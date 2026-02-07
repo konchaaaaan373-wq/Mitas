@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プライバシーポリシー - Neco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --purple: #A78BFA;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .profession-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(45, 49, 66, 0.05);
+            padding: 0.4rem;
+            border-radius: 50px;
+        }
+
+        .profession-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .profession-tab:hover {
+            background: rgba(255, 107, 157, 0.1);
+        }
+
+        main {
+            margin-top: 100px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .page-updated {
+            color: #6B7280;
+            margin-bottom: 3rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .content-section h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .content-section p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.8rem;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .profession-tabs {
+                display: none;
+            }
+
+            main {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="index.html" class="logo">Neco</a>
+                <div class="profession-tabs">
+                    <a href="index.html" class="profession-tab">医師</a>
+                    <a href="nurse.html" class="profession-tab">看護師</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">プライバシーポリシー</h1>
+        <p class="page-updated">最終更新日: 2026年2月7日</p>
+
+        <div class="content-section">
+            <h2>基本方針</h2>
+            <p>株式会社Neco（以下「当社」といいます）は、有料職業紹介事業を営む企業として、個人情報の重要性を認識し、個人情報の保護に関する法律（個人情報保護法）及び関連する法令等を遵守し、個人情報の適切な取り扱いに努めます。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の定義</h2>
+            <p>本プライバシーポリシーにおいて、個人情報とは、個人情報保護法第2条第1項により定義された個人情報、すなわち、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日、住所、電話番号、メールアドレスその他の記述等により特定の個人を識別することができるもの（他の情報と容易に照合することができ、それにより特定の個人を識別することができることとなるものを含みます）を指します。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の収集方法</h2>
+            <p>当社は、以下の方法により個人情報を収集します：</p>
+            <ul>
+                <li>ウェブサイトのお問い合わせフォームからの送信</li>
+                <li>求職申込書、求人申込書等の書面による提出</li>
+                <li>電話、メール、面談等による直接のやり取り</li>
+                <li>求人企業・医療機関からの推薦状や紹介状</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の利用目的</h2>
+            <p>当社は、収集した個人情報を以下の目的で利用します：</p>
+            <ul>
+                <li>有料職業紹介事業における求人・求職のマッチング</li>
+                <li>求職者への求人情報の提供</li>
+                <li>求人企業・医療機関への求職者情報の提供</li>
+                <li>職業紹介に関する各種連絡・調整</li>
+                <li>サービス改善のための統計データの作成（個人を特定できない形式）</li>
+                <li>当社サービスに関するお知らせやご案内の送付</li>
+                <li>お問い合わせへの対応</li>
+                <li>その他、上記に付随する業務</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の第三者提供</h2>
+            <p>当社は、以下の場合を除き、ご本人の同意なく個人情報を第三者に提供することはありません：</p>
+            <ul>
+                <li>求職者の同意を得て、求人企業・医療機関に情報を提供する場合</li>
+                <li>法令に基づく場合</li>
+                <li>人の生命、身体または財産の保護のために必要がある場合であって、本人の同意を得ることが困難であるとき</li>
+                <li>公衆衛生の向上または児童の健全な育成の推進のために特に必要がある場合であって、本人の同意を得ることが困難であるとき</li>
+                <li>国の機関もしくは地方公共団体またはその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合であって、本人の同意を得ることにより当該事務の遂行に支障を及ぼすおそれがあるとき</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の安全管理措置</h2>
+            <p>当社は、個人情報の漏えい、滅失またはき損の防止その他の個人情報の安全管理のため、以下の措置を講じます：</p>
+            <ul>
+                <li>個人情報保護管理者の設置</li>
+                <li>個人情報の取扱いに関する社内規程の整備</li>
+                <li>従業員に対する定期的な教育・研修の実施</li>
+                <li>個人情報へのアクセス制限及び持ち出し制限</li>
+                <li>個人情報を取り扱う情報システムへの不正アクセス対策</li>
+                <li>個人情報の保管場所への入退室管理</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>個人情報の開示・訂正・削除等</h2>
+            <p>ご本人は、当社が保有する個人情報について、以下の権利を有します：</p>
+            <ul>
+                <li>個人情報の開示を請求する権利</li>
+                <li>個人情報の内容が事実でない場合、訂正・追加・削除を請求する権利</li>
+                <li>個人情報の利用停止・消去を請求する権利</li>
+                <li>個人情報の第三者提供の停止を請求する権利</li>
+            </ul>
+            <p>これらの請求をされる場合は、下記のお問い合わせ窓口までご連絡ください。なお、請求の際には、ご本人確認のため、当社所定の書類をご提出いただく場合があります。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Cookie（クッキー）等の利用</h2>
+            <p>当社のウェブサイトでは、サービスの利便性向上のため、Cookie及びこれに類する技術を使用することがあります。これにより収集する情報は、利用者のアクセス状況やサービスの利用状況等であり、個人を特定する情報は含まれません。</p>
+            <p>ブラウザの設定により、Cookieの受け取りを拒否したり、Cookieを受け取ったときに警告を表示させたりすることができます。ただし、Cookieを無効にした場合、当社ウェブサイトの一部の機能が利用できなくなることがあります。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>プライバシーポリシーの変更</h2>
+            <p>当社は、法令の改正、社会情勢の変化、技術の進歩等に応じて、本プライバシーポリシーを変更することがあります。変更後のプライバシーポリシーは、当社ウェブサイトに掲載した時点から効力を生じるものとします。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>お問い合わせ窓口</h2>
+            <p>個人情報の取扱いに関するお問い合わせは、下記までご連絡ください。</p>
+            <p>
+                <strong>株式会社Neco</strong><br>
+                〒160-0023 東京都新宿区西新宿一丁目20-3 西新宿髙木ビル7階S-04<br>
+                個人情報保護管理者: 経営管理部<br>
+                メールアドレス: neco.oncall@gmail.com
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">ホーム</a>
+            <a href="company.html">会社概要</a>
+            <a href="privacy-policy.html">プライバシーポリシー</a>
+            <a href="terms.html">利用規約</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Neco Inc. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

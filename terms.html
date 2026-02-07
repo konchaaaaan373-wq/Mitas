@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利用規約 - Neco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --purple: #A78BFA;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .profession-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(45, 49, 66, 0.05);
+            padding: 0.4rem;
+            border-radius: 50px;
+        }
+
+        .profession-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .profession-tab:hover {
+            background: rgba(255, 107, 157, 0.1);
+        }
+
+        main {
+            margin-top: 100px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .page-updated {
+            color: #6B7280;
+            margin-bottom: 3rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .content-section h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .content-section p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section li {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .profession-tabs {
+                display: none;
+            }
+
+            main {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="index.html" class="logo">Neco</a>
+                <div class="profession-tabs">
+                    <a href="index.html" class="profession-tab">医師</a>
+                    <a href="nurse.html" class="profession-tab">看護師</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">利用規約</h1>
+        <p class="page-updated">最終更新日: 2026年2月7日</p>
+
+        <div class="content-section">
+            <h2>第1条（適用）</h2>
+            <ol>
+                <li>本規約は、株式会社Neco（以下「当社」といいます）が提供する有料職業紹介サービス（以下「本サービス」といいます）の利用に関する条件を、本サービスを利用するすべてのユーザー（以下「利用者」といいます）と当社との間で定めるものです。</li>
+                <li>利用者は、本規約に同意の上、本サービスを利用するものとします。</li>
+                <li>本規約は、本サービスの利用に関する当社と利用者との間の一切の関係に適用されます。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第2条（定義）</h2>
+            <p>本規約において使用する用語の定義は、以下のとおりとします。</p>
+            <ol>
+                <li>「求職者」とは、本サービスを通じて求職活動を行う医師または看護師をいいます。</li>
+                <li>「求人者」とは、本サービスを通じて求人活動を行う医療機関、企業等をいいます。</li>
+                <li>「個人情報」とは、個人情報保護法第2条第1項に定義される個人情報をいいます。</li>
+                <li>「知的財産権」とは、著作権、特許権、実用新案権、商標権、意匠権その他の知的財産権（それらの権利を取得し、またはそれらの権利につき登録等を出願する権利を含みます）をいいます。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第3条（本サービスの内容）</h2>
+            <p>当社は、本サービスにおいて、以下の業務を提供します。</p>
+            <ol>
+                <li>求人者からの求人情報の受付及び求職者への提供</li>
+                <li>求職者からの求職情報の受付及び求人者への提供</li>
+                <li>求人者と求職者のマッチング及び紹介</li>
+                <li>職業紹介に関する各種相談、助言</li>
+                <li>その他、上記に付随する業務</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第4条（利用登録）</h2>
+            <ol>
+                <li>本サービスの利用を希望する者は、本規約を遵守することに同意し、当社所定の方法により利用登録を申請するものとします。</li>
+                <li>当社は、利用登録の申請を審査の上、適当と判断した場合に利用登録を承認します。</li>
+                <li>当社は、以下のいずれかに該当する場合、利用登録を承認しないことがあり、その理由を開示する義務を負いません。
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>虚偽の情報を提供した場合</li>
+                        <li>過去に本規約違反等により、当社から利用停止等の措置を受けたことがある場合</li>
+                        <li>反社会的勢力等に該当すると当社が判断した場合</li>
+                        <li>その他、当社が利用登録を不適当と判断した場合</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第5条（登録情報の変更）</h2>
+            <p>利用者は、登録情報に変更があった場合、速やかに当社所定の方法により変更手続きを行うものとします。変更手続きの遅延または不実施により利用者が被った損害について、当社は一切責任を負いません。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>第6条（手数料）</h2>
+            <ol>
+                <li>求人者は、当社が求職者を紹介し、その求職者を採用した場合、当社所定の紹介手数料を当社に支払うものとします。</li>
+                <li>紹介手数料の金額及び支払方法は、別途当社が定める手数料表に基づくものとします。</li>
+                <li>求職者は、本サービスの利用について手数料を支払う必要はありません。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第7条（禁止事項）</h2>
+            <p>利用者は、本サービスの利用にあたり、以下の行為を行ってはなりません。</p>
+            <ol>
+                <li>法令または公序良俗に違反する行為</li>
+                <li>犯罪行為に関連する行為</li>
+                <li>当社、他の利用者、またはその他第三者の知的財産権、肖像権、プライバシー、名誉その他の権利または利益を侵害する行為</li>
+                <li>当社のサービスの運営を妨害するおそれのある行為</li>
+                <li>不正アクセスをし、またはこれを試みる行為</li>
+                <li>他の利用者に関する個人情報等を収集または蓄積する行為</li>
+                <li>不正な目的を持って本サービスを利用する行為</li>
+                <li>反社会的勢力等への利益供与</li>
+                <li>その他、当社が不適切と判断する行為</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第8条（本サービスの停止等）</h2>
+            <ol>
+                <li>当社は、以下のいずれかに該当する場合、利用者に事前に通知することなく、本サービスの全部または一部の提供を停止または中断することができるものとします。
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>本サービスに係るコンピューター・システムの点検または保守作業を緊急に行う場合</li>
+                        <li>コンピューター、通信回線等が事故により停止した場合</li>
+                        <li>地震、落雷、火災、風水害、停電、天災地変などの不可抗力により本サービスの運営ができなくなった場合</li>
+                        <li>その他、当社が停止または中断を必要と判断した場合</li>
+                    </ul>
+                </li>
+                <li>当社は、本条に基づき当社が行った措置により利用者に生じた損害について、一切責任を負いません。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第9条（権利帰属）</h2>
+            <p>本サービスに関する知的財産権は、すべて当社または当社にライセンスを許諾している者に帰属しており、本規約に基づく本サービスの利用許諾は、本サービスに関する当社または当社にライセンスを許諾している者の知的財産権の使用許諾を意味するものではありません。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>第10条（保証の否認および免責）</h2>
+            <ol>
+                <li>当社は、本サービスが利用者の特定の目的に適合すること、期待する機能・商品的価値・正確性・有用性を有すること、利用者による本サービスの利用が利用者に適用のある法令または業界団体の内部規則等に適合すること、および不具合が生じないことについて、何ら保証するものではありません。</li>
+                <li>当社は、本サービスを通じて紹介された求人情報の内容の真実性、正確性、最新性、有用性等について、何ら保証するものではありません。</li>
+                <li>当社は、本サービスに起因して利用者に生じたあらゆる損害について、一切の責任を負いません。ただし、本サービスに関する当社と利用者との間の契約が消費者契約法に定める消費者契約となる場合、この免責規定は適用されません。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第11条（契約期間および解約）</h2>
+            <ol>
+                <li>本サービスの利用契約は、第4条に基づき利用登録が完了した日に成立し、利用者または当社が解約するまで有効に存続するものとします。</li>
+                <li>利用者は、当社所定の方法により、いつでも本サービスの利用契約を解約することができます。</li>
+                <li>当社は、利用者が以下のいずれかに該当する場合、事前に通知または催告することなく、本サービスの利用を停止し、または利用契約を解除することができます。
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>本規約のいずれかの条項に違反した場合</li>
+                        <li>登録情報に虚偽の事実があることが判明した場合</li>
+                        <li>支払停止もしくは支払不能となった場合、または破産手続開始等の申立てがあった場合</li>
+                        <li>その他、当社が本サービスの利用を適当でないと判断した場合</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第12条（秘密保持）</h2>
+            <p>利用者は、本サービスに関連して当社が秘密に取扱うことを求めて開示した非公知の情報について、当社の事前の書面による承諾がある場合を除き、秘密に取扱うものとします。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>第13条（利用規約の変更）</h2>
+            <ol>
+                <li>当社は、利用者の承諾を得ることなく、いつでも本規約を変更することができるものとします。</li>
+                <li>変更後の利用規約は、当社ウェブサイトに掲載された時点から効力を生じるものとします。</li>
+                <li>利用者が変更後の利用規約の効力発生日以降に本サービスを利用した場合、利用者は変更後の利用規約に同意したものとみなされます。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>第14条（連絡・通知）</h2>
+            <p>本サービスに関する当社から利用者への連絡・通知は、当社が運営するウェブサイト内の適宜の場所への掲示、電子メールの送信、または登録された住所への郵送その他当社が適当と判断する方法により行うものとします。</p>
+        </div>
+
+        <div class="content-section">
+            <h2>第15条（準拠法および管轄裁判所）</h2>
+            <ol>
+                <li>本規約の準拠法は日本法とします。</li>
+                <li>本規約に起因し、または関連する一切の紛争については、東京地方裁判所を第一審の専属的合意管轄裁判所とします。</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2>お問い合わせ</h2>
+            <p>本規約に関するお問い合わせは、以下までご連絡ください。</p>
+            <p>
+                <strong>株式会社Neco</strong><br>
+                〒160-0023 東京都新宿区西新宿一丁目20-3 西新宿髙木ビル7階S-04<br>
+                メールアドレス: neco.oncall@gmail.com
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">ホーム</a>
+            <a href="company.html">会社概要</a>
+            <a href="privacy-policy.html">プライバシーポリシー</a>
+            <a href="terms.html">利用規約</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Neco Inc. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

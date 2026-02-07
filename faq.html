@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 - Neco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --purple: #A78BFA;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .profession-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(45, 49, 66, 0.05);
+            padding: 0.4rem;
+            border-radius: 50px;
+        }
+
+        .profession-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .profession-tab:hover {
+            background: rgba(255, 107, 157, 0.1);
+        }
+
+        main {
+            margin-top: 100px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #6B7280;
+            margin-bottom: 3rem;
+            font-size: 1.05rem;
+        }
+
+        .faq-category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            padding-left: 1rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-question h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+            padding-right: 2rem;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem 2rem;
+            color: #4B5563;
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .contact-cta {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(167, 139, 250, 0.1));
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .contact-cta h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta p {
+            margin-bottom: 2rem;
+            color: #6B7280;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .profession-tabs {
+                display: none;
+            }
+
+            main {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .faq-question {
+                padding: 1.2rem 1.5rem;
+            }
+
+            .faq-question h3 {
+                font-size: 1rem;
+                padding-right: 1rem;
+            }
+
+            .faq-answer-content {
+                padding: 0 1.5rem 1.2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="index.html" class="logo">Neco</a>
+                <div class="profession-tabs">
+                    <a href="index.html" class="profession-tab">医師</a>
+                    <a href="nurse.html" class="profession-tab">看護師</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">よくある質問</h1>
+        <p class="page-subtitle">Necoのサービスに関するよくある質問をまとめました</p>
+
+        <div class="faq-category">
+            <h2 class="category-title">サービス全般</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Necoはどのようなサービスですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        NecoはAI技術を活用した医療人材紹介サービスです。医師・看護師の専門性を定量的に評価し、従来の求人マッチング方式ではなく、AIコンシェルジュが一人ひとりに最適な求人をご提案します。特に在宅医療分野に強みを持ち、訪問看護が初めての方も安心してご利用いただけるサポート体制を整えています。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>利用料金はかかりますか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        求職者（医師・看護師）の方は完全無料でご利用いただけます。登録料、相談料、紹介手数料など、一切の費用はかかりません。求人企業・医療機関のみ、採用が決定した際に紹介手数料をお支払いいただく仕組みとなっています。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>他の人材紹介サービスとの違いは何ですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Necoは以下の3点で従来のサービスと大きく異なります。①専門性の定量評価：経験年数だけでなく、症例数や手技の習熟度など具体的なスキルを評価します。②AIコンシェルジュ：単なる求人情報の提供ではなく、AIが一人ひとりに最適な案件をインテリジェントに提案します。③長期的サポート：就職前の研修から手技獲得、入職後のフォローまで一貫してサポートします。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category">
+            <h2 class="category-title">登録・利用方法</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>登録に必要なものは何ですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        初回登録には、メールアドレスのみで仮登録が可能です。その後、専任コンシェルジュとの面談時に、医師免許証または看護師免許証、職務経歴書をご準備ください。訪問看護の場合は、対応可能な処置内容などをヒアリングさせていただきます。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>登録後の流れを教えてください</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        ①メールアドレス登録 → ②専任コンシェルジュとの面談（オンライン可） → ③専門性の評価・希望条件のヒアリング → ④AIによる最適な求人マッチング → ⑤求人のご紹介 → ⑥面接調整・サポート → ⑦採用決定・入職サポート という流れになります。平均25〜30日程度でマッチングが成立しています。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>地方在住でも利用できますか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        はい、全国どこからでもご利用いただけます。面談はオンラインで実施可能ですので、お住まいの地域に関わらずサービスをご利用いただけます。また、UIターン希望の方もサポートしておりますので、お気軽にご相談ください。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category">
+            <h2 class="category-title">医師向けサービス</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>どのような求人がありますか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        若手〜中堅医師向けの非常勤（バイト）案件を中心に取り扱っています。外来診療、当直、訪問診療、健診など、多様な勤務形態の求人がございます。専門科別では、内科系、外科系、救急科など幅広くカバーしており、ご希望に応じて最適な案件をご紹介します。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>専門性の評価とはどのようなものですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        経験年数だけでなく、症例数、手技の習熟度、専門医資格の有無、学会発表・論文の実績などを総合的に評価します。これにより、あなたの市場価値を正確に把握し、適正な条件での求人紹介が可能になります。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category">
+            <h2 class="category-title">看護師向けサービス</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>訪問看護が初めてでも大丈夫ですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        はい、訪問看護が初めての方も安心してご利用いただけます。就職前の研修サポート、同行訪問支援、必要な手技の獲得サポートなど、入職前から入職後まで一貫してサポートします。在宅医療未経験の方の採用実績も多数ございます。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>処置スキルの評価とは何ですか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        エンゼルケア、ストマ交換、褥瘡ケア、吸引、点滴管理、ポート管理、経管栄養・胃瘻管理、バルーン交換、在宅人工呼吸器対応など、訪問看護で必要とされる処置について、対応可能か、経験症例数はどの程度かなどを詳細に評価します。これにより、あなたのスキルに最適な求人をマッチングします。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>夜間オンコールが不安ですが、サポートはありますか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        はい、オンコール対応に不安がある方向けに、経験豊富な看護師による同行支援や、24時間相談可能な体制を整えている訪問看護ステーションを優先的にご紹介します。また、段階的にオンコール対応に慣れていけるようなキャリアプランもご提案可能です。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category">
+            <h2 class="category-title">個人情報・セキュリティ</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>個人情報は安全に管理されていますか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        当社は個人情報保護法を遵守し、厳格な安全管理措置を講じています。個人情報は暗号化して保管し、アクセス制限を設けるなど、漏洩防止策を徹底しています。また、求人企業への情報提供は、必ず事前にご本人の同意を得た上で行います。詳しくは<a href="privacy-policy.html" style="color: var(--primary);">プライバシーポリシー</a>をご確認ください。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>現在の勤務先にバレませんか？</h3>
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        ご安心ください。ご本人の同意なく、現在の勤務先や第三者に情報を開示することは一切ございません。求人企業への情報提供も、必ず事前に確認させていただきます。秘密厳守でサポートいたします。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <h2>他にご不明な点がございましたら</h2>
+            <p>お気軽にお問い合わせください。専任コンシェルジュが丁寧にご対応いたします。</p>
+            <a href="index.html#contact-form" class="contact-button">無料相談する</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">ホーム</a>
+            <a href="company.html">会社概要</a>
+            <a href="privacy-policy.html">プライバシーポリシー</a>
+            <a href="terms.html">利用規約</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Neco Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

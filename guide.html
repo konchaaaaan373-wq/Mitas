@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご利用ガイド - Neco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --purple: #A78BFA;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .profession-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(45, 49, 66, 0.05);
+            padding: 0.4rem;
+            border-radius: 50px;
+        }
+
+        .profession-tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .profession-tab:hover {
+            background: rgba(255, 107, 157, 0.1);
+        }
+
+        main {
+            margin-top: 100px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #6B7280;
+            margin-bottom: 4rem;
+            font-size: 1.05rem;
+        }
+
+        .step-section {
+            margin-bottom: 4rem;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .step-content {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .step-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-content li {
+            margin-bottom: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(76, 201, 240, 0.1));
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .tip-box strong {
+            color: var(--secondary);
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(167, 139, 250, 0.1));
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            margin-bottom: 2rem;
+            color: #6B7280;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .profession-tabs {
+                display: none;
+            }
+
+            main {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-title {
+                font-size: 1.5rem;
+            }
+
+            .step-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="index.html" class="logo">Neco</a>
+                <div class="profession-tabs">
+                    <a href="index.html" class="profession-tab">医師</a>
+                    <a href="nurse.html" class="profession-tab">看護師</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">ご利用ガイド</h1>
+        <p class="page-subtitle">Necoのサービスをご利用いただく流れをご説明します</p>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">無料登録</h2>
+            </div>
+            <div class="step-content">
+                <h3>メールアドレスで簡単登録</h3>
+                <p>トップページの「無料相談する」ボタンから、メールアドレスをご登録ください。登録は30秒で完了します。</p>
+                
+                <h3 style="margin-top: 2rem;">ご登録後の流れ</h3>
+                <ul>
+                    <li>ご登録いただいたメールアドレスに、担当コンシェルジュからご連絡（2営業日以内）</li>
+                    <li>面談日程の調整（オンライン面談も可能）</li>
+                    <li>必要書類のご案内</li>
+                </ul>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 登録時点では詳細な個人情報は不要です。まずはお気軽にご登録ください。登録後のキャンセルもいつでも可能です。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">専任コンシェルジュとの面談</h2>
+            </div>
+            <div class="step-content">
+                <h3>あなた専任のコンシェルジュが丁寧にヒアリング</h3>
+                <p>対面またはオンライン（Zoom等）で、専任コンシェルジュと面談を行います。所要時間は60〜90分程度です。</p>
+                
+                <h3 style="margin-top: 2rem;">面談でお伺いする内容</h3>
+                <ul>
+                    <li><strong>医師の場合：</strong>専門科、経験年数、症例数、手技の習熟度、専門医資格、希望勤務条件など</li>
+                    <li><strong>看護師の場合：</strong>経験病棟、対応可能な処置（吸引、点滴管理、ストマケア等）、訪問看護経験、オンコール対応の可否など</li>
+                    <li>希望勤務地、勤務日数、勤務時間帯</li>
+                    <li>キャリアプラン、今後のご希望</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">必要書類</h3>
+                <ul>
+                    <li>医師免許証または看護師免許証（コピー可）</li>
+                    <li>職務経歴書（当社フォーマットあり）</li>
+                    <li>専門医資格証（お持ちの場合）</li>
+                </ul>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 面談はリラックスした雰囲気で行います。不明点や不安なことがあれば、何でもお気軽にご相談ください。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">専門性の評価・AIマッチング</h2>
+            </div>
+            <div class="step-content">
+                <h3>あなたの専門性を定量的に評価</h3>
+                <p>面談でお伺いした情報をもとに、当社独自の評価システムであなたの専門性を可視化します。</p>
+                
+                <h3 style="margin-top: 2rem;">AIによる最適マッチング</h3>
+                <p>評価結果とご希望条件をもとに、AIが最適な求人を自動抽出。従来の人力マッチングでは見つけられなかった、あなたにぴったりの求人をご提案します。</p>
+                
+                <ul>
+                    <li>AIが保有求人データベース（非公開求人含む）から最適案件を抽出</li>
+                    <li>コンシェルジュが内容を精査し、厳選した3〜5件をご提案</li>
+                    <li>各求人の詳細情報、おすすめポイントをご説明</li>
+                </ul>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> ご提案した求人が希望と異なる場合は、遠慮なくお申し付けください。条件を再調整し、再度マッチングを行います。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">求人のご紹介・応募</h2>
+            </div>
+            <div class="step-content">
+                <h3>気になる求人に応募</h3>
+                <p>ご紹介した求人の中から、応募したい案件をお選びください。複数同時応募も可能です。</p>
+                
+                <h3 style="margin-top: 2rem;">応募書類の作成サポート</h3>
+                <ul>
+                    <li>履歴書・職務経歴書の添削</li>
+                    <li>志望動機のブラッシュアップ</li>
+                    <li>応募先に合わせたアピールポイントのアドバイス</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">求人企業への推薦</h3>
+                <p>コンシェルジュが、あなたの強みを最大限アピールする推薦状を作成し、求人企業に提出します。</p>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 応募する求人数に制限はありません。幅広く応募して選択肢を増やすことも、厳選して応募することも可能です。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <h2 class="step-title">面接対策・面接</h2>
+            </div>
+            <div class="step-content">
+                <h3>充実の面接サポート</h3>
+                <p>書類選考を通過したら、いよいよ面接です。当社が全面的にサポートします。</p>
+                
+                <h3 style="margin-top: 2rem;">面接前のサポート</h3>
+                <ul>
+                    <li>面接日程の調整代行</li>
+                    <li>模擬面接の実施（希望者のみ）</li>
+                    <li>想定質問と回答例のご提供</li>
+                    <li>求人企業の詳細情報、面接官の特徴などをご説明</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">面接当日</h3>
+                <p>必要に応じて、コンシェルジュが面接に同席（オンライン・対面とも可）し、サポートします。</p>
+
+                <h3 style="margin-top: 2rem;">面接後</h3>
+                <ul>
+                    <li>面接の感想をヒアリング</li>
+                    <li>求人企業へのフォローアップ</li>
+                    <li>結果のご連絡</li>
+                </ul>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 面接で聞きづらいことがあれば、コンシェルジュが代わりに確認します。遠慮なくお申し付けください。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">6</div>
+                <h2 class="step-title">条件交渉・内定</h2>
+            </div>
+            <div class="step-content">
+                <h3>納得のいく条件で入職</h3>
+                <p>内定が出た後も、当社がしっかりサポートします。</p>
+                
+                <h3 style="margin-top: 2rem;">条件交渉の代行</h3>
+                <ul>
+                    <li>給与・報酬の交渉</li>
+                    <li>勤務日数・時間の調整</li>
+                    <li>その他条件面の交渉</li>
+                </ul>
+
+                <p style="margin-top: 1.5rem;">直接は言いづらい条件面の交渉も、コンシェルジュが代行します。あなたの希望を最大限実現できるよう、求人企業と調整を行います。</p>
+
+                <h3 style="margin-top: 2rem;">契約内容の確認</h3>
+                <p>雇用契約書の内容を一緒に確認し、不明点や懸念点がないかチェックします。</p>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 条件に納得できない場合は、内定を辞退することも可能です。無理に入職を勧めることはありません。
+                </div>
+            </div>
+        </div>
+
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">7</div>
+                <h2 class="step-title">入職サポート・アフターフォロー</h2>
+            </div>
+            <div class="step-content">
+                <h3>入職後も安心のサポート</h3>
+                <p>入職が決まった後も、当社のサポートは続きます。</p>
+                
+                <h3 style="margin-top: 2rem;">入職前サポート（看護師の場合）</h3>
+                <ul>
+                    <li>必要な手技の研修サポート</li>
+                    <li>訪問看護未経験の方向けのオリエンテーション</li>
+                    <li>同行訪問の調整</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">入職後フォロー</h3>
+                <ul>
+                    <li>入職後1週間、1ヶ月、3ヶ月のタイミングで状況確認</li>
+                    <li>困りごとや不安があれば、いつでも相談可能</li>
+                    <li>必要に応じて、求人企業との調整をサポート</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">キャリア相談</h3>
+                <p>入職後も、キャリアに関するご相談を随時承ります。次のステップを考える際も、お気軽にご連絡ください。</p>
+
+                <div class="tip-box">
+                    <strong>💡 ポイント：</strong> 入職後に「思っていたのと違った」という場合も、遠慮なくご相談ください。状況改善のサポートをいたします。
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <h2>まずは無料登録から始めましょう</h2>
+            <p>ご不明な点があれば、お気軽にお問い合わせください</p>
+            <a href="index.html#contact-form" class="cta-button">無料登録する</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">ホーム</a>
+            <a href="company.html">会社概要</a>
+            <a href="privacy-policy.html">プライバシーポリシー</a>
+            <a href="terms.html">利用規約</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Neco Inc. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
