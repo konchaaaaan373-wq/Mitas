@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neco - あなたの一生物のバイトを、一緒に探す</title>
+    <title>Neco - 看護師のための在宅医療求人プラットフォーム</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
             font-weight: 800;
         }
 
-        /* Quantum Particle Background - Clean Linear Movement */
+        /* Quantum Particle Background */
         .poly-bg {
             position: absolute;
             width: 100%;
@@ -58,7 +58,6 @@
             filter: brightness(1.2);
         }
 
-        /* Crystal shape using clip-path */
         .quantum-particle::before {
             content: '';
             position: absolute;
@@ -101,95 +100,30 @@
         }
 
         @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Clean linear paths for each particle */
-        .quantum-particle:nth-child(1) { 
-            --tx: 200px; --ty: -150px;
-            background: var(--primary); top: 80%; left: 10%; animation-delay: 0s;
-        }
-        .quantum-particle:nth-child(2) { 
-            --tx: -180px; --ty: 120px;
-            background: var(--secondary); top: 20%; left: 80%; animation-delay: 0.4s;
-        }
-        .quantum-particle:nth-child(3) { 
-            --tx: 150px; --ty: 180px;
-            background: var(--purple); top: 30%; left: 20%; animation-delay: 0.8s;
-        }
-        .quantum-particle:nth-child(4) { 
-            --tx: -200px; --ty: -100px;
-            background: var(--accent); top: 70%; left: 90%; animation-delay: 1.2s;
-        }
-        .quantum-particle:nth-child(5) { 
-            --tx: 100px; --ty: -200px;
-            background: var(--blue); top: 50%; left: 50%; animation-delay: 1.6s;
-        }
-        .quantum-particle:nth-child(6) { 
-            --tx: -150px; --ty: 150px;
-            background: var(--orange); top: 15%; left: 60%; animation-delay: 2.0s;
-        }
-        .quantum-particle:nth-child(7) { 
-            --tx: 180px; --ty: 100px;
-            background: var(--primary); top: 85%; left: 30%; animation-delay: 2.4s;
-        }
-        .quantum-particle:nth-child(8) { 
-            --tx: -120px; --ty: -180px;
-            background: var(--secondary); top: 40%; left: 70%; animation-delay: 2.8s;
-        }
-        .quantum-particle:nth-child(9) { 
-            --tx: 220px; --ty: 80px;
-            background: var(--purple); top: 60%; left: 15%; animation-delay: 3.2s;
-        }
-        .quantum-particle:nth-child(10) { 
-            --tx: -100px; --ty: 200px;
-            background: var(--blue); top: 25%; left: 85%; animation-delay: 3.6s;
-        }
-        .quantum-particle:nth-child(11) { 
-            --tx: 160px; --ty: -120px;
-            background: var(--accent); top: 90%; left: 40%; animation-delay: 0.3s;
-        }
-        .quantum-particle:nth-child(12) { 
-            --tx: -190px; --ty: 140px;
-            background: var(--orange); top: 35%; left: 75%; animation-delay: 0.7s;
-        }
-        .quantum-particle:nth-child(13) { 
-            --tx: 140px; --ty: 160px;
-            background: var(--primary); top: 55%; left: 25%; animation-delay: 1.1s;
-        }
-        .quantum-particle:nth-child(14) { 
-            --tx: -170px; --ty: -90px;
-            background: var(--secondary); top: 75%; left: 65%; animation-delay: 1.5s;
-        }
-        .quantum-particle:nth-child(15) { 
-            --tx: 110px; --ty: -170px;
-            background: var(--purple); top: 45%; left: 55%; animation-delay: 1.9s;
-        }
-        .quantum-particle:nth-child(16) { 
-            --tx: -140px; --ty: 130px;
-            background: var(--blue); top: 20%; left: 45%; animation-delay: 2.3s;
-        }
-        .quantum-particle:nth-child(17) { 
-            --tx: 190px; --ty: 110px;
-            background: var(--accent); top: 65%; left: 35%; animation-delay: 2.7s;
-        }
-        .quantum-particle:nth-child(18) { 
-            --tx: -110px; --ty: -160px;
-            background: var(--orange); top: 50%; left: 80%; animation-delay: 3.1s;
-        }
-        .quantum-particle:nth-child(19) { 
-            --tx: 210px; --ty: 70px;
-            background: var(--primary); top: 30%; left: 90%; animation-delay: 3.5s;
-        }
-        .quantum-particle:nth-child(20) { 
-            --tx: -90px; --ty: 190px;
-            background: var(--secondary); top: 80%; left: 20%; animation-delay: 3.9s;
-        }
+        .quantum-particle:nth-child(1) { --tx: 200px; --ty: -150px; background: var(--primary); top: 80%; left: 10%; animation-delay: 0s; }
+        .quantum-particle:nth-child(2) { --tx: -180px; --ty: 120px; background: var(--secondary); top: 20%; left: 80%; animation-delay: 0.4s; }
+        .quantum-particle:nth-child(3) { --tx: 150px; --ty: 180px; background: var(--purple); top: 30%; left: 20%; animation-delay: 0.8s; }
+        .quantum-particle:nth-child(4) { --tx: -200px; --ty: -100px; background: var(--accent); top: 70%; left: 90%; animation-delay: 1.2s; }
+        .quantum-particle:nth-child(5) { --tx: 100px; --ty: -200px; background: var(--blue); top: 50%; left: 50%; animation-delay: 1.6s; }
+        .quantum-particle:nth-child(6) { --tx: -150px; --ty: 150px; background: var(--orange); top: 15%; left: 60%; animation-delay: 2.0s; }
+        .quantum-particle:nth-child(7) { --tx: 180px; --ty: 100px; background: var(--primary); top: 85%; left: 30%; animation-delay: 2.4s; }
+        .quantum-particle:nth-child(8) { --tx: -120px; --ty: -180px; background: var(--secondary); top: 40%; left: 70%; animation-delay: 2.8s; }
+        .quantum-particle:nth-child(9) { --tx: 220px; --ty: 80px; background: var(--purple); top: 60%; left: 15%; animation-delay: 3.2s; }
+        .quantum-particle:nth-child(10) { --tx: -100px; --ty: 200px; background: var(--blue); top: 25%; left: 85%; animation-delay: 3.6s; }
+        .quantum-particle:nth-child(11) { --tx: 160px; --ty: -120px; background: var(--accent); top: 90%; left: 40%; animation-delay: 0.3s; }
+        .quantum-particle:nth-child(12) { --tx: -190px; --ty: 140px; background: var(--orange); top: 35%; left: 75%; animation-delay: 0.7s; }
+        .quantum-particle:nth-child(13) { --tx: 140px; --ty: 160px; background: var(--primary); top: 55%; left: 25%; animation-delay: 1.1s; }
+        .quantum-particle:nth-child(14) { --tx: -170px; --ty: -90px; background: var(--secondary); top: 75%; left: 65%; animation-delay: 1.5s; }
+        .quantum-particle:nth-child(15) { --tx: 110px; --ty: -170px; background: var(--purple); top: 45%; left: 55%; animation-delay: 1.9s; }
+        .quantum-particle:nth-child(16) { --tx: -140px; --ty: 130px; background: var(--blue); top: 20%; left: 45%; animation-delay: 2.3s; }
+        .quantum-particle:nth-child(17) { --tx: 190px; --ty: 110px; background: var(--accent); top: 65%; left: 35%; animation-delay: 2.7s; }
+        .quantum-particle:nth-child(18) { --tx: -110px; --ty: -160px; background: var(--orange); top: 50%; left: 80%; animation-delay: 3.1s; }
+        .quantum-particle:nth-child(19) { --tx: 210px; --ty: 70px; background: var(--primary); top: 30%; left: 90%; animation-delay: 3.5s; }
+        .quantum-particle:nth-child(20) { --tx: -90px; --ty: 190px; background: var(--secondary); top: 80%; left: 20%; animation-delay: 3.9s; }
 
         /* Header */
         header {
@@ -431,11 +365,6 @@
             opacity: 0.1;
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
             animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .feature-badges {
@@ -1091,8 +1020,8 @@
             <div class="nav-left">
                 <div class="logo">Neco</div>
                 <div class="profession-tabs">
-                    <a href="index.html" class="profession-tab active">医師</a>
-                    <a href="nurse.html" class="profession-tab">看護師</a>
+                    <a href="index.html" class="profession-tab">医師</a>
+                    <a href="nurse.html" class="profession-tab active">看護師</a>
                 </div>
             </div>
             <ul class="nav-links">
@@ -1131,14 +1060,14 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1>
-                    <span class="gradient-text">一生物のバイト</span>を、<br>
-                    時間をかけて<br>
-                    一緒に探す
+                    <span class="gradient-text">あなたの専門性</span>を、<br>
+                    正しく評価して<br>
+                    最適な在宅医療へ
                 </h1>
-                <p class="subtitle">あなたの専門性を正しく評価し、最適な非常勤先をご提案</p>
+                <p class="subtitle">AIコンシェルジュが導く、全く新しい求人マッチング</p>
                 <p>
-                    Necoは、若手〜中堅医師の皆様のキャリアと生活を大切にした求人コンシェルジュサービスです。
-                    単なる求人紹介ではなく、あなたの専門性を定量的に評価し、現在の状況に合わせて理想のバイト先を一緒に探します。
+                    Necoは、看護師の皆様の専門性を適切に評価し、在宅医療に特化した最適な求人をご紹介します。<br>
+                    従来の案件マッチング方式ではなく、AIコンシェルジュが一人ひとりのスキルと希望に寄り添う、全く新しいプラットフォームです。
                 </p>
                 <div class="hero-buttons">
                     <a href="#contact-form" class="cta-button">今すぐ相談する</a>
@@ -1148,37 +1077,16 @@
             <div class="hero-visual">
                 <div class="poly-card">
                     <h3 style="font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark); font-weight: 700;">Necoが選ばれる理由</h3>
-                    <p style="color: #6B7280; margin-bottom: 2rem;">専門性を活かした最適なマッチング</p>
+                    <p style="color: #6B7280; margin-bottom: 2rem;">在宅医療に特化した専門性評価</p>
                     <div class="feature-badges">
                         <div class="badge">
                             <div class="badge-icon">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                    <circle cx="12" cy="12" r="3" opacity="0.2"/>
+                                    <path d="M9 11L12 14L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div>
-                            <span class="badge-text">専門性の定量評価</span>
-                        </div>
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="9" cy="7" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">専任コンシェルジュ</span>
-                        </div>
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                                    <path d="M12 6V12L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 2V6M12 18V22M22 12H18M6 12H2" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">時間をかけた対応<br>+ 長期間のサポート</span>
+                            <span class="badge-text">処置スキルの定量評価</span>
                         </div>
                         <div class="badge">
                             <div class="badge-icon">
@@ -1189,7 +1097,27 @@
                                     <path d="M15 13V15L16.5 16.5" stroke-width="1.5" stroke-linecap="round"/>
                                 </svg>
                             </div>
-                            <span class="badge-text">AIを用いた<br>最適な求人マッチング</span>
+                            <span class="badge-text">AIコンシェルジュ<br>によるマッチング</span>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 21V5C20 3.89543 19.1046 3 18 3H6C4.89543 3 4 3.89543 4 5V21" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M2 21H22" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="10" r="2" stroke-width="1.5"/>
+                                    <path d="M8 15H16M10 18H14" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <span class="badge-text">訪問看護初心者も<br>就職段階から支援</span>
+                        </div>
+                        <div class="badge">
+                            <div class="badge-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12" cy="12" r="3" opacity="0.2"/>
+                                </svg>
+                            </div>
+                            <span class="badge-text">手技獲得まで<br>サポート</span>
                         </div>
                     </div>
                 </div>
@@ -1212,24 +1140,24 @@
         </div>
         <div class="section-header fade-in">
             <span class="section-tag">Process</span>
-            <h2>時間をかけた、丁寧なマッチング</h2>
-            <p>あなたに合った一生物のバイトを見つけるための、3つのステップ</p>
+            <h2>AIコンシェルジュによる<br>新しいマッチング体験</h2>
+            <p>あなたのスキルを正しく評価し、最適な在宅医療の現場へ</p>
         </div>
         <div class="process-grid">
             <div class="process-card fade-in">
                 <div class="process-number">01</div>
-                <h3>専門性の定量評価</h3>
-                <p>これまでの経験、専門領域、スキルセットを詳細にヒアリング。独自の評価システムであなたの専門性を可視化します。</p>
+                <h3>専門性の詳細評価</h3>
+                <p>経験した処置内容、症例数、手技の習熟度を詳細にヒアリング。ストマ交換、吸引、点滴管理など、具体的なスキルを定量化します。</p>
             </div>
             <div class="process-card fade-in">
                 <div class="process-number">02</div>
-                <h3>現状分析とマッチング</h3>
-                <p>ライフスタイル、希望条件、キャリアプランを丁寧にお伺いし、あなたに最適な求人を厳選してご提案します。</p>
+                <h3>AIによる最適マッチング</h3>
+                <p>AIコンシェルジュがあなたのスキルセットと希望条件を分析。在宅医療に特化した求人データベースから、最適な案件をご提案します。</p>
             </div>
             <div class="process-card fade-in">
                 <div class="process-number">03</div>
-                <h3>長期的なサポート</h3>
-                <p>面接対策から条件交渉、入職後のフォローアップまで。専任コンシェルジュが継続的にサポートします。</p>
+                <h3>継続的なスキルサポート</h3>
+                <p>訪問看護が初めての方も安心。就職前の研修から、手技獲得のサポート、入職後のフォローまで、長期的にサポートします。</p>
             </div>
         </div>
     </section>
@@ -1255,40 +1183,34 @@
         <div class="section-header fade-in">
             <span class="section-tag">Features</span>
             <h2>Necoの特徴</h2>
-            <p>他の人材紹介サービスとは違う、Necoならではの価値</p>
+            <p>従来の求人サイトにはない、看護師のためのAIプラットフォーム</p>
         </div>
         <div class="features-grid">
             <div class="feature-card fade-in">
                 <div class="feature-icon-box">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
-                        <path d="M3 8H21M8 3V21" stroke-width="2"/>
-                        <circle cx="13" cy="13" r="2.5" stroke-width="2"/>
-                        <path d="M15 15L18 18" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="6" cy="6" r="1" fill="white"/>
-                        <path d="M10 13H16M13 10V16" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M9 11L12 14L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="7" y="7" width="4" height="4" rx="0.5" stroke-width="1.5" opacity="0.3"/>
+                        <rect x="7" y="13" width="4" height="4" rx="0.5" stroke-width="1.5" opacity="0.3"/>
                     </svg>
                 </div>
                 <div class="feature-content">
-                    <h3>専門性の定量評価システム</h3>
-                    <p>経験年数だけでなく、症例数、手技の習熟度、専門資格など、あなたの専門性を多角的に評価。市場価値を正確に把握します。</p>
+                    <h3>処置スキルの定量評価システム</h3>
+                    <p>エンゼルケア、ストマ交換、吸引、点滴管理、バルーン交換など、対応可能な処置を具体的に評価。あなたの専門性を正確に可視化します。</p>
                 </div>
             </div>
             <div class="feature-card fade-in">
                 <div class="feature-icon-box">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke-width="2" stroke-linejoin="round"/>
-                        <circle cx="12" cy="7" r="1.5" fill="white"/>
-                        <path d="M9 10L12 12L15 10" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-                        <circle cx="7" cy="14.5" r="1" fill="white" opacity="0.7"/>
-                        <circle cx="17" cy="14.5" r="1" fill="white" opacity="0.7"/>
+                        <circle cx="12" cy="12" r="3" stroke-width="2"/>
+                        <path d="M12 1V3M12 21V23M23 12H21M3 12H1" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M18.36 5.64L16.95 7.05M7.05 16.95L5.64 18.36M18.36 18.36L16.95 16.95M7.05 7.05L5.64 5.64" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
                     </svg>
                 </div>
                 <div class="feature-content">
-                    <h3>非公開求人へのアクセス</h3>
-                    <p>一般には公開されていない優良求人を多数保有。若手〜中堅医師に特化した厳選された非常勤案件をご紹介します。</p>
+                    <h3>AIコンシェルジュによるマッチング</h3>
+                    <p>従来の案件マッチング方式ではなく、AIが一人ひとりの専門性と希望を分析。在宅医療に最適な環境をインテリジェントにご提案します。</p>
                 </div>
             </div>
             <div class="feature-card fade-in">
@@ -1296,17 +1218,13 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20 21V5C20 3.89543 19.1046 3 18 3H6C4.89543 3 4 3.89543 4 5V21" stroke-width="2" stroke-linecap="round"/>
                         <path d="M2 21H22" stroke-width="2" stroke-linecap="round"/>
-                        <rect x="8" y="7" width="3" height="3" rx="0.5" stroke-width="1.5"/>
-                        <rect x="13" y="7" width="3" height="3" rx="0.5" stroke-width="1.5"/>
-                        <rect x="8" y="12" width="3" height="3" rx="0.5" stroke-width="1.5"/>
-                        <rect x="13" y="12" width="3" height="3" rx="0.5" stroke-width="1.5"/>
-                        <path d="M9 17H15" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="12" cy="5" r="1" fill="white"/>
+                        <circle cx="12" cy="9" r="2.5" stroke-width="1.5"/>
+                        <path d="M8 15C8 13.8954 8.89543 13 10 13H14C15.1046 13 16 13.8954 16 15V21H8V15Z" stroke-width="1.5"/>
                     </svg>
                 </div>
                 <div class="feature-content">
-                    <h3>ライフスタイル重視のマッチング</h3>
-                    <p>勤務日数、時間帯、通勤距離など、あなたのライフスタイルを最優先。仕事とプライベートの両立を実現します。</p>
+                    <h3>在宅医療特化の求人ネットワーク</h3>
+                    <p>訪問看護ステーション、在宅診療クリニックなど、在宅医療に特化した厳選された求人をご紹介。あなたのスキルを最大限活かせる環境が見つかります。</p>
                 </div>
             </div>
             <div class="feature-card fade-in">
@@ -1314,13 +1232,12 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <circle cx="12" cy="12" r="4" stroke-width="1.5" opacity="0.4"/>
-                        <path d="M12 9V12L14 13" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="12" cy="12" r="1" fill="white"/>
+                        <path d="M12 8V12L14 13.5" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </div>
                 <div class="feature-content">
-                    <h3>キャリア形成のサポート</h3>
-                    <p>単なるバイト紹介ではなく、長期的なキャリアプランを見据えた提案。専門性を高められる環境をご紹介します。</p>
+                    <h3>手技獲得から就職後まで徹底サポート</h3>
+                    <p>訪問看護が初めての方も安心。必要な手技の研修サポート、同行訪問支援、入職後のフォローアップまで、長期的にキャリアをサポートします。</p>
                 </div>
             </div>
         </div>
@@ -1329,19 +1246,19 @@
     <section id="stats" class="stats">
         <div class="stats-grid">
             <div class="stat-item fade-in">
-                <span class="stat-number">1,200+</span>
+                <span class="stat-number">800+</span>
                 <span class="stat-label">マッチング成功数</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number">96%</span>
+                <span class="stat-number">94%</span>
                 <span class="stat-label">継続勤務率</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number">4.8/5.0</span>
+                <span class="stat-number">4.7/5.0</span>
                 <span class="stat-label">満足度スコア</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number">平均30日</span>
+                <span class="stat-number">平均25日</span>
                 <span class="stat-label">マッチング期間</span>
             </div>
         </div>
@@ -1361,10 +1278,10 @@
             <div class="quantum-particle"></div>
         </div>
         <div class="cta-content">
-            <h2>あなたの一生物のバイトを<br>一緒に探しませんか？</h2>
+            <h2>あなたに最適な在宅医療の現場を<br>一緒に見つけませんか？</h2>
             <p>
-                まずは無料相談から。専任コンシェルジュが、<br>
-                あなたの状況を丁寧にお伺いします。
+                まずは無料相談から。AIコンシェルジュが、<br>
+                あなたのスキルと希望を丁寧にお伺いします。
             </p>
             <form class="cta-form" id="contact-form">
                 <input type="email" name="email" class="cta-input" placeholder="メールアドレスを入力" required id="emailInput">
@@ -1374,8 +1291,8 @@
                 document.getElementById('contact-form').addEventListener('submit', function(e) {
                     e.preventDefault();
                     const email = document.getElementById('emailInput').value;
-                    const subject = '無料相談の申し込み';
-                    const body = `お名前：\n専門科：\n経験年数：\nご希望の勤務形態：\nご相談内容：\n\n送信元メールアドレス：${email}`;
+                    const subject = '【看護師】無料相談の申し込み';
+                    const body = `お名前：\n現在の勤務先：\n経験年数：\n対応可能な処置：\nご希望の勤務形態：\nご相談内容：\n\n送信元メールアドレス：${email}`;
                     window.location.href = `mailto:neco.oncall@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 });
             </script>
@@ -1398,9 +1315,9 @@
             <div>
                 <div class="footer-brand">Neco</div>
                 <p class="footer-desc">
-                    医師の皆様のキャリアとライフスタイルを大切にした、<br>
-                    医師求人コンシェルジュサービス。<br>
-                    時間をかけて、一生物のバイトを一緒に探します。
+                    看護師の皆様の専門性を正しく評価し、<br>
+                    在宅医療に特化した最適な求人をご紹介。<br>
+                    AIコンシェルジュによる、全く新しいマッチングプラットフォーム。
                 </p>
                 <div class="footer-license">
                     📋 有料職業紹介事業許可番号：13-ユ-XXXXXX<br>
