@@ -200,20 +200,66 @@
         }
 
         @media (max-width: 768px) {
+            /* ヘッダー最適化 */
+            header {
+                padding: 0.8rem 0;
+            }
+
+            nav {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
             .profession-tabs {
                 display: none;
             }
 
+            /* メインコンテンツ */
             main {
-                padding: 3rem 1.5rem 4rem;
+                margin-top: 70px;
+                padding: 2.5rem 1.5rem 3rem;
             }
 
             .page-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .page-updated, .page-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
             }
 
             .content-section {
                 padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                border-radius: 15px;
+            }
+
+            .content-section h2 {
+                font-size: 1.3rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .content-section h3 {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .content-section p {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+                line-height: 1.7;
+            }
+
+            .content-section li {
+                font-size: 0.9rem;
+                margin-bottom: 0.7rem;
+                line-height: 1.7;
             }
 
             .company-info-table th,
@@ -227,6 +273,38 @@
                 font-weight: 700;
                 padding-bottom: 0.3rem;
             }
+            .company-info-table th,
+            .company-info-table td {
+                display: block;
+                width: 100%;
+                padding: 0.6rem 0;
+            }
+
+            .company-info-table th {
+                font-weight: 700;
+                padding-bottom: 0.3rem;
+                font-size: 0.9rem;
+            }
+
+            .company-info-table td {
+                font-size: 0.9rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #E5E7EB;
+            }
+
+            .company-info-table tr {
+                padding: 0.5rem 0;
+            }
+
+            .company-info-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .mission-text {
+                font-size: 1rem;
+                padding: 1.5rem;
+            }
+        }
 
             .company-info-table tr {
                 padding: 1rem 0;

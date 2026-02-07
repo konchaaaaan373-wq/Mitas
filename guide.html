@@ -258,29 +258,104 @@
         }
 
         @media (max-width: 768px) {
+            /* ヘッダー最適化 */
+            header {
+                padding: 0.8rem 0;
+            }
+
+            nav {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
             .profession-tabs {
                 display: none;
             }
 
+            /* メインコンテンツ */
             main {
-                padding: 3rem 1.5rem 4rem;
+                margin-top: 70px;
+                padding: 2.5rem 1.5rem 3rem;
             }
 
             .page-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .page-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .step-section {
+                margin-bottom: 3rem;
             }
 
             .step-header {
                 flex-direction: column;
                 text-align: center;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
             }
 
             .step-title {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
 
             .step-content {
                 padding: 1.5rem;
+            }
+
+            .step-content h3 {
+                font-size: 1.1rem;
+                margin-top: 1.5rem;
+            }
+
+            .step-content p {
+                font-size: 0.9rem;
+                line-height: 1.7;
+            }
+
+            .step-content li {
+                font-size: 0.9rem;
+                margin-bottom: 0.7rem;
+                line-height: 1.7;
+            }
+
+            .tip-box {
+                padding: 1.2rem;
+                font-size: 0.9rem;
+                margin-top: 1.2rem;
+            }
+
+            .cta-box {
+                padding: 2.5rem 1.5rem;
+                margin-top: 3rem;
+            }
+
+            .cta-box h2 {
+                font-size: 1.4rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .cta-box p {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-button {
+                padding: 0.9rem 2rem;
+                font-size: 0.95rem;
             }
         }
     </style>
