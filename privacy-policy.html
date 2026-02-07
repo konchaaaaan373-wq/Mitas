@@ -189,67 +189,83 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        @media (max-width: 768px) {
+                @media (max-width: 768px) {
             /* ヘッダー最適化 */
             header {
-                padding: 0.8rem 0;
+                padding: 0.6rem 0;
             }
 
             nav {
                 padding: 0 1rem;
             }
 
+            .nav-left {
+                gap: 1rem;
+            }
+
             .logo {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
 
             .profession-tabs {
-                display: none;
+                padding: 0.25rem;
+                gap: 0.3rem;
+            }
+
+            .profession-tab {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
             }
 
             /* メインコンテンツ */
             main {
-                margin-top: 70px;
-                padding: 2.5rem 1.5rem 3rem;
+                margin-top: 60px;
+                padding: 2rem 1.2rem 2.5rem;
             }
 
             .page-title {
-                font-size: 1.8rem;
-                margin-bottom: 0.8rem;
+                font-size: 1.6rem;
+                margin-bottom: 0.7rem;
             }
 
             .page-updated, .page-subtitle {
-                font-size: 0.9rem;
-                margin-bottom: 2rem;
+                font-size: 0.85rem;
+                margin-bottom: 1.8rem;
             }
 
             .content-section {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
+                padding: 1.3rem;
+                margin-bottom: 1.3rem;
                 border-radius: 15px;
             }
 
             .content-section h2 {
-                font-size: 1.3rem;
-                margin-bottom: 1.2rem;
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                padding-bottom: 0.6rem;
             }
 
             .content-section h3 {
-                font-size: 1.1rem;
-                margin-top: 1.5rem;
-                margin-bottom: 0.8rem;
+                font-size: 1.05rem;
+                margin-top: 1.3rem;
+                margin-bottom: 0.7rem;
             }
 
             .content-section p {
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
-                line-height: 1.7;
+                font-size: 0.85rem;
+                margin-bottom: 0.9rem;
+                line-height: 1.65;
             }
 
             .content-section li {
-                font-size: 0.9rem;
-                margin-bottom: 0.7rem;
-                line-height: 1.7;
+                font-size: 0.85rem;
+                margin-bottom: 0.6rem;
+                line-height: 1.65;
+            }
+
+            .content-section ol, .content-section ul {
+                margin-left: 1.2rem;
+                margin-bottom: 1.2rem;
             }
         }
     </style>
