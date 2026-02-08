@@ -1294,6 +1294,298 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* 専門性評価チャート */
+        .skill-chart-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.03), rgba(167, 139, 250, 0.03));
+        }
+
+        .chart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .chart-input {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .axis-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1.8rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .axis-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .axis-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .axis-desc {
+            font-size: 0.95rem;
+            color: #6B7280;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .pills {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .pill {
+            flex: 1;
+            padding: 1rem 0.5rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            color: var(--dark);
+        }
+
+        .pill:hover {
+            border-color: var(--primary);
+            background: rgba(255, 107, 157, 0.05);
+        }
+
+        .pill.selected {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .definition {
+            margin-top: 0.8rem;
+        }
+
+        .definition summary {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 600;
+            padding: 0.6rem;
+            list-style: none;
+        }
+
+        .definition summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .definition summary::before {
+            content: '▸ ';
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .definition[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .definition-content {
+            font-size: 0.85rem;
+            color: #4B5563;
+            padding: 1rem;
+            line-height: 1.7;
+            background: rgba(78, 205, 196, 0.05);
+            border-radius: 10px;
+            margin-top: 0.5rem;
+        }
+
+        .definition-item {
+            margin-bottom: 0.7rem;
+        }
+
+        .definition-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-output {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .chart-visual {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        #radarChart {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .chart-scores {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .score-card {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(167, 139, 250, 0.05));
+            border-radius: 15px;
+        }
+
+        .score-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        .score-text.small {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4B5563;
+        }
+
+        .chart-disclaimer {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .chart-disclaimer summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+            list-style: none;
+        }
+
+        .chart-disclaimer summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .disclaimer-content {
+            padding: 1rem 0 0.5rem 0;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #4B5563;
+        }
+
+        @media (max-width: 1024px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .chart-output {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .skill-chart-section {
+                padding: 3rem 1.2rem;
+            }
+
+            .chart-container {
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+
+            .axis-card {
+                padding: 1.3rem;
+            }
+
+            .axis-title {
+                font-size: 1.1rem;
+            }
+
+            .axis-desc {
+                font-size: 0.85rem;
+                margin-bottom: 1rem;
+            }
+
+            .pills {
+                gap: 0.4rem;
+            }
+
+            .pill {
+                padding: 0.8rem 0.3rem;
+                font-size: 0.95rem;
+            }
+
+            .chart-visual {
+                padding: 1.5rem;
+            }
+
+            #radarChart {
+                height: 300px;
+            }
+
+            .chart-scores {
+                padding: 1.5rem;
+            }
+
+            .score-card {
+                padding: 1rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .score-value {
+                font-size: 2rem;
+            }
+
+            .score-text {
+                font-size: 1rem;
+            }
+
+            .score-text.small {
+                font-size: 0.9rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1406,6 +1698,50 @@
             </div>
         </div>
     </section>
+
+    <!-- 専門性評価チャート -->
+    <section id="skill-chart" class="skill-chart-section">
+        <div class="section-header">
+            <span class="section-tag">Self Assessment</span>
+            <h2>あなたの専門性を可視化</h2>
+            <p>5つの軸で自己診断。強みと伸ばす1点が見えてきます。</p>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-input">
+                <div id="chartInputCards"></div>
+            </div>
+
+            <div class="chart-output">
+                <div class="chart-visual">
+                    <svg id="radarChart" viewBox="0 0 400 400"></svg>
+                </div>
+                
+                <div class="chart-scores">
+                    <div class="score-card">
+                        <div class="score-label">総合スコア</div>
+                        <div class="score-value" id="totalScore">—</div>
+                    </div>
+                    <div class="score-card">
+                        <div class="score-label">伸ばす1点</div>
+                        <div class="score-text" id="weakPoint">—</div>
+                    </div>
+                    <div class="score-card">
+                        <div class="score-label">次の一手</div>
+                        <div class="score-text small" id="nextStep">—</div>
+                    </div>
+                </div>
+
+                <details class="chart-disclaimer">
+                    <summary>使い方・免責事項</summary>
+                    <div class="disclaimer-content">
+                        各項目はあなたの専門領域・勤務環境の中で相対評価してください。自己診断の目安で、他者比較や採用判断には使いません。入力は自己申告です。
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
 
     <section id="process" class="process">
         <div class="poly-bg">
@@ -1691,6 +2027,240 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        // 専門性評価チャート - 看護師用軸定義（この配列を編集して内容を変更可能）
+        const axisData = [
+            {
+                name: '観察判断',
+                desc: '状態変化を捉え、先回りして動ける',
+                definitions: {
+                    1: '異常の気づきが遅れがちで、報告内容も要点がまとまらない',
+                    3: '重要所見を拾ってSBAR等で報告でき、リスクを先読みして対応できる',
+                    5: '専門領域（認知症、皮膚・排泄、感染、集中ケア等）でアセスメント→介入提案→評価まで一連で回し、周囲に教育/助言できる'
+                }
+            },
+            {
+                name: '処置',
+                desc: '安全・清潔・確実に実施できる',
+                definitions: {
+                    1: '基本手技に不安があり、手順確認が頻繁に必要',
+                    3: '標準的処置を独力で安全に実施、トラブル時に適切にエスカレできる',
+                    5: '難易度の高い処置/状況でも安全に実施し、手順標準化や指導ができる'
+                }
+            },
+            {
+                name: '連携',
+                desc: '他職種と情報をつなぐ',
+                definitions: {
+                    1: '申し送り/連絡の抜け漏れが起きる',
+                    3: '必要な相手に必要な情報を適切な粒度で共有できる',
+                    5: 'チームの意思決定を前に進め、摩擦も調整しながら連携設計できる'
+                }
+            },
+            {
+                name: '記録',
+                desc: '正確・速い・伝わる',
+                definitions: {
+                    1: '遅延/修正が多く、他者が読んで理解しづらい',
+                    3: '要点が整理され、時間内に記録できる',
+                    5: '監査や申し送りに耐える質で、テンプレ整備や改善提案までできる'
+                }
+            },
+            {
+                name: '接遇',
+                desc: '患者・家族への関わり',
+                definitions: {
+                    1: '対応が硬くなりやすく、困難場面で詰まりがち',
+                    3: '不安を拾って説明/共感し、必要時に支援を取り込める',
+                    5: '困難事例でも関係を壊さず、チームとしての支援につなげられる'
+                }
+            }
+        ];
+
+        const nextSteps = [
+            '1患者でリスク（せん妄/転倒等）を1つ選び、観察→介入→評価を記録',
+            '1つの処置について、手順を見直し改善点を1つメモ',
+            '1日の申し送りを振り返り、伝わりにくかった情報を1つ特定',
+            '今日の記録を1つ選び、SOAP形式で書き直してみる',
+            '困難だった患者対応を1つ振り返り、別のアプローチを1つ考える'
+        ];
+
+        let scores = [null, null, null, null, null];
+
+        function renderChartInput() {
+            const container = document.getElementById('chartInputCards');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            axisData.forEach((axis, idx) => {
+                const card = document.createElement('div');
+                card.className = 'axis-card fade-in';
+                card.innerHTML = `
+                    <div class="axis-title">${axis.name}</div>
+                    <div class="axis-desc">${axis.desc}</div>
+                    <div class="pills">
+                        ${[1,2,3,4,5].map(v => `
+                            <div class="pill ${scores[idx] === v ? 'selected' : ''}" 
+                                 data-axis="${idx}" data-value="${v}">
+                                ${v}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <details class="definition">
+                        <summary>1/3/5の定義を見る</summary>
+                        <div class="definition-content">
+                            <div class="definition-item"><strong>1:</strong> ${axis.definitions[1]}</div>
+                            <div class="definition-item"><strong>2/4:</strong> 中間</div>
+                            <div class="definition-item"><strong>3:</strong> ${axis.definitions[3]}</div>
+                            <div class="definition-item"><strong>5:</strong> ${axis.definitions[5]}</div>
+                        </div>
+                    </details>
+                `;
+                container.appendChild(card);
+            });
+
+            document.querySelectorAll('.pill').forEach(pill => {
+                pill.addEventListener('click', handlePillClick);
+            });
+        }
+
+        function handlePillClick(e) {
+            const axis = parseInt(e.target.dataset.axis);
+            const value = parseInt(e.target.dataset.value);
+            scores[axis] = value;
+            renderChartInput();
+            updateChartOutput();
+        }
+
+        function updateChartOutput() {
+            const filled = scores.filter(v => v !== null);
+            
+            if (filled.length === 5) {
+                const total = Math.round((filled.reduce((a, b) => a + b, 0) / 5) * 20);
+                document.getElementById('totalScore').textContent = total;
+                
+                const minIdx = scores.indexOf(Math.min(...filled));
+                document.getElementById('weakPoint').textContent = axisData[minIdx].name;
+                document.getElementById('nextStep').textContent = nextSteps[minIdx];
+                
+                drawRadarChart();
+            } else {
+                document.getElementById('totalScore').textContent = '—';
+                document.getElementById('weakPoint').textContent = '—';
+                document.getElementById('nextStep').textContent = '—';
+                drawRadarChart();
+            }
+        }
+
+        function drawRadarChart() {
+            const svg = document.getElementById('radarChart');
+            if (!svg) return;
+            
+            svg.innerHTML = '';
+            
+            const cx = 200, cy = 200, maxR = 140;
+            const n = 5;
+            const angleStep = (Math.PI * 2) / n;
+            
+            // Grid circles
+            for (let level = 1; level <= 5; level++) {
+                const r = (maxR / 5) * level;
+                const points = [];
+                for (let i = 0; i < n; i++) {
+                    const angle = angleStep * i - Math.PI / 2;
+                    points.push(`${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`);
+                }
+                const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                polygon.setAttribute('points', points.join(' '));
+                polygon.setAttribute('fill', 'none');
+                polygon.setAttribute('stroke', level === 5 ? '#D1D5DB' : '#E5E7EB');
+                polygon.setAttribute('stroke-width', level === 5 ? '2' : '1');
+                svg.appendChild(polygon);
+            }
+            
+            // Axis lines
+            for (let i = 0; i < n; i++) {
+                const angle = angleStep * i - Math.PI / 2;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', cx);
+                line.setAttribute('y1', cy);
+                line.setAttribute('x2', cx + maxR * Math.cos(angle));
+                line.setAttribute('y2', cy + maxR * Math.sin(angle));
+                line.setAttribute('stroke', '#D1D5DB');
+                line.setAttribute('stroke-width', '2');
+                svg.appendChild(line);
+                
+                // Labels
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                const labelR = maxR + 35;
+                text.setAttribute('x', cx + labelR * Math.cos(angle));
+                text.setAttribute('y', cy + labelR * Math.sin(angle));
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('fill', '#2D3142');
+                text.setAttribute('font-size', '14');
+                text.setAttribute('font-weight', '700');
+                text.setAttribute('font-family', 'Zen Kaku Gothic New, sans-serif');
+                text.textContent = axisData[i].name;
+                svg.appendChild(text);
+            }
+            
+            // Data polygon
+            const dataPoints = [];
+            let hasData = false;
+            for (let i = 0; i < n; i++) {
+                const value = scores[i];
+                if (value !== null) {
+                    hasData = true;
+                    const r = (maxR / 5) * value;
+                    const angle = angleStep * i - Math.PI / 2;
+                    dataPoints.push({
+                        x: cx + r * Math.cos(angle),
+                        y: cy + r * Math.sin(angle)
+                    });
+                } else {
+                    dataPoints.push({ x: cx, y: cy });
+                }
+            }
+            
+            if (hasData) {
+                const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                polygon.setAttribute('points', dataPoints.map(p => `${p.x},${p.y}`).join(' '));
+                polygon.setAttribute('fill', 'rgba(255, 107, 157, 0.25)');
+                polygon.setAttribute('stroke', '#FF6B9D');
+                polygon.setAttribute('stroke-width', '3');
+                svg.appendChild(polygon);
+                
+                // Points
+                dataPoints.forEach((p, i) => {
+                    if (scores[i] !== null) {
+                        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        circle.setAttribute('cx', p.x);
+                        circle.setAttribute('cy', p.y);
+                        circle.setAttribute('r', '7');
+                        circle.setAttribute('fill', '#FF6B9D');
+                        circle.setAttribute('stroke', '#FFFFFF');
+                        circle.setAttribute('stroke-width', '2');
+                        svg.appendChild(circle);
+                    }
+                });
+            }
+        }
+
+        // Initialize chart when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                renderChartInput();
+                updateChartOutput();
+            });
+        } else {
+            renderChartInput();
+            updateChartOutput();
+        }
+
     </script>
 </body>
 </html>
