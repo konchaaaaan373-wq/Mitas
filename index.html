@@ -403,6 +403,9 @@
         .hero-visual {
             position: relative;
             animation: fadeInRight 1s ease;
+            background: url('hero-doctors.jpg') center center / cover no-repeat;
+            border-radius: 30px;
+            padding: 1rem;
         }
 
         @keyframes fadeInRight {
@@ -417,7 +420,9 @@
         }
 
         .poly-card {
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 30px;
             padding: 3rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
