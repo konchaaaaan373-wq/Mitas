@@ -403,9 +403,6 @@
         .hero-visual {
             position: relative;
             animation: fadeInRight 1s ease;
-            background: url('hero-doctors.jpg') center center / cover no-repeat;
-            border-radius: 30px;
-            padding: 1rem;
         }
 
         @keyframes fadeInRight {
@@ -420,14 +417,21 @@
         }
 
         .poly-card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: var(--white);
             border-radius: 30px;
             padding: 3rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            object-fit: cover;
+            height: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         }
 
         .poly-card::before {
@@ -1128,6 +1132,11 @@
                 text-align: center;
                 padding: 0.85rem 1.5rem;
                 font-size: 0.95rem;
+            }
+
+            .hero-image {
+                height: 160px;
+                margin-bottom: 1rem;
             }
 
             .poly-card {
@@ -2067,6 +2076,7 @@
                 </div>
             </div>
             <div class="hero-visual">
+                <img src="hero-doctors.jpg" alt="医師イメージ" class="hero-image">
                 <div class="poly-card">
                     <h3 style="font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark); font-weight: 700;">Necoが選ばれる理由</h3>
                     <p style="color: #6B7280; margin-bottom: 2rem;">専門性を活かした最適なマッチング</p>
