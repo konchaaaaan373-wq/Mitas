@@ -324,8 +324,8 @@
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
             align-items: center;
             position: relative;
             z-index: 1;
@@ -403,6 +403,8 @@
         .hero-visual {
             position: relative;
             animation: fadeInRight 1s ease;
+            display: flex;
+            justify-content: flex-end;
         }
 
         @keyframes fadeInRight {
@@ -427,11 +429,10 @@
 
         .hero-image {
             width: 100%;
-            border-radius: 20px;
-            margin-bottom: 1.5rem;
+            border-radius: 24px;
             object-fit: cover;
-            height: 220px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            height: 480px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
         }
 
         .poly-card::before {
@@ -579,6 +580,120 @@
             color: var(--dark);
             font-size: 0.9375rem;
             line-height: 1.5;
+        }
+
+        /* Reasons Section */
+        .reasons-section {
+            padding: 6rem 2rem;
+            background: var(--white);
+            position: relative;
+        }
+
+        .reasons-section .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .reasons-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .reason-card {
+            background: var(--light);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 24px 24px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .reason-card:nth-child(1)::before { background: linear-gradient(90deg, var(--primary), var(--purple)); }
+        .reason-card:nth-child(2)::before { background: linear-gradient(90deg, var(--secondary), var(--blue)); }
+        .reason-card:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), var(--primary)); }
+        .reason-card:nth-child(4)::before { background: linear-gradient(90deg, var(--orange), var(--accent)); }
+
+        .reason-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .reason-card:hover::before {
+            height: 6px;
+        }
+
+        .reason-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+        }
+
+        .reason-card:nth-child(1) .reason-icon {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(167, 139, 250, 0.15));
+        }
+        .reason-card:nth-child(2) .reason-icon {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(76, 201, 240, 0.15));
+        }
+        .reason-card:nth-child(3) .reason-icon {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(255, 107, 157, 0.15));
+        }
+        .reason-card:nth-child(4) .reason-icon {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 230, 109, 0.15));
+        }
+
+        .reason-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .reason-card:nth-child(1) .reason-icon svg path,
+        .reason-card:nth-child(1) .reason-icon svg circle { stroke: var(--primary); }
+        .reason-card:nth-child(1) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--primary); }
+
+        .reason-card:nth-child(2) .reason-icon svg path,
+        .reason-card:nth-child(2) .reason-icon svg circle { stroke: var(--secondary); }
+        .reason-card:nth-child(2) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--secondary); }
+
+        .reason-card:nth-child(3) .reason-icon svg path,
+        .reason-card:nth-child(3) .reason-icon svg circle { stroke: var(--purple); }
+        .reason-card:nth-child(3) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--purple); }
+
+        .reason-card:nth-child(4) .reason-icon svg path,
+        .reason-card:nth-child(4) .reason-icon svg circle { stroke: var(--orange); }
+        .reason-card:nth-child(4) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--orange); }
+
+        .reason-card h3 {
+            font-size: 1.15rem;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .reason-card p {
+            font-size: 0.9rem;
+            color: #6B7280;
+            line-height: 1.7;
         }
 
         /* Process Section */
@@ -1040,6 +1155,14 @@
                 gap: 3rem;
             }
 
+            .hero-image {
+                height: 350px;
+            }
+
+            .reasons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .features-grid {
                 grid-template-columns: 1fr;
             }
@@ -1135,46 +1258,44 @@
             }
 
             .hero-image {
-                height: 160px;
+                height: 240px;
+                border-radius: 16px;
+            }
+
+            /* Reasons Section Mobile */
+            .reasons-section {
+                padding: 3rem 1.2rem;
+            }
+
+            .reasons-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .reason-card {
+                padding: 1.5rem 1.2rem;
+                border-radius: 16px;
+            }
+
+            .reason-icon {
+                width: 56px;
+                height: 56px;
                 margin-bottom: 1rem;
             }
 
-            .poly-card {
-                padding: 1.8rem 1.3rem;
+            .reason-icon svg {
+                width: 28px;
+                height: 28px;
             }
 
-            .poly-card h3 {
-                font-size: 1.1rem !important;
-                margin-bottom: 0.7rem !important;
+            .reason-card h3 {
+                font-size: 0.95rem;
+                margin-bottom: 0.5rem;
             }
 
-            .poly-card p {
-                font-size: 0.85rem;
-                margin-bottom: 1.3rem !important;
-            }
-
-            .feature-badges {
-                gap: 0.8rem;
-            }
-
-            .badge {
-                padding: 0.9rem;
-            }
-
-            .badge-icon {
-                width: 45px;
-                height: 45px;
-                margin-bottom: 0.6rem;
-            }
-
-            .badge-icon svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            .badge-text {
+            .reason-card p {
                 font-size: 0.8rem;
-                line-height: 1.35;
+                line-height: 1.6;
             }
 
             /* プロセスセクション */
@@ -2077,53 +2198,62 @@
             </div>
             <div class="hero-visual">
                 <img src="hero-doctors.jpg" alt="医師イメージ" class="hero-image">
-                <div class="poly-card">
-                    <h3 style="font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark); font-weight: 700;">Necoが選ばれる理由</h3>
-                    <p style="color: #6B7280; margin-bottom: 2rem;">専門性を活かした最適なマッチング</p>
-                    <div class="feature-badges">
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                    <circle cx="12" cy="12" r="3" opacity="0.2"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">専門性の定量評価</span>
-                        </div>
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="9" cy="7" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">専任コンシェルジュ</span>
-                        </div>
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                                    <path d="M12 6V12L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 2V6M12 18V22M22 12H18M6 12H2" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">時間をかけた対応<br>+ 長期間のサポート</span>
-                        </div>
-                        <div class="badge">
-                            <div class="badge-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
-                                    <path d="M3 9H21M9 3V21" stroke-width="2" opacity="0.3"/>
-                                    <circle cx="15" cy="15" r="3" stroke-width="2"/>
-                                    <path d="M15 13V15L16.5 16.5" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <span class="badge-text">AIを用いた<br>最適な求人マッチング</span>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Necoが選ばれる理由 -->
+    <section class="reasons-section" id="reasons">
+        <div class="section-header">
+            <span class="section-tag">Why Neco?</span>
+            <h2>Necoが選ばれる<span class="gradient-text">4つの理由</span></h2>
+            <p>専門性を活かした最適なマッチングで、あなたのキャリアを支えます</p>
+        </div>
+        <div class="reasons-grid">
+            <div class="reason-card">
+                <div class="reason-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <circle cx="12" cy="12" r="3" opacity="0.2"/>
+                    </svg>
                 </div>
+                <h3>専門性の定量評価</h3>
+                <p>あなたのスキルや経験を数値化し、市場価値を正確に把握。強みを最大限に活かせる求人をご提案します。</p>
+            </div>
+            <div class="reason-card">
+                <div class="reason-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="9" cy="7" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3>専任コンシェルジュ</h3>
+                <p>医療業界に精通した専任担当が、あなたの希望やライフスタイルに寄り添い、最適な職場を一緒に探します。</p>
+            </div>
+            <div class="reason-card">
+                <div class="reason-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                        <path d="M12 6V12L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 2V6M12 18V22M22 12H18M6 12H2" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+                    </svg>
+                </div>
+                <h3>時間をかけた対応と長期サポート</h3>
+                <p>急かさず、じっくりと時間をかけてあなたに合う職場を探索。入職後も長期にわたりフォローします。</p>
+            </div>
+            <div class="reason-card">
+                <div class="reason-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
+                        <path d="M3 9H21M9 3V21" stroke-width="2" opacity="0.3"/>
+                        <circle cx="15" cy="15" r="3" stroke-width="2"/>
+                        <path d="M15 13V15L16.5 16.5" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>AIを用いた最適マッチング</h3>
+                <p>独自のAIアルゴリズムが、あなたの経験・希望条件・将来のキャリアプランを分析し、最適な求人を提案します。</p>
             </div>
         </div>
     </section>
