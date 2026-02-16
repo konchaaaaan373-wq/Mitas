@@ -348,14 +348,6 @@
             color: var(--primary);
         }
 
-        .result-job-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1rem;
-            width: 100%;
-        }
-
         .hero-visual {
             position: relative;
             animation: fadeInRight 1s ease;
@@ -1336,620 +1328,341 @@
             transform: translateY(0);
         }
         /* 専門性評価チャート */
-        .skill-chart-section {
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.03), rgba(167, 139, 250, 0.03));
-        }
-
-        .chart-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .chart-input {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .axis-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 1.8rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .axis-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .axis-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .axis-desc {
-            font-size: 0.95rem;
-            color: #6B7280;
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-        }
-
-        .pills {
-            display: flex;
-            gap: 0.6rem;
-            margin-bottom: 1rem;
-        }
-
-        .pill {
-            flex: 1;
-            padding: 1rem 0.5rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            color: var(--dark);
-        }
-
-        .pill:hover {
-            border-color: var(--primary);
-            background: rgba(255, 107, 157, 0.05);
-        }
-
-        .pill.selected {
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            color: var(--white);
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
-        }
-
-        .definition {
-            margin-top: 0.8rem;
-        }
-
-        .definition summary {
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--secondary);
-            font-weight: 600;
-            padding: 0.6rem;
-            list-style: none;
-        }
-
-        .definition summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .definition summary::before {
-            content: '▸ ';
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        .definition[open] summary::before {
-            transform: rotate(90deg);
-        }
-
-        .definition-content {
-            font-size: 0.85rem;
-            color: #4B5563;
-            padding: 1rem;
-            line-height: 1.7;
-            background: rgba(78, 205, 196, 0.05);
-            border-radius: 10px;
-            margin-top: 0.5rem;
-        }
-
-        .definition-item {
-            margin-bottom: 0.7rem;
-        }
-
-        .definition-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .chart-output {
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-        }
-
-        .chart-visual {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin-bottom: 1.5rem;
-        }
-
-        #radarChart {
-            width: 100%;
-            max-width: 400px;
-            height: 400px;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .chart-scores {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin-bottom: 1.5rem;
-        }
-
-        .score-card {
-            margin-bottom: 1.5rem;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(167, 139, 250, 0.05));
-            border-radius: 15px;
-        }
-
-        .score-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .score-label {
-            font-size: 0.9rem;
-            color: #6B7280;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .score-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .score-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark);
-            line-height: 1.5;
-        }
-
-        .score-text.small {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #4B5563;
-        }
-
-        .chart-disclaimer {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 1.2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .chart-disclaimer summary {
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark);
-            list-style: none;
-        }
-
-        .chart-disclaimer summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .disclaimer-content {
-            padding: 1rem 0 0.5rem 0;
-            font-size: 0.9rem;
-            line-height: 1.7;
-            color: #4B5563;
-        }
-
-        @media (max-width: 1024px) {
-            .chart-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .chart-output {
-                position: static;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .skill-chart-section {
-                padding: 3rem 1.2rem;
-            }
-
-            .chart-container {
-                gap: 2rem;
-                margin-top: 2rem;
-            }
-
-            .axis-card {
-                padding: 1.3rem;
-            }
-
-            .axis-title {
-                font-size: 1.1rem;
-            }
-
-            .axis-desc {
-                font-size: 0.85rem;
-                margin-bottom: 1rem;
-            }
-
-            .pills {
-                gap: 0.4rem;
-            }
-
-            .pill {
-                padding: 0.8rem 0.3rem;
-                font-size: 0.95rem;
-            }
-
-            .chart-visual {
-                padding: 1.5rem;
-            }
-
-            #radarChart {
-                height: 300px;
-            }
-
-            .chart-scores {
-                padding: 1.5rem;
-            }
-
-            .score-card {
-                padding: 1rem;
-                margin-bottom: 1.2rem;
-            }
-
-            .score-value {
-                font-size: 2rem;
-            }
-
-            .score-text {
-                font-size: 1rem;
-            }
-
-            .score-text.small {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* 専門性評価チャート - コンパクト版 */
-        .skill-chart-section {
+        /* MedType CTA Section */
+        .medtype-cta-section {
             padding: 5rem 2rem;
             background: var(--white);
             position: relative;
             overflow: hidden;
         }
 
-        .skill-chart-section::before {
+        .medtype-cta-section::before {
             content: '';
             position: absolute;
-            top: -50%;
+            top: -30%;
             right: -10%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(255, 107, 157, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.06) 0%, transparent 70%);
             border-radius: 50%;
         }
 
-        .chart-container {
+        .medtype-cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .medtype-cta-container {
             max-width: 1100px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 2.5rem;
             margin-top: 2.5rem;
             position: relative;
             z-index: 1;
         }
 
-        .chart-input {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .axis-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.9));
-            border-radius: 16px;
-            padding: 1.3rem 1.5rem;
-            border: 1px solid rgba(45, 49, 66, 0.08);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .axis-card:hover {
-            transform: translateX(5px);
-            border-color: rgba(255, 107, 157, 0.3);
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.12);
-        }
-
-        .axis-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .axis-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .axis-desc {
-            font-size: 0.85rem;
-            color: #6B7280;
-            margin-bottom: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .pills {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .pill {
-            flex: 1;
-            padding: 0.7rem 0.3rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.25s ease;
-            color: #9CA3AF;
-            background: var(--white);
-        }
-
-        .pill:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .pill.selected {
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            color: var(--white);
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.25);
-            transform: scale(1.05);
-        }
-
-        .definition {
-            margin-top: 0.5rem;
-        }
-
-        .definition summary {
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: var(--secondary);
-            font-weight: 600;
-            padding: 0.4rem 0;
-            list-style: none;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .definition summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .definition summary::before {
-            content: '▸';
-            display: inline-block;
-            transition: transform 0.2s ease;
-            font-size: 0.7rem;
-        }
-
-        .definition[open] summary::before {
-            transform: rotate(90deg);
-        }
-
-        .definition-content {
-            font-size: 0.8rem;
-            color: #6B7280;
-            padding: 0.8rem;
-            line-height: 1.6;
-            background: rgba(78, 205, 196, 0.04);
-            border-radius: 8px;
-            margin-top: 0.4rem;
-            border-left: 3px solid var(--secondary);
-        }
-
-        .definition-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .definition-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .chart-output {
-            position: sticky;
-            top: 90px;
-            height: fit-content;
-        }
-
-        .chart-visual-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
-            border-radius: 20px;
-            padding: 1.8rem;
-            border: 1px solid rgba(45, 49, 66, 0.08);
-            margin-bottom: 1.2rem;
-            backdrop-filter: blur(10px);
-        }
-
-        #radarChart {
-            width: 100%;
-            max-width: 350px;
-            height: 350px;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .chart-scores {
+        .medtype-cta-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 28px;
+            padding: 3.5rem;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15, 52, 96, 0.3);
         }
 
-        .score-card {
-            padding: 1.2rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
-            border-radius: 16px;
-            border: 1px solid rgba(45, 49, 66, 0.08);
+        .medtype-cta-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 157, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .medtype-cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .medtype-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem 1.2rem;
+            margin-bottom: 1.5rem;
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
-        .score-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        .score-label {
-            font-size: 0.8rem;
-            color: #6B7280;
-            margin-bottom: 0.4rem;
+        .medtype-badge span {
+            font-size: 0.85rem;
             font-weight: 600;
-            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
             letter-spacing: 0.5px;
         }
 
-        .score-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+        .medtype-cta-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .medtype-cta-content h3 .gradient-text {
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.2;
         }
 
-        .score-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--dark);
-            line-height: 1.4;
+        .medtype-cta-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.8;
+            margin-bottom: 2rem;
         }
 
-        .score-text.small {
-            font-size: 0.95rem;
+        .medtype-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .medtype-feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.85);
             font-weight: 500;
-            color: #4B5563;
-            line-height: 1.6;
         }
 
-        .chart-disclaimer {
-            background: rgba(78, 205, 196, 0.06);
-            border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid rgba(78, 205, 196, 0.2);
+        .medtype-feature-tag svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
         }
 
-        .chart-disclaimer summary {
-            cursor: pointer;
+        .medtype-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .medtype-cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .medtype-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.45);
+        }
+
+        .medtype-cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .medtype-cta-btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .medtype-cta-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        .medtype-cta-sub {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 1rem;
+        }
+
+        .medtype-visual {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .medtype-characters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            max-width: 380px;
+        }
+
+        .medtype-char {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .medtype-char:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 107, 157, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .medtype-char-emoji {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            line-height: 1;
+        }
+
+        .medtype-char-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
-            color: var(--dark);
-            list-style: none;
-            font-size: 0.85rem;
+            letter-spacing: 0.3px;
         }
 
-        .chart-disclaimer summary::-webkit-details-marker {
-            display: none;
+        .medtype-char:nth-child(2) {
+            transform: translateY(-10px);
         }
 
-        .disclaimer-content {
-            padding: 0.8rem 0 0.3rem 0;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #4B5563;
+        .medtype-char:nth-child(2):hover {
+            transform: translateY(-15px);
+        }
+
+        .medtype-char:nth-child(5) {
+            transform: translateY(-10px);
+        }
+
+        .medtype-char:nth-child(5):hover {
+            transform: translateY(-15px);
+        }
+
+        .medtype-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .medtype-stat {
+            text-align: center;
+        }
+
+        .medtype-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .medtype-stat-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            margin-top: 0.2rem;
         }
 
         @media (max-width: 1024px) {
-            .chart-container {
+            .medtype-cta-card {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 2.5rem;
+                padding: 3rem;
             }
 
-            .chart-output {
-                position: static;
+            .medtype-visual {
+                order: -1;
             }
         }
 
         @media (max-width: 768px) {
-            .skill-chart-section {
+            .medtype-cta-section {
                 padding: 3rem 1.2rem;
             }
 
-            .chart-container {
-                gap: 1.8rem;
-                margin-top: 2rem;
+            .medtype-cta-card {
+                padding: 2rem 1.5rem;
+                border-radius: 20px;
             }
 
-            .axis-card {
-                padding: 1.1rem 1.2rem;
+            .medtype-cta-content h3 {
+                font-size: 1.5rem;
             }
 
-            .axis-title {
-                font-size: 1rem;
-            }
-
-            .axis-desc {
-                font-size: 0.8rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .pills {
-                gap: 0.4rem;
-            }
-
-            .pill {
-                padding: 0.65rem 0.25rem;
+            .medtype-cta-desc {
                 font-size: 0.9rem;
             }
 
-            .chart-visual-card {
-                padding: 1.3rem;
-            }
-
-            #radarChart {
-                height: 280px;
-                max-width: 280px;
-            }
-
-            .score-card {
-                padding: 1rem;
-            }
-
-            .score-value {
-                font-size: 1.8rem;
-            }
-
-            .score-text {
+            .medtype-cta-btn {
                 font-size: 1rem;
+                padding: 0.9rem 2rem;
+                width: 100%;
+                justify-content: center;
             }
 
-            .score-text.small {
-                font-size: 0.85rem;
+            .medtype-characters {
+                max-width: 300px;
+                gap: 0.7rem;
+            }
+
+            .medtype-char {
+                padding: 1rem 0.5rem;
+            }
+
+            .medtype-char-emoji {
+                font-size: 2.2rem;
+            }
+
+            .medtype-stats {
+                gap: 1.5rem;
+            }
+
+            .medtype-feature-tag {
+                font-size: 0.78rem;
+                padding: 0.4rem 0.8rem;
             }
         }
 
@@ -2025,47 +1738,93 @@
 
 
 
-    <!-- 専門性評価チャート -->
-    <section id="skill-chart" class="skill-chart-section">
+    <!-- MedType 診断CTA -->
+    <section id="skill-chart" class="medtype-cta-section">
         <div class="section-header">
-            <span class="section-tag">Self Assessment</span>
-            <h2>あなたの専門性を可視化</h2>
-            <p>5つの軸で自己診断。強みと伸ばす1点が一目でわかります。</p>
+            <span class="section-tag">MedType</span>
+            <h2>医療者としての自分を、客観的に知る</h2>
+            <p>能力・専門性・資質・働き方を多角的に評価。あなたの医療者タイプが見えてきます。</p>
         </div>
 
-        <div class="chart-container">
-            <div class="chart-input">
-                <div id="chartInputCards"></div>
-            </div>
+        <div class="medtype-cta-container">
+            <div class="medtype-cta-card">
+                <div class="medtype-cta-content">
+                    <div class="medtype-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                        <span>Self Assessment</span>
+                    </div>
+                    <h3>あなたは何タイプ？<br><span class="gradient-text">MedType診断</span></h3>
+                    <p class="medtype-cta-desc">
+                        観察判断力・処置力・連携力・記録力・接遇力の5軸であなたの医療者としてのタイプを診断。<br>
+                        強みと伸びしろが一目でわかるレーダーチャート付き。
+                    </p>
 
-            <div class="chart-output">
-                <div class="chart-visual-card">
-                    <svg id="radarChart" viewBox="0 0 400 400"></svg>
+                    <div class="medtype-features">
+                        <div class="medtype-feature-tag">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            5軸レーダー分析
+                        </div>
+                        <div class="medtype-feature-tag">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            所要時間 3分
+                        </div>
+                        <div class="medtype-feature-tag">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                            匿名・無料
+                        </div>
+                    </div>
+
+                    <a href="https://medmbti.netlify.app" class="medtype-cta-btn" target="_blank" rel="noopener noreferrer">
+                        無料で診断する
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <p class="medtype-cta-sub">登録不要 / 結果はその場で確認できます</p>
                 </div>
-                
-                <div class="chart-scores">
-                    <div class="score-card">
-                        <div class="score-label">Total Score</div>
-                        <div class="score-value" id="totalScore">—</div>
-                    </div>
-                    <div class="score-card">
-                        <div class="score-label">Focus Point</div>
-                        <div class="score-text" id="weakPoint">—</div>
-                    </div>
-                    <div class="score-card">
-                        <div class="score-label">Next Action</div>
-                        <div class="score-text small" id="nextStep">—</div>
+
+                <div class="medtype-visual">
+                    <div>
+                        <div class="medtype-characters">
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1F9D1;&#x200D;&#x2695;&#xFE0F;</span>
+                                <div class="medtype-char-label">Strategist</div>
+                            </div>
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1F468;&#x200D;&#x2695;&#xFE0F;</span>
+                                <div class="medtype-char-label">Speedster</div>
+                            </div>
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1F469;&#x200D;&#x2695;&#xFE0F;</span>
+                                <div class="medtype-char-label">Empath</div>
+                            </div>
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1F9EC;</span>
+                                <div class="medtype-char-label">Specialist</div>
+                            </div>
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1FA7A;</span>
+                                <div class="medtype-char-label">Operator</div>
+                            </div>
+                            <div class="medtype-char">
+                                <span class="medtype-char-emoji">&#x1F31F;</span>
+                                <div class="medtype-char-label">All-rounder</div>
+                            </div>
+                        </div>
+                        <div class="medtype-stats">
+                            <div class="medtype-stat">
+                                <div class="medtype-stat-value">6</div>
+                                <div class="medtype-stat-label">タイプ</div>
+                            </div>
+                            <div class="medtype-stat">
+                                <div class="medtype-stat-value">5</div>
+                                <div class="medtype-stat-label">評価軸</div>
+                            </div>
+                            <div class="medtype-stat">
+                                <div class="medtype-stat-value">3min</div>
+                                <div class="medtype-stat-label">所要時間</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <details class="chart-disclaimer">
-                    <summary>📋 使い方・免責事項</summary>
-                    <div class="disclaimer-content">
-                        各項目はあなたの専門領域・勤務環境の中で相対評価してください。自己診断の目安で、他者比較や採用判断には使いません。
-                    </div>
-                </details>
-
-                <a href="https://necofindjob.netlify.app/" class="cta-button result-job-link" target="_blank" rel="noopener noreferrer">診断結果に合った仕事を探す</a>
             </div>
         </div>
     </section>
@@ -2364,235 +2123,6 @@
 
 
     <script>
-        (function() {
-            'use strict';
-            
-            // 看護師用軸定義
-            const chartAxisData = [
-                {
-                    name: '観察判断',
-                    desc: '状態変化を捉え、先回りして動ける',
-                    definitions: {
-                        1: '異常の気づきが遅れがちで、報告内容も要点がまとまらない',
-                        3: '重要所見を拾ってSBAR等で報告でき、リスクを先読みして対応できる',
-                        5: '専門領域（認知症、皮膚・排泄、感染、集中ケア等）でアセスメント→介入提案→評価まで一連で回し、周囲に教育/助言できる'
-                    }
-                },
-                {
-                    name: '処置',
-                    desc: '安全・清潔・確実に実施できる',
-                    definitions: {
-                        1: '基本手技に不安があり、手順確認が頻繁に必要',
-                        3: '標準的処置を独力で安全に実施、トラブル時に適切にエスカレできる',
-                        5: '難易度の高い処置/状況でも安全に実施し、手順標準化や指導ができる'
-                    }
-                },
-                {
-                    name: '連携',
-                    desc: '他職種と情報をつなぐ',
-                    definitions: {
-                        1: '申し送り/連絡の抜け漏れが起きる',
-                        3: '必要な相手に必要な情報を適切な粒度で共有できる',
-                        5: 'チームの意思決定を前に進め、摩擦も調整しながら連携設計できる'
-                    }
-                },
-                {
-                    name: '記録',
-                    desc: '正確・速い・伝わる',
-                    definitions: {
-                        1: '遅延/修正が多く、他者が読んで理解しづらい',
-                        3: '要点が整理され、時間内に記録できる',
-                        5: '監査や申し送りに耐える質で、テンプレ整備や改善提案までできる'
-                    }
-                },
-                {
-                    name: '接遇',
-                    desc: '患者・家族への関わり',
-                    definitions: {
-                        1: '対応が硬くなりやすく、困難場面で詰まりがち',
-                        3: '不安を拾って説明/共感し、必要時に支援を取り込める',
-                        5: '困難事例でも関係を壊さず、チームとしての支援につなげられる'
-                    }
-                }
-            ];
-
-            const chartNextSteps = [
-                '1患者でリスク（せん妄/転倒等）を1つ選び、観察→介入→評価を記録',
-                '1つの処置について、手順を見直し改善点を1つメモ',
-                '1日の申し送りを振り返り、伝わりにくかった情報を1つ特定',
-                '今日の記録を1つ選び、SOAP形式で書き直してみる',
-                '困難だった患者対応を1つ振り返り、別のアプローチを1つ考える'
-            ];
-
-            let chartScores = [null, null, null, null, null];
-
-            function renderChartInput() {
-                const container = document.getElementById('chartInputCards');
-                if (!container) {
-                    console.error('chartInputCards not found');
-                    return;
-                }
-                
-                container.innerHTML = '';
-                
-                chartAxisData.forEach((axis, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'axis-card';
-                    card.innerHTML = `
-                        <div class="axis-header">
-                            <div class="axis-title">${axis.name}</div>
-                        </div>
-                        <div class="axis-desc">${axis.desc}</div>
-                        <div class="pills">
-                            ${[1,2,3,4,5].map(v => `
-                                <div class="pill ${chartScores[idx] === v ? 'selected' : ''}" 
-                                     data-axis="${idx}" data-value="${v}">
-                                    ${v}
-                                </div>
-                            `).join('')}
-                        </div>
-                        <details class="definition">
-                            <summary>定義を見る</summary>
-                            <div class="definition-content">
-                                <div class="definition-item"><strong>1:</strong> ${axis.definitions[1]}</div>
-                                <div class="definition-item"><strong>2/4:</strong> 中間</div>
-                                <div class="definition-item"><strong>3:</strong> ${axis.definitions[3]}</div>
-                                <div class="definition-item"><strong>5:</strong> ${axis.definitions[5]}</div>
-                            </div>
-                        </details>
-                    `;
-                    container.appendChild(card);
-                });
-
-                // イベントリスナー
-                document.querySelectorAll('.pill').forEach(pill => {
-                    pill.addEventListener('click', function(e) {
-                        const axis = parseInt(this.getAttribute('data-axis'));
-                        const value = parseInt(this.getAttribute('data-value'));
-                        chartScores[axis] = value;
-                        renderChartInput();
-                        updateChartOutput();
-                    });
-                });
-            }
-
-            function updateChartOutput() {
-                const filled = chartScores.filter(v => v !== null);
-                
-                if (filled.length === 5) {
-                    const total = Math.round((filled.reduce((a, b) => a + b, 0) / 5) * 20);
-                    document.getElementById('totalScore').textContent = total;
-                    
-                    const minIdx = chartScores.indexOf(Math.min(...filled));
-                    document.getElementById('weakPoint').textContent = chartAxisData[minIdx].name;
-                    document.getElementById('nextStep').textContent = chartNextSteps[minIdx];
-                    
-                    drawRadarChart();
-                } else {
-                    document.getElementById('totalScore').textContent = '—';
-                    document.getElementById('weakPoint').textContent = '—';
-                    document.getElementById('nextStep').textContent = '—';
-                    drawRadarChart();
-                }
-            }
-
-            function drawRadarChart() {
-                const svg = document.getElementById('radarChart');
-                if (!svg) return;
-                
-                svg.innerHTML = '';
-                
-                const cx = 200, cy = 200, maxR = 130;
-                const n = 5;
-                const angleStep = (Math.PI * 2) / n;
-                
-                for (let level = 1; level <= 5; level++) {
-                    const r = (maxR / 5) * level;
-                    const points = [];
-                    for (let i = 0; i < n; i++) {
-                        const angle = angleStep * i - Math.PI / 2;
-                        points.push(`${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`);
-                    }
-                    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                    polygon.setAttribute('points', points.join(' '));
-                    polygon.setAttribute('fill', 'none');
-                    polygon.setAttribute('stroke', level === 5 ? '#D1D5DB' : '#F3F4F6');
-                    polygon.setAttribute('stroke-width', level === 5 ? '2' : '1');
-                    svg.appendChild(polygon);
-                }
-                
-                for (let i = 0; i < n; i++) {
-                    const angle = angleStep * i - Math.PI / 2;
-                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    line.setAttribute('x1', cx);
-                    line.setAttribute('y1', cy);
-                    line.setAttribute('x2', cx + maxR * Math.cos(angle));
-                    line.setAttribute('y2', cy + maxR * Math.sin(angle));
-                    line.setAttribute('stroke', '#E5E7EB');
-                    line.setAttribute('stroke-width', '1.5');
-                    svg.appendChild(line);
-                    
-                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    const labelR = maxR + 30;
-                    text.setAttribute('x', cx + labelR * Math.cos(angle));
-                    text.setAttribute('y', cy + labelR * Math.sin(angle));
-                    text.setAttribute('text-anchor', 'middle');
-                    text.setAttribute('dominant-baseline', 'middle');
-                    text.setAttribute('fill', '#2D3142');
-                    text.setAttribute('font-size', '13');
-                    text.setAttribute('font-weight', '700');
-                    text.setAttribute('font-family', 'Zen Kaku Gothic New, sans-serif');
-                    text.textContent = chartAxisData[i].name;
-                    svg.appendChild(text);
-                }
-                
-                const dataPoints = [];
-                let hasData = false;
-                for (let i = 0; i < n; i++) {
-                    const value = chartScores[i];
-                    if (value !== null) {
-                        hasData = true;
-                        const r = (maxR / 5) * value;
-                        const angle = angleStep * i - Math.PI / 2;
-                        dataPoints.push({
-                            x: cx + r * Math.cos(angle),
-                            y: cy + r * Math.sin(angle)
-                        });
-                    } else {
-                        dataPoints.push({ x: cx, y: cy });
-                    }
-                }
-                
-                if (hasData) {
-                    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                    polygon.setAttribute('points', dataPoints.map(p => `${p.x},${p.y}`).join(' '));
-                    polygon.setAttribute('fill', 'rgba(255, 107, 157, 0.2)');
-                    polygon.setAttribute('stroke', '#FF6B9D');
-                    polygon.setAttribute('stroke-width', '3');
-                    svg.appendChild(polygon);
-                    
-                    dataPoints.forEach((p, i) => {
-                        if (chartScores[i] !== null) {
-                            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                            circle.setAttribute('cx', p.x);
-                            circle.setAttribute('cy', p.y);
-                            circle.setAttribute('r', '6');
-                            circle.setAttribute('fill', '#FF6B9D');
-                            circle.setAttribute('stroke', '#FFFFFF');
-                            circle.setAttribute('stroke-width', '2');
-                            svg.appendChild(circle);
-                        }
-                    });
-                }
-            }
-
-            // 初期化
-            setTimeout(function() {
-                renderChartInput();
-                updateChartOutput();
-            }, 100);
-            
-        })();
     </script>
 </body>
 </html>
