@@ -333,6 +333,29 @@
             box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
         }
 
+        .partner-home-link {
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: rgba(45, 49, 66, 0.65);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .partner-home-link:hover {
+            color: var(--primary);
+        }
+
+        .result-job-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
         .hero-visual {
             position: relative;
             animation: fadeInRight 1s ease;
@@ -1992,6 +2015,7 @@
                     <a href="#contact-form" class="cta-button">今すぐ相談する</a>
                     <a href="#process" class="secondary-button">詳しく見る</a>
                 </div>
+                <a href="https://necofindjob.netlify.app/" class="partner-home-link" target="_blank" rel="noopener noreferrer">Neco社</a>
             </div>
             <div class="hero-visual">
                 <img src="nurse.jpg" alt="看護師イメージ" class="hero-image" loading="eager" fetchpriority="high" decoding="async">
@@ -2040,6 +2064,8 @@
                         各項目はあなたの専門領域・勤務環境の中で相対評価してください。自己診断の目安で、他者比較や採用判断には使いません。
                     </div>
                 </details>
+
+                <a href="https://necofindjob.netlify.app/" class="cta-button result-job-link" target="_blank" rel="noopener noreferrer">診断結果に合った仕事を探す</a>
             </div>
         </div>
     </section>
