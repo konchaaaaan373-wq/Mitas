@@ -1535,7 +1535,7 @@
         /* MedType CTA Section */
         .medtype-cta-section {
             padding: 5rem 2rem;
-            background: var(--white);
+            background: #f8f5f1;
             position: relative;
             overflow: hidden;
         }
@@ -1547,7 +1547,7 @@
             right: -10%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(255, 107, 157, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.08) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -1558,8 +1558,41 @@
             left: -10%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(167, 139, 250, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(139, 124, 246, 0.08) 0%, transparent 70%);
             border-radius: 50%;
+        }
+
+        /* Cherry blossom petals */
+        .medtype-petal {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.35;
+            pointer-events: none;
+            animation: medtype-fall linear infinite, medtype-sway ease-in-out infinite;
+        }
+
+        @keyframes medtype-fall {
+            0% { top: -20px; }
+            100% { top: 110%; }
+        }
+
+        @keyframes medtype-sway {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(30px) rotate(90deg); }
+            50% { transform: translateX(-10px) rotate(180deg); }
+            75% { transform: translateX(20px) rotate(270deg); }
+        }
+
+        @keyframes medtype-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes medtype-shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
 
         .medtype-cta-container {
@@ -1571,7 +1604,8 @@
         }
 
         .medtype-cta-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #ffffff;
+            border: 2px solid #ddd5cc;
             border-radius: 28px;
             padding: 3.5rem;
             display: grid;
@@ -1580,7 +1614,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(15, 52, 96, 0.3);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
         }
 
         .medtype-cta-card::before {
@@ -1589,10 +1623,8 @@
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(255, 107, 157, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.15) 0%, transparent 50%);
+            height: 200px;
+            background: linear-gradient(180deg, rgba(255, 107, 157, 0.06), rgba(139, 124, 246, 0.04), transparent);
             pointer-events: none;
         }
 
@@ -1605,39 +1637,40 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(139, 124, 246, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(255, 107, 157, 0.25);
             border-radius: 50px;
-            padding: 0.5rem 1.2rem;
+            padding: 6px 18px;
             margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
         }
 
         .medtype-badge span {
-            font-size: 0.85rem;
+            font-size: 13px;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+            color: #e84393;
             letter-spacing: 0.5px;
         }
 
         .medtype-cta-content h3 {
+            font-family: 'Outfit', 'Zen Kaku Gothic New', sans-serif;
             font-size: 2rem;
             font-weight: 800;
-            color: #fff;
+            color: #1a1a2e;
             line-height: 1.4;
             margin-bottom: 1rem;
         }
 
         .medtype-cta-content h3 .gradient-text {
-            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            background: linear-gradient(135deg, #ff6b9d, #e84393, #8b7cf6, #6c5ce7, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 1px 2px rgba(30, 20, 50, 0.08));
         }
 
         .medtype-cta-desc {
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.75);
+            color: #3e3e52;
             line-height: 1.8;
             margin-bottom: 2rem;
         }
@@ -1653,12 +1686,12 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #f5f2ee;
+            border: 1px solid #ddd5cc;
             border-radius: 10px;
             padding: 0.5rem 1rem;
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: #3e3e52;
             font-weight: 500;
         }
 
@@ -1666,23 +1699,29 @@
             width: 14px;
             height: 14px;
             flex-shrink: 0;
+            stroke: #e84393;
         }
 
         .medtype-cta-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.8rem;
-            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            background: linear-gradient(135deg, #ff6b9d, #e84393, #8b7cf6, #6c5ce7);
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 17px;
             font-weight: 700;
-            padding: 1rem 2.5rem;
-            border-radius: 16px;
+            padding: 18px 50px;
+            border-radius: 60px;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.35);
+            box-shadow:
+                0 4px 15px rgba(232, 67, 147, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .medtype-cta-btn::before {
@@ -1690,19 +1729,18 @@
             position: absolute;
             top: 0;
             left: -100%;
-            width: 100%;
+            width: 60%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            animation: medtype-shimmer 3s infinite;
         }
 
         .medtype-cta-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.45);
-        }
-
-        .medtype-cta-btn:hover::before {
-            left: 100%;
+            box-shadow:
+                0 8px 25px rgba(232, 67, 147, 0.4),
+                0 2px 6px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .medtype-cta-btn svg {
@@ -1717,7 +1755,7 @@
 
         .medtype-cta-sub {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.45);
+            color: #6e6f82;
             margin-top: 1rem;
         }
 
@@ -1737,50 +1775,69 @@
         }
 
         .medtype-char {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #ffffff;
+            border: 1.5px solid #ddd5cc;
             border-radius: 20px;
-            padding: 1.2rem 0.8rem;
+            padding: 1rem 0.6rem 0.8rem;
             text-align: center;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
+
+        .medtype-char::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            opacity: 0.1;
+            pointer-events: none;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .medtype-char.passion::before { background: linear-gradient(180deg, #ef4444, transparent); }
+        .medtype-char.intelligence::before { background: linear-gradient(180deg, #3b82f6, transparent); }
+        .medtype-char.leadership::before { background: linear-gradient(180deg, #f59e0b, transparent); }
+        .medtype-char.explorer::before { background: linear-gradient(180deg, #10b981, transparent); }
 
         .medtype-char:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 107, 157, 0.3);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
         }
 
-        .medtype-char-emoji {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            display: block;
-            line-height: 1;
+        .medtype-char-svg {
+            width: 80px;
+            height: 96px;
+            margin: 0 auto 0.4rem;
+            animation: medtype-float 3s ease-in-out infinite;
         }
+
+        .medtype-char:nth-child(2) .medtype-char-svg { animation-delay: -0.5s; }
+        .medtype-char:nth-child(3) .medtype-char-svg { animation-delay: -1s; }
+        .medtype-char:nth-child(4) .medtype-char-svg { animation-delay: -1.5s; }
+        .medtype-char:nth-child(5) .medtype-char-svg { animation-delay: -2s; }
+        .medtype-char:nth-child(6) .medtype-char-svg { animation-delay: -2.5s; }
 
         .medtype-char-label {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
             letter-spacing: 0.3px;
         }
 
-        .medtype-char:nth-child(2) {
-            transform: translateY(-10px);
-        }
+        .medtype-char.passion .medtype-char-label { color: #ef4444; }
+        .medtype-char.intelligence .medtype-char-label { color: #3b82f6; }
+        .medtype-char.leadership .medtype-char-label { color: #f59e0b; }
+        .medtype-char.explorer .medtype-char-label { color: #10b981; }
 
-        .medtype-char:nth-child(2):hover {
-            transform: translateY(-15px);
-        }
-
-        .medtype-char:nth-child(5) {
-            transform: translateY(-10px);
-        }
-
-        .medtype-char:nth-child(5):hover {
-            transform: translateY(-15px);
+        .medtype-char-type {
+            font-size: 0.65rem;
+            color: #6e6f82;
+            font-weight: 500;
+            margin-top: 0.15rem;
         }
 
         .medtype-stats {
@@ -1795,9 +1852,10 @@
         }
 
         .medtype-stat-value {
+            font-family: 'Outfit', sans-serif;
             font-size: 1.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            background: linear-gradient(135deg, #ff6b9d, #e84393, #8b7cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1805,7 +1863,7 @@
 
         .medtype-stat-label {
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: #6e6f82;
             font-weight: 500;
             margin-top: 0.2rem;
         }
@@ -1841,8 +1899,8 @@
             }
 
             .medtype-cta-btn {
-                font-size: 1rem;
-                padding: 0.9rem 2rem;
+                font-size: 15px;
+                padding: 15px 36px;
                 width: 100%;
                 justify-content: center;
             }
@@ -1853,11 +1911,12 @@
             }
 
             .medtype-char {
-                padding: 1rem 0.5rem;
+                padding: 0.8rem 0.4rem 0.6rem;
             }
 
-            .medtype-char-emoji {
-                font-size: 2.2rem;
+            .medtype-char-svg {
+                width: 64px;
+                height: 77px;
             }
 
             .medtype-stats {
@@ -2000,42 +2059,51 @@
 
     <!-- MedType 診断CTA -->
     <section id="skill-chart" class="medtype-cta-section">
+        <!-- Cherry blossom petals -->
+        <div class="medtype-petal" style="left:8%;width:9px;height:9px;background:#ffb7c5;animation-duration:9s,4s;animation-delay:0s,0s;"></div>
+        <div class="medtype-petal" style="left:22%;width:7px;height:7px;background:#ffc0cb;animation-duration:11s,3.5s;animation-delay:1.2s,0.3s;"></div>
+        <div class="medtype-petal" style="left:45%;width:11px;height:11px;background:#ff9eb5;animation-duration:8s,4.5s;animation-delay:2.5s,0.8s;"></div>
+        <div class="medtype-petal" style="left:65%;width:8px;height:8px;background:#ffd1dc;animation-duration:10s,3.8s;animation-delay:0.8s,1.2s;"></div>
+        <div class="medtype-petal" style="left:80%;width:10px;height:10px;background:#ffb7c5;animation-duration:12s,5s;animation-delay:3s,0.5s;"></div>
+        <div class="medtype-petal" style="left:92%;width:7px;height:7px;background:#ffc0cb;animation-duration:9.5s,4.2s;animation-delay:1.8s,1s;"></div>
+        <div class="medtype-petal" style="left:35%;width:8px;height:8px;background:#ffd1dc;animation-duration:13s,3.3s;animation-delay:4s,0.2s;"></div>
+        <div class="medtype-petal" style="left:55%;width:6px;height:6px;background:#ff9eb5;animation-duration:10.5s,4.8s;animation-delay:2s,1.5s;"></div>
+
         <div class="section-header">
             <span class="section-tag">MedType</span>
             <h2>医療者としての自分を、客観的に知る</h2>
-            <p>能力・専門性・資質・働き方を多角的に評価。あなたの医療者タイプが見えてきます。</p>
+            <p>能力・専門性・資質・働き方を多角的に分析し、あなたの医療者タイプを診断します。</p>
         </div>
 
         <div class="medtype-cta-container">
             <div class="medtype-cta-card">
                 <div class="medtype-cta-content">
                     <div class="medtype-badge">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                        <span>Self Assessment</span>
+                        <span>&#x1F338; Self Assessment</span>
                     </div>
                     <h3>あなたは何タイプ？<br><span class="gradient-text">MedType診断</span></h3>
                     <p class="medtype-cta-desc">
-                        臨床判断力・処理速度・接遇力・専門性・手技力の5軸であなたの医療者としてのタイプを診断。<br>
-                        強みと伸びしろが一目でわかるレーダーチャート付き。
+                        救急対応・臨床力・コミュ力・リーダーシップ・学習力・レジリエンスの6軸であなたの医療者タイプを診断。<br>
+                        レゴ風キャラクターと共に、強みと伸びしろが一目でわかります。
                     </p>
 
                     <div class="medtype-features">
                         <div class="medtype-feature-tag">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                            5軸レーダー分析
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            6軸レーダー分析
                         </div>
                         <div class="medtype-feature-tag">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                             所要時間 3分
                         </div>
                         <div class="medtype-feature-tag">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                             匿名・無料
                         </div>
                     </div>
 
                     <a href="https://medmbti.netlify.app" class="medtype-cta-btn" target="_blank" rel="noopener noreferrer">
-                        無料で診断する
+                        無料で診断スタート
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
                     <p class="medtype-cta-sub">登録不要 / 結果はその場で確認できます</p>
@@ -2044,38 +2112,264 @@
                 <div class="medtype-visual">
                     <div>
                         <div class="medtype-characters">
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1F9D1;&#x200D;&#x2695;&#xFE0F;</span>
-                                <div class="medtype-char-label">Strategist</div>
+                            <!-- ENTJ: 戦略家ドクター (Leadership/Orange) -->
+                            <div class="medtype-char leadership">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#f59e0b" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#f59e0b"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#f59e0b" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#fbbf24" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#daa878" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#daa878" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#f59e0b"/><circle cx="90" cy="68" r="2.5" fill="#f59e0b"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#f59e0b"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#daa878"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#daa878"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#0d0d0d"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#0d0d0d"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#0d0d0d"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#0d0d0d"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#0d0d0d"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#0d0d0d"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <rect x="74" y="42" width="20" height="14" rx="4" fill="none" stroke="#667788" stroke-width="2"/>
+                                        <rect x="106" y="42" width="20" height="14" rx="4" fill="none" stroke="#667788" stroke-width="2"/>
+                                        <line x1="94" y1="48" x2="106" y2="48" stroke="#667788" stroke-width="1.5"/>
+                                        <rect x="154" y="128" width="18" height="26" rx="3" fill="#deb887"/>
+                                        <rect x="160" y="125" width="7" height="5" rx="1.5" fill="#b8860b"/>
+                                        <rect x="157" y="136" width="12" height="2" rx="1" fill="#999"/>
+                                        <rect x="157" y="141" width="10" height="2" rx="1" fill="#999" opacity="0.7"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">ENTJ</div>
+                                <div class="medtype-char-type">戦略家ドクター</div>
                             </div>
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1F468;&#x200D;&#x2695;&#xFE0F;</span>
-                                <div class="medtype-char-label">Speedster</div>
+                            <!-- ESTP: 救急のエース (Passion/Red) -->
+                            <div class="medtype-char passion">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#ef4444" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#ef4444"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#ef4444" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#f87171" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#e8b88a" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#e8b88a" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#ef4444"/><circle cx="90" cy="68" r="2.5" fill="#ef4444"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#ef4444"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#e8b88a"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#e8b88a"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#1a1a2e"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#1a1a2e"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#1a1a2e"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#1a1a2e"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#1a1a2e"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#1a1a2e"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <rect x="158" y="126" width="8" height="30" rx="2" fill="#e0e0e0"/>
+                                        <rect x="156" y="124" width="12" height="5" rx="2" fill="#bbb"/>
+                                        <rect x="160" y="156" width="4" height="8" rx="1" fill="#ddd"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">ESTP</div>
+                                <div class="medtype-char-type">救急のエース</div>
                             </div>
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1F469;&#x200D;&#x2695;&#xFE0F;</span>
-                                <div class="medtype-char-label">Empath</div>
+                            <!-- ISFP: 癒しのドクター (Explorer/Green) -->
+                            <div class="medtype-char explorer">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#10b981" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#10b981"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#10b981" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#34d399" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#f5c9a0" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#f5c9a0" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#10b981"/><circle cx="90" cy="68" r="2.5" fill="#10b981"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#10b981"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#f5c9a0"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#f5c9a0"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#8e44ad"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#8e44ad"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#8e44ad"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#8e44ad"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#8e44ad"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#8e44ad"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <circle cx="166" cy="144" r="4" fill="#10b981" opacity="0.7"/>
+                                        <circle cx="160" cy="139" r="4" fill="#10b981" opacity="0.5"/><circle cx="172" cy="139" r="4" fill="#10b981" opacity="0.5"/>
+                                        <circle cx="160" cy="149" r="4" fill="#10b981" opacity="0.5"/><circle cx="172" cy="149" r="4" fill="#10b981" opacity="0.5"/>
+                                        <circle cx="166" cy="144" r="2.5" fill="#fbbf24"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">ISFP</div>
+                                <div class="medtype-char-type">癒しのドクター</div>
                             </div>
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1F9EC;</span>
-                                <div class="medtype-char-label">Specialist</div>
+                            <!-- INTJ: 戦略的専門医 (Intelligence/Blue) -->
+                            <div class="medtype-char intelligence">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#3b82f6" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#3b82f6"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#3b82f6" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#60a5fa" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#e8b88a" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#e8b88a" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#3b82f6"/><circle cx="90" cy="68" r="2.5" fill="#3b82f6"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#3b82f6"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#e8b88a"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#e8b88a"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#0d0d0d"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#0d0d0d"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#0d0d0d"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#0d0d0d"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#0d0d0d"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#0d0d0d"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <rect x="74" y="42" width="20" height="14" rx="4" fill="none" stroke="#667788" stroke-width="2"/>
+                                        <rect x="106" y="42" width="20" height="14" rx="4" fill="none" stroke="#667788" stroke-width="2"/>
+                                        <line x1="94" y1="48" x2="106" y2="48" stroke="#667788" stroke-width="1.5"/>
+                                        <rect x="152" y="132" width="18" height="22" rx="3" fill="#3b82f6" opacity="0.85"/>
+                                        <rect x="154" y="134" width="14" height="18" rx="1.5" fill="white" opacity="0.2"/>
+                                        <line x1="161" y1="132" x2="161" y2="154" stroke="white" stroke-width="1" opacity="0.3"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">INTJ</div>
+                                <div class="medtype-char-type">戦略的専門医</div>
                             </div>
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1FA7A;</span>
-                                <div class="medtype-char-label">Operator</div>
+                            <!-- ENFP: 情熱の臨床家 (Passion/Red) -->
+                            <div class="medtype-char passion">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#ef4444" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#ef4444"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#ef4444" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#f87171" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#fdd9b5" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#fdd9b5" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#ef4444"/><circle cx="90" cy="68" r="2.5" fill="#ef4444"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#ef4444"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#fdd9b5"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#fdd9b5"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#e74c3c"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#e74c3c"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#e74c3c"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#e74c3c"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#e74c3c"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#e74c3c"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <polygon points="166,128 169,138 179,139 172,145 174,155 166,150 158,155 161,145 153,139 163,138" fill="#ef4444" opacity="0.85"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">ENFP</div>
+                                <div class="medtype-char-type">情熱の臨床家</div>
                             </div>
-                            <div class="medtype-char">
-                                <span class="medtype-char-emoji">&#x1F31F;</span>
-                                <div class="medtype-char-label">All-rounder</div>
+                            <!-- ESFJ: チームの要 (Leadership/Orange) -->
+                            <div class="medtype-char leadership">
+                                <div class="medtype-char-svg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="80" height="96">
+                                        <ellipse cx="100" cy="226" rx="36" ry="5" fill="#000" opacity="0.08"/>
+                                        <rect x="80" y="158" width="15" height="42" rx="3" fill="#2d3748"/><rect x="105" y="158" width="15" height="42" rx="3" fill="#2d3748"/>
+                                        <rect x="75" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/><rect x="103" y="198" width="22" height="10" rx="3" fill="#1a1a2e"/>
+                                        <rect x="72" y="88" width="56" height="72" rx="7" fill="#ededed"/><rect x="74" y="89" width="52" height="70" rx="6" fill="white"/>
+                                        <line x1="100" y1="94" x2="100" y2="158" stroke="#eee" stroke-width="0.8"/>
+                                        <polygon points="93,89 100,106 96,89" fill="#ebebeb"/><polygon points="107,89 100,106 104,89" fill="#ebebeb"/>
+                                        <rect x="96" y="89" width="8" height="40" rx="1" fill="#f59e0b" opacity="0.12"/>
+                                        <polygon points="97,90 103,90 103.5,102 100,108 96.5,102" fill="#f59e0b"/>
+                                        <polygon points="97,102 103,102 102,130 100,134 98,130" fill="#f59e0b" opacity="0.85"/>
+                                        <rect x="110" y="104" width="14" height="12" rx="2" fill="#fbbf24" opacity="0.9"/>
+                                        <circle cx="100" cy="118" r="1.8" fill="#ddd"/><circle cx="100" cy="130" r="1.8" fill="#ddd"/>
+                                        <rect x="46" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(-6 55 114)"/><rect x="47" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(-6 55 114)"/>
+                                        <rect x="136" y="92" width="18" height="44" rx="4" fill="#ededed" transform="rotate(6 145 114)"/><rect x="137" y="93" width="16" height="42" rx="3.5" fill="white" transform="rotate(6 145 114)"/>
+                                        <rect x="43" y="134" width="14" height="10" rx="3.5" fill="#fdd9b5" transform="rotate(-6 50 139)"/>
+                                        <rect x="143" y="134" width="14" height="10" rx="3.5" fill="#fdd9b5" transform="rotate(6 150 139)"/>
+                                        <path d="M89,70 Q80,86 78,104 Q76,118 82,128" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="82" cy="130" r="4.5" fill="#f59e0b"/><circle cx="90" cy="68" r="2.5" fill="#f59e0b"/>
+                                        <path d="M111,70 Q120,80 122,92" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <circle cx="110" cy="68" r="2.5" fill="#f59e0b"/>
+                                        <rect x="92" y="72" width="16" height="18" rx="3" fill="#fdd9b5"/>
+                                        <rect x="60" y="14" width="80" height="62" rx="14" fill="#fdd9b5"/>
+                                        <rect x="58" y="6" width="84" height="28" rx="10" fill="#5c3a1e"/>
+                                        <rect x="56" y="16" width="10" height="30" rx="4" fill="#5c3a1e"/><rect x="134" y="16" width="10" height="30" rx="4" fill="#5c3a1e"/>
+                                        <rect x="62" y="18" width="76" height="12" rx="5" fill="#5c3a1e"/>
+                                        <circle cx="84" cy="48" r="4.5" fill="#1a1a2e"/><circle cx="116" cy="48" r="4.5" fill="#1a1a2e"/>
+                                        <circle cx="86" cy="46" r="1.5" fill="white" opacity="0.4"/><circle cx="118" cy="46" r="1.5" fill="white" opacity="0.4"/>
+                                        <rect x="77" y="38" width="14" height="2.5" rx="1.2" fill="#5c3a1e"/><rect x="109" y="38" width="14" height="2.5" rx="1.2" fill="#5c3a1e"/>
+                                        <circle cx="73" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/><circle cx="127" cy="56" r="5" fill="#ffb3b3" opacity="0.25"/>
+                                        <path d="M93,63 Q100,69 107,63" fill="none" stroke="#c0756a" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M158,142 C158,136 164,132 166,138 C168,132 174,136 174,142 C174,149 166,156 166,156 C166,156 158,149 158,142Z" fill="#f59e0b" opacity="0.85"/>
+                                    </svg>
+                                </div>
+                                <div class="medtype-char-label">ESFJ</div>
+                                <div class="medtype-char-type">チームの要</div>
                             </div>
                         </div>
                         <div class="medtype-stats">
                             <div class="medtype-stat">
-                                <div class="medtype-stat-value">6</div>
+                                <div class="medtype-stat-value">16</div>
                                 <div class="medtype-stat-label">タイプ</div>
                             </div>
                             <div class="medtype-stat">
-                                <div class="medtype-stat-value">5</div>
+                                <div class="medtype-stat-value">6</div>
                                 <div class="medtype-stat-label">評価軸</div>
                             </div>
                             <div class="medtype-stat">
