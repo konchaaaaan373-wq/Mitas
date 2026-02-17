@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GA4: G-XXXXXXXXXX を実際の測定IDに置き換えてください -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
     <title>医療機関の皆様へ - Neco</title>
+    <meta name="description" content="Necoは医療機関向けに在宅医療の人材マッチングサービスを提供。専門性の定量評価で最適な医師・看護師をご紹介します。">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://neco-medical.netlify.app/for-medical.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="医療機関の皆様へ - Neco">
+    <meta property="og:description" content="在宅医療の人材マッチングサービス。専門性の定量評価で最適な医師・看護師をご紹介。">
+    <meta property="og:url" content="https://neco-medical.netlify.app/for-medical.html">
+    <meta property="og:site_name" content="Neco">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -643,6 +658,22 @@
                 padding: 2rem 1.5rem;
             }
         }
+
+        /* アクセシビリティ: 動きを減らす設定のユーザー向け */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* フォーカスインジケーター */
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 3px solid #4CC9F0;
+            outline-offset: 2px;
+        }
+
     </style>
 </head>
 <body>
