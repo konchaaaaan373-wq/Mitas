@@ -1036,6 +1036,83 @@
             color: var(--dark);
         }
 
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6B7280;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .testimonial-rating {
+            color: #FFB800;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .testimonial-avatar {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FF6B9D20, #A78BFA20);
+            border-radius: 50%;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .testimonial-role {
+            font-size: 0.8rem;
+            color: #6B7280;
+            margin-top: 0.2rem;
+        }
+
         /* CTA Section */
         .cta-section {
             padding: 8rem 2rem;
@@ -1447,6 +1524,20 @@
 
             .stat-label {
                 font-size: 0.75rem;
+            }
+
+            /* テスティモニアルセクション */
+            .testimonials-section {
+                padding: 3rem 1.2rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .testimonial-card {
+                padding: 1.5rem;
             }
 
             /* CTAセクション */
@@ -2590,6 +2681,47 @@
         </div>
     </section>
 
+    <!-- 利用者の声セクション -->
+    <section id="testimonials" class="testimonials-section">
+        <h2 class="section-title fade-in">利用者の声</h2>
+        <p class="section-subtitle fade-in">Necoで理想の働き方を見つけた医師たち</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating" aria-label="5段階評価で5">★★★★★</div>
+                <p class="testimonial-text">「専門性を正当に評価してもらえたのが一番の決め手でした。経験年数だけでなく、症例数や手技まで見てくれるので、自分のスキルに見合った条件で紹介してもらえました。」</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" aria-hidden="true">👨‍⚕️</div>
+                    <div>
+                        <div class="testimonial-name">T.K.先生</div>
+                        <div class="testimonial-role">内科医・30代｜訪問診療バイト</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating" aria-label="5段階評価で5">★★★★★</div>
+                <p class="testimonial-text">「他社では当直ばかり紹介されましたが、Necoでは自分の希望する外来中心の案件をAIが的確に提案してくれました。コンシェルジュの対応も丁寧で安心できました。」</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" aria-hidden="true">👩‍⚕️</div>
+                    <div>
+                        <div class="testimonial-name">M.S.先生</div>
+                        <div class="testimonial-role">総合診療科・40代｜外来バイト</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating" aria-label="5段階評価で4.5">★★★★☆</div>
+                <p class="testimonial-text">「登録から2週間で希望通りの訪問診療のバイトが決まりました。入職後のフォローもあり、初めての在宅医療でも安心してスタートできました。」</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" aria-hidden="true">👨‍⚕️</div>
+                    <div>
+                        <div class="testimonial-name">Y.H.先生</div>
+                        <div class="testimonial-role">救急科・30代｜訪問診療バイト</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="contact" class="cta-section">
         <div class="poly-bg">
             <div class="quantum-particle"></div>
@@ -2724,14 +2856,15 @@
             observer.observe(el);
         });
 
-        // Smooth scrolling
+        // Smooth scrolling（prefers-reduced-motion対応）
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({
-                        behavior: 'smooth',
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth',
                         block: 'start'
                     });
                 }
