@@ -3,10 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GA4: G-XXXXXXXXXX を実際の測定IDに置き換えてください -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
     <title>Neco - 看護師のための在宅医療求人プラットフォーム</title>
+    <meta name="description" content="Necoは看護師のための在宅医療求人プラットフォーム。AIコンシェルジュがあなたの専門性を分析し、最適な在宅医療の職場をマッチングします。">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://neco-medical.netlify.app/nurse.html">
+    <!-- OGP -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Neco - 看護師のための在宅医療求人プラットフォーム">
+    <meta property="og:description" content="看護師のための在宅医療求人プラットフォーム。AIコンシェルジュがあなたの専門性を分析し、最適な在宅医療の職場をマッチング。">
+    <meta property="og:url" content="https://neco-medical.netlify.app/nurse.html">
+    <meta property="og:image" content="https://neco-medical.netlify.app/nurse.jpg">
+    <meta property="og:site_name" content="Neco">
+    <meta property="og:locale" content="ja_JP">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Neco - 看護師のための在宅医療求人プラットフォーム">
+    <meta name="twitter:description" content="看護師のための在宅医療求人プラットフォーム。AIコンシェルジュがあなたの専門性を分析し、最適な在宅医療の職場をマッチング。">
+    <meta name="twitter:image" content="https://neco-medical.netlify.app/nurse.jpg">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&family=DotGothic16&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="nurse.webp" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="nurse.jpg" fetchpriority="high">
     <style>
         :root {
@@ -1724,7 +1747,35 @@
             }
         }
 
+        /* アクセシビリティ: 動きを減らす設定のユーザー向け */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .quantum-particle, .medtype-petal {
+                display: none;
+            }
+        }
+
+        /* フォーカスインジケーター */
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 3px solid #4CC9F0;
+            outline-offset: 2px;
+        }
+
     </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Neco",
+        "url": "https://neco-medical.netlify.app",
+        "description": "看護師のための在宅医療求人プラットフォーム",
+        "logo": "https://neco-medical.netlify.app/favicon.svg"
+    }
+    </script>
 </head>
 <body>
     <header>
@@ -1789,7 +1840,10 @@
                 <a href="https://necofindjob.netlify.app/" class="partner-home-link" target="_blank" rel="noopener noreferrer">Neco社</a>
             </div>
             <div class="hero-visual">
-                <img src="nurse.jpg" alt="看護師イメージ" class="hero-image" loading="eager" fetchpriority="high" decoding="async">
+                <picture>
+                    <source srcset="nurse.webp" type="image/webp">
+                    <img src="nurse.jpg" alt="看護師イメージ" class="hero-image" loading="eager" fetchpriority="high" decoding="async">
+                </picture>
             </div>
         </div>
     </section>
