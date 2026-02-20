@@ -53,3 +53,11 @@
   from = "/neco-medical-jobs%20(1).html"
   to = "/"
   status = 301
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/line/webhook"
+  to = "/.netlify/functions/line-webhook"
+  status = 200
