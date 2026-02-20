@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINEご相談前の同意 - Neco</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        :root {
+            --primary: #06c755;
+            --dark: #2d3142;
+            --light: #f8f9fa;
+            --muted: #6b7280;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #f6fff8 0%, #eefbf3 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+        }
+
+        .card {
+            width: min(640px, 100%);
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.4rem;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
+        }
+
+        h1 {
+            margin: 0 0 0.8rem;
+            font-size: 1.35rem;
+            line-height: 1.5;
+        }
+
+        p {
+            margin: 0 0 1rem;
+            line-height: 1.75;
+            color: #374151;
+        }
+
+        .check {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.55rem;
+            margin: 1rem 0 1.1rem;
+            color: var(--dark);
+        }
+
+        .check input {
+            margin-top: 0.3rem;
+            transform: scale(1.2);
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        button,
+        .back {
+            border: none;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 0.72rem 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.96rem;
+        }
+
+        #proceed {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        #proceed:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .back {
+            background: #edf2f7;
+            color: #1f2937;
+        }
+
+        .note {
+            margin-top: 0.8rem;
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>LINEでのご相談に進む前に</h1>
+        <p>LINEを利用すると、LINEヤフー株式会社が提供するサービス上で個人情報が収集される可能性があります。内容をご確認のうえ、同意いただける場合のみお進みください。</p>
+
+        <label class="check">
+            <input type="checkbox" id="consent-check">
+            <span>個人情報が収集される可能性について確認し、同意します。</span>
+        </label>
+
+        <div class="actions">
+            <button id="proceed" disabled>同意してLINEへ進む</button>
+            <a href="javascript:history.back()" class="back">戻る</a>
+        </div>
+
+        <p class="note">同意後、LINE公式アカウントページ（lin.ee）へ移動します。</p>
+    </main>
+
+    <script>
+        const checkbox = document.getElementById('consent-check');
+        const proceed = document.getElementById('proceed');
+
+        checkbox.addEventListener('change', () => {
+            proceed.disabled = !checkbox.checked;
+        });
+
+        proceed.addEventListener('click', () => {
+            if (!checkbox.checked) return;
+            window.location.href = 'https://lin.ee/8dfLNG4';
+        });
+    </script>
+</body>
+</html>
