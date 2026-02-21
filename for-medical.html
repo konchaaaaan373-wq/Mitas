@@ -400,6 +400,38 @@
             line-height: 1.7;
         }
 
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(45, 49, 66, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.6rem;
+            color: var(--primary);
+        }
+
+        .testimonial-role {
+            font-size: 0.88rem;
+            color: #6B7280;
+            margin-bottom: 0.8rem;
+        }
+
+        .testimonial-card p {
+            color: #4B5563;
+            line-height: 1.8;
+        }
+
         /* Form */
         .form-container {
             background: var(--white);
@@ -615,7 +647,8 @@
         /* Responsive */
         @media (max-width: 1024px) {
             .strength-cards,
-            .pricing-cards {
+            .pricing-cards,
+            .testimonials-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -859,6 +892,30 @@
         <div class="faq-item">
             <h4>解約や契約変更は可能ですか？</h4>
             <p>はい、可能です。契約期間や解約条件は個別にご相談の上決定します。柔軟に対応いたしますのでお気軽にご相談ください。</p>
+        </div>
+    </section>
+
+    <section id="testimonials">
+        <div class="section-header">
+            <h2>利用者の声</h2>
+            <p>導入いただいた医療機関からのコメント</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <h4>クリニック</h4>
+                <div class="testimonial-role">院長・東京都</div>
+                <p>「外来と訪問診療を両立できる人材の採用に苦戦していましたが、Necoは要件を正確に汲み取り、短期間で候補者を提案してくれました。ミスマッチが減り、現場の負担も軽くなりました。」</p>
+            </div>
+            <div class="testimonial-card">
+                <h4>訪問診療クリニック</h4>
+                <div class="testimonial-role">事務長・大阪府</div>
+                <p>「夜間帯の当番体制に課題がありましたが、スポットと定期勤務のバランスを考えた提案で運用が安定しました。導入後フォローが丁寧で、定着率も改善しています。」</p>
+            </div>
+            <div class="testimonial-card">
+                <h4>訪問看護ステーション</h4>
+                <div class="testimonial-role">管理者・神奈川県</div>
+                <p>「在宅経験のある看護師をピンポイントで採用できました。単なる紹介で終わらず、現場定着まで伴走してくれるため、採用後の教育負担が大きく下がりました。」</p>
+            </div>
         </div>
     </section>
 
