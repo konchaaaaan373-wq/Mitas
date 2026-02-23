@@ -8,6 +8,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 
 [[headers]]
   for = "/*.html"
@@ -38,6 +39,18 @@
   for = "/robots.txt"
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[redirects]]
+  from = "http://necofindjob.com/*"
+  to = "https://necofindjob.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.necofindjob.com/*"
+  to = "https://necofindjob.com/:splat"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/neco-medical-jobs"
