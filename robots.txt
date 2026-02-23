@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /neco-medical-jobs*
 
-Sitemap: https://neco-medical.netlify.app/sitemap.xml
+Sitemap: https://necofindjob.com/sitemap.xml
