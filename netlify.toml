@@ -1,6 +1,10 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -9,6 +13,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # Content-Security-Policy – restricts sources for scripts, styles, etc.
+    # Adjust as needed if you add third-party integrations.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.netlify.app https://*.googleapis.com https://scdn.line-apps.com; frame-ancestors 'none';"
 
 [[headers]]
   for = "/*.html"
@@ -67,10 +74,25 @@
   to = "/"
   status = 301
 
-[functions]
-  directory = "netlify/functions"
-
 [[redirects]]
   from = "/api/line/webhook"
   to = "/.netlify/functions/line-webhook"
+  status = 200
+
+# Auth API – routes /api/auth/* to the auth Netlify Function
+[[redirects]]
+  from = "/api/auth/*"
+  to = "/.netlify/functions/auth/:splat"
+  status = 200
+
+# Protected pages – redirect to login if accessed directly (handled client-side too)
+# These are informational; the actual auth check is done in JavaScript.
+[[redirects]]
+  from = "/dashboard.html"
+  to = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/medical-dashboard.html"
+  to = "/medical-dashboard.html"
   status = 200
