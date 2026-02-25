@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン - Neco</title>
-    <meta name="description" content="Necoにログイン。医師・医療機関の皆様はこちらからログインしてください。">
+    <title>医師・看護師ログイン - Neco</title>
+    <meta name="description" content="Neco 医師・看護師ログインページ。在宅医療求人プラットフォームへようこそ。">
     <meta name="robots" content="noindex, nofollow">
-    <link rel="canonical" href="https://neco-medical.netlify.app/login.html">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,17 +13,15 @@
     <style>
         :root {
             --primary: #FF6B9D;
-            --secondary: #4ECDC4;
             --purple: #A78BFA;
-            --blue: #4CC9F0;
             --dark: #2D3142;
             --light: #F8F9FA;
             --white: #FFFFFF;
             --error: #EF4444;
             --success: #10B981;
+            --gray-200: #E5E7EB;
             --gray-400: #9CA3AF;
             --gray-500: #6B7280;
-            --gray-200: #E5E7EB;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,7 +36,7 @@
         /* ===== LEFT PANEL ===== */
         .login-left {
             flex: 1;
-            background: linear-gradient(145deg, #FF6B9D 0%, #A78BFA 55%, #4CC9F0 100%);
+            background: linear-gradient(145deg, #FF6B9D 0%, #C084FC 55%, #A78BFA 100%);
             padding: 3rem 3.5rem;
             display: flex;
             flex-direction: column;
@@ -53,11 +50,9 @@
         .login-left::before {
             content: '';
             position: absolute;
-            top: -120px;
-            right: -80px;
-            width: 420px;
-            height: 420px;
-            background: rgba(255, 255, 255, 0.1);
+            top: -120px; right: -80px;
+            width: 420px; height: 420px;
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -65,11 +60,9 @@
         .login-left::after {
             content: '';
             position: absolute;
-            bottom: -80px;
-            left: -60px;
-            width: 320px;
-            height: 320px;
-            background: rgba(255, 255, 255, 0.07);
+            bottom: -80px; left: -60px;
+            width: 320px; height: 320px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -102,6 +95,21 @@
             position: relative;
             z-index: 1;
             max-width: 400px;
+        }
+
+        .left-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.02em;
         }
 
         .left-tagline {
@@ -144,8 +152,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
+            width: 28px; height: 28px;
             background: rgba(255, 255, 255, 0.22);
             border-radius: 50%;
             font-size: 0.85rem;
@@ -161,9 +168,7 @@
             border-top: 1px solid rgba(255,255,255,0.25);
         }
 
-        .stat-item {
-            text-align: center;
-        }
+        .stat-item { text-align: center; }
 
         .stat-num {
             font-family: 'Zen Kaku Gothic New', sans-serif;
@@ -190,9 +195,7 @@
             overflow-y: auto;
         }
 
-        .right-header {
-            margin-bottom: 2rem;
-        }
+        .right-header { margin-bottom: 2rem; }
 
         .right-header h2 {
             font-family: 'Zen Kaku Gothic New', sans-serif;
@@ -207,61 +210,11 @@
             font-size: 0.9rem;
         }
 
-        /* ===== TABS ===== */
-        .login-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            background: var(--light);
-            padding: 0.4rem;
-            border-radius: 14px;
-        }
-
-        .login-tab {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Noto Sans JP', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: transparent;
-            color: var(--gray-500);
-        }
-
-        .login-tab:hover:not(.active) {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .login-tab[data-type="doctor"].active {
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(255, 107, 157, 0.35);
-        }
-
-        .login-tab[data-type="medical"].active {
-            background: linear-gradient(135deg, var(--secondary), var(--blue));
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(78, 205, 196, 0.35);
-        }
-
-        /* ===== FORMS ===== */
+        /* ===== FORM ===== */
         .login-form {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 1.2rem;
-            animation: fadeSlideIn 0.25s ease;
-        }
-
-        .login-form.active {
-            display: flex;
-        }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
         }
 
         .form-group label {
@@ -291,29 +244,17 @@
             box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.12);
         }
 
-        #medical-form .form-input:focus {
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.12);
-        }
-
         .form-input::placeholder { color: #C4C9D4; }
 
-        /* Password wrapper with show/hide toggle */
-        .password-wrapper {
-            position: relative;
-        }
+        .password-wrapper { position: relative; }
 
-        .password-wrapper .form-input {
-            padding-right: 3rem;
-        }
+        .password-wrapper .form-input { padding-right: 3rem; }
 
         .toggle-password {
             position: absolute;
-            right: 0.9rem;
-            top: 50%;
+            right: 0.9rem; top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
+            background: none; border: none;
             cursor: pointer;
             color: var(--gray-400);
             font-size: 1rem;
@@ -323,7 +264,19 @@
 
         .toggle-password:hover { color: var(--dark); }
 
-        /* Submit button */
+        .forgot-link {
+            text-align: right;
+            margin-top: -0.6rem;
+        }
+
+        .forgot-link a {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            text-decoration: none;
+        }
+
+        .forgot-link a:hover { color: var(--primary); text-decoration: underline; }
+
         .submit-btn {
             width: 100%;
             padding: 1rem 1.5rem;
@@ -345,21 +298,12 @@
             box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
         }
 
-        .submit-btn.medical {
-            background: linear-gradient(135deg, var(--secondary), var(--blue));
-        }
-
-        .submit-btn.medical:hover:not(:disabled) {
-            box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
-        }
-
         .submit-btn:disabled {
             opacity: 0.65;
             cursor: not-allowed;
             transform: none !important;
         }
 
-        /* Error message */
         .error-message {
             display: none;
             padding: 0.8rem 1rem;
@@ -373,7 +317,6 @@
 
         .error-message.visible { display: block; }
 
-        /* Demo credentials box */
         .demo-box {
             padding: 1rem 1.1rem;
             background: #F0FDF4;
@@ -396,7 +339,6 @@
             font-size: 0.82rem;
             color: #374151;
             line-height: 1.7;
-            font-feature-settings: "tnum";
         }
 
         .demo-fill-btn {
@@ -413,11 +355,9 @@
 
         .demo-fill-btn:hover { color: #047857; }
 
-        /* Spinner */
         .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 16px; height: 16px;
             border: 2px solid rgba(255,255,255,0.35);
             border-top-color: var(--white);
             border-radius: 50%;
@@ -428,7 +368,23 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Links section */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+            color: var(--gray-400);
+            font-size: 0.82rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-200);
+        }
+
         .form-footer {
             text-align: center;
             margin-top: 1.5rem;
@@ -445,47 +401,48 @@
 
         .form-footer a:hover { text-decoration: underline; }
 
-        .form-footer .medical-link {
-            color: var(--secondary);
+        .switch-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.9rem;
+            background: rgba(78, 205, 196, 0.06);
+            border: 1px solid rgba(78, 205, 196, 0.25);
+            border-radius: 10px;
+            text-decoration: none;
+            color: #4ECDC4;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
         }
 
-        /* Mobile responsive */
+        .switch-link:hover {
+            background: rgba(78, 205, 196, 0.1);
+            border-color: rgba(78, 205, 196, 0.4);
+        }
+
         @media (max-width: 900px) {
             body { flex-direction: column; }
-
-            .login-left {
-                min-height: auto;
-                padding: 2.5rem 2rem 2rem;
-            }
-
+            .login-left { min-height: auto; padding: 2.5rem 2rem 2rem; }
             .left-logo { margin-bottom: 1.5rem; }
             .left-logo-text { font-size: 1.8rem; }
-            .left-logo-cat { width: 2rem; height: 2rem; }
             .left-tagline { font-size: 1.5rem; }
             .left-tagline strong { font-size: 1.65rem; }
             .left-sub { font-size: 0.9rem; margin-bottom: 1.5rem; }
             .feature-list { gap: 0.75rem; }
             .left-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
-
-            .login-right {
-                width: 100%;
-                min-height: auto;
-                padding: 2rem 1.5rem 3rem;
-                box-shadow: none;
-            }
+            .login-right { width: 100%; min-height: auto; padding: 2rem 1.5rem 3rem; box-shadow: none; }
         }
 
         @media (max-width: 480px) {
             .left-stats { display: none; }
             .login-right { padding: 1.5rem 1.25rem 2.5rem; }
             .right-header h2 { font-size: 1.4rem; }
-            .login-tabs { margin-bottom: 1.5rem; }
         }
 
-        /* Focus visible for keyboard nav */
-        a:focus-visible,
-        button:focus-visible,
-        input:focus-visible {
+        a:focus-visible, button:focus-visible, input:focus-visible {
             outline: 3px solid #4CC9F0;
             outline-offset: 2px;
         }
@@ -499,8 +456,8 @@
             <svg class="left-logo-cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
                 <polygon points="8,16 4,4 14,13" fill="rgba(255,255,255,0.9)"/>
                 <polygon points="32,16 36,4 26,13" fill="rgba(255,255,255,0.9)"/>
-                <polygon points="9,15 6,7 13,12" fill="rgba(255,182,205,0.45)"/>
-                <polygon points="31,15 34,7 27,12" fill="rgba(255,182,205,0.45)"/>
+                <polygon points="9,15 6,7 13,12" fill="rgba(255,182,205,0.5)"/>
+                <polygon points="31,15 34,7 27,12" fill="rgba(255,182,205,0.5)"/>
                 <ellipse cx="20" cy="24" rx="13" ry="12" fill="rgba(255,255,255,0.9)"/>
                 <ellipse cx="15" cy="21" rx="2.2" ry="2.8" fill="#FF6B9D"/>
                 <ellipse cx="25" cy="21" rx="2.2" ry="2.8" fill="#FF6B9D"/>
@@ -508,7 +465,7 @@
                 <ellipse cx="25" cy="22" rx="1.1" ry="1.6" fill="white"/>
                 <circle cx="15.7" cy="20.8" r="0.5" fill="rgba(255,255,255,0.7)"/>
                 <circle cx="25.7" cy="20.8" r="0.5" fill="rgba(255,255,255,0.7)"/>
-                <ellipse cx="20" cy="27" rx="1.3" ry="0.9" fill="#A78BFA" opacity="0.75"/>
+                <ellipse cx="20" cy="27" rx="1.3" ry="0.9" fill="#FF6B9D" opacity="0.7"/>
                 <path d="M 18.7 27.8 Q 20 29.2 21.3 27.8" stroke="#A78BFA" stroke-width="0.9" fill="none" stroke-linecap="round"/>
                 <line x1="7" y1="25.5" x2="15.5" y2="26.5" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
                 <line x1="7" y1="27.5" x2="15.5" y2="27.8" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
@@ -518,31 +475,33 @@
             <span class="left-logo-text">Neco</span>
         </a>
         <div class="left-content">
+            <div class="left-badge">
+                <span aria-hidden="true">👨‍⚕️</span> 医師・看護師向け
+            </div>
             <h1 class="left-tagline">
-                医師と医療機関の<br>
-                <strong>最適なマッチング</strong>を、<br>
-                スムーズに
+                一生物のバイトを、<br>
+                <strong>一緒に探そう。</strong>
             </h1>
             <p class="left-sub">
-                在宅医療に特化した人材マッチングプラットフォーム。<br>
-                ログイン後はチャットで直接コミュニケーションが取れます。
+                在宅医療に特化した求人プラットフォーム。<br>
+                あなたの専門性を正当に評価し、最適な職場をご紹介します。
             </p>
             <ul class="feature-list" aria-label="Necoの特徴">
                 <li>
-                    <span class="feature-icon" aria-hidden="true">💬</span>
-                    医師と医療機関のダイレクトチャット
-                </li>
-                <li>
-                    <span class="feature-icon" aria-hidden="true">✓</span>
-                    専任コンシェルジュによる丁寧なサポート
-                </li>
-                <li>
-                    <span class="feature-icon" aria-hidden="true">🏥</span>
-                    在宅医療に特化した豊富な求人
+                    <span class="feature-icon" aria-hidden="true">🏠</span>
+                    在宅医療に特化した豊富な求人情報
                 </li>
                 <li>
                     <span class="feature-icon" aria-hidden="true">📊</span>
                     専門性の定量評価で最適なマッチング
+                </li>
+                <li>
+                    <span class="feature-icon" aria-hidden="true">💬</span>
+                    専任コンシェルジュによる丁寧なサポート
+                </li>
+                <li>
+                    <span class="feature-icon" aria-hidden="true">🤝</span>
+                    医療機関とのダイレクトチャット
                 </li>
             </ul>
             <div class="left-stats" aria-label="実績">
@@ -565,82 +524,41 @@
     <!-- ===== RIGHT FORM PANEL ===== -->
     <main class="login-right" role="main">
         <div class="right-header">
-            <h2>ログイン</h2>
-            <p>アカウントの種類を選んでください</p>
+            <h2>医師・看護師ログイン</h2>
+            <p>アカウント情報を入力してください</p>
         </div>
 
-        <!-- Tab switcher -->
-        <div class="login-tabs" role="tablist" aria-label="ログイン種別">
-            <button
-                class="login-tab active"
-                data-type="doctor"
-                role="tab"
-                aria-selected="true"
-                aria-controls="doctor-form"
-                id="tab-doctor"
-                onclick="switchTab('doctor')"
-            >
-                👨‍⚕️ 医師
-            </button>
-            <button
-                class="login-tab"
-                data-type="medical"
-                role="tab"
-                aria-selected="false"
-                aria-controls="medical-form"
-                id="tab-medical"
-                onclick="switchTab('medical')"
-            >
-                🏥 医療機関
-            </button>
-        </div>
-
-        <!-- ===== DOCTOR FORM ===== -->
-        <form
-            id="doctor-form"
-            class="login-form active"
-            role="tabpanel"
-            aria-labelledby="tab-doctor"
-            onsubmit="handleLogin(event, 'doctor')"
-            novalidate
-        >
-            <div id="doctor-error" class="error-message" role="alert" aria-live="polite"></div>
+        <form id="doctor-form" class="login-form" onsubmit="handleLogin(event)" novalidate>
+            <div id="login-error" class="error-message" role="alert" aria-live="polite"></div>
 
             <div class="form-group">
-                <label for="doctor-email">メールアドレス</label>
+                <label for="email">メールアドレス</label>
                 <input
-                    type="email"
-                    id="doctor-email"
-                    class="form-input"
+                    type="email" id="email" class="form-input"
                     placeholder="dr-demo@neco.jp"
-                    required
-                    autocomplete="email"
-                    inputmode="email"
+                    required autocomplete="email" inputmode="email"
                 >
             </div>
 
             <div class="form-group">
-                <label for="doctor-password">パスワード</label>
+                <label for="password">パスワード</label>
                 <div class="password-wrapper">
                     <input
-                        type="password"
-                        id="doctor-password"
-                        class="form-input"
+                        type="password" id="password" class="form-input"
                         placeholder="パスワードを入力"
-                        required
-                        autocomplete="current-password"
-                        minlength="6"
+                        required autocomplete="current-password" minlength="6"
                     >
-                    <button
-                        type="button"
-                        class="toggle-password"
-                        onclick="togglePassword('doctor-password', this)"
-                        aria-label="パスワードを表示/非表示"
-                    >👁</button>
+                    <button type="button" class="toggle-password"
+                        onclick="togglePassword('password', this)"
+                        aria-label="パスワードを表示/非表示">👁</button>
                 </div>
             </div>
 
-            <button type="submit" id="doctor-submit" class="submit-btn">
+            <div class="forgot-link">
+                <a href="#">パスワードを忘れた方はこちら</a>
+            </div>
+
+            <button type="submit" id="submit-btn" class="submit-btn">
                 ログイン
             </button>
 
@@ -653,87 +571,18 @@
                     メール: dr-demo@neco.jp<br>
                     パスワード: demo1234
                 </div>
-                <button
-                    type="button"
-                    class="demo-fill-btn"
-                    onclick="fillDemo('doctor')"
-                    aria-label="デモ情報を自動入力"
-                >
+                <button type="button" class="demo-fill-btn" onclick="fillDemo()" aria-label="デモ情報を自動入力">
                     ↑ デモ情報を自動入力する
                 </button>
             </div>
         </form>
 
-        <!-- ===== MEDICAL INSTITUTION FORM ===== -->
-        <form
-            id="medical-form"
-            class="login-form"
-            role="tabpanel"
-            aria-labelledby="tab-medical"
-            onsubmit="handleLogin(event, 'medical')"
-            novalidate
-        >
-            <div id="medical-error" class="error-message" role="alert" aria-live="polite"></div>
+        <div class="divider">または</div>
 
-            <div class="form-group">
-                <label for="medical-email">メールアドレス</label>
-                <input
-                    type="email"
-                    id="medical-email"
-                    class="form-input"
-                    placeholder="clinic-demo@neco.jp"
-                    required
-                    autocomplete="email"
-                    inputmode="email"
-                >
-            </div>
+        <a href="/login-medical.html" class="switch-link">
+            🏥 医療機関の方はこちら
+        </a>
 
-            <div class="form-group">
-                <label for="medical-password">パスワード</label>
-                <div class="password-wrapper">
-                    <input
-                        type="password"
-                        id="medical-password"
-                        class="form-input"
-                        placeholder="パスワードを入力"
-                        required
-                        autocomplete="current-password"
-                        minlength="6"
-                    >
-                    <button
-                        type="button"
-                        class="toggle-password"
-                        onclick="togglePassword('medical-password', this)"
-                        aria-label="パスワードを表示/非表示"
-                    >👁</button>
-                </div>
-            </div>
-
-            <button type="submit" id="medical-submit" class="submit-btn medical">
-                ログイン
-            </button>
-
-            <!-- Demo credentials -->
-            <div class="demo-box" aria-label="デモアカウント情報">
-                <div class="demo-box-title">
-                    <span aria-hidden="true">🧪</span> デモアカウント（医療機関）
-                </div>
-                <div class="demo-credential">
-                    メール: clinic-demo@neco.jp<br>
-                    パスワード: demo1234
-                </div>
-                <button
-                    type="button"
-                    class="demo-fill-btn"
-                    onclick="fillDemo('medical')"
-                    aria-label="デモ情報を自動入力"
-                >
-                    ↑ デモ情報を自動入力する
-                </button>
-            </div>
-        </form>
-
-        <!-- Footer links -->
         <div class="form-footer">
             <a href="/">← トップページに戻る</a><br><br>
             初めてご利用の方は<a href="/#contact-form">こちらから無料登録</a>
@@ -741,54 +590,20 @@
     </main>
 
     <script>
-        // ---------------------------------------------------------------
-        // Auto-redirect if already authenticated
-        // ---------------------------------------------------------------
         (function checkExistingSession() {
             try {
                 const token = localStorage.getItem('neco_token');
                 const userStr = localStorage.getItem('neco_user');
                 if (!token || !userStr) return;
                 const user = JSON.parse(userStr);
-                if (user.type === 'doctor') {
-                    window.location.replace('/dashboard.html');
-                } else if (user.type === 'medical') {
-                    window.location.replace('/medical-dashboard.html');
-                }
+                if (user.type === 'doctor') window.location.replace('/dashboard.html');
+                else if (user.type === 'medical') window.location.replace('/medical-dashboard.html');
             } catch (_) {
                 localStorage.removeItem('neco_token');
                 localStorage.removeItem('neco_user');
             }
         })();
 
-        // ---------------------------------------------------------------
-        // Pre-fill type from URL param (?type=medical)
-        // ---------------------------------------------------------------
-        (function checkUrlParam() {
-            const params = new URLSearchParams(window.location.search);
-            const type = params.get('type');
-            if (type === 'medical') switchTab('medical');
-        })();
-
-        // ---------------------------------------------------------------
-        // Tab switching
-        // ---------------------------------------------------------------
-        function switchTab(type) {
-            document.querySelectorAll('.login-tab').forEach(t => {
-                const isActive = t.dataset.type === type;
-                t.classList.toggle('active', isActive);
-                t.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            });
-            document.querySelectorAll('.login-form').forEach(f => {
-                f.classList.remove('active');
-            });
-            const form = document.getElementById(`${type}-form`);
-            if (form) form.classList.add('active');
-        }
-
-        // ---------------------------------------------------------------
-        // Password visibility toggle
-        // ---------------------------------------------------------------
         function togglePassword(inputId, btn) {
             const input = document.getElementById(inputId);
             if (!input) return;
@@ -798,45 +613,24 @@
             btn.setAttribute('aria-label', isHidden ? 'パスワードを非表示' : 'パスワードを表示');
         }
 
-        // ---------------------------------------------------------------
-        // Demo credential autofill
-        // ---------------------------------------------------------------
-        function fillDemo(type) {
-            if (type === 'doctor') {
-                document.getElementById('doctor-email').value = 'dr-demo@neco.jp';
-                document.getElementById('doctor-password').value = 'demo1234';
-            } else {
-                document.getElementById('medical-email').value = 'clinic-demo@neco.jp';
-                document.getElementById('medical-password').value = 'demo1234';
-            }
+        function fillDemo() {
+            document.getElementById('email').value = 'dr-demo@neco.jp';
+            document.getElementById('password').value = 'demo1234';
         }
 
-        // ---------------------------------------------------------------
-        // Login handler
-        // ---------------------------------------------------------------
-        async function handleLogin(e, type) {
+        async function handleLogin(e) {
             e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+            const submitBtn = document.getElementById('submit-btn');
 
-            const email    = document.getElementById(`${type}-email`).value.trim();
-            const password = document.getElementById(`${type}-password`).value;
-            const errorEl  = document.getElementById(`${type}-error`);
-            const submitBtn = document.getElementById(`${type}-submit`);
-
-            // Clear errors
             errorEl.classList.remove('visible');
             errorEl.textContent = '';
 
-            // Basic client-side validation
-            if (!email) {
-                showError(errorEl, 'メールアドレスを入力してください');
-                return;
-            }
-            if (!password || password.length < 6) {
-                showError(errorEl, 'パスワードを入力してください（6文字以上）');
-                return;
-            }
+            if (!email) { showError(errorEl, 'メールアドレスを入力してください'); return; }
+            if (!password || password.length < 6) { showError(errorEl, 'パスワードを入力してください（6文字以上）'); return; }
 
-            // Loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span>ログイン中...';
 
@@ -846,31 +640,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password }),
                 });
-
                 let data;
-                try {
-                    data = await res.json();
-                } catch (_) {
-                    throw new Error('サーバーエラーが発生しました。しばらくしてからお試しください。');
-                }
-
-                if (!data.ok) {
-                    throw new Error(data.error || 'ログインに失敗しました');
-                }
-
-                // Persist session
+                try { data = await res.json(); }
+                catch (_) { throw new Error('サーバーエラーが発生しました。しばらくしてからお試しください。'); }
+                if (!data.ok) throw new Error(data.error || 'ログインに失敗しました');
                 localStorage.setItem('neco_token', data.token);
                 localStorage.setItem('neco_user', JSON.stringify(data.user));
-
-                // Redirect
-                if (data.user.type === 'doctor') {
-                    window.location.replace('/dashboard.html');
-                } else if (data.user.type === 'medical') {
-                    window.location.replace('/medical-dashboard.html');
-                } else {
-                    window.location.replace('/');
-                }
-
+                if (data.user.type === 'doctor') window.location.replace('/dashboard.html');
+                else if (data.user.type === 'medical') window.location.replace('/medical-dashboard.html');
+                else window.location.replace('/');
             } catch (err) {
                 showError(errorEl, err.message || 'ログインに失敗しました。もう一度お試しください。');
                 submitBtn.disabled = false;
