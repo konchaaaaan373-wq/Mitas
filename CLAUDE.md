@@ -114,6 +114,20 @@ When adding third-party scripts or API endpoints, update the CSP in `netlify.tom
 
 ---
 
+## Workflow Rules
+
+The owner is a non-engineer. Every task must follow this flow without exception:
+
+1. **Develop** all changes on a dedicated `claude/` branch
+2. **Commit** with a clear message describing what changed and why
+3. **Push** the branch to origin
+4. **Create a Pull Request** via `gh pr create` and return the PR URL to the user
+5. **End every session** by posting the PR link so the user can review and merge
+
+Never leave work uncommitted or un-PR'd. The user's only action is clicking "Merge".
+
+---
+
 ## Common Tasks
 
 ### Add a new page
