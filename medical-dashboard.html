@@ -761,7 +761,7 @@ let currentUser = null;
             document.getElementById('header-avatar').style.background = currentUser.avatarColor;
         }
     } catch (_) {
-        window.location.replace('/login.html?type=medical');
+        window.location.replace('/login-medical.html');
     }
 })();
 
@@ -1211,7 +1211,7 @@ function logout() {
     if (!confirm('ログアウトしますか？')) return;
     localStorage.removeItem('neco_token');
     localStorage.removeItem('neco_user');
-    window.location.replace('/login.html?type=medical');
+    window.location.replace('/login-medical.html');
 }
 
 // -----------------------------------------------------------------------
