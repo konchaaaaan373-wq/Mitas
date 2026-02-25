@@ -423,6 +423,45 @@
             border-color: rgba(78, 205, 196, 0.4);
         }
 
+        /* New registration CTA */
+        .register-cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.1rem 1.25rem;
+            background: linear-gradient(135deg, rgba(255,107,157,0.06), rgba(167,139,250,0.06));
+            border: 1.5px solid rgba(255,107,157,0.2);
+            border-radius: 12px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .register-cta-text {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .register-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.7rem 1.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            letter-spacing: 0.02em;
+        }
+
+        .register-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,157,0.35);
+        }
+
         @media (max-width: 900px) {
             body { flex-direction: column; }
             .login-left { min-height: auto; padding: 2.5rem 2rem 2rem; }
@@ -583,9 +622,16 @@
             🏥 医療機関の方はこちら
         </a>
 
+        <div class="register-cta">
+            <p class="register-cta-text">まだアカウントをお持ちでない方</p>
+            <a href="/register-doctor.html" class="register-cta-btn">
+                ✨ 無料で新規登録する
+            </a>
+            <p class="register-cta-text" style="font-size: 0.78rem; margin-top: -0.2rem;">登録無料・3分で完了</p>
+        </div>
+
         <div class="form-footer">
-            <a href="/">← トップページに戻る</a><br><br>
-            初めてご利用の方は<a href="/#contact-form">こちらから無料登録</a>
+            <a href="/">← トップページに戻る</a>
         </div>
     </main>
 
