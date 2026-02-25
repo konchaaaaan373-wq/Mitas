@@ -1330,6 +1330,11 @@
                 display: none;
             }
 
+            /* Hide secondary nav button on mobile to prevent overflow */
+            .nav-secondary-btn {
+                display: none;
+            }
+
             .cta-button {
                 padding: 0.6rem 1.2rem;
                 font-size: 0.85rem;
@@ -2076,9 +2081,9 @@
     <header>
         <nav>
             <div class="nav-left">
-                <div class="logo">Neco</div>
+                <a href="/" class="logo" aria-label="Neco トップページ">Neco</a>
                 <div class="profession-tabs">
-                    <a href="features" class="profession-tab active">医師</a>
+                    <a href="/" class="profession-tab active" aria-current="page">医師</a>
                     <a href="nurse.html" class="profession-tab">看護師</a>
                 </div>
             </div>
@@ -2087,7 +2092,8 @@
                 <li><a href="#stats">実績</a></li>
                 <li><a href="#contact">お問い合わせ</a></li>
             </ul>
-            <a href="for-medical.html" class="cta-button" style="background: transparent; border: 2px solid #FF6B9D; color: #FF6B9D; margin-right: 8px;">医療機関の方はこちら</a>
+            <a href="for-medical.html" class="cta-button nav-secondary-btn" style="background: transparent; border: 2px solid #FF6B9D; color: #FF6B9D; margin-right: 8px;">医療機関の方はこちら</a>
+            <a href="/login.html" class="cta-button" style="background: transparent; border: 2px solid #A78BFA; color: #A78BFA; margin-right: 8px;">ログイン</a>
             <a href="#contact-form" class="cta-button">無料相談する</a>
         </nav>
     </header>

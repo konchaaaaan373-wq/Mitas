@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダッシュボード（医師） - Neco</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --purple: #A78BFA;
+            --blue: #4CC9F0;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --border: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --sidebar-w: 300px;
+            --header-h: 64px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            height: var(--header-h);
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1rem;
+            flex-shrink: 0;
+            z-index: 100;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        }
+
+        .header-logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .header-badge {
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .header-spacer { flex: 1; }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            color: var(--gray-500);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.4rem;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .unread-total-badge {
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .conv-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .conv-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            border-bottom: 1px solid var(--gray-100);
+            position: relative;
+        }
+
+        .conv-item:hover { background: var(--gray-100); }
+
+        .conv-item.active {
+            background: linear-gradient(90deg, rgba(255,107,157,0.08), rgba(167,139,250,0.04));
+            border-left: 3px solid var(--primary);
+        }
+
+        .conv-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .conv-info { flex: 1; overflow: hidden; }
+
+        .conv-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.25rem;
+        }
+
+        .conv-preview {
+            font-size: 0.78rem;
+            color: var(--gray-400);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conv-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.4rem;
+            flex-shrink: 0;
+        }
+
+        .conv-time {
+            font-size: 0.72rem;
+            color: var(--gray-400);
+            white-space: nowrap;
+        }
+
+        .unread-badge {
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 10px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.1rem 0.45rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--light);
+        }
+
+        /* Jobs banner at top */
+        .jobs-banner {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: none;
+        }
+
+        .jobs-banner::-webkit-scrollbar { display: none; }
+
+        .jobs-banner-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--gray-400);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .job-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.85rem;
+            background: var(--light);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--dark);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .job-chip:hover {
+            border-color: var(--primary);
+            background: rgba(255,107,157,0.05);
+        }
+
+        .job-chip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ===== CHAT AREA ===== */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat header */
+        .chat-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .chat-header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+        }
+
+        .chat-header-info { flex: 1; }
+
+        .chat-header-name {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .chat-header-sub {
+            font-size: 0.78rem;
+            color: var(--gray-400);
+        }
+
+        /* Messages */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .date-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--gray-400);
+            font-size: 0.75rem;
+            margin: 0.5rem 0;
+        }
+
+        .date-divider::before,
+        .date-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 72%;
+        }
+
+        .message.own {
+            flex-direction: row-reverse;
+            align-self: flex-end;
+        }
+
+        .message.other { align-self: flex-start; }
+
+        .msg-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--white);
+            flex-shrink: 0;
+            align-self: flex-end;
+        }
+
+        .msg-content { display: flex; flex-direction: column; gap: 0.3rem; }
+
+        .message.own .msg-content { align-items: flex-end; }
+
+        .msg-sender {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .msg-bubble {
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        .message.own .msg-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.other .msg-bubble {
+            background: var(--white);
+            color: var(--dark);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .msg-time {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--gray-400);
+            animation: typingBounce 1.2s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-area {
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .message-input {
+            flex: 1;
+            min-height: 44px;
+            max-height: 140px;
+            padding: 0.65rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 22px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            color: var(--dark);
+            background: var(--light);
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s ease;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .message-input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+        }
+
+        .message-input::placeholder { color: #C4C9D4; }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(255, 107, 157, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .empty-chat-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-chat h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-chat p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* ===== MOBILE OVERLAY ===== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 200;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+
+            .sidebar {
+                position: fixed;
+                top: var(--header-h);
+                left: 0;
+                bottom: 0;
+                width: 280px;
+                z-index: 300;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open { transform: translateX(0); }
+
+            .sidebar-overlay.open { display: block; }
+
+            .jobs-banner { padding: 0.6rem 1rem; }
+
+            .chat-header { padding: 0.85rem 1rem; }
+
+            .messages-container { padding: 1rem; }
+
+            .message { max-width: 88%; }
+
+            .input-area { padding: 0.75rem 1rem; }
+
+            .user-name, .user-role { display: none; }
+
+            .header-badge { display: none; }
+        }
+
+        /* Focus visible */
+        a:focus-visible, button:focus-visible, textarea:focus-visible {
+            outline: 3px solid var(--blue);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="app-header" role="banner">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="会話リストを開く" aria-expanded="false" id="menu-btn">
+        ☰
+    </button>
+    <a href="/" class="header-logo" aria-label="Neco トップページ">Neco</a>
+    <span class="header-badge">医師</span>
+
+    <div class="header-spacer"></div>
+
+    <div class="header-user">
+        <div class="user-avatar" id="header-avatar" style="background: #FF6B9D;" aria-hidden="true">田</div>
+        <div>
+            <div class="user-name" id="header-name">田中 太郎</div>
+            <div class="user-role" id="header-specialty">内科</div>
+        </div>
+        <button class="logout-btn" onclick="logout()" aria-label="ログアウト">ログアウト</button>
+    </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<div class="app-body">
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar: conversation list -->
+    <aside class="sidebar" id="sidebar" aria-label="会話リスト">
+        <div class="sidebar-header">
+            <span class="sidebar-title">💬 メッセージ</span>
+            <span class="unread-total-badge" id="total-unread" aria-label="未読メッセージ数">0</span>
+        </div>
+        <div class="conv-list" id="conv-list" role="list" aria-label="会話一覧">
+            <!-- Populated by JS -->
+        </div>
+    </aside>
+
+    <!-- Main chat area -->
+    <main class="main-content" role="main">
+        <!-- Matched jobs banner -->
+        <div class="jobs-banner" aria-label="マッチング済みの求人">
+            <span class="jobs-banner-label">マッチング求人：</span>
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Chat -->
+        <div class="chat-area" id="chat-area">
+            <!-- Initial empty state -->
+            <div class="empty-chat" id="empty-state">
+                <div class="empty-chat-icon" aria-hidden="true">💬</div>
+                <h3>会話を選択してください</h3>
+                <p>左のリストから医療機関を選んで<br>メッセージを送りましょう</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+// -----------------------------------------------------------------------
+// 0. Auth guard – redirect to login if no session
+// -----------------------------------------------------------------------
+let currentUser = null;
+
+(function initAuth() {
+    try {
+        const token   = localStorage.getItem('neco_token');
+        const userStr = localStorage.getItem('neco_user');
+        if (!token || !userStr) throw new Error('no session');
+
+        currentUser = JSON.parse(userStr);
+        if (!currentUser || currentUser.type !== 'doctor') throw new Error('wrong type');
+
+        // Update header UI
+        document.getElementById('header-name').textContent    = currentUser.name;
+        document.getElementById('header-specialty').textContent = currentUser.specialty || '医師';
+        document.getElementById('header-avatar').textContent  = currentUser.avatarInitial || currentUser.name.charAt(0);
+        if (currentUser.avatarColor) {
+            document.getElementById('header-avatar').style.background = currentUser.avatarColor;
+        }
+    } catch (_) {
+        window.location.replace('/login.html');
+    }
+})();
+
+// -----------------------------------------------------------------------
+// 1. Demo data & localStorage helpers
+// -----------------------------------------------------------------------
+const CONVERSATIONS = [
+    {
+        id: 'conv_dr-001_mc-001',
+        otherId: 'mc-001',
+        otherName: 'さくら在宅クリニック',
+        otherType: 'medical',
+        avatarColor: '#4ECDC4',
+        avatarInitial: 'さ',
+        facilityType: '在宅医療クリニック',
+        prefecture: '東京都渋谷区',
+        jobTitle: '内科外来 週1〜2回',
+        jobRate: '時給5万円〜',
+    },
+    {
+        id: 'conv_dr-001_mc-002',
+        otherId: 'mc-002',
+        otherName: 'みなと訪問看護ステーション',
+        otherType: 'medical',
+        avatarColor: '#4CC9F0',
+        avatarInitial: 'み',
+        facilityType: '訪問看護ステーション',
+        prefecture: '東京都港区',
+        jobTitle: '在宅診療 週1回',
+        jobRate: '時給4万円〜',
+    },
+];
+
+const DEMO_MESSAGES = {
+    'conv_dr-001_mc-001': [
+        {
+            id: 'msg-001', senderId: 'mc-001', senderName: 'さくら在宅クリニック',
+            senderType: 'medical', text: 'はじめまして。Necoを通じてご連絡させていただきました。内科外来の非常勤医師を探しており、先生のご経歴に大変興味を持ちました。よろしければ詳細をお話しできればと思います。',
+            timestamp: getTimestamp(-120), read: true,
+        },
+        {
+            id: 'msg-002', senderId: 'dr-001', senderName: '田中 太郎',
+            senderType: 'doctor', text: 'ご連絡ありがとうございます。詳細をお聞かせいただけますか？特に勤務日時と報酬について確認させてください。',
+            timestamp: getTimestamp(-90), read: true,
+        },
+        {
+            id: 'msg-003', senderId: 'mc-001', senderName: 'さくら在宅クリニック',
+            senderType: 'medical', text: '週1〜2回（土日優先）、1回5〜6時間の外来診療をお願いしております。報酬は時給換算で5〜6万円を想定しています。在宅医療の経験が豊富な先生を探しておりますので、ぜひご検討ください。',
+            timestamp: getTimestamp(-60), read: false,
+        },
+    ],
+    'conv_dr-001_mc-002': [
+        {
+            id: 'msg-004', senderId: 'mc-002', senderName: 'みなと訪問看護ステーション',
+            senderType: 'medical', text: 'こちら、みなと訪問看護ステーションの鈴木と申します。先生のプロフィールを拝見し、在宅医療への熱意に共感しました。当ステーションでは週1回程度、在宅患者の往診をお願いできる先生を探しています。',
+            timestamp: getTimestamp(-48 * 60), read: true,
+        },
+        {
+            id: 'msg-005', senderId: 'dr-001', senderName: '田中 太郎',
+            senderType: 'doctor', text: '鈴木様、ご連絡ありがとうございます。詳細を教えていただけますか？対象患者様の疾患背景と、必要な訪問頻度・時間帯などについて確認させてください。',
+            timestamp: getTimestamp(-44 * 60), read: true,
+        },
+    ],
+};
+
+function getTimestamp(minutesAgo) {
+    return new Date(Date.now() + minutesAgo * 60 * 1000).toISOString();
+}
+
+function getStorageKey(convId) {
+    return `neco_messages_${convId}`;
+}
+
+function loadMessages(convId) {
+    const stored = localStorage.getItem(getStorageKey(convId));
+    if (stored) {
+        try { return JSON.parse(stored); } catch (_) {}
+    }
+    // Seed with demo data on first load
+    const demo = DEMO_MESSAGES[convId] || [];
+    localStorage.setItem(getStorageKey(convId), JSON.stringify(demo));
+    return demo;
+}
+
+function saveMessages(convId, messages) {
+    localStorage.setItem(getStorageKey(convId), JSON.stringify(messages));
+}
+
+function markRead(convId) {
+    const msgs = loadMessages(convId);
+    const updated = msgs.map(m => m.senderId !== (currentUser && currentUser.id) ? { ...m, read: true } : m);
+    saveMessages(convId, updated);
+}
+
+function getUnreadCount(convId) {
+    const msgs = loadMessages(convId);
+    return msgs.filter(m => m.senderId !== (currentUser && currentUser.id) && !m.read).length;
+}
+
+function formatTime(isoStr) {
+    const d = new Date(isoStr);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffDays = Math.floor(diffMs / 86400000);
+    if (diffDays === 0) return d.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+    if (diffDays === 1) return '昨日';
+    if (diffDays < 7) return `${diffDays}日前`;
+    return d.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+}
+
+function formatDateHeader(isoStr) {
+    const d = new Date(isoStr);
+    const now = new Date();
+    if (d.toDateString() === now.toDateString()) return '今日';
+    const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+    if (d.toDateString() === yesterday.toDateString()) return '昨日';
+    return d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// -----------------------------------------------------------------------
+// 2. Render sidebar conversations
+// -----------------------------------------------------------------------
+let activeConvId = null;
+
+function renderSidebar() {
+    const convList = document.getElementById('conv-list');
+    convList.innerHTML = '';
+    let totalUnread = 0;
+
+    CONVERSATIONS.forEach(conv => {
+        const msgs = loadMessages(conv.id);
+        const lastMsg = msgs[msgs.length - 1];
+        const unread = getUnreadCount(conv.id);
+        totalUnread += unread;
+
+        const item = document.createElement('div');
+        item.className = `conv-item${activeConvId === conv.id ? ' active' : ''}`;
+        item.setAttribute('role', 'listitem');
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('aria-label', `${conv.otherName}との会話${unread > 0 ? `、未読${unread}件` : ''}`);
+        item.innerHTML = `
+            <div class="conv-avatar" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true">${escapeHtml(conv.avatarInitial)}</div>
+            <div class="conv-info">
+                <div class="conv-name">${escapeHtml(conv.otherName)}</div>
+                <div class="conv-preview">${escapeHtml(lastMsg ? lastMsg.text.slice(0, 30) + (lastMsg.text.length > 30 ? '…' : '') : 'メッセージなし')}</div>
+            </div>
+            <div class="conv-meta">
+                <div class="conv-time">${lastMsg ? formatTime(lastMsg.timestamp) : ''}</div>
+                ${unread > 0 ? `<div class="unread-badge" aria-label="未読${unread}件">${unread}</div>` : ''}
+            </div>
+        `;
+        item.onclick = () => openConversation(conv.id);
+        item.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openConversation(conv.id); };
+        convList.appendChild(item);
+    });
+
+    const badge = document.getElementById('total-unread');
+    badge.textContent = totalUnread;
+    badge.style.display = totalUnread > 0 ? '' : 'none';
+}
+
+// -----------------------------------------------------------------------
+// 3. Render job chips banner
+// -----------------------------------------------------------------------
+function renderJobsBanner() {
+    const banner = document.querySelector('.jobs-banner');
+    const label = banner.querySelector('.jobs-banner-label');
+
+    CONVERSATIONS.forEach(conv => {
+        const chip = document.createElement('button');
+        chip.className = 'job-chip';
+        chip.setAttribute('aria-label', `${conv.otherName}: ${conv.jobTitle}`);
+        chip.innerHTML = `
+            <span class="job-chip-dot" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true"></span>
+            <strong>${escapeHtml(conv.otherName)}</strong>：${escapeHtml(conv.jobTitle)}・${escapeHtml(conv.jobRate)}
+        `;
+        chip.onclick = () => openConversation(conv.id);
+        banner.appendChild(chip);
+    });
+}
+
+// -----------------------------------------------------------------------
+// 4. Open a conversation and render messages
+// -----------------------------------------------------------------------
+function openConversation(convId) {
+    activeConvId = convId;
+    markRead(convId);
+
+    const conv = CONVERSATIONS.find(c => c.id === convId);
+    if (!conv) return;
+
+    // Update sidebar
+    renderSidebar();
+
+    // Build chat area HTML
+    const chatArea = document.getElementById('chat-area');
+    chatArea.innerHTML = `
+        <div class="chat-header">
+            <div class="chat-header-avatar" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true">${escapeHtml(conv.avatarInitial)}</div>
+            <div class="chat-header-info">
+                <div class="chat-header-name">${escapeHtml(conv.otherName)}</div>
+                <div class="chat-header-sub">${escapeHtml(conv.facilityType)} · ${escapeHtml(conv.prefecture)} · ${escapeHtml(conv.jobTitle)}</div>
+            </div>
+        </div>
+        <div class="messages-container" id="messages-container" aria-label="メッセージ一覧" aria-live="polite">
+            <!-- Messages rendered here -->
+        </div>
+        <div class="typing-indicator" id="typing-indicator" aria-live="polite" aria-label="相手が入力中">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+        <div class="input-area">
+            <textarea
+                class="message-input"
+                id="message-input"
+                placeholder="${escapeHtml(conv.otherName)}にメッセージを送る..."
+                aria-label="メッセージ入力"
+                rows="1"
+                maxlength="1000"
+            ></textarea>
+            <button class="send-btn" id="send-btn" onclick="sendMessage()" aria-label="送信" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    renderMessages(convId);
+    setupInputHandlers(convId, conv);
+
+    // Close sidebar on mobile
+    if (window.innerWidth <= 768) closeSidebar();
+}
+
+// -----------------------------------------------------------------------
+// 5. Render messages in the chat area
+// -----------------------------------------------------------------------
+function renderMessages(convId) {
+    const container = document.getElementById('messages-container');
+    if (!container) return;
+
+    const messages = loadMessages(convId);
+    container.innerHTML = '';
+
+    let lastDateStr = '';
+
+    messages.forEach(msg => {
+        const dateStr = formatDateHeader(msg.timestamp);
+        if (dateStr !== lastDateStr) {
+            const divider = document.createElement('div');
+            divider.className = 'date-divider';
+            divider.setAttribute('aria-label', dateStr);
+            divider.textContent = dateStr;
+            container.appendChild(divider);
+            lastDateStr = dateStr;
+        }
+
+        const isOwn = msg.senderId === currentUser.id;
+        const wrapper = document.createElement('div');
+        wrapper.className = `message ${isOwn ? 'own' : 'other'}`;
+        wrapper.innerHTML = `
+            ${!isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(msg.senderId === 'mc-001' ? '#4ECDC4' : '#4CC9F0')}" aria-hidden="true">${escapeHtml(msg.senderName.charAt(0))}</div>` : ''}
+            <div class="msg-content">
+                ${!isOwn ? `<span class="msg-sender">${escapeHtml(msg.senderName)}</span>` : ''}
+                <div class="msg-bubble">${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+                <span class="msg-time">${formatTime(msg.timestamp)}</span>
+            </div>
+            ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#FF6B9D')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name.charAt(0))}</div>` : ''}
+        `;
+        container.appendChild(wrapper);
+    });
+
+    // Scroll to bottom
+    setTimeout(() => { container.scrollTop = container.scrollHeight; }, 0);
+}
+
+// -----------------------------------------------------------------------
+// 6. Input handlers and send
+// -----------------------------------------------------------------------
+function setupInputHandlers(convId, conv) {
+    const input   = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    if (!input || !sendBtn) return;
+
+    // Auto-resize textarea
+    input.addEventListener('input', () => {
+        sendBtn.disabled = input.value.trim().length === 0;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+    });
+
+    // Ctrl+Enter or Cmd+Enter to send
+    input.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            if (!sendBtn.disabled) sendMessage();
+        }
+    });
+}
+
+function sendMessage() {
+    if (!activeConvId || !currentUser) return;
+
+    const input   = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Create message object
+    const newMsg = {
+        id: `msg-${Date.now()}`,
+        senderId:   currentUser.id,
+        senderName: currentUser.name,
+        senderType: currentUser.type,
+        text,
+        timestamp: new Date().toISOString(),
+        read: false,
+    };
+
+    // Save and render
+    const msgs = loadMessages(activeConvId);
+    msgs.push(newMsg);
+    saveMessages(activeConvId, msgs);
+
+    // Clear input
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    renderMessages(activeConvId);
+    renderSidebar();
+
+    // Show typing indicator after a short delay (demo auto-reply)
+    scheduleAutoReply(activeConvId);
+}
+
+// -----------------------------------------------------------------------
+// 7. Demo auto-reply (simulates the other side typing)
+// -----------------------------------------------------------------------
+const AUTO_REPLIES = {
+    'mc-001': [
+        'ありがとうございます！詳細についてはこちらからご説明いたします。',
+        'ご質問がございましたらいつでもお気軽にご連絡ください。',
+        '先生のご都合に合わせて日程を調整いたします。いつがご都合よろしいでしょうか？',
+        'ぜひ一度、施設を見学いただけますでしょうか？',
+        'ご回答ありがとうございます。担当者と確認してすぐにご連絡いたします。',
+    ],
+    'mc-002': [
+        'ご連絡ありがとうございます。詳細をお伝えします。',
+        'ご質問等ございましたら、いつでもご連絡ください。',
+        '先生のご経験は私たちのチームにとって非常に心強いです。',
+        'ご都合のよい日時をお知らせください。',
+    ],
+};
+
+let autoReplyTimers = {};
+
+function scheduleAutoReply(convId) {
+    if (autoReplyTimers[convId]) return; // avoid duplicate
+
+    const conv = CONVERSATIONS.find(c => c.id === convId);
+    if (!conv) return;
+
+    const replies = AUTO_REPLIES[conv.otherId] || AUTO_REPLIES['mc-001'];
+    const reply = replies[Math.floor(Math.random() * replies.length)];
+
+    // Show typing indicator after 1.5s
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    autoReplyTimers[convId] = setTimeout(() => {
+        if (activeConvId !== convId) {
+            delete autoReplyTimers[convId];
+            return;
+        }
+
+        if (typingIndicator) typingIndicator.style.display = 'block';
+
+        // Scroll to show typing
+        const container = document.getElementById('messages-container');
+        if (container) container.scrollTop = container.scrollHeight;
+
+        // Send reply after 2s of typing
+        setTimeout(() => {
+            if (typingIndicator) typingIndicator.style.display = 'none';
+            delete autoReplyTimers[convId];
+
+            if (activeConvId !== convId) return;
+
+            const autoMsg = {
+                id: `auto-${Date.now()}`,
+                senderId:   conv.otherId,
+                senderName: conv.otherName,
+                senderType: 'medical',
+                text: reply,
+                timestamp: new Date().toISOString(),
+                read: true,
+            };
+
+            const msgs = loadMessages(convId);
+            msgs.push(autoMsg);
+            saveMessages(convId, msgs);
+
+            renderMessages(convId);
+            renderSidebar();
+        }, 2000);
+    }, 1500);
+}
+
+// -----------------------------------------------------------------------
+// 8. Mobile sidebar toggle
+// -----------------------------------------------------------------------
+function toggleSidebar() {
+    const sidebar  = document.getElementById('sidebar');
+    const overlay  = document.getElementById('sidebar-overlay');
+    const menuBtn  = document.getElementById('menu-btn');
+    const isOpen   = sidebar.classList.contains('open');
+
+    sidebar.classList.toggle('open', !isOpen);
+    overlay.classList.toggle('open', !isOpen);
+    menuBtn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+    document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
+}
+
+// -----------------------------------------------------------------------
+// 9. Logout
+// -----------------------------------------------------------------------
+function logout() {
+    if (!confirm('ログアウトしますか？')) return;
+    localStorage.removeItem('neco_token');
+    localStorage.removeItem('neco_user');
+    window.location.replace('/login.html');
+}
+
+// -----------------------------------------------------------------------
+// 10. Init
+// -----------------------------------------------------------------------
+renderSidebar();
+renderJobsBanner();
+
+// Auto-open first conversation on desktop
+if (window.innerWidth > 768 && CONVERSATIONS.length > 0) {
+    openConversation(CONVERSATIONS[0].id);
+}
+</script>
+</body>
+</html>
