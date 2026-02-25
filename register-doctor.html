@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医師・看護師 新規登録 - Neco</title>
+    <meta name="description" content="Necoに無料登録して、在宅医療の求人を探しましょう。医師・看護師向け登録フォーム。">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B9D;
+            --purple: #A78BFA;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --error: #EF4444;
+            --success: #10B981;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ===== LEFT PANEL ===== */
+        .login-left {
+            flex: 1;
+            background: linear-gradient(145deg, #FF6B9D 0%, #C084FC 55%, #A78BFA 100%);
+            padding: 3rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -80px;
+            width: 420px; height: 420px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .login-left::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -60px;
+            width: 320px; height: 320px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .left-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin-bottom: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-logo-cat { width: 2.4rem; height: 2.4rem; flex-shrink: 0; }
+
+        .left-logo-text {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.03em;
+        }
+
+        .left-content { position: relative; z-index: 1; max-width: 400px; }
+
+        .left-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .left-tagline {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            line-height: 1.45;
+            margin-bottom: 1.25rem;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .left-tagline strong { display: block; font-size: 2rem; }
+
+        .left-sub {
+            font-size: 0.95rem;
+            opacity: 0.92;
+            line-height: 1.75;
+            margin-bottom: 2.5rem;
+        }
+
+        .step-guide {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step-guide-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            opacity: 0.75;
+            transition: opacity 0.3s;
+        }
+        .step-guide-item.active { opacity: 1; }
+        .step-guide-item.done { opacity: 0.55; }
+
+        .step-guide-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .step-guide-item.active .step-guide-num {
+            background: rgba(255,255,255,0.35);
+            border-color: rgba(255,255,255,0.6);
+        }
+        .step-guide-item.done .step-guide-num {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* ===== RIGHT PANEL ===== */
+        .login-right {
+            width: 520px;
+            background: var(--white);
+            padding: 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-shadow: -30px 0 80px rgba(0,0,0,0.06);
+            overflow-y: auto;
+        }
+
+        .right-header { margin-bottom: 1.5rem; }
+        .right-header h2 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.3rem;
+        }
+        .right-header p { color: var(--gray-500); font-size: 0.88rem; }
+
+        /* Progress bar */
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 2rem;
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--gray-200);
+            z-index: 0;
+        }
+        .progress-step.done:not(:last-child)::after,
+        .progress-step.active:not(:last-child)::after {
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+        }
+        .progress-dot {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-400);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+        .progress-step.active .progress-dot {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            box-shadow: 0 0 0 4px rgba(255,107,157,0.15);
+        }
+        .progress-step.done .progress-dot {
+            background: var(--success);
+            color: white;
+        }
+        .progress-label {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+            margin-top: 0.3rem;
+            text-align: center;
+        }
+        .progress-step.active .progress-label { color: var(--primary); font-weight: 600; }
+        .progress-step.done .progress-label { color: var(--success); }
+
+        /* Form steps */
+        .form-step { display: none; flex-direction: column; gap: 1.1rem; animation: fadeIn 0.2s ease; }
+        .form-step.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+
+        .form-group { display: flex; flex-direction: column; }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.35rem;
+        }
+        .form-group label .req {
+            color: var(--primary);
+            margin-left: 0.2rem;
+            font-size: 0.78rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            color: var(--dark);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,107,157,0.12);
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder { color: #C4C9D4; }
+
+        .form-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%239CA3AF' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+            line-height: 1.6;
+        }
+
+        .password-wrapper { position: relative; }
+        .password-wrapper .form-input { padding-right: 3rem; }
+        .toggle-password {
+            position: absolute;
+            right: 0.85rem; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            cursor: pointer; color: var(--gray-400);
+            font-size: 1rem; padding: 0.2rem; line-height: 1;
+        }
+        .toggle-password:hover { color: var(--dark); }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .checkbox-chip input[type="checkbox"] { display: none; }
+
+        .chip-label {
+            padding: 0.4rem 0.85rem;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            background: var(--white);
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .checkbox-chip input:checked + .chip-label {
+            border-color: var(--primary);
+            background: rgba(255,107,157,0.08);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Type selector */
+        .type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .type-option { position: relative; }
+        .type-option input[type="radio"] { display: none; }
+        .type-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.1rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .type-card .type-icon { font-size: 1.8rem; }
+        .type-card .type-name { font-size: 0.9rem; font-weight: 600; color: var(--dark); }
+        .type-card .type-sub { font-size: 0.75rem; color: var(--gray-500); }
+        .type-option input:checked + .type-card {
+            border-color: var(--primary);
+            background: rgba(255,107,157,0.05);
+        }
+        .type-option input:checked + .type-card .type-name { color: var(--primary); }
+
+        /* Terms */
+        .terms-box {
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--gray-500);
+        }
+
+        .terms-agree {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .terms-agree input[type="checkbox"] { margin-top: 0.15rem; flex-shrink: 0; accent-color: var(--primary); }
+        .terms-agree span { font-size: 0.875rem; color: var(--dark); line-height: 1.5; }
+        .terms-agree a { color: var(--primary); text-decoration: none; }
+        .terms-agree a:hover { text-decoration: underline; }
+
+        /* Buttons */
+        .btn-row { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+
+        .btn-next, .btn-submit {
+            flex: 1;
+            padding: 0.95rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: var(--white);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.02em;
+        }
+        .btn-next:hover, .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255,107,157,0.4);
+        }
+        .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none !important; }
+
+        .btn-back {
+            padding: 0.95rem 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--gray-500);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-back:hover { border-color: var(--gray-400); color: var(--dark); }
+
+        .error-message {
+            display: none;
+            padding: 0.75rem 1rem;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: 10px;
+            color: var(--error);
+            font-size: 0.875rem;
+        }
+        .error-message.visible { display: block; }
+
+        .success-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.25rem;
+            padding: 2rem 0;
+        }
+        .success-screen.active { display: flex; }
+
+        .success-icon {
+            width: 72px; height: 72px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .success-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .success-sub { font-size: 0.9rem; color: var(--gray-500); line-height: 1.7; }
+        .success-btn {
+            padding: 0.95rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .success-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,157,0.4); }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.75rem 0;
+            color: var(--gray-400);
+            font-size: 0.82rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-200);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            line-height: 1.7;
+        }
+        .form-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .form-footer a:hover { text-decoration: underline; }
+
+        .spinner {
+            display: inline-block;
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .field-hint { font-size: 0.78rem; color: var(--gray-400); margin-top: 0.25rem; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .login-left { min-height: auto; padding: 2rem 1.5rem 1.5rem; }
+            .left-logo { margin-bottom: 1.2rem; }
+            .left-tagline { font-size: 1.4rem; }
+            .step-guide { display: none; }
+            .login-right { width: 100%; min-height: auto; padding: 2rem 1.25rem 3rem; box-shadow: none; }
+            .form-row { grid-template-columns: 1fr; }
+            .type-selector { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .login-right { padding: 1.5rem 1rem 2.5rem; }
+        }
+
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 3px solid #4CC9F0;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LEFT BRAND PANEL ===== -->
+    <div class="login-left" role="banner">
+        <a href="/" class="left-logo" aria-label="Neco トップページへ">
+            <svg class="left-logo-cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
+                <polygon points="8,16 4,4 14,13" fill="rgba(255,255,255,0.9)"/>
+                <polygon points="32,16 36,4 26,13" fill="rgba(255,255,255,0.9)"/>
+                <polygon points="9,15 6,7 13,12" fill="rgba(255,182,205,0.5)"/>
+                <polygon points="31,15 34,7 27,12" fill="rgba(255,182,205,0.5)"/>
+                <ellipse cx="20" cy="24" rx="13" ry="12" fill="rgba(255,255,255,0.9)"/>
+                <ellipse cx="15" cy="21" rx="2.2" ry="2.8" fill="#FF6B9D"/>
+                <ellipse cx="25" cy="21" rx="2.2" ry="2.8" fill="#FF6B9D"/>
+                <ellipse cx="15" cy="22" rx="1.1" ry="1.6" fill="white"/>
+                <ellipse cx="25" cy="22" rx="1.1" ry="1.6" fill="white"/>
+                <circle cx="15.7" cy="20.8" r="0.5" fill="rgba(255,255,255,0.7)"/>
+                <circle cx="25.7" cy="20.8" r="0.5" fill="rgba(255,255,255,0.7)"/>
+                <ellipse cx="20" cy="27" rx="1.3" ry="0.9" fill="#FF6B9D" opacity="0.7"/>
+                <path d="M 18.7 27.8 Q 20 29.2 21.3 27.8" stroke="#A78BFA" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+                <line x1="7" y1="25.5" x2="15.5" y2="26.5" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
+                <line x1="7" y1="27.5" x2="15.5" y2="27.8" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
+                <line x1="24.5" y1="26.5" x2="33" y2="25.5" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
+                <line x1="24.5" y1="27.8" x2="33" y2="27.5" stroke="#A78BFA" stroke-width="0.8" opacity="0.5"/>
+            </svg>
+            <span class="left-logo-text">Neco</span>
+        </a>
+        <div class="left-content">
+            <div class="left-badge">
+                <span aria-hidden="true">✨</span> 無料で登録できます
+            </div>
+            <h1 class="left-tagline">
+                3分で登録完了。<br>
+                <strong>理想の職場を探そう。</strong>
+            </h1>
+            <p class="left-sub">
+                在宅医療に特化した求人プラットフォーム。<br>
+                登録無料で、あなたにぴったりの求人をご紹介します。
+            </p>
+            <div class="step-guide" aria-label="登録ステップ">
+                <div class="step-guide-item active" id="guide-1">
+                    <span class="step-guide-num">1</span>
+                    基本情報・アカウント設定
+                </div>
+                <div class="step-guide-item" id="guide-2">
+                    <span class="step-guide-num">2</span>
+                    職種・専門情報
+                </div>
+                <div class="step-guide-item" id="guide-3">
+                    <span class="step-guide-num">3</span>
+                    希望条件・自己PR
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== RIGHT FORM PANEL ===== -->
+    <main class="login-right" role="main">
+        <div class="right-header">
+            <h2>医師・看護師 新規登録</h2>
+            <p>すべて無料。登録後すぐに求人を閲覧できます。</p>
+        </div>
+
+        <!-- Progress indicator -->
+        <div class="progress-bar" role="list" aria-label="登録ステップ">
+            <div class="progress-step active" id="prog-1" role="listitem">
+                <div class="progress-dot">1</div>
+                <span class="progress-label">基本情報</span>
+            </div>
+            <div class="progress-step" id="prog-2" role="listitem">
+                <div class="progress-dot">2</div>
+                <span class="progress-label">職種・専門</span>
+            </div>
+            <div class="progress-step" id="prog-3" role="listitem">
+                <div class="progress-dot">3</div>
+                <span class="progress-label">希望条件</span>
+            </div>
+        </div>
+
+        <div id="form-error" class="error-message" role="alert" aria-live="polite"></div>
+
+        <!-- STEP 1: 基本情報 -->
+        <div class="form-step active" id="step-1">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="last-name">姓<span class="req">*</span></label>
+                    <input type="text" id="last-name" class="form-input" placeholder="田中" required autocomplete="family-name">
+                </div>
+                <div class="form-group">
+                    <label for="first-name">名<span class="req">*</span></label>
+                    <input type="text" id="first-name" class="form-input" placeholder="太郎" required autocomplete="given-name">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-email">メールアドレス<span class="req">*</span></label>
+                <input type="email" id="reg-email" class="form-input" placeholder="your@email.com" required autocomplete="email" inputmode="email">
+            </div>
+
+            <div class="form-group">
+                <label for="reg-password">パスワード<span class="req">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" id="reg-password" class="form-input" placeholder="8文字以上" required autocomplete="new-password" minlength="8">
+                    <button type="button" class="toggle-password" onclick="togglePw('reg-password', this)" aria-label="パスワードを表示">👁</button>
+                </div>
+                <p class="field-hint">半角英数字8文字以上で設定してください</p>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-password2">パスワード（確認）<span class="req">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" id="reg-password2" class="form-input" placeholder="パスワードを再入力" required autocomplete="new-password">
+                    <button type="button" class="toggle-password" onclick="togglePw('reg-password2', this)" aria-label="パスワードを表示">👁</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reg-phone">電話番号</label>
+                <input type="tel" id="reg-phone" class="form-input" placeholder="090-1234-5678" autocomplete="tel" inputmode="tel">
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-next" onclick="goNext(1)">次へ →</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: 職種・専門情報 -->
+        <div class="form-step" id="step-2">
+            <div class="form-group">
+                <label>職種<span class="req">*</span></label>
+                <div class="type-selector">
+                    <label class="type-option">
+                        <input type="radio" name="profession" value="doctor" checked>
+                        <div class="type-card">
+                            <span class="type-icon" aria-hidden="true">👨‍⚕️</span>
+                            <span class="type-name">医師</span>
+                            <span class="type-sub">MD / 医学博士</span>
+                        </div>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="profession" value="nurse">
+                        <div class="type-card">
+                            <span class="type-icon" aria-hidden="true">👩‍⚕️</span>
+                            <span class="type-name">看護師</span>
+                            <span class="type-sub">正看護師 / 准看護師</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="specialty-group">
+                <label for="specialty">専門科目<span class="req">*</span></label>
+                <select id="specialty" class="form-select">
+                    <option value="">選択してください</option>
+                    <optgroup label="内科系">
+                        <option value="naika">内科</option>
+                        <option value="junkan">循環器内科</option>
+                        <option value="shoka">消化器内科</option>
+                        <option value="kokyuki">呼吸器内科</option>
+                        <option value="jinzo">腎臓内科</option>
+                        <option value="shinryo">神経内科</option>
+                        <option value="tohnyobyou">糖尿病・内分泌内科</option>
+                        <option value="kansen">感染症内科</option>
+                        <option value="zaitaku">在宅医療・総合診療</option>
+                    </optgroup>
+                    <optgroup label="外科系">
+                        <option value="geka">外科</option>
+                        <option value="seikei">整形外科</option>
+                        <option value="hinyoki">泌尿器科</option>
+                    </optgroup>
+                    <optgroup label="その他">
+                        <option value="koka">口腔外科・歯科</option>
+                        <option value="seishin">精神科・心療内科</option>
+                        <option value="hifuka">皮膚科</option>
+                        <option value="ganka">眼科</option>
+                        <option value="other">その他</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="form-group" id="qualification-group" style="display:none">
+                <label for="qualification">保有資格<span class="req">*</span></label>
+                <select id="qualification" class="form-select">
+                    <option value="">選択してください</option>
+                    <option value="seikango">正看護師</option>
+                    <option value="junkango">准看護師</option>
+                    <option value="hokenshi">保健師</option>
+                    <option value="josanshi">助産師</option>
+                    <option value="kangofukushi">介護福祉士</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">経験年数<span class="req">*</span></label>
+                <select id="experience" class="form-select">
+                    <option value="">選択してください</option>
+                    <option value="1">1年未満</option>
+                    <option value="1-3">1〜3年</option>
+                    <option value="3-5">3〜5年</option>
+                    <option value="5-10">5〜10年</option>
+                    <option value="10-20">10〜20年</option>
+                    <option value="20+">20年以上</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="license-group">
+                <label for="license">医師免許番号</label>
+                <input type="text" id="license" class="form-input" placeholder="例：123456">
+                <p class="field-hint">任意。入力いただくとマッチング精度が上がります</p>
+            </div>
+
+            <div class="form-group">
+                <label>在宅医療の経験</label>
+                <div class="type-selector">
+                    <label class="type-option">
+                        <input type="radio" name="zaitaku-exp" value="yes">
+                        <div class="type-card">
+                            <span class="type-icon" aria-hidden="true">✅</span>
+                            <span class="type-name">あり</span>
+                            <span class="type-sub">経験があります</span>
+                        </div>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="zaitaku-exp" value="no" checked>
+                        <div class="type-card">
+                            <span class="type-icon" aria-hidden="true">🌱</span>
+                            <span class="type-name">なし・未経験</span>
+                            <span class="type-sub">これから始めたい</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-back" onclick="goBack(2)">← 戻る</button>
+                <button type="button" class="btn-next" onclick="goNext(2)">次へ →</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: 希望条件 -->
+        <div class="form-step" id="step-3">
+            <div class="form-group">
+                <label>希望勤務形態<span class="req">*</span></label>
+                <div class="checkbox-group">
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="work-type" value="jokin">
+                        <span class="chip-label">常勤</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="work-type" value="hijokin">
+                        <span class="chip-label">非常勤</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="work-type" value="spot">
+                        <span class="chip-label">スポット・単発</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="work-type" value="remote">
+                        <span class="chip-label">遠隔診療</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="work-area">希望エリア（都道府県）<span class="req">*</span></label>
+                <select id="work-area" class="form-select">
+                    <option value="">選択してください</option>
+                    <optgroup label="関東">
+                        <option value="tokyo">東京都</option>
+                        <option value="kanagawa">神奈川県</option>
+                        <option value="saitama">埼玉県</option>
+                        <option value="chiba">千葉県</option>
+                        <option value="ibaraki">茨城県</option>
+                        <option value="tochigi">栃木県</option>
+                        <option value="gunma">群馬県</option>
+                    </optgroup>
+                    <optgroup label="関西">
+                        <option value="osaka">大阪府</option>
+                        <option value="kyoto">京都府</option>
+                        <option value="hyogo">兵庫県</option>
+                        <option value="nara">奈良県</option>
+                        <option value="shiga">滋賀県</option>
+                        <option value="wakayama">和歌山県</option>
+                    </optgroup>
+                    <optgroup label="中部">
+                        <option value="aichi">愛知県</option>
+                        <option value="shizuoka">静岡県</option>
+                        <option value="gifu">岐阜県</option>
+                        <option value="mie">三重県</option>
+                        <option value="niigata">新潟県</option>
+                        <option value="toyama">富山県</option>
+                        <option value="ishikawa">石川県</option>
+                        <option value="fukui">福井県</option>
+                        <option value="yamanashi">山梨県</option>
+                        <option value="nagano">長野県</option>
+                    </optgroup>
+                    <optgroup label="北海道・東北">
+                        <option value="hokkaido">北海道</option>
+                        <option value="aomori">青森県</option>
+                        <option value="iwate">岩手県</option>
+                        <option value="miyagi">宮城県</option>
+                        <option value="akita">秋田県</option>
+                        <option value="yamagata">山形県</option>
+                        <option value="fukushima">福島県</option>
+                    </optgroup>
+                    <optgroup label="中国・四国">
+                        <option value="hiroshima">広島県</option>
+                        <option value="okayama">岡山県</option>
+                        <option value="tottori">鳥取県</option>
+                        <option value="shimane">島根県</option>
+                        <option value="yamaguchi">山口県</option>
+                        <option value="tokushima">徳島県</option>
+                        <option value="kagawa">香川県</option>
+                        <option value="ehime">愛媛県</option>
+                        <option value="kochi">高知県</option>
+                    </optgroup>
+                    <optgroup label="九州・沖縄">
+                        <option value="fukuoka">福岡県</option>
+                        <option value="saga">佐賀県</option>
+                        <option value="nagasaki">長崎県</option>
+                        <option value="kumamoto">熊本県</option>
+                        <option value="oita">大分県</option>
+                        <option value="miyazaki">宮崎県</option>
+                        <option value="kagoshima">鹿児島県</option>
+                        <option value="okinawa">沖縄県</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="desired-salary">希望給与（目安）</label>
+                <select id="desired-salary" class="form-select">
+                    <option value="">特に希望なし</option>
+                    <option value="10k-30k">時給 1,000〜3,000円</option>
+                    <option value="30k-50k">時給 3,000〜5,000円</option>
+                    <option value="50k+">時給 5,000円以上</option>
+                    <option value="monthly-400k">月給 40万円以上</option>
+                    <option value="monthly-600k">月給 60万円以上</option>
+                    <option value="monthly-800k">月給 80万円以上</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="start-time">希望開始時期</label>
+                <select id="start-time" class="form-select">
+                    <option value="">特に希望なし</option>
+                    <option value="asap">すぐに開始したい</option>
+                    <option value="1month">1ヶ月以内</option>
+                    <option value="3month">3ヶ月以内</option>
+                    <option value="6month">6ヶ月以内</option>
+                    <option value="undecided">未定・情報収集中</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="self-pr">自己PR・アピールポイント</label>
+                <textarea id="self-pr" class="form-textarea" placeholder="これまでの経験や得意分野、職場に求める条件などをご記入ください（任意）"></textarea>
+                <p class="field-hint">記入いただくとマッチング精度が上がります</p>
+            </div>
+
+            <div class="form-group">
+                <div class="terms-box" tabindex="0" aria-label="利用規約本文">
+                    <strong>利用規約（抜粋）</strong><br><br>
+                    第1条（サービスの目的）本サービスは、医師・看護師等の医療従事者と医療機関とのマッチングを目的として提供されます。<br><br>
+                    第2条（登録）利用者は、正確な情報を入力し登録するものとします。虚偽の情報を登録した場合、サービスの利用停止措置を取ることがあります。<br><br>
+                    第3条（個人情報）取得した個人情報は、マッチングサービスの提供・改善のために利用します。第三者への提供は行いません。<br><br>
+                    第4条（禁止事項）当サービスを通じて知り得た情報を、サービス外での直接取引に利用することを禁止します。
+                </div>
+                <label class="terms-agree">
+                    <input type="checkbox" id="terms-check">
+                    <span><a href="/terms.html" target="_blank">利用規約</a>・<a href="/privacy-policy.html" target="_blank">プライバシーポリシー</a>に同意して登録する<span class="req">*</span></span>
+                </label>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-back" onclick="goBack(3)">← 戻る</button>
+                <button type="button" id="submit-btn" class="btn-submit" onclick="handleRegister()">無料で登録する</button>
+            </div>
+        </div>
+
+        <!-- SUCCESS SCREEN -->
+        <div class="success-screen" id="success-screen" role="status">
+            <div class="success-icon" aria-hidden="true">🎉</div>
+            <h2 class="success-title">登録が完了しました！</h2>
+            <p class="success-sub">
+                ご登録いただいたメールアドレスに<br>
+                確認メールをお送りしました。<br><br>
+                さっそくダッシュボードで<br>
+                求人情報を確認しましょう。
+            </p>
+            <a href="/dashboard.html" class="success-btn">ダッシュボードへ進む →</a>
+        </div>
+
+        <div class="divider">または</div>
+        <div class="form-footer">
+            すでにアカウントをお持ちの方は<a href="/login-doctor.html">ログインはこちら</a><br>
+            医療機関の方は<a href="/register-medical.html">こちら</a>からご登録ください<br><br>
+            <a href="/">← トップページに戻る</a>
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        const TOTAL_STEPS = 3;
+
+        // Update profession-specific fields
+        document.querySelectorAll('input[name="profession"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const isDoctor = this.value === 'doctor';
+                document.getElementById('specialty-group').style.display = isDoctor ? '' : 'none';
+                document.getElementById('qualification-group').style.display = isDoctor ? 'none' : '';
+                document.getElementById('license-group').style.display = isDoctor ? '' : 'none';
+            });
+        });
+
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.textContent = isHidden ? '🙈' : '👁';
+            btn.setAttribute('aria-label', isHidden ? 'パスワードを非表示' : 'パスワードを表示');
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('form-error');
+            el.textContent = msg;
+            el.classList.add('visible');
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function clearError() {
+            const el = document.getElementById('form-error');
+            el.classList.remove('visible');
+            el.textContent = '';
+        }
+
+        function validateStep(step) {
+            clearError();
+            if (step === 1) {
+                const lastName = document.getElementById('last-name').value.trim();
+                const firstName = document.getElementById('first-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const pw = document.getElementById('reg-password').value;
+                const pw2 = document.getElementById('reg-password2').value;
+                if (!lastName || !firstName) { showError('氏名を入力してください'); return false; }
+                if (!email || !email.includes('@')) { showError('有効なメールアドレスを入力してください'); return false; }
+                if (pw.length < 8) { showError('パスワードは8文字以上で入力してください'); return false; }
+                if (pw !== pw2) { showError('パスワードが一致しません'); return false; }
+            }
+            if (step === 2) {
+                const profession = document.querySelector('input[name="profession"]:checked').value;
+                if (profession === 'doctor') {
+                    if (!document.getElementById('specialty').value) { showError('専門科目を選択してください'); return false; }
+                } else {
+                    if (!document.getElementById('qualification').value) { showError('保有資格を選択してください'); return false; }
+                }
+                if (!document.getElementById('experience').value) { showError('経験年数を選択してください'); return false; }
+            }
+            if (step === 3) {
+                const workTypes = document.querySelectorAll('input[name="work-type"]:checked');
+                if (workTypes.length === 0) { showError('希望勤務形態を1つ以上選択してください'); return false; }
+                if (!document.getElementById('work-area').value) { showError('希望エリアを選択してください'); return false; }
+                if (!document.getElementById('terms-check').checked) { showError('利用規約・プライバシーポリシーへの同意が必要です'); return false; }
+            }
+            return true;
+        }
+
+        function setStep(n) {
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.progress-step').forEach((el, i) => {
+                el.classList.remove('active');
+                if (i + 1 < n) el.classList.add('done');
+                else el.classList.remove('done');
+            });
+            document.querySelectorAll('.step-guide-item').forEach((el, i) => {
+                el.classList.remove('active', 'done');
+                if (i + 1 < n) el.classList.add('done');
+                else if (i + 1 === n) el.classList.add('active');
+            });
+
+            const stepEl = document.getElementById('step-' + n);
+            const progEl = document.getElementById('prog-' + n);
+            if (stepEl) stepEl.classList.add('active');
+            if (progEl) progEl.classList.add('active');
+            currentStep = n;
+
+            // Update progress dot content
+            document.querySelectorAll('.progress-step.done .progress-dot').forEach((dot, i) => {
+                dot.textContent = '✓';
+            });
+            document.getElementById('prog-' + n).querySelector('.progress-dot').textContent = n;
+        }
+
+        function goNext(from) {
+            if (!validateStep(from)) return;
+            if (from < TOTAL_STEPS) setStep(from + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack(from) {
+            if (from > 1) setStep(from - 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function handleRegister() {
+            if (!validateStep(3)) return;
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>登録中...';
+
+            // Simulate registration (in production, call API)
+            await new Promise(r => setTimeout(r, 1200));
+
+            const profession = document.querySelector('input[name="profession"]:checked').value;
+            const user = {
+                id: 'dr-new-' + Date.now(),
+                type: 'doctor',
+                profession,
+                name: document.getElementById('last-name').value + ' ' + document.getElementById('first-name').value,
+                email: document.getElementById('reg-email').value,
+                avatarInitial: document.getElementById('last-name').value[0] || 'N',
+                avatarColor: '#FF6B9D',
+                specialty: document.getElementById('specialty').value || document.getElementById('qualification').value,
+                experience: document.getElementById('experience').value,
+                workArea: document.getElementById('work-area').value,
+                selfPR: document.getElementById('self-pr').value,
+                registeredAt: new Date().toISOString()
+            };
+            localStorage.setItem('neco_user', JSON.stringify(user));
+            localStorage.setItem('neco_token', 'demo-token-' + Date.now());
+
+            // Show success
+            document.getElementById('step-3').classList.remove('active');
+            document.getElementById('success-screen').classList.add('active');
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('form-error').classList.remove('visible');
+        }
+    </script>
+</body>
+</html>

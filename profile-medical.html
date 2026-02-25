@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>施設プロフィール設定 - Neco</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #4ECDC4;
+            --blue: #4CC9F0;
+            --dark: #2D3142;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --border: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --success: #10B981;
+            --error: #EF4444;
+            --header-h: 64px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        .app-header {
+            height: var(--header-h);
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        }
+
+        .header-logo {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .header-badge {
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .header-spacer { flex: 1; }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            transition: all 0.15s;
+        }
+        .header-nav-link:hover { background: var(--gray-100); color: var(--dark); }
+        .header-nav-link.active { background: rgba(78,205,196,0.1); color: var(--teal); font-weight: 600; }
+
+        .logout-btn {
+            padding: 0.45rem 1rem;
+            background: none;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .logout-btn:hover { border-color: var(--error); color: var(--error); }
+
+        .page-container {
+            max-width: 800px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .page-header { margin-bottom: 2rem; }
+        .page-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.35rem;
+        }
+        .page-sub { color: var(--gray-500); font-size: 0.9rem; }
+
+        .profile-hero {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+        }
+
+        .avatar-circle {
+            width: 72px; height: 72px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-hero-info h2 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .profile-hero-info p { color: var(--gray-500); font-size: 0.875rem; }
+
+        .profile-completeness { margin-left: auto; text-align: right; }
+        .completeness-pct {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .completeness-label { font-size: 0.75rem; color: var(--gray-500); }
+        .completeness-bar {
+            width: 80px; height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            margin-top: 0.4rem;
+            overflow: hidden;
+        }
+        .completeness-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--blue));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .tab-bar {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.25rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--dark); }
+        .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .section-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.25rem; }
+        .form-grid .full-width { grid-column: 1 / -1; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            color: var(--dark);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(78,205,196,0.1);
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: #C4C9D4; }
+        .form-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%239CA3AF' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+        }
+        .form-textarea { resize: vertical; min-height: 100px; line-height: 1.65; }
+
+        .password-wrapper { position: relative; }
+        .password-wrapper .form-input { padding-right: 3rem; }
+        .toggle-password {
+            position: absolute;
+            right: 0.85rem; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            cursor: pointer; color: var(--gray-400);
+            font-size: 1rem; padding: 0.2rem; line-height: 1;
+        }
+
+        .chip-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .chip-toggle { cursor: pointer; }
+        .chip-toggle input { display: none; }
+        .chip-inner {
+            display: block;
+            padding: 0.4rem 0.9rem;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .chip-toggle input:checked + .chip-inner {
+            border-color: var(--teal);
+            background: rgba(78,205,196,0.08);
+            color: var(--teal);
+            font-weight: 600;
+        }
+
+        .save-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.1rem 1.75rem;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+        }
+        .save-status { font-size: 0.875rem; color: var(--gray-400); transition: all 0.3s; }
+        .save-status.saved { color: var(--success); font-weight: 600; }
+        .save-btn {
+            padding: 0.7rem 2rem;
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .save-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(78,205,196,0.35);
+        }
+        .save-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+        .danger-zone {
+            border: 1.5px solid #FECACA;
+            border-radius: 14px;
+            padding: 1.5rem 1.75rem;
+            background: #FFF5F5;
+        }
+        .danger-title { font-size: 0.95rem; font-weight: 700; color: var(--error); margin-bottom: 0.5rem; }
+        .danger-sub { font-size: 0.875rem; color: #9CA3AF; margin-bottom: 1rem; }
+        .danger-btn {
+            padding: 0.65rem 1.25rem;
+            background: none;
+            border: 1.5px solid var(--error);
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--error);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .danger-btn:hover { background: var(--error); color: white; }
+
+        .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            opacity: 1;
+            transition: all 0.4s ease;
+            z-index: 999;
+        }
+        .toast.hide { opacity: 0; transform: translateY(8px); }
+
+        /* Recruitment list */
+        .recruit-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .recruit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            border: 1.5px solid var(--gray-200);
+        }
+        .recruit-item-info { flex: 1; }
+        .recruit-item-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .recruit-item-sub { font-size: 0.8rem; color: var(--gray-500); }
+        .recruit-badge {
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-active { background: rgba(16,185,129,0.1); color: var(--success); }
+        .badge-draft { background: rgba(156,163,175,0.15); color: var(--gray-500); }
+
+        @media (max-width: 640px) {
+            .page-container { padding: 1rem 1rem 3rem; }
+            .profile-hero { flex-wrap: wrap; }
+            .profile-completeness { margin-left: 0; }
+            .form-grid { grid-template-columns: 1fr; }
+            .header-nav { display: none; }
+        }
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 3px solid #4CC9F0;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+        <a href="/medical-dashboard.html" class="header-logo">Neco</a>
+        <span class="header-badge">医療機関</span>
+        <div class="header-spacer"></div>
+        <nav class="header-nav">
+            <a href="/medical-dashboard.html" class="header-nav-link">💬 メッセージ</a>
+            <a href="/profile-medical.html" class="header-nav-link active">🏥 施設プロフィール</a>
+        </nav>
+        <button class="logout-btn" onclick="handleLogout()">ログアウト</button>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <main class="page-container" role="main">
+        <div class="page-header">
+            <h1 class="page-title">施設プロフィール設定</h1>
+            <p class="page-sub">施設情報・求人情報を編集できます。充実した情報がより多くの医師・看護師に届きます。</p>
+        </div>
+
+        <!-- Profile hero -->
+        <div class="profile-hero">
+            <div class="avatar-circle" id="profile-avatar" style="background: #4ECDC4;">さ</div>
+            <div class="profile-hero-info">
+                <h2 id="profile-display-name">さくら在宅クリニック</h2>
+                <p id="profile-display-sub">在宅クリニック / 東京都</p>
+            </div>
+            <div class="profile-completeness">
+                <div class="completeness-pct" id="completeness-pct">65%</div>
+                <div class="completeness-label">プロフィール完成度</div>
+                <div class="completeness-bar">
+                    <div class="completeness-fill" id="completeness-fill" style="width: 65%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save bar -->
+        <div class="save-bar">
+            <span class="save-status" id="save-status">変更が保存されていません</span>
+            <button class="save-btn" id="save-btn" onclick="saveProfile()">変更を保存する</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" role="tab" onclick="switchTab('facility', this)">施設情報</button>
+            <button class="tab-btn" role="tab" onclick="switchTab('contact', this)">担当者情報</button>
+            <button class="tab-btn" role="tab" onclick="switchTab('recruit', this)">募集情報</button>
+            <button class="tab-btn" role="tab" onclick="switchTab('account', this)">アカウント</button>
+        </div>
+
+        <!-- TAB: 施設情報 -->
+        <div class="tab-panel active" id="panel-facility" role="tabpanel">
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">🏥</span> 施設基本情報</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="p-facility-name">施設名</label>
+                        <input type="text" id="p-facility-name" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-facility-name-kana">施設名（フリガナ）</label>
+                        <input type="text" id="p-facility-name-kana" class="form-input" placeholder="サクラザイタククリニック">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-facility-type">施設種別</label>
+                        <select id="p-facility-type" class="form-select">
+                            <option value="clinic">在宅クリニック</option>
+                            <option value="nursing">訪問看護ステーション</option>
+                            <option value="hospital">病院・有床診療所</option>
+                            <option value="care">介護・老健施設</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-facility-beds">ベッド数・規模</label>
+                        <select id="p-facility-beds" class="form-select">
+                            <option value="">選択してください</option>
+                            <option value="small">〜19床（小規模）</option>
+                            <option value="medium">20〜99床（中規模）</option>
+                            <option value="large">100床以上（大規模）</option>
+                            <option value="home">外来・在宅専門</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">📍</span> 所在地・連絡先</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="p-pref">都道府県</label>
+                        <select id="p-pref" class="form-select">
+                            <option value="">選択してください</option>
+                            <option value="tokyo">東京都</option>
+                            <option value="kanagawa">神奈川県</option>
+                            <option value="osaka">大阪府</option>
+                            <option value="aichi">愛知県</option>
+                            <option value="fukuoka">福岡県</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-city">市区町村</label>
+                        <input type="text" id="p-city" class="form-input" placeholder="渋谷区">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-address">番地・建物名</label>
+                        <input type="text" id="p-address" class="form-input" placeholder="神南1-1-1 ○○ビル2F">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-tel">電話番号</label>
+                        <input type="tel" id="p-tel" class="form-input" inputmode="tel">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-website">ウェブサイトURL</label>
+                        <input type="url" id="p-website" class="form-input" placeholder="https://example.com" inputmode="url">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">📝</span> 施設紹介</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="p-facility-pr">施設概要・アピールポイント</label>
+                        <textarea id="p-facility-pr" class="form-textarea" style="min-height: 130px;" placeholder="施設の特徴、理念、職場の雰囲気、働きやすさなどをご紹介ください"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-access">アクセス情報</label>
+                        <input type="text" id="p-access" class="form-input" placeholder="例：渋谷駅徒歩5分">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 担当者情報 -->
+        <div class="tab-panel" id="panel-contact" role="tabpanel">
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">👤</span> 担当者情報</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="p-contact-last">担当者姓</label>
+                        <input type="text" id="p-contact-last" class="form-input" autocomplete="family-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-contact-first">担当者名</label>
+                        <input type="text" id="p-contact-first" class="form-input" autocomplete="given-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-dept">部署・役職</label>
+                        <input type="text" id="p-dept" class="form-input" placeholder="院長・事務長・人事担当など">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-contact-tel">担当者直通電話</label>
+                        <input type="tel" id="p-contact-tel" class="form-input" inputmode="tel">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 募集情報 -->
+        <div class="tab-panel" id="panel-recruit" role="tabpanel">
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">🎯</span> 募集条件</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>募集職種（複数選択可）</label>
+                        <div class="chip-group">
+                            <label class="chip-toggle"><input type="checkbox" name="p-recruit-type" value="doctor"><span class="chip-inner">👨‍⚕️ 医師</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-recruit-type" value="nurse"><span class="chip-inner">👩‍⚕️ 看護師</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-recruit-type" value="care"><span class="chip-inner">🤝 介護福祉士</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-recruit-type" value="pt"><span class="chip-inner">🏃 PT/OT/ST</span></label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>雇用形態（複数選択可）</label>
+                        <div class="chip-group">
+                            <label class="chip-toggle"><input type="checkbox" name="p-employ" value="regular"><span class="chip-inner">常勤（正社員）</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-employ" value="part"><span class="chip-inner">非常勤・パート</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-employ" value="spot"><span class="chip-inner">スポット・単発</span></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-salary-type">給与形態</label>
+                        <select id="p-salary-type" class="form-select">
+                            <option value="">選択してください</option>
+                            <option value="hourly">時給</option>
+                            <option value="daily">日給</option>
+                            <option value="monthly">月給（固定）</option>
+                            <option value="annual">年俸</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-salary-amount">給与金額（目安）</label>
+                        <input type="text" id="p-salary-amount" class="form-input" placeholder="例：時給5,000円〜">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-work-hours">勤務時間</label>
+                        <input type="text" id="p-work-hours" class="form-input" placeholder="例：9:00〜18:00（週3日〜）">
+                    </div>
+                    <div class="form-group">
+                        <label for="p-recruit-count">募集人数</label>
+                        <select id="p-recruit-count" class="form-select">
+                            <option value="1">1名</option>
+                            <option value="2-3">2〜3名</option>
+                            <option value="4-5">4〜5名</option>
+                            <option value="5+">5名以上</option>
+                            <option value="ongoing">随時募集</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-benefits">待遇・福利厚生</label>
+                        <textarea id="p-benefits" class="form-textarea" placeholder="例：交通費全額支給、社会保険完備、昇給あり、など"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-job-desc">業務内容詳細</label>
+                        <textarea id="p-job-desc" class="form-textarea" placeholder="担当していただく業務の詳細をご記入ください"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: アカウント設定 -->
+        <div class="tab-panel" id="panel-account" role="tabpanel">
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">✉️</span> メールアドレス変更</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="p-email">現在のメールアドレス</label>
+                        <input type="email" id="p-email" class="form-input" readonly style="background: var(--gray-100); color: var(--gray-500);">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-email-new">新しいメールアドレス</label>
+                        <input type="email" id="p-email-new" class="form-input" placeholder="new-email@example.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="p-email-confirm">メールアドレス確認</label>
+                        <input type="email" id="p-email-confirm" class="form-input" placeholder="もう一度入力してください">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">🔒</span> パスワード変更</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="p-pw-current">現在のパスワード</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="p-pw-current" class="form-input">
+                            <button type="button" class="toggle-password" onclick="togglePw('p-pw-current', this)" aria-label="パスワードを表示">👁</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-pw-new">新しいパスワード</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="p-pw-new" class="form-input" placeholder="8文字以上">
+                            <button type="button" class="toggle-password" onclick="togglePw('p-pw-new', this)" aria-label="パスワードを表示">👁</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="p-pw-confirm">新しいパスワード（確認）</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="p-pw-confirm" class="form-input">
+                            <button type="button" class="toggle-password" onclick="togglePw('p-pw-confirm', this)" aria-label="パスワードを表示">👁</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title"><span aria-hidden="true">🔔</span> 通知設定</h2>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>メール通知</label>
+                        <div class="chip-group">
+                            <label class="chip-toggle"><input type="checkbox" name="p-notify" value="message" checked><span class="chip-inner">新着メッセージ</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-notify" value="match" checked><span class="chip-inner">新規マッチング</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-notify" value="apply" checked><span class="chip-inner">応募通知</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-notify" value="news"><span class="chip-inner">Necoからのお知らせ</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="danger-zone" role="region" aria-label="危険な操作">
+                <div class="danger-title">アカウントの削除</div>
+                <div class="danger-sub">アカウントを削除すると、施設情報・メッセージ履歴・求人情報がすべて削除されます。この操作は取り消せません。</div>
+                <button class="danger-btn" onclick="confirmDelete()">アカウントを削除する</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            try {
+                const token = localStorage.getItem('neco_token');
+                const userStr = localStorage.getItem('neco_user');
+                if (!token || !userStr) { window.location.replace('/login-medical.html'); return; }
+                const user = JSON.parse(userStr);
+                if (user.type !== 'medical') { window.location.replace('/profile-doctor.html'); return; }
+                loadUserData(user);
+            } catch (_) {
+                window.location.replace('/login-medical.html');
+            }
+        })();
+
+        function loadUserData(user) {
+            document.getElementById('p-facility-name').value = user.name || '';
+            document.getElementById('p-email').value = user.email || '';
+
+            if (user.prefecture) {
+                const sel = document.getElementById('p-pref');
+                for (const opt of sel.options) { if (opt.value === user.prefecture) { opt.selected = true; break; } }
+            }
+            if (user.facilityType) {
+                const sel = document.getElementById('p-facility-type');
+                for (const opt of sel.options) { if (opt.value === user.facilityType) { opt.selected = true; break; } }
+            }
+
+            document.getElementById('profile-avatar').textContent = user.avatarInitial || user.name?.[0] || 'N';
+            document.getElementById('profile-avatar').style.background = user.avatarColor || '#4ECDC4';
+            document.getElementById('profile-display-name').textContent = user.name || '';
+            if (user.prefecture) {
+                const prefMap = { tokyo: '東京都', kanagawa: '神奈川県', osaka: '大阪府', aichi: '愛知県', fukuoka: '福岡県' };
+                document.getElementById('profile-display-sub').textContent = (user.facilityType || '医療機関') + ' / ' + (prefMap[user.prefecture] || '');
+            }
+
+            if (user.contactName) {
+                const parts = user.contactName.split(' ');
+                document.getElementById('p-contact-last').value = parts[0] || '';
+                document.getElementById('p-contact-first').value = parts[1] || '';
+            }
+
+            updateCompleteness(user);
+            markDirty(false);
+        }
+
+        function updateCompleteness(user) {
+            let score = 0;
+            if (user.name) score += 20;
+            if (user.email) score += 15;
+            if (user.prefecture) score += 15;
+            if (user.facilityType) score += 15;
+            if (user.contactName) score += 20;
+            if (user.facilityPR) score += 15;
+            document.getElementById('completeness-pct').textContent = score + '%';
+            document.getElementById('completeness-fill').style.width = score + '%';
+        }
+
+        let isDirty = false;
+        function markDirty(dirty = true) {
+            isDirty = dirty;
+            const status = document.getElementById('save-status');
+            if (dirty) {
+                status.textContent = '未保存の変更があります';
+                status.classList.remove('saved');
+            } else {
+                status.textContent = '保存済み';
+                status.classList.add('saved');
+            }
+        }
+
+        document.querySelectorAll('.form-input, .form-select, .form-textarea, input[type="checkbox"]')
+            .forEach(el => el.addEventListener('change', () => markDirty(true)));
+        document.querySelectorAll('.form-input, .form-textarea')
+            .forEach(el => el.addEventListener('input', () => markDirty(true)));
+
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.textContent = isHidden ? '🙈' : '👁';
+        }
+
+        async function saveProfile() {
+            const btn = document.getElementById('save-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>保存中...';
+
+            await new Promise(r => setTimeout(r, 800));
+
+            try {
+                const userStr = localStorage.getItem('neco_user');
+                const user = userStr ? JSON.parse(userStr) : {};
+                user.name = document.getElementById('p-facility-name').value.trim() || user.name;
+                user.avatarInitial = user.name?.[0] || 'N';
+                user.prefecture = document.getElementById('p-pref').value || user.prefecture;
+                user.facilityType = document.getElementById('p-facility-type').value || user.facilityType;
+                const cLast = document.getElementById('p-contact-last').value.trim();
+                const cFirst = document.getElementById('p-contact-first').value.trim();
+                if (cLast || cFirst) user.contactName = [cLast, cFirst].filter(Boolean).join(' ');
+                user.facilityPR = document.getElementById('p-facility-pr').value;
+
+                localStorage.setItem('neco_user', JSON.stringify(user));
+
+                document.getElementById('profile-display-name').textContent = user.name;
+                document.getElementById('profile-avatar').textContent = user.avatarInitial;
+                updateCompleteness(user);
+                markDirty(false);
+                showToast('✅ プロフィールを保存しました');
+            } catch (_) {
+                showToast('保存に失敗しました。もう一度お試しください。');
+            }
+
+            btn.disabled = false;
+            btn.textContent = '変更を保存する';
+        }
+
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { t.classList.add('hide'); setTimeout(() => t.remove(), 400); }, 3000);
+        }
+
+        function handleLogout() {
+            if (!confirm('ログアウトしますか？')) return;
+            localStorage.removeItem('neco_token');
+            localStorage.removeItem('neco_user');
+            window.location.replace('/login-medical.html');
+        }
+
+        function confirmDelete() {
+            if (confirm('本当にアカウントを削除しますか？\nこの操作は取り消せません。')) {
+                localStorage.removeItem('neco_token');
+                localStorage.removeItem('neco_user');
+                alert('アカウントを削除しました。ご利用いただきありがとうございました。');
+                window.location.replace('/for-medical.html');
+            }
+        }
+    </script>
+</body>
+</html>
