@@ -136,6 +136,68 @@
             color: var(--primary);
         }
 
+        /* ===== CAT MENU ===== */
+        .cat-menu { position: relative; }
+        .cat-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .cat-menu-btn:hover,
+        .cat-menu-btn.active { background: rgba(78, 205, 196, 0.1); }
+        .cat-menu-icon-svg { width: 36px; height: 36px; display: block; }
+        @keyframes catMenuIn {
+            from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .cat-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 230px;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+            overflow: hidden;
+            z-index: 200;
+        }
+        .cat-menu-dropdown.open { display: block; animation: catMenuIn 0.18s ease; }
+        .cat-menu-header-area {
+            padding: 14px 16px 12px;
+            background: linear-gradient(135deg, rgba(78,205,196,0.1) 0%, rgba(76,201,240,0.1) 100%);
+        }
+        .cat-menu-user-name { font-weight: 700; font-size: 0.9rem; color: #1a1a2e; }
+        .cat-menu-user-role { font-size: 0.78rem; color: #6B7280; margin-top: 2px; }
+        .cat-menu-divider { margin: 0; border: none; border-top: 1px solid #F3F4F6; }
+        .cat-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            font-size: 0.875rem;
+            color: #374151;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .cat-menu-item:hover { background: #F9FAFB; }
+        .cat-menu-item.cat-menu-logout { color: #EF4444; }
+        .cat-menu-item.cat-menu-logout:hover { background: rgba(239, 68, 68, 0.06); }
+        .cat-menu-item-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -703,15 +765,39 @@
 
     <div class="header-spacer"></div>
 
-    <div class="header-user">
-        <a href="/profile-medical.html" class="header-profile-link" aria-label="施設プロフィール設定">
-            <div class="user-avatar" id="header-avatar" style="background: #4ECDC4;" aria-hidden="true">さ</div>
-            <div>
-                <div class="user-name" id="header-name">さくら在宅クリニック</div>
-                <div class="user-role" id="header-type">在宅医療クリニック</div>
+    <div class="cat-menu" id="catMenu">
+        <button class="cat-menu-btn" id="catMenuBtn" aria-haspopup="true" aria-expanded="false" aria-label="メニューを開く">
+            <svg class="cat-menu-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
+                <defs>
+                    <linearGradient id="catMenuGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#4ECDC4"/>
+                        <stop offset="100%" stop-color="#4CC9F0"/>
+                    </linearGradient>
+                </defs>
+                <path d="M 20 35 Q 29 35 32 28 L 32 20 L 29 8 L 23 16 Q 21.5 14.5 20 14.5 Q 18.5 14.5 17 16 L 11 8 L 8 20 L 8 28 Q 11 35 20 35 Z"
+                      stroke="url(#catMenuGrad)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            </svg>
+        </button>
+        <div class="cat-menu-dropdown" id="catMenuDropdown" role="menu">
+            <div class="cat-menu-header-area">
+                <div class="cat-menu-user-name" id="menu-user-name">さくら在宅クリニック</div>
+                <div class="cat-menu-user-role" id="menu-user-role">在宅医療クリニック</div>
             </div>
-        </a>
-        <button class="logout-btn" onclick="logout()" aria-label="ログアウト">ログアウト</button>
+            <hr class="cat-menu-divider">
+            <a href="/medical-dashboard.html" class="cat-menu-item" role="menuitem">
+                <span class="cat-menu-item-icon">💬</span>
+                <span>メッセージ</span>
+            </a>
+            <a href="/profile-medical.html" class="cat-menu-item" role="menuitem">
+                <span class="cat-menu-item-icon">🏥</span>
+                <span>施設プロフィール設定</span>
+            </a>
+            <hr class="cat-menu-divider">
+            <button class="cat-menu-item cat-menu-logout" role="menuitem" onclick="logout()">
+                <span class="cat-menu-item-icon">🚪</span>
+                <span>ログアウト</span>
+            </button>
+        </div>
     </div>
 </header>
 
@@ -767,12 +853,8 @@ let currentUser = null;
         currentUser = JSON.parse(userStr);
         if (!currentUser || currentUser.type !== 'medical') throw new Error('wrong type');
 
-        document.getElementById('header-name').textContent  = currentUser.name;
-        document.getElementById('header-type').textContent  = currentUser.facilityType || '医療機関';
-        document.getElementById('header-avatar').textContent = currentUser.avatarInitial || currentUser.name.charAt(0);
-        if (currentUser.avatarColor) {
-            document.getElementById('header-avatar').style.background = currentUser.avatarColor;
-        }
+        document.getElementById('menu-user-name').textContent = currentUser.name;
+        document.getElementById('menu-user-role').textContent = currentUser.facilityType || '医療機関';
     } catch (_) {
         window.location.replace('/login-medical.html');
     }
@@ -1236,6 +1318,25 @@ renderCandidatesBanner();
 if (window.innerWidth > 768 && CONVERSATIONS.length > 0) {
     openConversation(CONVERSATIONS[0].id);
 }
+
+// Cat menu toggle
+(function() {
+    const btn = document.getElementById('catMenuBtn');
+    const menu = document.getElementById('catMenuDropdown');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.classList.toggle('active', open);
+        btn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', function() {
+        menu.classList.remove('open');
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+    });
+    menu.addEventListener('click', function(e) { e.stopPropagation(); });
+})();
 </script>
 </body>
 </html>

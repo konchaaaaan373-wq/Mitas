@@ -110,6 +110,68 @@
         }
         .logout-btn:hover { border-color: var(--error); color: var(--error); }
 
+        /* ===== CAT MENU ===== */
+        .cat-menu { position: relative; }
+        .cat-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .cat-menu-btn:hover,
+        .cat-menu-btn.active { background: rgba(255, 107, 157, 0.1); }
+        .cat-menu-icon-svg { width: 36px; height: 36px; display: block; }
+        @keyframes catMenuIn {
+            from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .cat-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 230px;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+            overflow: hidden;
+            z-index: 200;
+        }
+        .cat-menu-dropdown.open { display: block; animation: catMenuIn 0.18s ease; }
+        .cat-menu-header-area {
+            padding: 14px 16px 12px;
+            background: linear-gradient(135deg, rgba(255,107,157,0.08) 0%, rgba(167,139,250,0.08) 100%);
+        }
+        .cat-menu-user-name { font-weight: 700; font-size: 0.9rem; color: #1a1a2e; }
+        .cat-menu-user-role { font-size: 0.78rem; color: #6B7280; margin-top: 2px; }
+        .cat-menu-divider { margin: 0; border: none; border-top: 1px solid #F3F4F6; }
+        .cat-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            font-size: 0.875rem;
+            color: #374151;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .cat-menu-item:hover { background: #F9FAFB; }
+        .cat-menu-item.cat-menu-logout { color: #EF4444; }
+        .cat-menu-item.cat-menu-logout:hover { background: rgba(239, 68, 68, 0.06); }
+        .cat-menu-item-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+
         /* ===== PAGE LAYOUT ===== */
         .page-container {
             max-width: 800px;
@@ -470,11 +532,40 @@
         <a href="/dashboard.html" class="header-logo">Neco</a>
         <span class="header-badge" id="header-badge">医師</span>
         <div class="header-spacer"></div>
-        <nav class="header-nav" aria-label="サブナビゲーション">
-            <a href="/dashboard.html" class="header-nav-link">💬 メッセージ</a>
-            <a href="/profile-doctor.html" class="header-nav-link active">👤 プロフィール</a>
-        </nav>
-        <button class="logout-btn" onclick="handleLogout()">ログアウト</button>
+        <div class="cat-menu" id="catMenu">
+            <button class="cat-menu-btn" id="catMenuBtn" aria-haspopup="true" aria-expanded="false" aria-label="メニューを開く">
+                <svg class="cat-menu-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="catMenuGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#FF6B9D"/>
+                            <stop offset="100%" stop-color="#A78BFA"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 20 35 Q 29 35 32 28 L 32 20 L 29 8 L 23 16 Q 21.5 14.5 20 14.5 Q 18.5 14.5 17 16 L 11 8 L 8 20 L 8 28 Q 11 35 20 35 Z"
+                          stroke="url(#catMenuGrad)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+                </svg>
+            </button>
+            <div class="cat-menu-dropdown" id="catMenuDropdown" role="menu">
+                <div class="cat-menu-header-area">
+                    <div class="cat-menu-user-name" id="menu-user-name">田中 太郎</div>
+                    <div class="cat-menu-user-role" id="menu-user-role">内科</div>
+                </div>
+                <hr class="cat-menu-divider">
+                <a href="/dashboard.html" class="cat-menu-item" role="menuitem">
+                    <span class="cat-menu-item-icon">💬</span>
+                    <span>メッセージ</span>
+                </a>
+                <a href="/profile-doctor.html" class="cat-menu-item cat-menu-item-active" role="menuitem">
+                    <span class="cat-menu-item-icon">👤</span>
+                    <span>プロフィール設定</span>
+                </a>
+                <hr class="cat-menu-divider">
+                <button class="cat-menu-item cat-menu-logout" role="menuitem" onclick="handleLogout()">
+                    <span class="cat-menu-item-icon">🚪</span>
+                    <span>ログアウト</span>
+                </button>
+            </div>
+        </div>
     </header>
 
     <!-- ===== MAIN ===== -->
@@ -811,6 +902,8 @@
             document.getElementById('profile-avatar').style.background = user.avatarColor || '#FF6B9D';
             document.getElementById('profile-display-name').textContent = user.name || '田中 太郎';
             document.getElementById('header-badge').textContent = user.profession === 'nurse' ? '看護師' : '医師';
+            document.getElementById('menu-user-name').textContent = user.name || '田中 太郎';
+            document.getElementById('menu-user-role').textContent = user.specialty || (user.profession === 'nurse' ? '看護師' : '医師');
 
             const professionValue = user.profession === 'nurse' ? 'nurse' : 'doctor';
             const radio = document.querySelector(`input[name="p-profession"][value="${professionValue}"]`);
@@ -924,6 +1017,25 @@
                 window.location.replace('/');
             }
         }
+
+        // Cat menu toggle
+        (function() {
+            const btn = document.getElementById('catMenuBtn');
+            const menu = document.getElementById('catMenuDropdown');
+            if (!btn || !menu) return;
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const open = menu.classList.toggle('open');
+                btn.classList.toggle('active', open);
+                btn.setAttribute('aria-expanded', String(open));
+            });
+            document.addEventListener('click', function() {
+                menu.classList.remove('open');
+                btn.classList.remove('active');
+                btn.setAttribute('aria-expanded', 'false');
+            });
+            menu.addEventListener('click', function(e) { e.stopPropagation(); });
+        })();
     </script>
 </body>
 </html>
