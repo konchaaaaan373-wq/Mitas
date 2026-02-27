@@ -197,6 +197,13 @@
         .cat-menu-item.cat-menu-logout { color: #EF4444; }
         .cat-menu-item.cat-menu-logout:hover { background: rgba(239, 68, 68, 0.06); }
         .cat-menu-item-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+        .cat-menu-header-link {
+            display: block;
+            text-decoration: none;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .cat-menu-header-link:hover { background: rgba(78, 205, 196, 0.1); }
 
         .mobile-menu-btn {
             display: none;
@@ -779,10 +786,10 @@
             </svg>
         </button>
         <div class="cat-menu-dropdown" id="catMenuDropdown" role="menu">
-            <div class="cat-menu-header-area">
+            <a href="/profile-medical.html" class="cat-menu-header-area cat-menu-header-link" role="menuitem" aria-label="施設プロフィール設定">
                 <div class="cat-menu-user-name" id="menu-user-name">さくら在宅クリニック</div>
                 <div class="cat-menu-user-role" id="menu-user-role">在宅医療クリニック</div>
-            </div>
+            </a>
             <hr class="cat-menu-divider">
             <a href="/medical-dashboard.html" class="cat-menu-item" role="menuitem">
                 <span class="cat-menu-item-icon">💬</span>
@@ -853,8 +860,10 @@ let currentUser = null;
         currentUser = JSON.parse(userStr);
         if (!currentUser || currentUser.type !== 'medical') throw new Error('wrong type');
 
-        document.getElementById('menu-user-name').textContent = currentUser.name;
-        document.getElementById('menu-user-role').textContent = currentUser.facilityType || '医療機関';
+        const _nameEl = document.getElementById('menu-user-name');
+        const _roleEl = document.getElementById('menu-user-role');
+        if (_nameEl) _nameEl.textContent = currentUser.name;
+        if (_roleEl) _roleEl.textContent = currentUser.facilityType || '医療機関';
     } catch (_) {
         window.location.replace('/login-medical.html');
     }

@@ -865,16 +865,19 @@
     <script>
         // Auth check
         (function() {
+            let user;
             try {
                 const token = localStorage.getItem('neco_token');
                 const userStr = localStorage.getItem('neco_user');
                 if (!token || !userStr) { window.location.replace('/login-doctor.html'); return; }
-                const user = JSON.parse(userStr);
+                user = JSON.parse(userStr);
                 if (user.type === 'medical') { window.location.replace('/profile-medical.html'); return; }
-                loadUserData(user);
             } catch (_) {
                 window.location.replace('/login-doctor.html');
+                return;
             }
+            // Auth passed — load data separately so errors here don't trigger a redirect
+            try { loadUserData(user); } catch (e) { console.warn('loadUserData error:', e); }
         })();
 
         function loadUserData(user) {

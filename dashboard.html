@@ -196,6 +196,13 @@
         .cat-menu-item.cat-menu-logout { color: #EF4444; }
         .cat-menu-item.cat-menu-logout:hover { background: rgba(239, 68, 68, 0.06); }
         .cat-menu-item-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+        .cat-menu-header-link {
+            display: block;
+            text-decoration: none;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .cat-menu-header-link:hover { background: rgba(255, 107, 157, 0.1); }
 
         .mobile-menu-btn {
             display: none;
@@ -735,10 +742,10 @@
             </svg>
         </button>
         <div class="cat-menu-dropdown" id="catMenuDropdown" role="menu">
-            <div class="cat-menu-header-area">
+            <a href="/profile-doctor.html" class="cat-menu-header-area cat-menu-header-link" role="menuitem" aria-label="プロフィール設定">
                 <div class="cat-menu-user-name" id="menu-user-name">田中 太郎</div>
                 <div class="cat-menu-user-role" id="menu-user-role">内科</div>
-            </div>
+            </a>
             <hr class="cat-menu-divider">
             <a href="/dashboard.html" class="cat-menu-item" role="menuitem">
                 <span class="cat-menu-item-icon">💬</span>
@@ -809,8 +816,10 @@ let currentUser = null;
         if (!currentUser || currentUser.type !== 'doctor') throw new Error('wrong type');
 
         // Update header UI
-        document.getElementById('menu-user-name').textContent = currentUser.name;
-        document.getElementById('menu-user-role').textContent = currentUser.specialty || '医師';
+        const _nameEl = document.getElementById('menu-user-name');
+        const _roleEl = document.getElementById('menu-user-role');
+        if (_nameEl) _nameEl.textContent = currentUser.name;
+        if (_roleEl) _roleEl.textContent = currentUser.specialty || '医師';
     } catch (_) {
         window.location.replace('/login-doctor.html');
     }
