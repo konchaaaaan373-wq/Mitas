@@ -455,17 +455,17 @@
 
             .login-left {
                 min-height: auto;
-                padding: 2.5rem 2rem 2rem;
+                padding: 2rem 1.5rem 1.75rem;
             }
 
-            .left-logo { margin-bottom: 1.5rem; }
-            .left-logo-text { font-size: 1.8rem; }
-            .left-logo-cat { width: 2rem; height: 2rem; }
-            .left-tagline { font-size: 1.5rem; }
-            .left-tagline strong { font-size: 1.65rem; }
-            .left-sub { font-size: 0.9rem; margin-bottom: 1.5rem; }
-            .feature-list { gap: 0.75rem; }
-            .left-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
+            .left-logo { margin-bottom: 1.25rem; }
+            .left-logo-text { font-size: 1.6rem; }
+            .left-logo-cat { width: 1.8rem; height: 1.8rem; }
+            .left-tagline { font-size: 1.35rem; }
+            .left-tagline strong { font-size: 1.5rem; }
+            .left-sub { font-size: 0.88rem; margin-bottom: 1.25rem; }
+            .feature-list { gap: 0.6rem; }
+            .left-stats { gap: 1.5rem; margin-top: 1.5rem; padding-top: 1.25rem; }
 
             .login-right {
                 width: 100%;
@@ -475,8 +475,17 @@
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .left-stats { display: none; }
+            .feature-list { display: none; }
+            .left-sub { display: none; }
+            .left-tagline { font-size: 1.15rem; }
+            .left-tagline strong { font-size: 1.25rem; }
+            .left-logo { margin-bottom: 0.75rem; }
+            .login-left { padding: 1.25rem 1.25rem 1rem; }
+        }
+
+        @media (max-width: 480px) {
             .login-right { padding: 1.5rem 1.25rem 2.5rem; }
             .right-header h2 { font-size: 1.4rem; }
             .login-tabs { margin-bottom: 1.5rem; }
