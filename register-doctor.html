@@ -581,6 +581,20 @@
         .subspecialty-section.visible { display: block; animation: fadeIn 0.2s ease; }
         .subspecialty-label { font-size: 0.74rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
 
+        /* Cert subsection dividers */
+        .cert-section-label {
+            display: block;
+            font-size: 0.69rem;
+            font-weight: 700;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin: 0.9rem 0 0.45rem;
+            padding-bottom: 0.22rem;
+            border-bottom: 1px solid var(--gray-200);
+            width: 100%;
+        }
+
         @media (max-width: 480px) { .doc-upload-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -791,31 +805,27 @@
 
             <div class="form-group" id="specialist-cert-group">
                 <label>専門医・認定医資格<span style="font-size:0.73rem; color:var(--gray-400); font-weight:400; margin-left:0.4rem;">（複数選択可・任意）</span></label>
+                <div class="cert-section-label">基本領域（日本専門医機構 19領域）</div>
                 <div class="checkbox-group">
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="naika-senmon" id="reg-cert-naika" onchange="toggleRegSubspecialty()">
-                        <span class="chip-label">🏥 内科専門医</span>
-                    </label>
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="geka-senmon">
-                        <span class="chip-label">🔪 外科専門医</span>
-                    </label>
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="zaitaku-senmon">
-                        <span class="chip-label">🏠 在宅医療専門医</span>
-                    </label>
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="kanwa">
-                        <span class="chip-label">💊 緩和ケア認定医</span>
-                    </label>
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="ninchi">
-                        <span class="chip-label">🧠 認知症専門医</span>
-                    </label>
-                    <label class="checkbox-chip">
-                        <input type="checkbox" name="specialist-cert" value="tounyou">
-                        <span class="chip-label">🩸 糖尿病専門医</span>
-                    </label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="naika-senmon" id="reg-cert-naika" onchange="toggleRegSubspecialty()"><span class="chip-label">内科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="geka-senmon"><span class="chip-label">外科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="shoni-senmon"><span class="chip-label">小児科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="sanka-senmon"><span class="chip-label">産婦人科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="ganka-senmon"><span class="chip-label">眼科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="jibika-senmon"><span class="chip-label">耳鼻咽喉科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="hinyoki-senmon"><span class="chip-label">泌尿器科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="hifuka-senmon"><span class="chip-label">皮膚科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="nogeika-senmon"><span class="chip-label">脳神経外科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="seikei-senmon"><span class="chip-label">整形外科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="hosha-senmon"><span class="chip-label">放射線科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="masui-senmon"><span class="chip-label">麻酔科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="byori-senmon"><span class="chip-label">病理専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="rinken-senmon"><span class="chip-label">臨床検査専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="kyukyu-senmon"><span class="chip-label">救急科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="keisei-senmon"><span class="chip-label">形成外科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="rehabi-senmon"><span class="chip-label">リハビリ科専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="sogo-senmon"><span class="chip-label">総合診療専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="seishin-senmon"><span class="chip-label">精神科専門医</span></label>
                 </div>
                 <div class="subspecialty-section" id="reg-subspecialty-section">
                     <div class="subspecialty-label">内科 サブスペシャリティ</div>
@@ -830,6 +840,22 @@
                         <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="ketsueki"><span class="chip-label">血液</span></label>
                         <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="ryumachi"><span class="chip-label">リウマチ</span></label>
                     </div>
+                </div>
+                <div class="cert-section-label">その他の認定医・資格</div>
+                <div class="checkbox-group">
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="zaitaku-senmon"><span class="chip-label">在宅医療専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="kanwa"><span class="chip-label">緩和ケア認定医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="ninchi"><span class="chip-label">認知症専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="tounyou-cert"><span class="chip-label">糖尿病専門医</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="acls"><span class="chip-label">ACLS</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="bls"><span class="chip-label">BLS</span></label>
+                </div>
+                <div class="cert-section-label">実務要件・研修修了証</div>
+                <div class="checkbox-group">
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="online-shinryo"><span class="chip-label">オンライン診療研修（厚労省）修了</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="online-kinkyu"><span class="chip-label">緊急避妊オンライン診療研修 修了</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="slit-sugi"><span class="chip-label">舌下免疫療法・スギ 修了</span></label>
+                    <label class="checkbox-chip"><input type="checkbox" name="specialist-cert" value="slit-dani"><span class="chip-label">舌下免疫療法・ダニ 修了</span></label>
                 </div>
             </div>
 

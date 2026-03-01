@@ -580,6 +580,20 @@
         .subspecialty-label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.55rem; }
         @keyframes fadeInSub { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Cert subsection dividers */
+        .cert-section-label {
+            display: block;
+            font-size: 0.69rem;
+            font-weight: 700;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin: 0.9rem 0 0.45rem;
+            padding-bottom: 0.22rem;
+            border-bottom: 1px solid var(--gray-200);
+            width: 100%;
+        }
+
         @media (max-width: 640px) { .doc-upload-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -778,15 +792,27 @@
                 <div class="form-grid">
                     <div class="form-group full-width">
                         <label>専門医・認定医資格（複数選択可）</label>
+                        <div class="cert-section-label">基本領域（日本専門医機構 19領域）</div>
                         <div class="chip-group">
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="naika-senmon" id="p-cert-naika" onchange="toggleSubspecialty()"><span class="chip-inner">🏥 内科専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="zaitaku"><span class="chip-inner">🏠 在宅医療専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="kanwakea"><span class="chip-inner">💊 緩和ケア認定医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="ninchi"><span class="chip-inner">🧠 認知症専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="tounyou"><span class="chip-inner">🩸 糖尿病専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="geka-senmon"><span class="chip-inner">🔪 外科専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="acls"><span class="chip-inner">ACLS</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="bls"><span class="chip-inner">BLS</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="naika-senmon" id="p-cert-naika" onchange="toggleSubspecialty()"><span class="chip-inner">内科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="geka-senmon"><span class="chip-inner">外科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="shoni-senmon"><span class="chip-inner">小児科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="sanka-senmon"><span class="chip-inner">産婦人科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="ganka-senmon"><span class="chip-inner">眼科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="jibika-senmon"><span class="chip-inner">耳鼻咽喉科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="hinyoki-senmon"><span class="chip-inner">泌尿器科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="hifuka-senmon"><span class="chip-inner">皮膚科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="nogeika-senmon"><span class="chip-inner">脳神経外科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="seikei-senmon"><span class="chip-inner">整形外科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="hosha-senmon"><span class="chip-inner">放射線科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="masui-senmon"><span class="chip-inner">麻酔科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="byori-senmon"><span class="chip-inner">病理専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="rinken-senmon"><span class="chip-inner">臨床検査専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="kyukyu-senmon"><span class="chip-inner">救急科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="keisei-senmon"><span class="chip-inner">形成外科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="rehabi-senmon"><span class="chip-inner">リハビリ科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="sogo-senmon"><span class="chip-inner">総合診療専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="seishin-senmon"><span class="chip-inner">精神科専門医</span></label>
                         </div>
                         <div class="subspecialty-section" id="subspecialty-section">
                             <div class="subspecialty-label">内科 サブスペシャリティ</div>
@@ -801,6 +827,22 @@
                                 <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="ketsueki"><span class="chip-inner">血液</span></label>
                                 <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="ryumachi"><span class="chip-inner">リウマチ</span></label>
                             </div>
+                        </div>
+                        <div class="cert-section-label">その他の認定医・資格</div>
+                        <div class="chip-group">
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="zaitaku"><span class="chip-inner">在宅医療専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="kanwakea"><span class="chip-inner">緩和ケア認定医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="ninchi"><span class="chip-inner">認知症専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="tounyou"><span class="chip-inner">糖尿病専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="acls"><span class="chip-inner">ACLS</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="bls"><span class="chip-inner">BLS</span></label>
+                        </div>
+                        <div class="cert-section-label">実務要件・研修修了証</div>
+                        <div class="chip-group">
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="online-shinryo"><span class="chip-inner">オンライン診療研修（厚労省）修了</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="online-kinkyu"><span class="chip-inner">緊急避妊オンライン診療研修 修了</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="slit-sugi"><span class="chip-inner">舌下免疫療法・スギ 修了</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="slit-dani"><span class="chip-inner">舌下免疫療法・ダニ 修了</span></label>
                         </div>
                     </div>
                     <div class="form-group full-width">
