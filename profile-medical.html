@@ -811,32 +811,36 @@
         })();
 
         function loadUserData(user) {
-            document.getElementById('p-facility-name').value = user.name || '';
-            document.getElementById('p-email').value = user.email || '';
+            const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+            const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            const setStyle = (id, prop, v) => { const el = document.getElementById(id); if (el) el.style[prop] = v; };
+            const selectOpt = (id, val) => {
+                if (!val) return;
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                for (const opt of sel.options) { if (opt.value === val) { opt.selected = true; break; } }
+            };
 
-            if (user.prefecture) {
-                const sel = document.getElementById('p-pref');
-                for (const opt of sel.options) { if (opt.value === user.prefecture) { opt.selected = true; break; } }
-            }
-            if (user.facilityType) {
-                const sel = document.getElementById('p-facility-type');
-                for (const opt of sel.options) { if (opt.value === user.facilityType) { opt.selected = true; break; } }
-            }
+            setVal('p-facility-name', user.name || '');
+            setVal('p-email', user.email || '');
 
-            document.getElementById('profile-avatar').textContent = user.avatarInitial || user.name?.[0] || 'N';
-            document.getElementById('profile-avatar').style.background = user.avatarColor || '#4ECDC4';
-            document.getElementById('profile-display-name').textContent = user.name || '';
-            document.getElementById('menu-user-name').textContent = user.name || 'さくら在宅クリニック';
-            document.getElementById('menu-user-role').textContent = user.facilityType || '医療機関';
+            selectOpt('p-pref', user.prefecture);
+            selectOpt('p-facility-type', user.facilityType);
+
+            setText('profile-avatar', user.avatarInitial || user.name?.[0] || 'N');
+            setStyle('profile-avatar', 'background', user.avatarColor || '#4ECDC4');
+            setText('profile-display-name', user.name || '');
+            setText('menu-user-name', user.name || 'さくら在宅クリニック');
+            setText('menu-user-role', user.facilityType || '医療機関');
             if (user.prefecture) {
                 const prefMap = { tokyo: '東京都', kanagawa: '神奈川県', osaka: '大阪府', aichi: '愛知県', fukuoka: '福岡県' };
-                document.getElementById('profile-display-sub').textContent = (user.facilityType || '医療機関') + ' / ' + (prefMap[user.prefecture] || '');
+                setText('profile-display-sub', (user.facilityType || '医療機関') + ' / ' + (prefMap[user.prefecture] || ''));
             }
 
             if (user.contactName) {
                 const parts = user.contactName.split(' ');
-                document.getElementById('p-contact-last').value = parts[0] || '';
-                document.getElementById('p-contact-first').value = parts[1] || '';
+                setVal('p-contact-last', parts[0] || '');
+                setVal('p-contact-first', parts[1] || '');
             }
 
             updateCompleteness(user);

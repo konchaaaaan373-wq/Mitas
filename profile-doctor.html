@@ -882,31 +882,33 @@
 
         function loadUserData(user) {
             const nameParts = (user.name || '田中 太郎').split(' ');
-            document.getElementById('p-last-name').value = nameParts[0] || '';
-            document.getElementById('p-first-name').value = nameParts[1] || '';
-            document.getElementById('p-email').value = user.email || '';
+            const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+            const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            const setStyle = (id, prop, v) => { const el = document.getElementById(id); if (el) el.style[prop] = v; };
+            const selectOpt = (id, val) => {
+                if (!val) return;
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                for (const opt of sel.options) { if (opt.value === val) { opt.selected = true; break; } }
+            };
 
-            if (user.specialty) {
-                const sel = document.getElementById('p-specialty');
-                for (const opt of sel.options) { if (opt.value === user.specialty) { opt.selected = true; break; } }
-            }
-            if (user.experience) {
-                const sel = document.getElementById('p-experience');
-                for (const opt of sel.options) { if (opt.value === user.experience) { opt.selected = true; break; } }
-            }
-            if (user.workArea) {
-                const sel = document.getElementById('p-work-area');
-                for (const opt of sel.options) { if (opt.value === user.workArea) { opt.selected = true; break; } }
-            }
-            if (user.selfPR) document.getElementById('p-self-pr').value = user.selfPR;
+            setVal('p-last-name', nameParts[0] || '');
+            setVal('p-first-name', nameParts[1] || '');
+            setVal('p-email', user.email || '');
+
+            selectOpt('p-specialty', user.specialty);
+            selectOpt('p-experience', user.experience);
+            selectOpt('p-work-area', user.workArea);
+
+            setVal('p-self-pr', user.selfPR || '');
 
             // Update display
-            document.getElementById('profile-avatar').textContent = user.avatarInitial || nameParts[0]?.[0] || 'N';
-            document.getElementById('profile-avatar').style.background = user.avatarColor || '#FF6B9D';
-            document.getElementById('profile-display-name').textContent = user.name || '田中 太郎';
-            document.getElementById('header-badge').textContent = user.profession === 'nurse' ? '看護師' : '医師';
-            document.getElementById('menu-user-name').textContent = user.name || '田中 太郎';
-            document.getElementById('menu-user-role').textContent = user.specialty || (user.profession === 'nurse' ? '看護師' : '医師');
+            setText('profile-avatar', user.avatarInitial || nameParts[0]?.[0] || 'N');
+            setStyle('profile-avatar', 'background', user.avatarColor || '#FF6B9D');
+            setText('profile-display-name', user.name || '田中 太郎');
+            setText('header-badge', user.profession === 'nurse' ? '看護師' : '医師');
+            setText('menu-user-name', user.name || '田中 太郎');
+            setText('menu-user-role', user.specialty || (user.profession === 'nurse' ? '看護師' : '医師'));
 
             const professionValue = user.profession === 'nurse' ? 'nurse' : 'doctor';
             const radio = document.querySelector(`input[name="p-profession"][value="${professionValue}"]`);
