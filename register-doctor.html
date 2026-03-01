@@ -543,6 +543,45 @@
             outline: 3px solid #4CC9F0;
             outline-offset: 2px;
         }
+
+        /* ===== DOCUMENT UPLOAD ===== */
+        .doc-upload-zone {
+            border: 2px dashed var(--gray-200);
+            border-radius: 10px;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+            background: var(--gray-100);
+            min-height: 100px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 0.35rem;
+            user-select: none;
+        }
+        .doc-upload-zone:hover { border-color: var(--primary); background: rgba(255,107,157,0.04); transform: translateY(-1px); }
+        .doc-upload-zone:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(255,107,157,0.12); }
+        .doc-upload-zone.has-file { border-color: var(--success); border-style: solid; background: rgba(16,185,129,0.04); }
+        .doc-upload-icon { font-size: 1.5rem; line-height: 1; }
+        .doc-upload-name { font-size: 0.8rem; font-weight: 700; color: var(--dark); }
+        .doc-upload-hint { font-size: 0.7rem; color: var(--gray-400); }
+        .doc-upload-filename { display: none; font-size: 0.75rem; color: var(--success); font-weight: 600; word-break: break-all; padding: 0 0.15rem; }
+        .doc-upload-zone.has-file .doc-upload-hint { display: none; }
+        .doc-upload-zone.has-file .doc-upload-filename { display: block; }
+        .doc-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+        /* ===== SUBSPECIALTY ===== */
+        .subspecialty-section {
+            display: none; margin-top: 0.65rem;
+            padding: 0.85rem 1rem;
+            background: linear-gradient(135deg, rgba(255,107,157,0.05), rgba(167,139,250,0.07));
+            border: 1.5px solid rgba(255,107,157,0.25);
+            border-radius: 10px;
+        }
+        .subspecialty-section.visible { display: block; animation: fadeIn 0.2s ease; }
+        .subspecialty-label { font-size: 0.74rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+
+        @media (max-width: 480px) { .doc-upload-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -750,6 +789,72 @@
                 <p class="field-hint">任意。入力いただくとマッチング精度が上がります</p>
             </div>
 
+            <div class="form-group" id="specialist-cert-group">
+                <label>専門医・認定医資格<span style="font-size:0.73rem; color:var(--gray-400); font-weight:400; margin-left:0.4rem;">（複数選択可・任意）</span></label>
+                <div class="checkbox-group">
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="naika-senmon" id="reg-cert-naika" onchange="toggleRegSubspecialty()">
+                        <span class="chip-label">🏥 内科専門医</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="geka-senmon">
+                        <span class="chip-label">🔪 外科専門医</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="zaitaku-senmon">
+                        <span class="chip-label">🏠 在宅医療専門医</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="kanwa">
+                        <span class="chip-label">💊 緩和ケア認定医</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="ninchi">
+                        <span class="chip-label">🧠 認知症専門医</span>
+                    </label>
+                    <label class="checkbox-chip">
+                        <input type="checkbox" name="specialist-cert" value="tounyou">
+                        <span class="chip-label">🩸 糖尿病専門医</span>
+                    </label>
+                </div>
+                <div class="subspecialty-section" id="reg-subspecialty-section">
+                    <div class="subspecialty-label">内科 サブスペシャリティ</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="junkan"><span class="chip-label">循環器</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="shoka"><span class="chip-label">消化器</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="kokyuki"><span class="chip-label">呼吸器</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="jinzo"><span class="chip-label">腎臓</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="neuro"><span class="chip-label">神経</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="tounyou-naika"><span class="chip-label">糖尿病・内分泌</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="kansen"><span class="chip-label">感染症</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="ketsueki"><span class="chip-label">血液</span></label>
+                        <label class="checkbox-chip"><input type="checkbox" name="subspecialty" value="ryumachi"><span class="chip-label">リウマチ</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="doc-upload-group">
+                <label>資格証明書類<span style="font-size:0.73rem; color:var(--gray-400); font-weight:400; margin-left:0.4rem;">（任意）</span></label>
+                <p class="field-hint" style="margin-bottom:0.6rem;">アップロードすると信頼度・マッチング率が向上します</p>
+                <div class="doc-upload-grid">
+                    <div class="doc-upload-zone" id="reg-license-zone" onclick="document.getElementById('reg-license-input').click()" role="button" tabindex="0" aria-label="医師免許証をアップロード" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+                        <input type="file" id="reg-license-input" accept="image/*,.pdf" style="display:none" onchange="handleRegDoc(event,'license')">
+                        <div class="doc-upload-icon">📄</div>
+                        <div class="doc-upload-name">医師免許証</div>
+                        <div class="doc-upload-hint">JPG・PNG・PDF（5MB以内）</div>
+                        <div class="doc-upload-filename" id="reg-license-filename"></div>
+                    </div>
+                    <div class="doc-upload-zone" id="reg-hoken-zone" onclick="document.getElementById('reg-hoken-input').click()" role="button" tabindex="0" aria-label="保険医登録票をアップロード" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+                        <input type="file" id="reg-hoken-input" accept="image/*,.pdf" style="display:none" onchange="handleRegDoc(event,'hoken')">
+                        <div class="doc-upload-icon">📄</div>
+                        <div class="doc-upload-name">保険医登録票</div>
+                        <div class="doc-upload-hint">JPG・PNG・PDF（5MB以内）</div>
+                        <div class="doc-upload-filename" id="reg-hoken-filename"></div>
+                    </div>
+                </div>
+                <p style="font-size:0.72rem; color:var(--gray-400); margin-top:0.5rem;">🔒 SSL暗号化通信で安全に送信されます</p>
+            </div>
+
             <div class="btn-row">
                 <button type="button" class="btn-back" onclick="goBack(2)">← 戻る</button>
                 <button type="button" class="btn-next" onclick="goNext(2)">次へ →</button>
@@ -920,6 +1025,12 @@
                 document.getElementById('specialty-group').style.display = isDoctor ? '' : 'none';
                 document.getElementById('qualification-group').style.display = isDoctor ? 'none' : '';
                 document.getElementById('license-group').style.display = isDoctor ? '' : 'none';
+                document.getElementById('specialist-cert-group').style.display = isDoctor ? '' : 'none';
+                document.getElementById('doc-upload-group').style.display = isDoctor ? '' : 'none';
+                if (!isDoctor) {
+                    const sub = document.getElementById('reg-subspecialty-section');
+                    if (sub) sub.classList.remove('visible');
+                }
 
                 // Switch experience year options
                 const expSel = document.getElementById('experience');
@@ -941,6 +1052,27 @@
                 }
             });
         });
+
+        function toggleRegSubspecialty() {
+            const checked = document.getElementById('reg-cert-naika')?.checked;
+            const section = document.getElementById('reg-subspecialty-section');
+            if (section) section.classList.toggle('visible', !!checked);
+        }
+
+        function handleRegDoc(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                showError('ファイルサイズは5MB以内にしてください');
+                return;
+            }
+            const zoneId = type === 'license' ? 'reg-license-zone' : 'reg-hoken-zone';
+            const filenameId = type === 'license' ? 'reg-license-filename' : 'reg-hoken-filename';
+            const zone = document.getElementById(zoneId);
+            const filenameEl = document.getElementById(filenameId);
+            if (zone) zone.classList.add('has-file');
+            if (filenameEl) filenameEl.textContent = '✓ ' + file.name;
+        }
 
         function togglePw(id, btn) {
             const input = document.getElementById(id);

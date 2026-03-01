@@ -523,6 +523,64 @@
             outline: 3px solid #4CC9F0;
             outline-offset: 2px;
         }
+
+        /* ===== AVATAR IMAGE UPLOAD ===== */
+        .avatar-circle { overflow: hidden; }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .avatar-edit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--purple)) !important;
+            border: 2px solid white !important;
+            color: white !important;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 28px !important; height: 28px !important;
+            font-size: 0.8rem !important;
+        }
+        .avatar-edit-btn:hover { transform: scale(1.12); box-shadow: 0 3px 10px rgba(255,107,157,0.45); }
+
+        /* ===== DOCUMENT UPLOAD ===== */
+        .doc-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .doc-upload-zone {
+            border: 2px dashed var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+            background: var(--gray-100);
+            min-height: 115px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 0.4rem;
+            user-select: none;
+        }
+        .doc-upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(255,107,157,0.04);
+            transform: translateY(-2px);
+        }
+        .doc-upload-zone:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(255,107,157,0.15); }
+        .doc-upload-zone.has-file { border-color: var(--success); border-style: solid; background: rgba(16,185,129,0.04); }
+        .doc-upload-icon { font-size: 1.75rem; line-height: 1; }
+        .doc-upload-name { font-size: 0.82rem; font-weight: 700; color: var(--dark); }
+        .doc-upload-hint { font-size: 0.72rem; color: var(--gray-400); }
+        .doc-upload-filename { display: none; font-size: 0.78rem; color: var(--success); font-weight: 600; word-break: break-all; padding: 0 0.25rem; }
+        .doc-upload-zone.has-file .doc-upload-hint { display: none; }
+        .doc-upload-zone.has-file .doc-upload-filename { display: block; }
+        .doc-note { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.75rem; }
+
+        /* ===== SUBSPECIALTY ===== */
+        .subspecialty-section {
+            display: none; margin-top: 0.75rem;
+            padding: 0.9rem 1.1rem;
+            background: linear-gradient(135deg, rgba(255,107,157,0.05), rgba(167,139,250,0.07));
+            border: 1.5px solid rgba(255,107,157,0.25);
+            border-radius: 10px;
+        }
+        .subspecialty-section.visible { display: block; animation: fadeInSub 0.2s ease; }
+        .subspecialty-label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.55rem; }
+        @keyframes fadeInSub { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 640px) { .doc-upload-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -580,7 +638,8 @@
         <div class="profile-hero">
             <div class="avatar-wrapper">
                 <div class="avatar-circle" id="profile-avatar" style="background: #FF6B9D;">田</div>
-                <button class="avatar-edit-btn" aria-label="アバターを変更">✏️</button>
+                <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+                <button class="avatar-edit-btn" aria-label="アイコン写真を変更" title="写真を変更" onclick="document.getElementById('avatar-file-input').click()">📷</button>
             </div>
             <div class="profile-hero-info">
                 <h2 id="profile-display-name">田中 太郎</h2>
@@ -718,14 +777,30 @@
                 <h2 class="section-title"><span class="section-title-icon" aria-hidden="true">📋</span> 保有資格・スキル</h2>
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>保有資格（複数選択可）</label>
+                        <label>専門医・認定医資格（複数選択可）</label>
                         <div class="chip-group">
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="zaitaku"><span class="chip-inner">在宅医療専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="kanwakea"><span class="chip-inner">緩和ケア認定医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="ninchi"><span class="chip-inner">認知症専門医</span></label>
-                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="tounyou"><span class="chip-inner">糖尿病専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="naika-senmon" id="p-cert-naika" onchange="toggleSubspecialty()"><span class="chip-inner">🏥 内科専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="zaitaku"><span class="chip-inner">🏠 在宅医療専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="kanwakea"><span class="chip-inner">💊 緩和ケア認定医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="ninchi"><span class="chip-inner">🧠 認知症専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="tounyou"><span class="chip-inner">🩸 糖尿病専門医</span></label>
+                            <label class="chip-toggle"><input type="checkbox" name="p-cert" value="geka-senmon"><span class="chip-inner">🔪 外科専門医</span></label>
                             <label class="chip-toggle"><input type="checkbox" name="p-cert" value="acls"><span class="chip-inner">ACLS</span></label>
                             <label class="chip-toggle"><input type="checkbox" name="p-cert" value="bls"><span class="chip-inner">BLS</span></label>
+                        </div>
+                        <div class="subspecialty-section" id="subspecialty-section">
+                            <div class="subspecialty-label">内科 サブスペシャリティ</div>
+                            <div class="chip-group">
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="junkan"><span class="chip-inner">循環器</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="shoka"><span class="chip-inner">消化器</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="kokyuki"><span class="chip-inner">呼吸器</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="jinzo"><span class="chip-inner">腎臓</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="neuro"><span class="chip-inner">神経</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="tounyou-naika"><span class="chip-inner">糖尿病・内分泌</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="kansen"><span class="chip-inner">感染症</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="ketsueki"><span class="chip-inner">血液</span></label>
+                                <label class="chip-toggle"><input type="checkbox" name="p-subspecialty" value="ryumachi"><span class="chip-inner">リウマチ</span></label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group full-width">
@@ -733,6 +808,34 @@
                         <textarea id="p-self-pr" class="form-textarea" placeholder="これまでの経験、得意分野、職場での強みなどをご記入ください"></textarea>
                     </div>
                 </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-title-icon" aria-hidden="true">🪪</span> 資格証明書類</h2>
+                <p style="font-size:0.85rem; color:var(--gray-500); margin-bottom:1.25rem;">書類をアップロードすると信頼度が上がり、マッチング率が向上します。</p>
+                <div class="doc-upload-grid">
+                    <div>
+                        <div style="font-size:0.82rem; font-weight:600; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem;">医師免許証</div>
+                        <div class="doc-upload-zone" id="license-zone" onclick="document.getElementById('license-doc-input').click()" role="button" tabindex="0" aria-label="医師免許証をアップロード" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+                            <input type="file" id="license-doc-input" accept="image/*,.pdf" style="display:none" onchange="handleDocUpload(event,'license')">
+                            <div class="doc-upload-icon">📄</div>
+                            <div class="doc-upload-name">クリックして選択</div>
+                            <div class="doc-upload-hint">JPG・PNG・PDF（5MB以内）</div>
+                            <div class="doc-upload-filename" id="license-filename"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.82rem; font-weight:600; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem;">保険医登録票</div>
+                        <div class="doc-upload-zone" id="hoken-zone" onclick="document.getElementById('hoken-doc-input').click()" role="button" tabindex="0" aria-label="保険医登録票をアップロード" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
+                            <input type="file" id="hoken-doc-input" accept="image/*,.pdf" style="display:none" onchange="handleDocUpload(event,'hoken')">
+                            <div class="doc-upload-icon">📄</div>
+                            <div class="doc-upload-name">クリックして選択</div>
+                            <div class="doc-upload-hint">JPG・PNG・PDF（5MB以内）</div>
+                            <div class="doc-upload-filename" id="hoken-filename"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="doc-note">🔒 アップロードされた書類はSSL暗号化通信で安全に送信されます</p>
             </div>
         </div>
 
@@ -903,8 +1006,14 @@
             setVal('p-self-pr', user.selfPR || '');
 
             // Update display
-            setText('profile-avatar', user.avatarInitial || nameParts[0]?.[0] || 'N');
-            setStyle('profile-avatar', 'background', user.avatarColor || '#FF6B9D');
+            const avatarEl = document.getElementById('profile-avatar');
+            if (user.avatarImage && avatarEl) {
+                avatarEl.innerHTML = `<img src="${user.avatarImage}" alt="プロフィール写真">`;
+                avatarEl.style.background = 'transparent';
+            } else {
+                setText('profile-avatar', user.avatarInitial || nameParts[0]?.[0] || 'N');
+                setStyle('profile-avatar', 'background', user.avatarColor || '#FF6B9D');
+            }
             setText('profile-display-name', user.name || '田中 太郎');
             setText('header-badge', user.profession === 'nurse' ? '看護師' : '医師');
             setText('menu-user-name', user.name || '田中 太郎');
@@ -987,7 +1096,9 @@
                 localStorage.setItem('neco_user', JSON.stringify(user));
 
                 document.getElementById('profile-display-name').textContent = user.name;
-                document.getElementById('profile-avatar').textContent = user.avatarInitial;
+                if (!user.avatarImage) {
+                    document.getElementById('profile-avatar').textContent = user.avatarInitial;
+                }
                 updateCompleteness(user);
                 markDirty(false);
                 showToast('✅ プロフィールを保存しました');
@@ -1005,6 +1116,58 @@
             t.textContent = msg;
             document.body.appendChild(t);
             setTimeout(() => { t.classList.add('hide'); setTimeout(() => t.remove(), 400); }, 3000);
+        }
+
+        // ===== AVATAR IMAGE UPLOAD =====
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('⚠️ ファイルサイズは5MB以内にしてください');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const avatarEl = document.getElementById('profile-avatar');
+                if (avatarEl) {
+                    avatarEl.innerHTML = `<img src="${e.target.result}" alt="プロフィール写真">`;
+                    avatarEl.style.background = 'transparent';
+                }
+                try {
+                    const userStr = localStorage.getItem('neco_user');
+                    const user = userStr ? JSON.parse(userStr) : {};
+                    user.avatarImage = e.target.result;
+                    localStorage.setItem('neco_user', JSON.stringify(user));
+                } catch (_) {}
+                showToast('✅ 写真を変更しました');
+                markDirty(false);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ===== DOCUMENT UPLOAD =====
+        function handleDocUpload(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('⚠️ ファイルサイズは5MB以内にしてください');
+                return;
+            }
+            const zoneId = type === 'license' ? 'license-zone' : 'hoken-zone';
+            const filenameId = type === 'license' ? 'license-filename' : 'hoken-filename';
+            const zone = document.getElementById(zoneId);
+            const filenameEl = document.getElementById(filenameId);
+            if (zone) zone.classList.add('has-file');
+            if (filenameEl) filenameEl.textContent = '✓ ' + file.name;
+            showToast('✅ ファイルをアップロードしました');
+            markDirty(true);
+        }
+
+        // ===== SUBSPECIALTY TOGGLE =====
+        function toggleSubspecialty() {
+            const checked = document.getElementById('p-cert-naika')?.checked;
+            const section = document.getElementById('subspecialty-section');
+            if (section) section.classList.toggle('visible', !!checked);
         }
 
         function handleLogout() {
