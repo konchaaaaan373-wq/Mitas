@@ -1214,9 +1214,11 @@
 
         function handleLogout() {
             if (!confirm('ログアウトしますか？')) return;
+            let userStr; try { userStr = localStorage.getItem('neco_user'); } catch (_) {}
+            const userType = userStr ? JSON.parse(userStr).type : 'doctor';
             localStorage.removeItem('neco_token');
             localStorage.removeItem('neco_user');
-            window.location.replace('/login-doctor.html');
+            window.location.replace(userType === 'nurse' ? '/login-nurse.html' : '/login-doctor.html');
         }
 
         function confirmDelete() {

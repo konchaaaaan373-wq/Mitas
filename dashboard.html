@@ -813,13 +813,13 @@ let currentUser = null;
         if (!token || !userStr) throw new Error('no session');
 
         currentUser = JSON.parse(userStr);
-        if (!currentUser || currentUser.type !== 'doctor') throw new Error('wrong type');
+        if (!currentUser || (currentUser.type !== 'doctor' && currentUser.type !== 'nurse')) throw new Error('wrong type');
 
         // Update header UI
         const _nameEl = document.getElementById('menu-user-name');
         const _roleEl = document.getElementById('menu-user-role');
         if (_nameEl) _nameEl.textContent = currentUser.name;
-        if (_roleEl) _roleEl.textContent = currentUser.specialty || '医師';
+        if (_roleEl) _roleEl.textContent = currentUser.specialty || (currentUser.type === 'nurse' ? '看護師' : '医師');
     } catch (_) {
         window.location.replace('/login-doctor.html');
     }
@@ -1270,9 +1270,10 @@ function closeSidebar() {
 // -----------------------------------------------------------------------
 function logout() {
     if (!confirm('ログアウトしますか？')) return;
+    const logoutType = currentUser && currentUser.type;
     localStorage.removeItem('neco_token');
     localStorage.removeItem('neco_user');
-    window.location.replace('/login-doctor.html');
+    window.location.replace(logoutType === 'nurse' ? '/login-nurse.html' : '/login-doctor.html');
 }
 
 // -----------------------------------------------------------------------

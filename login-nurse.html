@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>医師ログイン - Neco</title>
-    <meta name="description" content="Neco 医師ログインページ。在宅医療求人プラットフォームへようこそ。">
+    <title>看護師ログイン - Neco</title>
+    <meta name="description" content="Neco 看護師ログインページ。在宅医療求人プラットフォームへようこそ。">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,8 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FF6B9D;
-            --purple: #A78BFA;
+            --primary: #10B981;
+            --secondary: #34D399;
+            --teal: #0D9488;
             --dark: #2D3142;
             --light: #F8F9FA;
             --white: #FFFFFF;
@@ -36,7 +37,7 @@
         /* ===== LEFT PANEL ===== */
         .login-left {
             flex: 1;
-            background: linear-gradient(145deg, #FF6B9D 0%, #C084FC 55%, #A78BFA 100%);
+            background: linear-gradient(145deg, #10B981 0%, #0D9488 55%, #0891B2 100%);
             padding: 3rem 3.5rem;
             display: flex;
             flex-direction: column;
@@ -241,7 +242,7 @@
 
         .form-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.12);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
         }
 
         .form-input::placeholder { color: #C4C9D4; }
@@ -282,7 +283,7 @@
             padding: 1rem 1.5rem;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+            background: linear-gradient(135deg, var(--primary), var(--teal));
             color: var(--white);
             font-family: 'Noto Sans JP', sans-serif;
             font-size: 1rem;
@@ -295,7 +296,7 @@
 
         .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
         }
 
         .submit-btn:disabled {
@@ -407,11 +408,11 @@
             justify-content: center;
             gap: 0.5rem;
             padding: 0.9rem;
-            background: rgba(78, 205, 196, 0.06);
-            border: 1px solid rgba(78, 205, 196, 0.25);
+            background: rgba(255, 107, 157, 0.06);
+            border: 1px solid rgba(255, 107, 157, 0.25);
             border-radius: 10px;
             text-decoration: none;
-            color: #4ECDC4;
+            color: #FF6B9D;
             font-size: 0.88rem;
             font-weight: 600;
             transition: all 0.2s ease;
@@ -419,19 +420,29 @@
         }
 
         .switch-link:hover {
+            background: rgba(255, 107, 157, 0.1);
+            border-color: rgba(255, 107, 157, 0.4);
+        }
+
+        .switch-link.medical {
+            background: rgba(78, 205, 196, 0.06);
+            border-color: rgba(78, 205, 196, 0.25);
+            color: #4ECDC4;
+        }
+
+        .switch-link.medical:hover {
             background: rgba(78, 205, 196, 0.1);
             border-color: rgba(78, 205, 196, 0.4);
         }
 
-        /* New registration CTA */
         .register-cta {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.6rem;
             padding: 1.1rem 1.25rem;
-            background: linear-gradient(135deg, rgba(255,107,157,0.06), rgba(167,139,250,0.06));
-            border: 1.5px solid rgba(255,107,157,0.2);
+            background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(13,148,136,0.06));
+            border: 1.5px solid rgba(16,185,129,0.2);
             border-radius: 12px;
             margin-top: 1rem;
             text-align: center;
@@ -447,7 +458,7 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.7rem 1.75rem;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+            background: linear-gradient(135deg, var(--primary), var(--teal));
             color: white;
             border-radius: 50px;
             text-decoration: none;
@@ -459,7 +470,7 @@
 
         .register-cta-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,107,157,0.35);
+            box-shadow: 0 6px 20px rgba(16,185,129,0.35);
         }
 
         @media (max-width: 900px) {
@@ -482,7 +493,7 @@
         }
 
         a:focus-visible, button:focus-visible, input:focus-visible {
-            outline: 3px solid #4CC9F0;
+            outline: 3px solid #0D9488;
             outline-offset: 2px;
         }
     </style>
@@ -500,24 +511,24 @@
         </a>
         <div class="left-content">
             <div class="left-badge">
-                <span aria-hidden="true">👨‍⚕️</span> 医師向け
+                <span aria-hidden="true">💊</span> 看護師向け
             </div>
             <h1 class="left-tagline">
-                一生物のバイトを、<br>
-                <strong>一緒に探そう。</strong>
+                あなたの看護を、<br>
+                <strong>必要な場所へ。</strong>
             </h1>
             <p class="left-sub">
-                在宅医療に特化した求人プラットフォーム。<br>
-                あなたの専門性を正当に評価し、最適な職場をご紹介します。
+                在宅医療に特化した看護師求人プラットフォーム。<br>
+                患者さんに寄り添えるフィールドを一緒に見つけましょう。
             </p>
             <ul class="feature-list" aria-label="Necoの特徴">
                 <li>
                     <span class="feature-icon" aria-hidden="true">🏠</span>
-                    在宅医療に特化した豊富な求人情報
+                    在宅・訪問看護に特化した豊富な求人
                 </li>
                 <li>
-                    <span class="feature-icon" aria-hidden="true">📊</span>
-                    専門性の定量評価で最適なマッチング
+                    <span class="feature-icon" aria-hidden="true">📋</span>
+                    スキルと経験を正当に評価するマッチング
                 </li>
                 <li>
                     <span class="feature-icon" aria-hidden="true">💬</span>
@@ -530,15 +541,15 @@
             </ul>
             <div class="left-stats" aria-label="実績">
                 <div class="stat-item">
-                    <span class="stat-num">500+</span>
-                    <span class="stat-label">登録医師数</span>
+                    <span class="stat-num">1,200+</span>
+                    <span class="stat-label">登録看護師数</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-num">200+</span>
                     <span class="stat-label">提携医療機関</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-num">97%</span>
+                    <span class="stat-num">96%</span>
                     <span class="stat-label">定着率</span>
                 </div>
             </div>
@@ -548,18 +559,18 @@
     <!-- ===== RIGHT FORM PANEL ===== -->
     <main class="login-right" role="main">
         <div class="right-header">
-            <h2>医師ログイン</h2>
+            <h2>看護師ログイン</h2>
             <p>アカウント情報を入力してください</p>
         </div>
 
-        <form id="doctor-form" class="login-form" onsubmit="handleLogin(event)" novalidate>
+        <form id="nurse-form" class="login-form" onsubmit="handleLogin(event)" novalidate>
             <div id="login-error" class="error-message" role="alert" aria-live="polite"></div>
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
                 <input
                     type="email" id="email" class="form-input"
-                    placeholder="dr-demo@neco.jp"
+                    placeholder="nurse-demo@neco.jp"
                     required autocomplete="email" inputmode="email"
                 >
             </div>
@@ -589,10 +600,10 @@
             <!-- Demo credentials -->
             <div class="demo-box" aria-label="デモアカウント情報">
                 <div class="demo-box-title">
-                    <span aria-hidden="true">🧪</span> デモアカウント（医師）
+                    <span aria-hidden="true">🧪</span> デモアカウント（看護師）
                 </div>
                 <div class="demo-credential">
-                    メール: dr-demo@neco.jp<br>
+                    メール: nurse-demo@neco.jp<br>
                     パスワード: demo1234
                 </div>
                 <button type="button" class="demo-fill-btn" onclick="fillDemo()" aria-label="デモ情報を自動入力">
@@ -603,11 +614,11 @@
 
         <div class="divider">または</div>
 
-        <a href="/login-nurse.html" class="switch-link">
-            💊 看護師の方はこちら
+        <a href="/login-doctor.html" class="switch-link">
+            👨‍⚕️ 医師の方はこちら
         </a>
 
-        <a href="/login-medical.html" class="switch-link" style="margin-top: 0.5rem;">
+        <a href="/login-medical.html" class="switch-link medical">
             🏥 医療機関の方はこちら
         </a>
 
@@ -631,8 +642,8 @@
                 const userStr = localStorage.getItem('neco_user');
                 if (!token || !userStr) return;
                 const user = JSON.parse(userStr);
-                if (user.type === 'doctor') window.location.replace('/dashboard.html');
-                else if (user.type === 'nurse') window.location.replace('/login-nurse.html');
+                if (user.type === 'nurse') window.location.replace('/dashboard.html');
+                else if (user.type === 'doctor') window.location.replace('/dashboard.html');
                 else if (user.type === 'medical') window.location.replace('/medical-dashboard.html');
             } catch (_) {
                 localStorage.removeItem('neco_token');
@@ -650,7 +661,7 @@
         }
 
         function fillDemo() {
-            document.getElementById('email').value = 'dr-demo@neco.jp';
+            document.getElementById('email').value = 'nurse-demo@neco.jp';
             document.getElementById('password').value = 'demo1234';
         }
 
@@ -682,10 +693,13 @@
                 if (!data.ok) throw new Error(data.error || 'ログインに失敗しました');
                 localStorage.setItem('neco_token', data.token);
                 localStorage.setItem('neco_user', JSON.stringify(data.user));
-                if (data.user.type === 'doctor') window.location.replace('/dashboard.html');
-                else if (data.user.type === 'nurse') window.location.replace('/dashboard.html');
-                else if (data.user.type === 'medical') window.location.replace('/medical-dashboard.html');
-                else window.location.replace('/');
+                if (data.user.type === 'nurse' || data.user.type === 'doctor') {
+                    window.location.replace('/dashboard.html');
+                } else if (data.user.type === 'medical') {
+                    window.location.replace('/medical-dashboard.html');
+                } else {
+                    window.location.replace('/');
+                }
             } catch (err) {
                 showError(errorEl, err.message || 'ログインに失敗しました。もう一度お試しください。');
                 submitBtn.disabled = false;
