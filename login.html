@@ -606,7 +606,7 @@
                     type="email"
                     id="doctor-email"
                     class="form-input"
-                    placeholder="dr-demo@neco.jp"
+                    placeholder="メールアドレスを入力"
                     required
                     autocomplete="email"
                     inputmode="email"
@@ -638,24 +638,6 @@
                 ログイン
             </button>
 
-            <!-- Demo credentials -->
-            <div class="demo-box" aria-label="デモアカウント情報">
-                <div class="demo-box-title">
-                    <span aria-hidden="true">🧪</span> デモアカウント（医師）
-                </div>
-                <div class="demo-credential">
-                    メール: dr-demo@neco.jp<br>
-                    パスワード: demo1234
-                </div>
-                <button
-                    type="button"
-                    class="demo-fill-btn"
-                    onclick="fillDemo('doctor')"
-                    aria-label="デモ情報を自動入力"
-                >
-                    ↑ デモ情報を自動入力する
-                </button>
-            </div>
         </form>
 
         <!-- ===== MEDICAL INSTITUTION FORM ===== -->
@@ -675,7 +657,7 @@
                     type="email"
                     id="medical-email"
                     class="form-input"
-                    placeholder="clinic-demo@neco.jp"
+                    placeholder="メールアドレスを入力"
                     required
                     autocomplete="email"
                     inputmode="email"
@@ -707,24 +689,6 @@
                 ログイン
             </button>
 
-            <!-- Demo credentials -->
-            <div class="demo-box" aria-label="デモアカウント情報">
-                <div class="demo-box-title">
-                    <span aria-hidden="true">🧪</span> デモアカウント（医療機関）
-                </div>
-                <div class="demo-credential">
-                    メール: clinic-demo@neco.jp<br>
-                    パスワード: demo1234
-                </div>
-                <button
-                    type="button"
-                    class="demo-fill-btn"
-                    onclick="fillDemo('medical')"
-                    aria-label="デモ情報を自動入力"
-                >
-                    ↑ デモ情報を自動入力する
-                </button>
-            </div>
         </form>
 
         <!-- Footer links -->
@@ -790,19 +754,6 @@
             input.type = isHidden ? 'text' : 'password';
             btn.textContent = isHidden ? '🙈' : '👁';
             btn.setAttribute('aria-label', isHidden ? 'パスワードを非表示' : 'パスワードを表示');
-        }
-
-        // ---------------------------------------------------------------
-        // Demo credential autofill
-        // ---------------------------------------------------------------
-        function fillDemo(type) {
-            if (type === 'doctor') {
-                document.getElementById('doctor-email').value = 'dr-demo@neco.jp';
-                document.getElementById('doctor-password').value = 'demo1234';
-            } else {
-                document.getElementById('medical-email').value = 'clinic-demo@neco.jp';
-                document.getElementById('medical-password').value = 'demo1234';
-            }
         }
 
         // ---------------------------------------------------------------

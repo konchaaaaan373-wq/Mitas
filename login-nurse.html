@@ -570,7 +570,7 @@
                 <label for="email">メールアドレス</label>
                 <input
                     type="email" id="email" class="form-input"
-                    placeholder="nurse-demo@neco.jp"
+                    placeholder="メールアドレスを入力"
                     required autocomplete="email" inputmode="email"
                 >
             </div>
@@ -597,19 +597,6 @@
                 ログイン
             </button>
 
-            <!-- Demo credentials -->
-            <div class="demo-box" aria-label="デモアカウント情報">
-                <div class="demo-box-title">
-                    <span aria-hidden="true">🧪</span> デモアカウント（看護師）
-                </div>
-                <div class="demo-credential">
-                    メール: nurse-demo@neco.jp<br>
-                    パスワード: demo1234
-                </div>
-                <button type="button" class="demo-fill-btn" onclick="fillDemo()" aria-label="デモ情報を自動入力">
-                    ↑ デモ情報を自動入力する
-                </button>
-            </div>
         </form>
 
         <div class="divider">または</div>
@@ -658,11 +645,6 @@
             input.type = isHidden ? 'text' : 'password';
             btn.textContent = isHidden ? '🙈' : '👁';
             btn.setAttribute('aria-label', isHidden ? 'パスワードを非表示' : 'パスワードを表示');
-        }
-
-        function fillDemo() {
-            document.getElementById('email').value = 'nurse-demo@neco.jp';
-            document.getElementById('password').value = 'demo1234';
         }
 
         async function handleLogin(e) {
