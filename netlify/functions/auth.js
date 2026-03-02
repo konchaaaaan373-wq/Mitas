@@ -1,7 +1,7 @@
 /**
  * Neco Auth Netlify Function
  *
- * Handles authentication for doctors and medical institutions.
+ * Handles authentication for doctors, nurses, and medical institutions.
  *
  * DEMO NOTICE: User credentials are hardcoded for demo purposes.
  * In production, replace DEMO_USERS with database queries (e.g., Supabase, PlanetScale)
@@ -63,6 +63,25 @@ const DEMO_USERS = [
     bio: '緩和ケアを専門に、患者さんと家族を支える在宅医療を実践しています。',
     avatarInitial: '佐',
     avatarColor: '#A78BFA',
+  },
+  // --- Nurses ---
+  {
+    id: 'ns-001',
+    email: 'nurse-demo@neco.jp',
+    password: 'demo1234',
+    type: 'nurse',
+    name: '山本 花子',
+    nameKana: 'ヤマモト ハナコ',
+    specialty: '訪問看護',
+    subSpecialty: '在宅ケア・緩和ケア',
+    experience: '6年',
+    affiliation: '東京訪問看護ステーション',
+    prefecture: '東京都',
+    available: ['月', '火', '水', '木', '金'],
+    hourlyRate: '3万円〜',
+    bio: '在宅での看護ケアを通じて、患者さんとご家族の生活を支えることにやりがいを感じています。',
+    avatarInitial: '山',
+    avatarColor: '#34D399',
   },
   // --- Medical institutions ---
   {
