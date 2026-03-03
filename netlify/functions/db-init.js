@@ -352,26 +352,26 @@ exports.handler = async (event) => {
     // Optional: drop & recreate (dev/staging only)
     if (doReset) {
       for (const tbl of RESET_TABLES) {
-        await sql.unsafe(`DROP TABLE IF EXISTS ${tbl} CASCADE`);
+        await sql.query(`DROP TABLE IF EXISTS ${tbl} CASCADE`);
         results.push(`DROP TABLE ${tbl}`);
       }
     }
 
     // Create tables
     for (const stmt of DDL_TABLES) {
-      await sql.unsafe(stmt);
+      await sql.query(stmt);
       results.push('OK: ' + stmt.trim().split('\n')[0].slice(0, 60));
     }
 
     // Create indexes
     for (const stmt of DDL_INDEXES) {
-      await sql.unsafe(stmt);
+      await sql.query(stmt);
       results.push('OK: ' + stmt.trim().slice(0, 60));
     }
 
     // Create triggers
     for (const stmt of DDL_TRIGGERS) {
-      await sql.unsafe(stmt);
+      await sql.query(stmt);
       results.push('OK: trigger');
     }
 
