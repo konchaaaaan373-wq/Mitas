@@ -79,10 +79,50 @@
   to = "/.netlify/functions/line-webhook"
   status = 200
 
-# Auth API – routes /api/auth/* to the auth Netlify Function
+# Auth API
 [[redirects]]
   from = "/api/auth/*"
   to = "/.netlify/functions/auth/:splat"
+  status = 200
+
+# Users API – 登録・プロフィール管理
+[[redirects]]
+  from = "/api/users/*"
+  to = "/.netlify/functions/users/:splat"
+  status = 200
+
+# Jobs API – 求人情報
+[[redirects]]
+  from = "/api/jobs/*"
+  to = "/.netlify/functions/jobs/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/jobs"
+  to = "/.netlify/functions/jobs"
+  status = 200
+
+# Applications API – 応募管理
+[[redirects]]
+  from = "/api/applications/*"
+  to = "/.netlify/functions/applications/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/applications"
+  to = "/.netlify/functions/applications"
+  status = 200
+
+# Messages API – メッセージ機能
+[[redirects]]
+  from = "/api/messages/*"
+  to = "/.netlify/functions/messages/:splat"
+  status = 200
+
+# Admin API – DB 初期化（ADMIN_SECRET 環境変数で保護）
+[[redirects]]
+  from = "/api/admin/db-init"
+  to = "/.netlify/functions/db-init"
   status = 200
 
 # Protected pages – redirect to login if accessed directly (handled client-side too)
