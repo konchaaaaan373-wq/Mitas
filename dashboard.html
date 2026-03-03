@@ -826,101 +826,47 @@ let currentUser = null;
 })();
 
 // -----------------------------------------------------------------------
-// 1. Demo data & localStorage helpers
+// 1. API state
 // -----------------------------------------------------------------------
-const CONVERSATIONS = [
-    {
-        id: 'conv_dr-001_mc-001',
-        otherId: 'mc-001',
-        otherName: 'さくら在宅クリニック',
-        otherType: 'medical',
-        avatarColor: '#4ECDC4',
-        avatarInitial: 'さ',
-        facilityType: '在宅医療クリニック',
-        prefecture: '東京都渋谷区',
-        jobTitle: '内科外来 週1〜2回',
-        jobRate: '時給5万円〜',
-    },
-    {
-        id: 'conv_dr-001_mc-002',
-        otherId: 'mc-002',
-        otherName: 'みなと訪問看護ステーション',
-        otherType: 'medical',
-        avatarColor: '#4CC9F0',
-        avatarInitial: 'み',
-        facilityType: '訪問看護ステーション',
-        prefecture: '東京都港区',
-        jobTitle: '在宅診療 週1回',
-        jobRate: '時給4万円〜',
-    },
-];
+const _token = localStorage.getItem('neco_token');
+let conversations = [];
+let messagesByConvId = {};
+let activeConvId = null;
+let sendingMessage = false;
+let pollingInterval = null;
 
-const DEMO_MESSAGES = {
-    'conv_dr-001_mc-001': [
-        {
-            id: 'msg-001', senderId: 'mc-001', senderName: 'さくら在宅クリニック',
-            senderType: 'medical', text: 'はじめまして。Necoを通じてご連絡させていただきました。内科外来の非常勤医師を探しており、先生のご経歴に大変興味を持ちました。よろしければ詳細をお話しできればと思います。',
-            timestamp: getTimestamp(-120), read: true,
+async function apiFetch(path, options = {}) {
+    const res = await fetch(`/.netlify/functions${path}`, {
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${_token}`,
+            ...(options.headers || {}),
         },
-        {
-            id: 'msg-002', senderId: 'dr-001', senderName: '田中 太郎',
-            senderType: 'doctor', text: 'ご連絡ありがとうございます。詳細をお聞かせいただけますか？特に勤務日時と報酬について確認させてください。',
-            timestamp: getTimestamp(-90), read: true,
-        },
-        {
-            id: 'msg-003', senderId: 'mc-001', senderName: 'さくら在宅クリニック',
-            senderType: 'medical', text: '週1〜2回（土日優先）、1回5〜6時間の外来診療をお願いしております。報酬は時給換算で5〜6万円を想定しています。在宅医療の経験が豊富な先生を探しておりますので、ぜひご検討ください。',
-            timestamp: getTimestamp(-60), read: false,
-        },
-    ],
-    'conv_dr-001_mc-002': [
-        {
-            id: 'msg-004', senderId: 'mc-002', senderName: 'みなと訪問看護ステーション',
-            senderType: 'medical', text: 'こちら、みなと訪問看護ステーションの鈴木と申します。先生のプロフィールを拝見し、在宅医療への熱意に共感しました。当ステーションでは週1回程度、在宅患者の往診をお願いできる先生を探しています。',
-            timestamp: getTimestamp(-48 * 60), read: true,
-        },
-        {
-            id: 'msg-005', senderId: 'dr-001', senderName: '田中 太郎',
-            senderType: 'doctor', text: '鈴木様、ご連絡ありがとうございます。詳細を教えていただけますか？対象患者様の疾患背景と、必要な訪問頻度・時間帯などについて確認させてください。',
-            timestamp: getTimestamp(-44 * 60), read: true,
-        },
-    ],
-};
-
-function getTimestamp(minutesAgo) {
-    return new Date(Date.now() + minutesAgo * 60 * 1000).toISOString();
+    });
+    return res.json();
 }
 
-function getStorageKey(convId) {
-    return `neco_messages_${convId}`;
-}
-
-function loadMessages(convId) {
-    const stored = localStorage.getItem(getStorageKey(convId));
-    if (stored) {
-        try { return JSON.parse(stored); } catch (_) {}
+// -----------------------------------------------------------------------
+// 2. Load conversations from API
+// -----------------------------------------------------------------------
+async function loadConversations() {
+    try {
+        const data = await apiFetch('/messages/conversations');
+        if (data.ok) conversations = data.conversations || [];
+    } catch (err) {
+        console.error('[dashboard] loadConversations:', err.message);
     }
-    // Seed with demo data on first load
-    const demo = DEMO_MESSAGES[convId] || [];
-    localStorage.setItem(getStorageKey(convId), JSON.stringify(demo));
-    return demo;
+    renderSidebar();
+    renderJobsBanner();
+    if (window.innerWidth > 768 && conversations.length > 0) {
+        openConversation(conversations[0].id);
+    }
 }
 
-function saveMessages(convId, messages) {
-    localStorage.setItem(getStorageKey(convId), JSON.stringify(messages));
-}
-
-function markRead(convId) {
-    const msgs = loadMessages(convId);
-    const updated = msgs.map(m => m.senderId !== (currentUser && currentUser.id) ? { ...m, read: true } : m);
-    saveMessages(convId, updated);
-}
-
-function getUnreadCount(convId) {
-    const msgs = loadMessages(convId);
-    return msgs.filter(m => m.senderId !== (currentUser && currentUser.id) && !m.read).length;
-}
-
+// -----------------------------------------------------------------------
+// 3. Formatting helpers
+// -----------------------------------------------------------------------
 function formatTime(isoStr) {
     const d = new Date(isoStr);
     const now = new Date();
@@ -951,34 +897,38 @@ function escapeHtml(str) {
 }
 
 // -----------------------------------------------------------------------
-// 2. Render sidebar conversations
+// 4. Render sidebar conversations
 // -----------------------------------------------------------------------
-let activeConvId = null;
-
 function renderSidebar() {
     const convList = document.getElementById('conv-list');
     convList.innerHTML = '';
     let totalUnread = 0;
 
-    CONVERSATIONS.forEach(conv => {
-        const msgs = loadMessages(conv.id);
-        const lastMsg = msgs[msgs.length - 1];
-        const unread = getUnreadCount(conv.id);
+    if (conversations.length === 0) {
+        convList.innerHTML = '<div style="padding:1.5rem 1rem;color:#9ca3af;font-size:0.875rem;text-align:center;">まだメッセージはありません</div>';
+    }
+
+    conversations.forEach(conv => {
+        const unread = conv.unread_count || 0;
         totalUnread += unread;
+
+        const preview = conv.last_message_content
+            ? conv.last_message_content.slice(0, 30) + (conv.last_message_content.length > 30 ? '…' : '')
+            : 'メッセージなし';
 
         const item = document.createElement('div');
         item.className = `conv-item${activeConvId === conv.id ? ' active' : ''}`;
         item.setAttribute('role', 'listitem');
         item.setAttribute('tabindex', '0');
-        item.setAttribute('aria-label', `${conv.otherName}との会話${unread > 0 ? `、未読${unread}件` : ''}`);
+        item.setAttribute('aria-label', `${conv.other_user_name}との会話${unread > 0 ? `、未読${unread}件` : ''}`);
         item.innerHTML = `
-            <div class="conv-avatar" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true">${escapeHtml(conv.avatarInitial)}</div>
+            <div class="conv-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#4ECDC4')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
             <div class="conv-info">
-                <div class="conv-name">${escapeHtml(conv.otherName)}</div>
-                <div class="conv-preview">${escapeHtml(lastMsg ? lastMsg.text.slice(0, 30) + (lastMsg.text.length > 30 ? '…' : '') : 'メッセージなし')}</div>
+                <div class="conv-name">${escapeHtml(conv.other_user_name || '')}</div>
+                <div class="conv-preview">${escapeHtml(preview)}</div>
             </div>
             <div class="conv-meta">
-                <div class="conv-time">${lastMsg ? formatTime(lastMsg.timestamp) : ''}</div>
+                <div class="conv-time">${conv.last_message_at ? formatTime(conv.last_message_at) : ''}</div>
                 ${unread > 0 ? `<div class="unread-badge" aria-label="未読${unread}件">${unread}</div>` : ''}
             </div>
         `;
@@ -993,19 +943,20 @@ function renderSidebar() {
 }
 
 // -----------------------------------------------------------------------
-// 3. Render job chips banner
+// 5. Render job chips banner
 // -----------------------------------------------------------------------
 function renderJobsBanner() {
     const banner = document.querySelector('.jobs-banner');
-    const label = banner.querySelector('.jobs-banner-label');
+    if (!banner) return;
+    banner.querySelectorAll('.job-chip').forEach(c => c.remove());
 
-    CONVERSATIONS.forEach(conv => {
+    conversations.forEach(conv => {
         const chip = document.createElement('button');
         chip.className = 'job-chip';
-        chip.setAttribute('aria-label', `${conv.otherName}: ${conv.jobTitle}`);
+        chip.setAttribute('aria-label', `${conv.other_user_name}との会話`);
         chip.innerHTML = `
-            <span class="job-chip-dot" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true"></span>
-            <strong>${escapeHtml(conv.otherName)}</strong>：${escapeHtml(conv.jobTitle)}・${escapeHtml(conv.jobRate)}
+            <span class="job-chip-dot" style="background: ${escapeHtml(conv.other_user_avatar_color || '#4ECDC4')}" aria-hidden="true"></span>
+            <strong>${escapeHtml(conv.other_user_name || '')}</strong>
         `;
         chip.onclick = () => openConversation(conv.id);
         banner.appendChild(chip);
@@ -1013,30 +964,28 @@ function renderJobsBanner() {
 }
 
 // -----------------------------------------------------------------------
-// 4. Open a conversation and render messages
+// 6. Open a conversation and render messages
 // -----------------------------------------------------------------------
-function openConversation(convId) {
+async function openConversation(convId) {
     activeConvId = convId;
-    markRead(convId);
+    stopPolling();
 
-    const conv = CONVERSATIONS.find(c => c.id === convId);
+    const conv = conversations.find(c => c.id === convId);
     if (!conv) return;
 
-    // Update sidebar
     renderSidebar();
 
-    // Build chat area HTML
     const chatArea = document.getElementById('chat-area');
     chatArea.innerHTML = `
         <div class="chat-header">
-            <div class="chat-header-avatar" style="background: ${escapeHtml(conv.avatarColor)}" aria-hidden="true">${escapeHtml(conv.avatarInitial)}</div>
+            <div class="chat-header-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#4ECDC4')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
             <div class="chat-header-info">
-                <div class="chat-header-name">${escapeHtml(conv.otherName)}</div>
-                <div class="chat-header-sub">${escapeHtml(conv.facilityType)} · ${escapeHtml(conv.prefecture)} · ${escapeHtml(conv.jobTitle)}</div>
+                <div class="chat-header-name">${escapeHtml(conv.other_user_name || '')}</div>
+                <div class="chat-header-sub">${conv.other_user_type === 'medical' ? '医療機関' : conv.other_user_type === 'nurse' ? '看護師' : '医師'}</div>
             </div>
         </div>
         <div class="messages-container" id="messages-container" aria-label="メッセージ一覧" aria-live="polite">
-            <!-- Messages rendered here -->
+            <div style="padding:2rem;text-align:center;color:#9ca3af;font-size:0.875rem;">読み込み中...</div>
         </div>
         <div class="typing-indicator" id="typing-indicator" aria-live="polite" aria-label="相手が入力中">
             <div class="typing-dots">
@@ -1049,7 +998,7 @@ function openConversation(convId) {
             <textarea
                 class="message-input"
                 id="message-input"
-                placeholder="${escapeHtml(conv.otherName)}にメッセージを送る..."
+                placeholder="${escapeHtml(conv.other_user_name || '')}にメッセージを送る..."
                 aria-label="メッセージ入力"
                 rows="1"
                 maxlength="1000"
@@ -1063,27 +1012,46 @@ function openConversation(convId) {
         </div>
     `;
 
-    renderMessages(convId);
-    setupInputHandlers(convId, conv);
+    setupInputHandlers();
 
-    // Close sidebar on mobile
+    try {
+        const data = await apiFetch(`/messages/conversations/${convId}`);
+        if (data.ok) messagesByConvId[convId] = data.messages || [];
+    } catch (err) {
+        console.error('[dashboard] loadMessages:', err.message);
+    }
+
+    renderMessages(convId);
+
+    apiFetch(`/messages/conversations/${convId}/read`, { method: 'POST' }).then(() => {
+        const c = conversations.find(x => x.id === convId);
+        if (c) { c.unread_count = 0; renderSidebar(); }
+    }).catch(() => {});
+
+    startPolling(convId);
+
     if (window.innerWidth <= 768) closeSidebar();
 }
 
 // -----------------------------------------------------------------------
-// 5. Render messages in the chat area
+// 7. Render messages in the chat area
 // -----------------------------------------------------------------------
 function renderMessages(convId) {
     const container = document.getElementById('messages-container');
     if (!container) return;
 
-    const messages = loadMessages(convId);
+    const messages = messagesByConvId[convId] || [];
     container.innerHTML = '';
+
+    if (messages.length === 0) {
+        container.innerHTML = '<div style="padding:2rem;text-align:center;color:#9ca3af;font-size:0.875rem;">メッセージはまだありません。最初のメッセージを送りましょう。</div>';
+        return;
+    }
 
     let lastDateStr = '';
 
     messages.forEach(msg => {
-        const dateStr = formatDateHeader(msg.timestamp);
+        const dateStr = formatDateHeader(msg.created_at);
         if (dateStr !== lastDateStr) {
             const divider = document.createElement('div');
             divider.className = 'date-divider';
@@ -1093,42 +1061,38 @@ function renderMessages(convId) {
             lastDateStr = dateStr;
         }
 
-        const isOwn = msg.senderId === currentUser.id;
+        const isOwn = msg.sender_id === currentUser.id;
         const wrapper = document.createElement('div');
         wrapper.className = `message ${isOwn ? 'own' : 'other'}`;
         wrapper.innerHTML = `
-            ${!isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(msg.senderId === 'mc-001' ? '#4ECDC4' : '#4CC9F0')}" aria-hidden="true">${escapeHtml(msg.senderName.charAt(0))}</div>` : ''}
+            ${!isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(msg.avatar_color || '#4ECDC4')}" aria-hidden="true">${escapeHtml(msg.avatar_initial || msg.sender_name?.charAt(0) || '?')}</div>` : ''}
             <div class="msg-content">
-                ${!isOwn ? `<span class="msg-sender">${escapeHtml(msg.senderName)}</span>` : ''}
-                <div class="msg-bubble">${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
-                <span class="msg-time">${formatTime(msg.timestamp)}</span>
+                ${!isOwn ? `<span class="msg-sender">${escapeHtml(msg.sender_name || '')}</span>` : ''}
+                <div class="msg-bubble">${escapeHtml(msg.content || '').replace(/\n/g, '<br>')}</div>
+                <span class="msg-time">${formatTime(msg.created_at)}</span>
             </div>
-            ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#FF6B9D')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name.charAt(0))}</div>` : ''}
+            ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#FF6B9D')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name?.charAt(0) || '?')}</div>` : ''}
         `;
         container.appendChild(wrapper);
     });
 
-    // Scroll to bottom
     setTimeout(() => { container.scrollTop = container.scrollHeight; }, 0);
 }
 
 // -----------------------------------------------------------------------
-// 6. Input handlers and send
+// 8. Input handlers and send
 // -----------------------------------------------------------------------
-function setupInputHandlers(convId, conv) {
+function setupInputHandlers() {
     const input   = document.getElementById('message-input');
     const sendBtn = document.getElementById('send-btn');
-
     if (!input || !sendBtn) return;
 
-    // Auto-resize textarea
     input.addEventListener('input', () => {
         sendBtn.disabled = input.value.trim().length === 0;
         input.style.height = 'auto';
         input.style.height = Math.min(input.scrollHeight, 140) + 'px';
     });
 
-    // Ctrl+Enter or Cmd+Enter to send
     input.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             e.preventDefault();
@@ -1137,112 +1101,77 @@ function setupInputHandlers(convId, conv) {
     });
 }
 
-function sendMessage() {
-    if (!activeConvId || !currentUser) return;
+async function sendMessage() {
+    if (!activeConvId || !currentUser || sendingMessage) return;
 
     const input   = document.getElementById('message-input');
     const sendBtn = document.getElementById('send-btn');
     const text = input.value.trim();
     if (!text) return;
 
-    // Create message object
-    const newMsg = {
-        id: `msg-${Date.now()}`,
-        senderId:   currentUser.id,
-        senderName: currentUser.name,
-        senderType: currentUser.type,
-        text,
-        timestamp: new Date().toISOString(),
-        read: false,
-    };
-
-    // Save and render
-    const msgs = loadMessages(activeConvId);
-    msgs.push(newMsg);
-    saveMessages(activeConvId, msgs);
-
-    // Clear input
+    sendingMessage = true;
+    sendBtn.disabled = true;
     input.value = '';
     input.style.height = 'auto';
-    sendBtn.disabled = true;
 
-    renderMessages(activeConvId);
-    renderSidebar();
+    try {
+        const data = await apiFetch(`/messages/conversations/${activeConvId}/send`, {
+            method: 'POST',
+            body: JSON.stringify({ content: text }),
+        });
 
-    // Show typing indicator after a short delay (demo auto-reply)
-    scheduleAutoReply(activeConvId);
+        if (data.ok) {
+            const msg = {
+                ...data.message,
+                sender_name:    currentUser.name,
+                avatar_initial: currentUser.avatarInitial || currentUser.name?.charAt(0),
+                avatar_color:   currentUser.avatarColor || '#FF6B9D',
+            };
+            if (!messagesByConvId[activeConvId]) messagesByConvId[activeConvId] = [];
+            messagesByConvId[activeConvId].push(msg);
+            renderMessages(activeConvId);
+
+            const conv = conversations.find(c => c.id === activeConvId);
+            if (conv) {
+                conv.last_message_content  = text;
+                conv.last_message_sender_id = currentUser.id;
+                conv.last_message_at        = new Date().toISOString();
+                renderSidebar();
+            }
+        } else {
+            input.value = text;
+        }
+    } catch (err) {
+        console.error('[dashboard] sendMessage:', err.message);
+        input.value = text;
+    } finally {
+        sendingMessage = false;
+        sendBtn.disabled = input.value.trim().length === 0;
+    }
 }
 
 // -----------------------------------------------------------------------
-// 7. Demo auto-reply (simulates the other side typing)
+// 9. Polling for new messages (10s interval)
 // -----------------------------------------------------------------------
-const AUTO_REPLIES = {
-    'mc-001': [
-        'ありがとうございます！詳細についてはこちらからご説明いたします。',
-        'ご質問がございましたらいつでもお気軽にご連絡ください。',
-        '先生のご都合に合わせて日程を調整いたします。いつがご都合よろしいでしょうか？',
-        'ぜひ一度、施設を見学いただけますでしょうか？',
-        'ご回答ありがとうございます。担当者と確認してすぐにご連絡いたします。',
-    ],
-    'mc-002': [
-        'ご連絡ありがとうございます。詳細をお伝えします。',
-        'ご質問等ございましたら、いつでもご連絡ください。',
-        '先生のご経験は私たちのチームにとって非常に心強いです。',
-        'ご都合のよい日時をお知らせください。',
-    ],
-};
+function startPolling(convId) {
+    pollingInterval = setInterval(async () => {
+        if (activeConvId !== convId) { stopPolling(); return; }
+        try {
+            const data = await apiFetch(`/messages/conversations/${convId}`);
+            if (!data.ok) return;
+            const current = messagesByConvId[convId] || [];
+            if (data.messages.length > current.length) {
+                messagesByConvId[convId] = data.messages;
+                renderMessages(convId);
+                const convData = await apiFetch('/messages/conversations');
+                if (convData.ok) { conversations = convData.conversations || []; renderSidebar(); }
+            }
+        } catch (_) {}
+    }, 10000);
+}
 
-let autoReplyTimers = {};
-
-function scheduleAutoReply(convId) {
-    if (autoReplyTimers[convId]) return; // avoid duplicate
-
-    const conv = CONVERSATIONS.find(c => c.id === convId);
-    if (!conv) return;
-
-    const replies = AUTO_REPLIES[conv.otherId] || AUTO_REPLIES['mc-001'];
-    const reply = replies[Math.floor(Math.random() * replies.length)];
-
-    // Show typing indicator after 1.5s
-    const typingIndicator = document.getElementById('typing-indicator');
-
-    autoReplyTimers[convId] = setTimeout(() => {
-        if (activeConvId !== convId) {
-            delete autoReplyTimers[convId];
-            return;
-        }
-
-        if (typingIndicator) typingIndicator.style.display = 'block';
-
-        // Scroll to show typing
-        const container = document.getElementById('messages-container');
-        if (container) container.scrollTop = container.scrollHeight;
-
-        // Send reply after 2s of typing
-        setTimeout(() => {
-            if (typingIndicator) typingIndicator.style.display = 'none';
-            delete autoReplyTimers[convId];
-
-            if (activeConvId !== convId) return;
-
-            const autoMsg = {
-                id: `auto-${Date.now()}`,
-                senderId:   conv.otherId,
-                senderName: conv.otherName,
-                senderType: 'medical',
-                text: reply,
-                timestamp: new Date().toISOString(),
-                read: true,
-            };
-
-            const msgs = loadMessages(convId);
-            msgs.push(autoMsg);
-            saveMessages(convId, msgs);
-
-            renderMessages(convId);
-            renderSidebar();
-        }, 2000);
-    }, 1500);
+function stopPolling() {
+    if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
 }
 
 // -----------------------------------------------------------------------
@@ -1277,15 +1206,9 @@ function logout() {
 }
 
 // -----------------------------------------------------------------------
-// 10. Init
+// 11. Init
 // -----------------------------------------------------------------------
-renderSidebar();
-renderJobsBanner();
-
-// Auto-open first conversation on desktop
-if (window.innerWidth > 768 && CONVERSATIONS.length > 0) {
-    openConversation(CONVERSATIONS[0].id);
-}
+loadConversations();
 
 // Cat menu toggle
 (function() {

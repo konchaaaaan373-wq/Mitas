@@ -896,29 +896,47 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>保存中...';
 
-            await new Promise(r => setTimeout(r, 800));
+            const token    = localStorage.getItem('neco_token');
+            const cLast    = document.getElementById('p-contact-last').value.trim();
+            const cFirst   = document.getElementById('p-contact-first').value.trim();
+            const facName  = document.getElementById('p-facility-name').value.trim();
+
+            const payload = {
+                name:         facName || undefined,
+                avatarInitial: facName?.[0] || undefined,
+                contactName:  [cLast, cFirst].filter(Boolean).join(' ') || undefined,
+                facilityType: document.getElementById('p-facility-type').value || undefined,
+                prefecture:   document.getElementById('p-pref').value || undefined,
+                bio:          document.getElementById('p-facility-pr').value || undefined,
+            };
 
             try {
-                const userStr = localStorage.getItem('neco_user');
-                const user = userStr ? JSON.parse(userStr) : {};
-                user.name = document.getElementById('p-facility-name').value.trim() || user.name;
-                user.avatarInitial = user.name?.[0] || 'N';
-                user.prefecture = document.getElementById('p-pref').value || user.prefecture;
-                user.facilityType = document.getElementById('p-facility-type').value || user.facilityType;
-                const cLast = document.getElementById('p-contact-last').value.trim();
-                const cFirst = document.getElementById('p-contact-first').value.trim();
-                if (cLast || cFirst) user.contactName = [cLast, cFirst].filter(Boolean).join(' ');
-                user.facilityPR = document.getElementById('p-facility-pr').value;
+                const res  = await fetch('/.netlify/functions/users/profile', {
+                    method:  'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
 
-                localStorage.setItem('neco_user', JSON.stringify(user));
+                if (!res.ok || !data.ok) {
+                    showToast('保存に失敗しました。もう一度お試しください。');
+                    btn.disabled = false;
+                    btn.textContent = '変更を保存する';
+                    return;
+                }
 
-                document.getElementById('profile-display-name').textContent = user.name;
-                document.getElementById('profile-avatar').textContent = user.avatarInitial;
-                updateCompleteness(user);
+                localStorage.setItem('neco_user', JSON.stringify(data.user));
+
+                document.getElementById('profile-display-name').textContent = data.user.name;
+                document.getElementById('profile-avatar').textContent = data.user.avatarInitial;
+                updateCompleteness(data.user);
                 markDirty(false);
                 showToast('✅ プロフィールを保存しました');
-            } catch (_) {
-                showToast('保存に失敗しました。もう一度お試しください。');
+            } catch (_err) {
+                showToast('通信エラーが発生しました。ネットワーク接続をご確認ください。');
             }
 
             btn.disabled = false;
