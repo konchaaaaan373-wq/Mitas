@@ -1119,33 +1119,48 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>保存中...';
 
-            await new Promise(r => setTimeout(r, 800));
+            const token    = localStorage.getItem('neco_token');
+            const lastName  = document.getElementById('p-last-name').value.trim();
+            const firstName = document.getElementById('p-first-name').value.trim();
+
+            const payload = {
+                name:         [lastName, firstName].filter(Boolean).join(' ') || undefined,
+                avatarInitial: lastName[0] || undefined,
+                specialty:    document.getElementById('p-specialty').value || undefined,
+                experience:   document.getElementById('p-experience').value || undefined,
+                prefecture:   document.getElementById('p-work-area').value || undefined,
+                bio:          document.getElementById('p-self-pr').value || undefined,
+            };
 
             try {
-                const userStr = localStorage.getItem('neco_user');
-                const user = userStr ? JSON.parse(userStr) : {};
-                const lastName = document.getElementById('p-last-name').value.trim();
-                const firstName = document.getElementById('p-first-name').value.trim();
-                const profession = document.querySelector('input[name="p-profession"]:checked')?.value;
-                user.name = [lastName, firstName].filter(Boolean).join(' ') || user.name;
-                user.avatarInitial = lastName[0] || user.avatarInitial || 'N';
-                user.specialty = document.getElementById('p-specialty').value || user.specialty;
-                user.experience = document.getElementById('p-experience').value || user.experience;
-                user.workArea = document.getElementById('p-work-area').value || user.workArea;
-                user.selfPR = document.getElementById('p-self-pr').value;
-                if (profession) user.profession = profession;
+                const res  = await fetch('/.netlify/functions/users/profile', {
+                    method:  'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
 
-                localStorage.setItem('neco_user', JSON.stringify(user));
-
-                document.getElementById('profile-display-name').textContent = user.name;
-                if (!user.avatarImage) {
-                    document.getElementById('profile-avatar').textContent = user.avatarInitial;
+                if (!res.ok || !data.ok) {
+                    showToast('保存に失敗しました。もう一度お試しください。');
+                    btn.disabled = false;
+                    btn.textContent = '変更を保存する';
+                    return;
                 }
-                updateCompleteness(user);
+
+                localStorage.setItem('neco_user', JSON.stringify(data.user));
+
+                document.getElementById('profile-display-name').textContent = data.user.name;
+                if (!data.user.avatarImage) {
+                    document.getElementById('profile-avatar').textContent = data.user.avatarInitial;
+                }
+                updateCompleteness(data.user);
                 markDirty(false);
                 showToast('✅ プロフィールを保存しました');
-            } catch (_) {
-                showToast('保存に失敗しました。もう一度お試しください。');
+            } catch (_err) {
+                showToast('通信エラーが発生しました。ネットワーク接続をご確認ください。');
             }
 
             btn.disabled = false;

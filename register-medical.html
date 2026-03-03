@@ -913,28 +913,52 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>登録中...';
 
-            await new Promise(r => setTimeout(r, 1200));
-
             const facilityType = document.querySelector('input[name="facility-type"]:checked')?.value || 'clinic';
-            const user = {
-                id: 'mc-new-' + Date.now(),
-                type: 'medical',
-                facilityType,
-                name: document.getElementById('facility-name').value,
-                email: document.getElementById('contact-email').value,
-                contactName: document.getElementById('contact-last').value + ' ' + document.getElementById('contact-first').value,
-                avatarInitial: document.getElementById('facility-name').value[0] || 'N',
-                avatarColor: '#4ECDC4',
-                prefecture: document.getElementById('facility-pref').value,
-                registeredAt: new Date().toISOString()
-            };
-            localStorage.setItem('neco_user', JSON.stringify(user));
-            localStorage.setItem('neco_token', 'demo-token-' + Date.now());
+            const facilityName = document.getElementById('facility-name').value.trim();
+            const contactLast  = document.getElementById('contact-last').value.trim();
+            const contactFirst = document.getElementById('contact-first').value.trim();
 
-            document.getElementById('step-3').classList.remove('active');
-            document.getElementById('success-screen').classList.add('active');
-            document.querySelector('.progress-bar').style.display = 'none';
-            document.getElementById('form-error').classList.remove('visible');
+            const payload = {
+                email:         document.getElementById('contact-email').value.trim().toLowerCase(),
+                password:      document.getElementById('reg-password').value,
+                user_type:     'medical',
+                name:          facilityName,
+                avatarInitial: facilityName[0] || 'N',
+                avatarColor:   '#4ECDC4',
+                contactName:   `${contactLast} ${contactFirst}`,
+                facilityType,
+                prefecture:    document.getElementById('facility-pref').value || null,
+                city:          document.getElementById('facility-city').value.trim() || null,
+                bio:           document.getElementById('facility-pr').value.trim() || null,
+            };
+
+            try {
+                const res  = await fetch('/.netlify/functions/users/register', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(payload),
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.ok) {
+                    showError(data.error || '登録に失敗しました。もう一度お試しください。');
+                    btn.disabled = false;
+                    btn.textContent = '無料で登録する';
+                    return;
+                }
+
+                localStorage.setItem('neco_token', data.token);
+                localStorage.setItem('neco_user', JSON.stringify(data.user));
+
+                document.getElementById('step-3').classList.remove('active');
+                document.getElementById('success-screen').classList.add('active');
+                document.querySelector('.progress-bar').style.display = 'none';
+                document.getElementById('form-error').classList.remove('visible');
+            } catch (_err) {
+                showError('通信エラーが発生しました。ネットワーク接続をご確認ください。');
+                btn.disabled = false;
+                btn.textContent = '無料で登録する';
+            }
         }
     </script>
 </body>

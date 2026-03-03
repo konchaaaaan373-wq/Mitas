@@ -1196,32 +1196,53 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>登録中...';
 
-            // Simulate registration (in production, call API)
-            await new Promise(r => setTimeout(r, 1200));
+            const profession  = document.querySelector('input[name="profession"]:checked').value;
+            const lastName    = document.getElementById('last-name').value.trim();
+            const firstName   = document.getElementById('first-name').value.trim();
+            const specialty   = profession === 'doctor'
+                ? document.getElementById('specialty').value
+                : document.getElementById('qualification').value;
 
-            const profession = document.querySelector('input[name="profession"]:checked').value;
-            const user = {
-                id: 'dr-new-' + Date.now(),
-                type: 'doctor',
-                profession,
-                name: document.getElementById('last-name').value + ' ' + document.getElementById('first-name').value,
-                email: document.getElementById('reg-email').value,
-                avatarInitial: document.getElementById('last-name').value[0] || 'N',
-                avatarColor: '#FF6B9D',
-                specialty: document.getElementById('specialty').value || document.getElementById('qualification').value,
-                experience: document.getElementById('experience').value,
-                workArea: document.getElementById('work-area').value,
-                selfPR: document.getElementById('self-pr').value,
-                registeredAt: new Date().toISOString()
+            const payload = {
+                email:         document.getElementById('reg-email').value.trim().toLowerCase(),
+                password:      document.getElementById('reg-password').value,
+                user_type:     profession,
+                name:          `${lastName} ${firstName}`,
+                avatarInitial: lastName[0] || 'N',
+                avatarColor:   profession === 'doctor' ? '#FF6B9D' : '#4ECDC4',
+                specialty:     specialty || null,
+                experience:    document.getElementById('experience').value || null,
+                prefecture:    document.getElementById('work-area').value || null,
+                bio:           document.getElementById('self-pr').value.trim() || null,
             };
-            localStorage.setItem('neco_user', JSON.stringify(user));
-            localStorage.setItem('neco_token', 'demo-token-' + Date.now());
 
-            // Show success
-            document.getElementById('step-3').classList.remove('active');
-            document.getElementById('success-screen').classList.add('active');
-            document.querySelector('.progress-bar').style.display = 'none';
-            document.getElementById('form-error').classList.remove('visible');
+            try {
+                const res  = await fetch('/.netlify/functions/users/register', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(payload),
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.ok) {
+                    showError(data.error || '登録に失敗しました。もう一度お試しください。');
+                    btn.disabled = false;
+                    btn.textContent = '無料で登録する';
+                    return;
+                }
+
+                localStorage.setItem('neco_token', data.token);
+                localStorage.setItem('neco_user', JSON.stringify(data.user));
+
+                document.getElementById('step-3').classList.remove('active');
+                document.getElementById('success-screen').classList.add('active');
+                document.querySelector('.progress-bar').style.display = 'none';
+                document.getElementById('form-error').classList.remove('visible');
+            } catch (_err) {
+                showError('通信エラーが発生しました。ネットワーク接続をご確認ください。');
+                btn.disabled = false;
+                btn.textContent = '無料で登録する';
+            }
         }
     </script>
 </body>
