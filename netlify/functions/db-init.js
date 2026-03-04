@@ -28,18 +28,22 @@ const DDL_TABLES = [
 
   // ── users ───────────────────────────────────────────────────────────────
   `CREATE TABLE IF NOT EXISTS users (
-    id           UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
-    email        VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    user_type    VARCHAR(20)  NOT NULL CHECK (user_type IN ('doctor','nurse','medical','admin')),
-    name         VARCHAR(255) NOT NULL,
-    name_kana    VARCHAR(255),
-    avatar_initial VARCHAR(10),
-    avatar_color VARCHAR(20),
-    is_active    BOOLEAN      DEFAULT true,
-    created_at   TIMESTAMPTZ  DEFAULT NOW(),
-    updated_at   TIMESTAMPTZ  DEFAULT NOW()
+    id                  UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    email               VARCHAR(255) UNIQUE NOT NULL,
+    password_hash       VARCHAR(255) NOT NULL,
+    user_type           VARCHAR(20)  NOT NULL CHECK (user_type IN ('doctor','nurse','medical','admin')),
+    name                VARCHAR(255) NOT NULL,
+    name_kana           VARCHAR(255),
+    avatar_initial      VARCHAR(10),
+    avatar_color        VARCHAR(20),
+    is_active           BOOLEAN      DEFAULT true,
+    email_notification  BOOLEAN      DEFAULT false,
+    created_at          TIMESTAMPTZ  DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ  DEFAULT NOW()
   )`,
+
+  // email_notification カラム追加（既存DBへのマイグレーション用）
+  `ALTER TABLE users ADD COLUMN IF NOT EXISTS email_notification BOOLEAN DEFAULT false`,
 
   // ── doctor_profiles ─────────────────────────────────────────────────────
   `CREATE TABLE IF NOT EXISTS doctor_profiles (
@@ -195,11 +199,34 @@ const RESET_TABLES = [
   'users',
 ];
 
+// ── Neco system user helper ───────────────────────────────────────────────────
+
+/**
+ * Neco システムユーザーを取得または作成する。
+ * user_type = 'admin'、email = 'neco-system@neco.jp で固定。
+ */
+async function ensureNecoSystemUser(sql) {
+  const existing = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
+  if (existing.length > 0) return existing[0].id;
+
+  const bcrypt = require('bcryptjs');
+  const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+  const [row] = await sql`
+    INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
+    VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)
+    RETURNING id
+  `;
+  return row.id;
+}
+
 // ── Seed data ────────────────────────────────────────────────────────────────
 
 async function runSeed(sql) {
   const SALT_ROUNDS = 10;
   const hash = (pw) => bcrypt.hash(pw, SALT_ROUNDS);
+
+  // Neco システムユーザー（必ず存在させる）
+  await ensureNecoSystemUser(sql);
 
   // Demo users
   const users = [

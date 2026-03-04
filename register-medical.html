@@ -782,6 +782,14 @@
             </div>
 
             <div class="form-group">
+                <label>メール通知設定</label>
+                <label class="terms-agree" style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="email-notification-check" checked>
+                    <span>新着メッセージをメールで通知する（登録後に設定画面からいつでも変更できます）</span>
+                </label>
+            </div>
+
+            <div class="form-group">
                 <div class="terms-box" tabindex="0" aria-label="利用規約本文">
                     <strong>医療機関向け利用規約（抜粋）</strong><br><br>
                     第1条（サービスの目的）本サービスは、医療機関と医療従事者とのマッチングを目的として提供されます。<br><br>
@@ -919,17 +927,18 @@
             const contactFirst = document.getElementById('contact-first').value.trim();
 
             const payload = {
-                email:         document.getElementById('contact-email').value.trim().toLowerCase(),
-                password:      document.getElementById('reg-password').value,
-                user_type:     'medical',
-                name:          facilityName,
-                avatarInitial: facilityName[0] || 'N',
-                avatarColor:   '#4ECDC4',
-                contactName:   `${contactLast} ${contactFirst}`,
+                email:             document.getElementById('contact-email').value.trim().toLowerCase(),
+                password:          document.getElementById('reg-password').value,
+                user_type:         'medical',
+                name:              facilityName,
+                avatarInitial:     facilityName[0] || 'N',
+                avatarColor:       '#4ECDC4',
+                contactName:       `${contactLast} ${contactFirst}`,
                 facilityType,
-                prefecture:    document.getElementById('facility-pref').value || null,
-                city:          document.getElementById('facility-city').value.trim() || null,
-                bio:           document.getElementById('facility-pr').value.trim() || null,
+                prefecture:        document.getElementById('facility-pref').value || null,
+                city:              document.getElementById('facility-city').value.trim() || null,
+                bio:               document.getElementById('facility-pr').value.trim() || null,
+                emailNotification: document.getElementById('email-notification-check').checked,
             };
 
             try {

@@ -32,13 +32,14 @@ const authenticate = (event) => {
 /** DB の users 行からフロントエンド互換オブジェクトへ変換（password_hash を除外） */
 function formatUser(user, profile = {}) {
   return {
-    id:            user.id,
-    email:         user.email,
-    type:          user.user_type,
-    name:          user.name,
-    nameKana:      user.name_kana,
-    avatarInitial: user.avatar_initial,
-    avatarColor:   user.avatar_color,
+    id:                user.id,
+    email:             user.email,
+    type:              user.user_type,
+    name:              user.name,
+    nameKana:          user.name_kana,
+    avatarInitial:     user.avatar_initial,
+    avatarColor:       user.avatar_color,
+    emailNotification: user.email_notification || false,
     // doctor / nurse
     specialty:     profile.specialty      || null,
     subSpecialty:  profile.sub_specialty  || null,
@@ -55,6 +56,68 @@ function formatUser(user, profile = {}) {
     patientCount:  profile.patient_count  || null,
     needs:         profile.needs          || null,
   };
+}
+
+/**
+ * Neco システムユーザーを取得または作成する。
+ * 新規ユーザー登録時にウェルカム会話を作るために使用。
+ */
+async function getOrCreateNecoUser(sql) {
+  const existing = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
+  if (existing.length > 0) return existing[0].id;
+
+  const bcrypt = require('bcryptjs');
+  const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+  const [row] = await sql`
+    INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
+    VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)
+    RETURNING id
+  `;
+  return row.id;
+}
+
+/**
+ * 新規ユーザーのウェルカム会話を Neco との間に作成し、ウェルカムメッセージを送信する。
+ */
+async function createNecoWelcomeConversation(sql, newUserId) {
+  try {
+    const necoId = await getOrCreateNecoUser(sql);
+
+    // participant ID を正規化（小さい方が participant1）
+    const p1 = newUserId < necoId ? newUserId : necoId;
+    const p2 = newUserId < necoId ? necoId : newUserId;
+
+    // 既存の会話を確認
+    let [conv] = await sql`
+      SELECT id FROM conversations WHERE participant1_id = ${p1} AND participant2_id = ${p2}
+    `;
+
+    if (!conv) {
+      [conv] = await sql`
+        INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
+        VALUES (${p1}, ${p2}, NOW())
+        RETURNING id
+      `;
+    }
+
+    // ウェルカムメッセージを Neco から送信
+    const welcomeMessage = `はじめまして！Necoです。あなたの転職・キャリアアップを全力で応援します🐱
+
+在宅医療・訪問診療に特化した求人情報をご紹介しています。
+ご質問やご要望があれば、お気軽にこちらでメッセージをお送りください。
+
+✨ 転職案件のご提案や、医療機関からのスカウトメッセージもこちらに届きます。どうぞよろしくお願いいたします！`;
+
+    await sql`
+      INSERT INTO messages (conversation_id, sender_id, content)
+      VALUES (${conv.id}, ${necoId}, ${welcomeMessage})
+    `;
+
+    await sql`UPDATE conversations SET last_message_at = NOW() WHERE id = ${conv.id}`;
+  } catch (err) {
+    console.error('[users] createNecoWelcomeConversation error:', err.message);
+    // ウェルカム会話の作成失敗はユーザー登録を阻害しない
+  }
 }
 
 async function fetchProfile(sql, userId, userType) {
@@ -94,6 +157,7 @@ exports.handler = async (event) => {
     const {
       email, password, user_type,
       name, nameKana, avatarInitial, avatarColor,
+      emailNotification,
       // doctor / nurse profile
       specialty, subSpecialty, experience, affiliation,
       prefecture, available, hourlyRate, bio,
@@ -122,12 +186,15 @@ exports.handler = async (event) => {
 
       const password_hash = await bcrypt.hash(String(password), SALT_ROUNDS);
 
+      const emailNotifValue = emailNotification === true || emailNotification === 'true';
+
       const [userRow] = await sql`
         INSERT INTO users
-          (email, password_hash, user_type, name, name_kana, avatar_initial, avatar_color)
+          (email, password_hash, user_type, name, name_kana, avatar_initial, avatar_color, email_notification)
         VALUES
           (${normalizedEmail}, ${password_hash}, ${user_type}, ${name},
-           ${nameKana || null}, ${avatarInitial || name[0] || null}, ${avatarColor || null})
+           ${nameKana || null}, ${avatarInitial || name[0] || null}, ${avatarColor || null},
+           ${emailNotifValue})
         RETURNING *
       `;
 
@@ -163,6 +230,9 @@ exports.handler = async (event) => {
              ${patientCount || null}, ${needs || null}, ${bio || null})
         `;
       }
+
+      // Neco とのウェルカム会話を作成（非同期で行い、失敗してもユーザー登録は成功）
+      await createNecoWelcomeConversation(sql, userRow.id);
 
       const profile  = await fetchProfile(sql, userRow.id, user_type);
       const userData = formatUser(userRow, profile);
@@ -214,13 +284,18 @@ exports.handler = async (event) => {
 
       // users テーブル更新
       if (body.name || body.nameKana !== undefined ||
-          body.avatarInitial !== undefined || body.avatarColor !== undefined) {
+          body.avatarInitial !== undefined || body.avatarColor !== undefined ||
+          body.emailNotification !== undefined) {
+        const emailNotifValue = body.emailNotification !== undefined
+          ? (body.emailNotification === true || body.emailNotification === 'true')
+          : null;
         await sql`
           UPDATE users SET
-            name           = COALESCE(${body.name || null},          name),
-            name_kana      = COALESCE(${body.nameKana || null},      name_kana),
-            avatar_initial = COALESCE(${body.avatarInitial || null}, avatar_initial),
-            avatar_color   = COALESCE(${body.avatarColor || null},   avatar_color)
+            name               = COALESCE(${body.name || null},          name),
+            name_kana          = COALESCE(${body.nameKana || null},      name_kana),
+            avatar_initial     = COALESCE(${body.avatarInitial || null}, avatar_initial),
+            avatar_color       = COALESCE(${body.avatarColor || null},   avatar_color),
+            email_notification = COALESCE(${emailNotifValue},            email_notification)
           WHERE id = ${user.id}
         `;
       }

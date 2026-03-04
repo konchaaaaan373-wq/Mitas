@@ -1001,6 +1001,14 @@
             </div>
 
             <div class="form-group">
+                <label>メール通知設定</label>
+                <label class="terms-agree" style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="email-notification-check" checked>
+                    <span>新着メッセージをメールで通知する（登録後に設定画面からいつでも変更できます）</span>
+                </label>
+            </div>
+
+            <div class="form-group">
                 <div class="terms-box" tabindex="0" aria-label="利用規約本文">
                     <strong>利用規約（抜粋）</strong><br><br>
                     第1条（サービスの目的）本サービスは、医師・看護師等の医療従事者と医療機関とのマッチングを目的として提供されます。<br><br>
@@ -1204,16 +1212,17 @@
                 : document.getElementById('qualification').value;
 
             const payload = {
-                email:         document.getElementById('reg-email').value.trim().toLowerCase(),
-                password:      document.getElementById('reg-password').value,
-                user_type:     profession,
-                name:          `${lastName} ${firstName}`,
-                avatarInitial: lastName[0] || 'N',
-                avatarColor:   profession === 'doctor' ? '#FF6B9D' : '#4ECDC4',
-                specialty:     specialty || null,
-                experience:    document.getElementById('experience').value || null,
-                prefecture:    document.getElementById('work-area').value || null,
-                bio:           document.getElementById('self-pr').value.trim() || null,
+                email:             document.getElementById('reg-email').value.trim().toLowerCase(),
+                password:          document.getElementById('reg-password').value,
+                user_type:         profession,
+                name:              `${lastName} ${firstName}`,
+                avatarInitial:     lastName[0] || 'N',
+                avatarColor:       profession === 'doctor' ? '#FF6B9D' : '#4ECDC4',
+                specialty:         specialty || null,
+                experience:        document.getElementById('experience').value || null,
+                prefecture:        document.getElementById('work-area').value || null,
+                bio:               document.getElementById('self-pr').value.trim() || null,
+                emailNotification: document.getElementById('email-notification-check').checked,
             };
 
             try {

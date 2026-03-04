@@ -1041,6 +1041,10 @@
             setVal('p-first-name', nameParts[1] || '');
             setVal('p-email', user.email || '');
 
+            // メール通知設定を反映
+            const msgNotifyCheck = document.querySelector('input[name="p-notify"][value="message"]');
+            if (msgNotifyCheck) msgNotifyCheck.checked = user.emailNotification !== false;
+
             selectOpt('p-specialty', user.specialty);
             selectOpt('p-experience', user.experience);
             selectOpt('p-work-area', user.workArea);
@@ -1123,13 +1127,15 @@
             const lastName  = document.getElementById('p-last-name').value.trim();
             const firstName = document.getElementById('p-first-name').value.trim();
 
+            const msgNotifyCheck = document.querySelector('input[name="p-notify"][value="message"]');
             const payload = {
-                name:         [lastName, firstName].filter(Boolean).join(' ') || undefined,
-                avatarInitial: lastName[0] || undefined,
-                specialty:    document.getElementById('p-specialty').value || undefined,
-                experience:   document.getElementById('p-experience').value || undefined,
-                prefecture:   document.getElementById('p-work-area').value || undefined,
-                bio:          document.getElementById('p-self-pr').value || undefined,
+                name:              [lastName, firstName].filter(Boolean).join(' ') || undefined,
+                avatarInitial:     lastName[0] || undefined,
+                specialty:         document.getElementById('p-specialty').value || undefined,
+                experience:        document.getElementById('p-experience').value || undefined,
+                prefecture:        document.getElementById('p-work-area').value || undefined,
+                bio:               document.getElementById('p-self-pr').value || undefined,
+                emailNotification: msgNotifyCheck ? msgNotifyCheck.checked : undefined,
             };
 
             try {
