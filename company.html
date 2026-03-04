@@ -136,19 +136,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .company-hero {
-            margin: 0 0 2rem;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        .company-hero img {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
         .content-section h2 {
             font-size: 1.6rem;
             margin-bottom: 1.5rem;
@@ -185,14 +172,37 @@
         }
 
         .mission-text {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
             font-size: 1.1rem;
             line-height: 1.9;
             color: #4B5563;
             text-align: center;
             padding: 2rem;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.05), rgba(167, 139, 250, 0.05));
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.08), rgba(167, 139, 250, 0.08));
             border-radius: 15px;
             margin-top: 1.5rem;
+        }
+
+        .mission-text::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            background-image: url("assets/images/company-top-cat-hero.jpg");
+            background-size: cover;
+            background-position: center 58%;
+            opacity: 0.14;
+            transform: scale(1.02);
+        }
+
+        .mission-text::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(248, 250, 252, 0.62));
         }
 
         .ceo-message {
@@ -319,11 +329,6 @@
                 border-radius: 15px;
             }
 
-            .company-hero {
-                margin-bottom: 1.3rem;
-                border-radius: 15px;
-            }
-
             .content-section h2 {
                 font-size: 1.2rem;
                 margin-bottom: 1rem;
@@ -387,6 +392,11 @@
                 line-height: 1.7;
             }
 
+            .mission-text::before {
+                opacity: 0.12;
+                background-position: center 55%;
+            }
+
             .ceo-message {
                 padding: 1.5rem;
             }
@@ -438,10 +448,6 @@
 
     <main>
         <h1 class="page-title">会社概要</h1>
-
-        <figure class="company-hero">
-            <img src="assets/images/company-top-cat-hero.jpg" alt="夕暮れの都市を背景に歩く猫の写真" loading="eager" fetchpriority="high" width="1600" height="872">
-        </figure>
 
         <div class="content-section">
             <h2>企業理念</h2>
