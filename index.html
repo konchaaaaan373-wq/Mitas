@@ -363,6 +363,70 @@
             box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
         }
 
+        /* Hamburger menu (mobile only) */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: 1.5px solid rgba(255, 107, 157, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0.35rem 0.55rem;
+            font-size: 1.15rem;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .mobile-nav-drawer {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.2rem;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+
+        .mobile-nav-drawer.open {
+            display: flex;
+        }
+
+        .mobile-nav-drawer a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .mobile-nav-drawer a:hover {
+            background: rgba(255, 107, 157, 0.08);
+        }
+
+        .mobile-nav-drawer .drawer-divider {
+            height: 1px;
+            background: rgba(45, 49, 66, 0.1);
+            margin: 0.3rem 0;
+        }
+
+        .mobile-nav-drawer .drawer-medical-link {
+            border: 2px solid #FF6B9D;
+            color: #FF6B9D;
+            border-radius: 50px;
+        }
+
+        .mobile-nav-drawer .drawer-login-link {
+            border: 2px solid #A78BFA;
+            color: #A78BFA;
+            border-radius: 50px;
+        }
+
         /* Hero Section */
         .hero {
             margin-top: 80px;
@@ -1366,10 +1430,14 @@
                 display: none;
             }
 
-            /* Hide secondary/login nav buttons on mobile to prevent overflow */
+            /* Secondary/login nav buttons moved to hamburger drawer on mobile */
             .nav-secondary-btn,
             .nav-login-btn {
                 display: none;
+            }
+
+            .hamburger-btn {
+                display: block;
             }
 
             .cta-button {
@@ -2145,6 +2213,15 @@
                 <a href="#contact-form" class="cta-button">無料相談する</a>
                 <a href="for-medical.html" class="cta-button nav-secondary-btn" style="background: transparent; border: 2px solid #FF6B9D; color: #FF6B9D;">医療機関の方はこちら</a>
                 <a href="/login-doctor.html" class="cta-button nav-login-btn" style="background: transparent; border: 2px solid #A78BFA; color: #A78BFA;">ログイン</a>
+                <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="メニューを開く" aria-expanded="false" id="hamburger-btn">☰</button>
+            </div>
+            <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="navigation" aria-label="モバイルメニュー">
+                <a href="#what-neco" onclick="closeMobileNav()">サービス内容</a>
+                <a href="#stats" onclick="closeMobileNav()">実績</a>
+                <a href="#contact" onclick="closeMobileNav()">お問い合わせ</a>
+                <div class="drawer-divider"></div>
+                <a href="for-medical.html" class="drawer-medical-link">医療機関の方はこちら</a>
+                <a href="/login-doctor.html" class="drawer-login-link">ログイン</a>
             </div>
         </nav>
     </header>
@@ -2838,6 +2915,27 @@
             });
         });
 
+    </script>
+    <script>
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            const btn = document.getElementById('hamburger-btn');
+            const isOpen = drawer.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.textContent = isOpen ? '✕' : '☰';
+        }
+
+        function closeMobileNav() {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            const btn = document.getElementById('hamburger-btn');
+            drawer.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.textContent = '☰';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('nav')) closeMobileNav();
+        });
     </script>
 </body>
 </html>
