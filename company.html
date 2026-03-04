@@ -207,10 +207,32 @@
 
         .ceo-message {
             position: relative;
+            isolation: isolate;
+            overflow: hidden;
             padding: 3rem;
             background: linear-gradient(135deg, rgba(45, 49, 66, 0.03), rgba(167, 139, 250, 0.06));
             border-radius: 15px;
             margin-top: 1.5rem;
+        }
+
+        .ceo-message::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            background-image: url("assets/images/company-top-cat-hero.jpg");
+            background-size: cover;
+            background-position: center 56%;
+            opacity: 0.1;
+            transform: scale(1.02);
+        }
+
+        .ceo-message::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(248, 250, 252, 0.66));
         }
 
         .ceo-message-body {
@@ -399,6 +421,11 @@
 
             .ceo-message {
                 padding: 1.5rem;
+            }
+
+            .ceo-message::before {
+                opacity: 0.08;
+                background-position: center 53%;
             }
 
             .ceo-message-body {
