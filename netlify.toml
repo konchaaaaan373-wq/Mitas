@@ -125,6 +125,12 @@
   to = "/.netlify/functions/db-init"
   status = 200
 
+# Admin API – 統計ダッシュボード（ADMIN_SECRET 環境変数で保護）
+[[redirects]]
+  from = "/api/admin/stats"
+  to = "/.netlify/functions/admin-stats"
+  status = 200
+
 # Protected pages – redirect to login if accessed directly (handled client-side too)
 # These are informational; the actual auth check is done in JavaScript.
 [[redirects]]
