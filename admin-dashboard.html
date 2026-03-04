@@ -607,11 +607,15 @@
     <div class="login-logo">neco</div>
     <div class="login-badge">Admin Dashboard</div>
     <div class="form-field">
+      <label for="admin-id">管理者ID</label>
+      <input type="text" id="admin-id" name="admin-username" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-field">
       <label for="admin-secret">管理者シークレット</label>
-      <input type="password" id="admin-secret" placeholder="••••••••••••" autocomplete="off">
+      <input type="password" id="admin-secret" name="admin-password" placeholder="••••••••••••" autocomplete="current-password">
     </div>
     <button class="login-btn" onclick="doLogin()">ダッシュボードを開く</button>
-    <div class="login-error" id="login-error">シークレットキーが正しくありません</div>
+    <div class="login-error" id="login-error">IDまたはシークレットキーが正しくありません</div>
   </div>
 </div>
 
@@ -790,8 +794,13 @@ let days   = 7;
 
 // ─── Auth ─────────────────────────────────────────────────────────────────
 function doLogin() {
+  const id  = document.getElementById('admin-id').value.trim();
   const val = document.getElementById('admin-secret').value.trim();
-  if (!val) return;
+  if (!id || !val) return;
+  if (id !== 'admin') {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
   secret = val;
   loadStats();
 }
@@ -800,10 +809,14 @@ function doLogout() {
   secret = '';
   document.getElementById('dashboard').style.display    = 'none';
   document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-id').value             = '';
   document.getElementById('admin-secret').value         = '';
   document.getElementById('login-error').style.display  = 'none';
 }
 
+document.getElementById('admin-id').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('admin-secret').focus();
+});
 document.getElementById('admin-secret').addEventListener('keydown', e => {
   if (e.key === 'Enter') doLogin();
 });
