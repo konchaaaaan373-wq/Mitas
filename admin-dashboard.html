@@ -3,314 +3,491 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理者ダッシュボード - Neco</title>
+  <title>管理ダッシュボード — Neco</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ═══ Design Tokens ═══════════════════════════════════════════════════════ */
     :root {
-      --primary:   #FF6B9D;
-      --secondary: #4ECDC4;
-      --purple:    #A78BFA;
-      --blue:      #4CC9F0;
-      --green:     #34D399;
-      --yellow:    #FBBF24;
-      --red:       #F87171;
-      --dark:      #2D3142;
-      --light:     #F8F9FA;
-      --white:     #FFFFFF;
-      --border:    #E5E7EB;
-      --gray-100:  #F3F4F6;
-      --gray-400:  #9CA3AF;
-      --gray-500:  #6B7280;
-      --gray-700:  #374151;
+      --brand:   #FF6B9D;
+      --purple:  #8B5CF6;
+      --teal:    #0D9488;
+      --green:   #10B981;
+      --yellow:  #F59E0B;
+      --red:     #EF4444;
+      --blue:    #3B82F6;
+      --navy:    #0F172A;
+      --dark:    #1E293B;
+      --slate:   #334155;
+      --muted:   #64748B;
+      --subtle:  #94A3B8;
+      --border:  #E2E8F0;
+      --surface: #F1F5F9;
+      --white:   #FFFFFF;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: 'Noto Sans JP', system-ui, sans-serif;
+      background: var(--surface);
       color: var(--dark);
-      background: var(--light);
       min-height: 100vh;
     }
 
-    /* ===== LOGIN SCREEN ===== */
+    /* ═══ LOGIN ═══════════════════════════════════════════════════════════════ */
     #login-screen {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #FF6B9D22 0%, #A78BFA22 50%, #4CC9F022 100%);
+      background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 55%, #0F172A 100%);
     }
 
     .login-card {
       background: var(--white);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 2.5rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      width: 380px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
     }
 
     .login-logo {
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 900;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
+      background: linear-gradient(135deg, var(--brand), var(--purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       text-align: center;
-      margin-bottom: 0.25rem;
     }
 
-    .login-subtitle {
+    .login-badge {
       text-align: center;
-      color: var(--gray-500);
-      font-size: 0.85rem;
+      margin-top: 0.2rem;
       margin-bottom: 2rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--subtle);
+      text-transform: uppercase;
     }
 
-    .login-card label {
+    .form-field { margin-bottom: 1.25rem; }
+
+    .form-field label {
       display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--slate);
       margin-bottom: 0.4rem;
-      color: var(--gray-700);
     }
 
-    .login-card input {
+    .form-field input {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.8rem 1rem;
       border: 1.5px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.95rem;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 1.2rem;
+      background: var(--surface);
+      color: var(--dark);
+      transition: border-color 0.15s, background 0.15s;
     }
 
-    .login-card input:focus { border-color: var(--primary); }
+    .form-field input:focus { border-color: var(--purple); background: var(--white); }
 
     .login-btn {
       width: 100%;
-      padding: 0.85rem;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--purple) 100%);
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
       font-family: inherit;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s, transform 0.1s;
     }
 
-    .login-btn:hover { opacity: 0.9; }
+    .login-btn:hover  { opacity: 0.9; }
+    .login-btn:active { transform: scale(0.98); }
 
     .login-error {
+      display: none;
       margin-top: 1rem;
-      padding: 0.75rem;
+      padding: 0.65rem 1rem;
       background: #FEF2F2;
-      color: var(--red);
+      color: #DC2626;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 500;
       text-align: center;
-      display: none;
     }
 
-    /* ===== MAIN DASHBOARD ===== */
-    #dashboard {
-      display: none;
-    }
+    /* ═══ DASHBOARD ═══════════════════════════════════════════════════════════ */
+    #dashboard { display: none; }
 
-    .dash-header {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 60px;
+    /* ─── Header ─────────────────────────────────────────────────────────── */
+    .header {
+      background: var(--navy);
+      height: 54px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      padding: 0 1.5rem;
+      gap: 1.25rem;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      z-index: 200;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    .dash-logo {
+    .header-logo {
       font-family: 'Zen Kaku Gothic New', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 900;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
+      color: rgba(255,255,255,0.5);
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .header-logo span {
+      background: linear-gradient(90deg, var(--brand), var(--purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .dash-header-right {
+    .period-tabs {
       display: flex;
-      align-items: center;
-      gap: 1rem;
+      gap: 0.2rem;
+      background: rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 0.22rem;
+      flex-shrink: 0;
     }
 
-    .refresh-btn, .logout-btn {
-      padding: 0.45rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+    .period-tab {
+      padding: 0.28rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
       font-family: inherit;
       border: none;
-      transition: all 0.2s;
+      background: transparent;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.15s;
     }
 
-    .refresh-btn {
-      background: var(--gray-100);
-      color: var(--gray-700);
+    .period-tab.active          { background: var(--white); color: var(--navy); }
+    .period-tab:not(.active):hover { color: rgba(255,255,255,0.8); }
+
+    .header-spacer { flex: 1; }
+
+    .header-meta {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      flex-shrink: 0;
     }
 
-    .refresh-btn:hover { background: var(--border); }
-
-    .logout-btn {
-      background: var(--gray-100);
-      color: var(--gray-500);
-    }
-
-    .logout-btn:hover { background: #FEF2F2; color: var(--red); }
-
-    .last-updated {
+    .header-btn {
+      padding: 0.32rem 0.8rem;
+      border-radius: 7px;
       font-size: 0.78rem;
-      color: var(--gray-400);
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      transition: all 0.15s;
+      flex-shrink: 0;
     }
 
-    .dash-main {
-      padding: 2rem;
-      max-width: 1400px;
+    .btn-refresh { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.75); }
+    .btn-refresh:hover { background: rgba(255,255,255,0.18); }
+
+    .btn-logout { background: transparent; color: rgba(255,255,255,0.3); }
+    .btn-logout:hover { color: #F87171; }
+
+    /* ─── Main layout ────────────────────────────────────────────────────── */
+    .main {
+      padding: 1.5rem;
+      max-width: 1440px;
       margin: 0 auto;
     }
 
-    /* ===== SECTION TITLES ===== */
-    .section-title {
-      font-size: 1rem;
+    /* ─── Section label ──────────────────────────────────────────────────── */
+    .section-label {
+      font-size: 0.68rem;
       font-weight: 700;
-      color: var(--gray-700);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--border);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 0.65rem;
+    }
+
+    .row { margin-bottom: 1.25rem; }
+
+    /* ─── Alert banner ───────────────────────────────────────────────────── */
+    .alert-banner {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-left: 4px solid var(--yellow);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: #78350F;
+    }
+
+    .alert-banner.show { display: flex; }
+
+    /* ─── Hero KPIs ──────────────────────────────────────────────────────── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 1100px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+
+    .hero-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); transform: translateY(-1px); }
+
+    /* Top accent bar */
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .hero-card.c-brand::before  { background: linear-gradient(90deg, var(--brand), var(--purple)); }
+    .hero-card.c-green::before  { background: linear-gradient(90deg, var(--green), #059669); }
+    .hero-card.c-yellow::before { background: linear-gradient(90deg, var(--yellow), #D97706); }
+    .hero-card.c-blue::before   { background: linear-gradient(90deg, var(--blue), #6366F1); }
+
+    /* Warning state */
+    .hero-card.is-warning::before { background: linear-gradient(90deg, #EF4444, var(--yellow)); }
+    .hero-card.is-warning { background: #FFFDF4; }
+
+    .hero-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+      letter-spacing: -0.025em;
+    }
+
+    .hero-meta {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      margin-top: 0.55rem;
+      flex-wrap: wrap;
     }
 
-    .section-title .icon { font-size: 1.1rem; }
-
-    /* ===== KPI CARDS ===== */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .kpi-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      border-left: 4px solid var(--border);
-      transition: box-shadow 0.2s;
-    }
-
-    .kpi-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
-
-    .kpi-card.pink   { border-color: var(--primary); }
-    .kpi-card.teal   { border-color: var(--secondary); }
-    .kpi-card.purple { border-color: var(--purple); }
-    .kpi-card.blue   { border-color: var(--blue); }
-    .kpi-card.green  { border-color: var(--green); }
-    .kpi-card.yellow { border-color: var(--yellow); }
-
-    .kpi-label {
-      font-size: 0.78rem;
-      color: var(--gray-500);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .kpi-value {
-      font-size: 2rem;
+    .delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      color: var(--dark);
-      line-height: 1;
-    }
-
-    .kpi-sub {
-      font-size: 0.75rem;
-      color: var(--gray-400);
-      margin-top: 0.3rem;
-    }
-
-    .kpi-badge {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
+      padding: 0.18rem 0.48rem;
       border-radius: 100px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      margin-left: 0.3rem;
     }
 
-    .badge-week { background: #EFF6FF; color: #3B82F6; }
+    .delta.up   { background: #DCFCE7; color: #15803D; }
+    .delta.down { background: #FEE2E2; color: #DC2626; }
+    .delta.flat { background: #F1F5F9; color: var(--muted); }
 
-    /* ===== CHARTS ===== */
-    .charts-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
+    .hero-sub { font-size: 0.75rem; color: var(--subtle); }
 
-    @media (max-width: 900px) {
-      .charts-grid { grid-template-columns: 1fr; }
-    }
-
-    .chart-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .chart-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--gray-700);
-      margin-bottom: 1rem;
-    }
-
-    /* Bar chart */
-    .bar-chart {
+    /* Matching rate ring */
+    .ring-wrap {
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      align-items: center;
+      gap: 0.85rem;
+      margin-top: 0.5rem;
     }
+
+    .ring-rate { font-size: 1.8rem; font-weight: 800; }
+    .ring-label { font-size: 0.7rem; color: var(--subtle); margin-top: 0.1rem; }
+
+    /* Warning tag */
+    .warn-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #FEF3C7;
+      color: #92400E;
+      border-radius: 8px;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+
+    .ok-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #D1FAE5;
+      color: #065F46;
+      border-radius: 8px;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+
+    /* ─── Card base ──────────────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .card-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--slate);
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-title-meta {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--subtle);
+      margin-left: auto;
+    }
+
+    /* ─── Grid layouts ───────────────────────────────────────────────────── */
+    .col-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.25rem; }
+    .col-3   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .col-2   { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+
+    @media (max-width: 1100px) { .col-3-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 960px)  { .col-3   { grid-template-columns: 1fr; } }
+    @media (max-width: 720px)  { .col-2   { grid-template-columns: 1fr; } }
+
+    /* ─── SVG Charts ─────────────────────────────────────────────────────── */
+    .chart-legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    .chart-svg-wrap { width: 100%; }
+    .chart-svg-wrap svg { width: 100%; display: block; }
+
+    /* ─── Pipeline bar ───────────────────────────────────────────────────── */
+    .pipeline {
+      display: flex;
+      height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      gap: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .pipeline-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: white;
+      min-width: 0;
+      transition: flex-basis 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .pipeline-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .pl-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+    }
+
+    .pl-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .pl-label { color: var(--muted); }
+    .pl-val { font-weight: 700; color: var(--dark); margin-left: auto; }
+
+    .pipeline-divider {
+      margin: 1rem 0;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── Bar charts ─────────────────────────────────────────────────────── */
+    .bar-list { display: flex; flex-direction: column; gap: 0.42rem; }
 
     .bar-row {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      font-size: 0.8rem;
+      gap: 0.6rem;
+      font-size: 0.77rem;
     }
 
-    .bar-label {
-      width: 100px;
-      text-align: right;
-      color: var(--gray-500);
+    .bar-name {
+      width: 76px;
       flex-shrink: 0;
+      text-align: right;
+      color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -318,8 +495,8 @@
 
     .bar-track {
       flex: 1;
-      height: 20px;
-      background: var(--gray-100);
+      height: 18px;
+      background: var(--surface);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -327,595 +504,659 @@
     .bar-fill {
       height: 100%;
       border-radius: 4px;
-      transition: width 0.4s ease;
+      transition: width 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .bar-count {
-      width: 36px;
+    .bar-num {
+      width: 28px;
       text-align: right;
-      font-weight: 600;
-      color: var(--gray-700);
+      font-weight: 700;
+      color: var(--slate);
     }
 
-    /* Mini trend sparkline */
-    .sparkline-wrap {
-      overflow-x: auto;
-    }
-
-    .sparkline-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      height: 80px;
-      min-width: 200px;
-    }
-
-    .sparkline-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      flex: 1;
-      min-width: 12px;
-    }
-
-    .sparkline-bar {
-      width: 100%;
-      border-radius: 2px 2px 0 0;
-      min-height: 2px;
-      transition: height 0.3s;
-    }
-
-    .sparkline-date {
-      font-size: 0.55rem;
-      color: var(--gray-400);
-      transform: rotate(-45deg);
-      white-space: nowrap;
-    }
-
-    /* Donut-style status ring */
-    .status-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 8px;
-      background: var(--gray-100);
-    }
-
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .status-label { font-size: 0.75rem; color: var(--gray-500); }
-    .status-value { font-size: 0.9rem; font-weight: 700; color: var(--dark); }
-
-    /* ===== TABLES ===== */
-    .tables-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 900px) {
-      .tables-grid { grid-template-columns: 1fr; }
-    }
-
-    .table-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .table-card table {
+    /* ─── Tables ─────────────────────────────────────────────────────────── */
+    .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: 0.79rem;
     }
 
-    .table-card th {
+    .data-table th {
       text-align: left;
-      padding: 0.5rem 0.6rem;
-      color: var(--gray-500);
-      font-weight: 600;
-      font-size: 0.75rem;
+      padding: 0 0.5rem 0.5rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--subtle);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       border-bottom: 1px solid var(--border);
     }
 
-    .table-card td {
-      padding: 0.5rem 0.6rem;
-      border-bottom: 1px solid var(--gray-100);
-      color: var(--gray-700);
+    .data-table td {
+      padding: 0.52rem 0.5rem;
+      border-bottom: 1px solid #F8FAFC;
+      color: var(--slate);
+      vertical-align: middle;
     }
 
-    .table-card tr:last-child td { border-bottom: none; }
+    .data-table tbody tr { transition: background 0.1s; }
+    .data-table tbody tr:hover { background: #F8FAFF; }
+    .data-table tr:last-child td { border-bottom: none; }
 
-    /* Type badges */
+    /* ─── Badges ─────────────────────────────────────────────────────────── */
     .badge {
       display: inline-block;
-      padding: 0.15rem 0.5rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 100px;
-      font-size: 0.7rem;
+      font-size: 0.67rem;
       font-weight: 700;
+      white-space: nowrap;
     }
 
-    .badge-doctor  { background: #FDF2F8; color: #DB2777; }
-    .badge-nurse   { background: #ECFDF5; color: #059669; }
-    .badge-medical { background: #EFF6FF; color: #2563EB; }
+    .b-doctor   { background: #FDF2F8; color: #BE185D; }
+    .b-nurse    { background: #ECFDF5; color: #047857; }
+    .b-medical  { background: #EFF6FF; color: #1D4ED8; }
+    .b-pending  { background: #FEF3C7; color: #92400E; }
+    .b-reviewing{ background: #DBEAFE; color: #1E40AF; }
+    .b-accepted { background: #D1FAE5; color: #065F46; }
+    .b-rejected { background: #FEE2E2; color: #991B1B; }
+    .b-withdrawn{ background: #F1F5F9; color: var(--muted); }
+    .b-follow   { background: #D1FAE5; color: #065F46; }
+    .b-unfollow { background: #FEE2E2; color: #991B1B; }
+    .b-message  { background: #DBEAFE; color: #1E40AF; }
 
-    /* Status badges */
-    .badge-pending   { background: #FEF9C3; color: #92400E; }
-    .badge-reviewing { background: #EFF6FF; color: #1D4ED8; }
-    .badge-accepted  { background: #ECFDF5; color: #065F46; }
-    .badge-rejected  { background: #FEF2F2; color: #991B1B; }
-    .badge-withdrawn { background: var(--gray-100); color: var(--gray-500); }
-
-    /* LINE event badges */
-    .badge-follow   { background: #ECFDF5; color: #059669; }
-    .badge-unfollow { background: #FEF2F2; color: #991B1B; }
-    .badge-message  { background: #EFF6FF; color: #2563EB; }
-
-    /* ===== LOADING ===== */
+    /* ─── Loading ────────────────────────────────────────────────────────── */
     .loading-overlay {
+      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(255,255,255,0.7);
-      display: flex;
+      background: rgba(15,23,42,0.4);
+      backdrop-filter: blur(3px);
+      z-index: 9999;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(2px);
     }
 
+    .loading-overlay.show { display: flex; }
+
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--border);
-      border-top-color: var(--primary);
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--white);
+      animation: spin 0.7s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== RANGE SELECTOR ===== */
-    .range-tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .range-tab {
-      padding: 0.35rem 0.85rem;
-      border-radius: 100px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      cursor: pointer;
-      color: var(--gray-500);
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-
-    .range-tab.active {
-      background: var(--dark);
-      color: white;
-      border-color: var(--dark);
-    }
-
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
+    /* ─── Empty state ────────────────────────────────────────────────────── */
+    .empty {
       text-align: center;
-      color: var(--gray-400);
-      padding: 2rem;
-      font-size: 0.85rem;
-    }
-
-    /* ===== INLINE TREND MINI BARS ===== */
-    .mini-trend {
-      display: flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 24px;
-    }
-
-    .mini-bar {
-      width: 6px;
-      border-radius: 2px 2px 0 0;
-      min-height: 2px;
-      background: var(--primary);
-      opacity: 0.6;
+      padding: 1.5rem;
+      color: var(--subtle);
+      font-size: 0.8rem;
     }
   </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
+<!-- ═════════ LOGIN ═════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">neco</div>
-    <div class="login-subtitle">管理者ダッシュボード</div>
-    <label for="admin-secret">管理者シークレット</label>
-    <input type="password" id="admin-secret" placeholder="ADMIN_SECRET を入力" autocomplete="off">
-    <button class="login-btn" onclick="doLogin()">ログイン</button>
-    <div class="login-error" id="login-error">シークレットが正しくありません</div>
+    <div class="login-badge">Admin Dashboard</div>
+    <div class="form-field">
+      <label for="admin-secret">管理者シークレット</label>
+      <input type="password" id="admin-secret" placeholder="••••••••••••" autocomplete="off">
+    </div>
+    <button class="login-btn" onclick="doLogin()">ダッシュボードを開く</button>
+    <div class="login-error" id="login-error">シークレットキーが正しくありません</div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
+<!-- ═════════ DASHBOARD ══════════════════════════════════════════════════════ -->
 <div id="dashboard">
-  <header class="dash-header">
-    <span class="dash-logo">neco admin</span>
-    <div class="dash-header-right">
-      <span class="last-updated" id="last-updated"></span>
-      <button class="refresh-btn" onclick="loadStats()">更新</button>
-      <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo"><span>neco</span>&nbsp;admin</div>
+
+    <div class="period-tabs" role="group" aria-label="集計期間">
+      <button class="period-tab active" data-days="7"  onclick="selectPeriod(this)">7日</button>
+      <button class="period-tab"        data-days="14" onclick="selectPeriod(this)">14日</button>
+      <button class="period-tab"        data-days="30" onclick="selectPeriod(this)">30日</button>
+      <button class="period-tab"        data-days="90" onclick="selectPeriod(this)">90日</button>
     </div>
+
+    <div class="header-spacer"></div>
+
+    <span class="header-meta" id="last-updated"></span>
+    <button class="header-btn btn-refresh" onclick="loadStats()" title="更新 (R キー)">↻ 更新</button>
+    <button class="header-btn btn-logout"  onclick="doLogout()">ログアウト</button>
   </header>
 
-  <main class="dash-main">
+  <main class="main">
 
-    <!-- 期間選択 -->
-    <div class="range-tabs">
-      <button class="range-tab active" data-days="7"  onclick="selectRange(this)">7日</button>
-      <button class="range-tab"        data-days="14" onclick="selectRange(this)">14日</button>
-      <button class="range-tab"        data-days="30" onclick="selectRange(this)">30日</button>
-      <button class="range-tab"        data-days="90" onclick="selectRange(this)">90日</button>
+    <!-- Alert banner (conditional) -->
+    <div class="alert-banner" id="alert-banner">
+      <span style="font-size:1.1rem">⚠️</span>
+      <span id="alert-text"></span>
     </div>
 
-    <!-- KPI ユーザー -->
-    <div class="section-title"><span class="icon">👥</span>ユーザー</div>
-    <div class="kpi-grid" id="kpi-users"></div>
+    <!-- ── Hero KPIs ──────────────────────────────────────────────────────── -->
+    <div class="section-label">主要指標 — 一目でビジネス状況を把握</div>
+    <div class="hero-grid row">
 
-    <!-- KPI 求人・応募 -->
-    <div class="section-title"><span class="icon">💼</span>求人 / 応募</div>
-    <div class="kpi-grid" id="kpi-jobs"></div>
-
-    <!-- KPI メッセージ・LINE -->
-    <div class="section-title"><span class="icon">💬</span>メッセージ / LINE</div>
-    <div class="kpi-grid" id="kpi-msg"></div>
-
-    <!-- チャート -->
-    <div class="section-title"><span class="icon">📈</span>トレンド</div>
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">ユーザー登録トレンド</div>
-        <div class="sparkline-wrap" id="chart-user-trend"></div>
+      <!-- 総ユーザー -->
+      <div class="hero-card c-brand">
+        <div class="hero-label">総ユーザー数</div>
+        <div class="hero-value" id="h-total">—</div>
+        <div class="hero-meta">
+          <span class="delta" id="h-total-delta"></span>
+          <span class="hero-sub" id="h-total-sub"></span>
+        </div>
       </div>
-      <div class="chart-card">
-        <div class="chart-title">応募ステータス内訳</div>
-        <div class="status-grid" id="chart-app-status"></div>
+
+      <!-- マッチング率 -->
+      <div class="hero-card c-green">
+        <div class="hero-label">マッチング率</div>
+        <div class="ring-wrap">
+          <svg width="60" height="60" viewBox="0 0 60 60" style="flex-shrink:0">
+            <circle cx="30" cy="30" r="23" fill="none" stroke="#E2E8F0" stroke-width="7"/>
+            <circle cx="30" cy="30" r="23" fill="none" stroke="#10B981" stroke-width="7"
+              id="ring-arc"
+              stroke-dasharray="144.5"
+              stroke-dashoffset="144.5"
+              stroke-linecap="round"
+              transform="rotate(-90 30 30)"
+              style="transition: stroke-dashoffset 0.8s ease, stroke 0.4s"/>
+          </svg>
+          <div>
+            <div class="ring-rate" id="h-match-rate">—</div>
+            <div class="ring-label">応募承認率</div>
+          </div>
+        </div>
       </div>
+
+      <!-- 審査待ち -->
+      <div class="hero-card c-yellow" id="hero-pending-card">
+        <div class="hero-label">審査待ち応募</div>
+        <div class="hero-value" id="h-pending">—</div>
+        <div id="h-pending-tag"></div>
+      </div>
+
+      <!-- 今月の新規登録 -->
+      <div class="hero-card c-blue">
+        <div class="hero-label">今月の新規登録</div>
+        <div class="hero-value" id="h-new-month">—</div>
+        <div class="hero-meta">
+          <span class="delta" id="h-new-delta"></span>
+          <span class="hero-sub" id="h-new-sub"></span>
+        </div>
+      </div>
+
+    </div><!-- /hero-grid -->
+
+    <!-- ── トレンド & 応募フロー ──────────────────────────────────────────── -->
+    <div class="section-label">トレンド &amp; 応募パイプライン</div>
+    <div class="col-3-2 row">
+
+      <!-- ユーザー登録トレンド (SVG line chart) -->
+      <div class="card">
+        <div class="card-title">
+          ユーザー登録トレンド
+          <span class="card-title-meta" id="trend-period-label"></span>
+        </div>
+        <div class="chart-legend" id="trend-legend"></div>
+        <div class="chart-svg-wrap" id="chart-trend"></div>
+      </div>
+
+      <!-- 応募パイプライン + 応募トレンド -->
+      <div class="card">
+        <div class="card-title">応募パイプライン</div>
+        <div class="pipeline" id="pipeline"></div>
+        <div class="pipeline-legend" id="pipeline-legend"></div>
+        <hr class="pipeline-divider">
+        <div class="card-title">応募トレンド <span class="card-title-meta">承認推移</span></div>
+        <div class="chart-svg-wrap" id="chart-app-trend"></div>
+      </div>
+
     </div>
 
-    <!-- 分布 -->
-    <div class="section-title"><span class="icon">🗾</span>地域・カテゴリ分布</div>
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">医師の都道府県分布（上位10件）</div>
-        <div class="bar-chart" id="chart-pref-doctor"></div>
+    <!-- ── 分布 ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">地域 &amp; カテゴリ分布</div>
+    <div class="col-3 row">
+
+      <div class="card">
+        <div class="card-title">医師の都道府県 TOP 10</div>
+        <div class="bar-list" id="bars-doctor-pref"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-title">求人診療科 TOP 10</div>
-        <div class="bar-chart" id="chart-specialties"></div>
+
+      <div class="card">
+        <div class="card-title">看護師の都道府県 TOP 10</div>
+        <div class="bar-list" id="bars-nurse-pref"></div>
       </div>
+
+      <div class="card">
+        <div class="card-title">求人診療科 TOP 10</div>
+        <div class="bar-list" id="bars-specialties"></div>
+      </div>
+
     </div>
 
-    <!-- テーブル -->
-    <div class="section-title"><span class="icon">🕐</span>最近のアクティビティ</div>
-    <div class="tables-grid">
-      <div class="table-card">
-        <div class="chart-title">新着ユーザー</div>
-        <table id="table-users"></table>
+    <!-- ── 最近のアクティビティ ───────────────────────────────────────────── -->
+    <div class="section-label">最近のアクティビティ</div>
+    <div class="col-2 row">
+
+      <div class="card">
+        <div class="card-title">新着ユーザー <span class="card-title-meta">直近10件</span></div>
+        <table class="data-table" id="table-users"></table>
       </div>
-      <div class="table-card">
-        <div class="chart-title">新着応募</div>
-        <table id="table-apps"></table>
+
+      <div class="card">
+        <div class="card-title">新着応募 <span class="card-title-meta">直近10件</span></div>
+        <table class="data-table" id="table-apps"></table>
       </div>
+
     </div>
 
-    <div class="section-title"><span class="icon">📱</span>LINE イベント（直近20件）</div>
-    <div class="table-card">
-      <table id="table-line" style="width:100%"></table>
+    <!-- ── LINE ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">LINE イベント</div>
+    <div class="row">
+      <div class="card">
+        <div class="card-title">
+          直近20件
+          <span class="card-title-meta" id="line-meta"></span>
+        </div>
+        <table class="data-table" id="table-line"></table>
+      </div>
     </div>
 
   </main>
 </div>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loading" style="display:none">
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
   <div class="spinner"></div>
 </div>
 
 <script>
-  let currentSecret = '';
-  let currentDays = 7;
+'use strict';
 
-  // ── ログイン ───────────────────────────────────────────────────────────────
-  function doLogin() {
-    const secret = document.getElementById('admin-secret').value.trim();
-    if (!secret) return;
-    currentSecret = secret;
+// ─── State ────────────────────────────────────────────────────────────────
+let secret = '';
+let days   = 7;
+
+// ─── Auth ─────────────────────────────────────────────────────────────────
+function doLogin() {
+  const val = document.getElementById('admin-secret').value.trim();
+  if (!val) return;
+  secret = val;
+  loadStats();
+}
+
+function doLogout() {
+  secret = '';
+  document.getElementById('dashboard').style.display    = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-secret').value         = '';
+  document.getElementById('login-error').style.display  = 'none';
+}
+
+document.getElementById('admin-secret').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Keyboard shortcut: R = refresh
+document.addEventListener('keydown', e => {
+  if (e.key === 'r' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
     loadStats();
   }
+});
 
-  document.getElementById('admin-secret').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') doLogin();
+// ─── Period ───────────────────────────────────────────────────────────────
+function selectPeriod(btn) {
+  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  days = parseInt(btn.dataset.days);
+  loadStats();
+}
+
+// ─── Data fetch ───────────────────────────────────────────────────────────
+async function loadStats() {
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/admin/stats?days=${days}`, {
+      headers: { 'x-admin-secret': secret },
+    });
+
+    if (res.status === 401) {
+      document.getElementById('login-error').style.display = 'block';
+      setLoading(false);
+      return;
+    }
+
+    document.getElementById('login-error').style.display = 'none';
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display    = 'block';
+
+    renderAll(data);
+
+    const dt = new Date(data.generated_at);
+    document.getElementById('last-updated').textContent =
+      dt.toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' 更新';
+
+  } catch (err) {
+    const el = document.getElementById('login-error');
+    el.textContent = 'エラー: ' + err.message;
+    el.style.display = 'block';
+  } finally {
+    setLoading(false);
+  }
+}
+
+function setLoading(on) {
+  document.getElementById('loading').classList.toggle('show', on);
+}
+
+// ─── Render all ───────────────────────────────────────────────────────────
+function renderAll(d) {
+  renderHero(d);
+  renderAlertBanner(d);
+  renderUserTrend(d.trends.user_registrations, d.days_range);
+  renderAppTrend(d.trends.applications);
+  renderPipeline(d.applications);
+  renderBars('bars-doctor-pref', d.distributions.doctors_by_prefecture, '#FF6B9D');
+  renderBars('bars-nurse-pref',  d.distributions.nurses_by_prefecture,  '#10B981');
+  renderBars('bars-specialties', d.distributions.top_job_specialties,   '#8B5CF6');
+  renderTableUsers(d.recent.users);
+  renderTableApps(d.recent.applications);
+  renderTableLine(d.recent.line_events, d.line_events);
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────
+function renderHero(d) {
+  const { users, applications, trends } = d;
+
+  // Total users
+  document.getElementById('h-total').textContent = users.total.toLocaleString();
+  const uDelta = trendDelta(trends.user_registrations, 'total');
+  applyDelta('h-total-delta', uDelta);
+  document.getElementById('h-total-sub').textContent =
+    `医師 ${users.doctors} / 看護師 ${users.nurses} / 医療機関 ${users.medical_institutions}`;
+
+  // Matching rate ring
+  const rate = applications.acceptance_rate;
+  document.getElementById('h-match-rate').textContent = rate + '%';
+  const circ = 144.5;
+  const arc  = document.getElementById('ring-arc');
+  arc.setAttribute('stroke-dashoffset', (circ * (1 - rate / 100)).toFixed(2));
+  const ringColor = rate >= 30 ? '#10B981' : rate >= 10 ? '#F59E0B' : '#EF4444';
+  arc.setAttribute('stroke', ringColor);
+  document.querySelector('.ring-rate').style.color = ringColor;
+
+  // Pending
+  document.getElementById('h-pending').textContent = applications.pending.toLocaleString();
+  const card   = document.getElementById('hero-pending-card');
+  const tagEl  = document.getElementById('h-pending-tag');
+  if (applications.pending > 0) {
+    card.classList.add('is-warning');
+    tagEl.innerHTML = `<div class="warn-tag">⚠ ${applications.pending}件 対応が必要</div>`;
+  } else {
+    card.classList.remove('is-warning');
+    tagEl.innerHTML = `<div class="ok-tag">✓ 未対応なし</div>`;
+  }
+
+  // New this month
+  document.getElementById('h-new-month').textContent = users.new_this_month.toLocaleString();
+  const nDelta = trendDelta(trends.user_registrations, 'total');
+  applyDelta('h-new-delta', nDelta);
+  document.getElementById('h-new-sub').textContent = `今週 +${users.new_this_week}`;
+}
+
+// トレンドデルタ: 後半 vs 前半の比較（%）
+function trendDelta(rows, field) {
+  if (!rows || rows.length < 4) return null;
+  const half   = Math.floor(rows.length / 2);
+  const recent = rows.slice(-half).reduce((s, r) => s + (parseInt(r[field]) || 0), 0);
+  const prev   = rows.slice(-half * 2, -half).reduce((s, r) => s + (parseInt(r[field]) || 0), 0);
+  if (prev === 0) return recent > 0 ? 100 : 0;
+  return Math.round((recent - prev) / prev * 100);
+}
+
+function applyDelta(id, pct) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (pct === null) { el.className = 'delta flat'; el.textContent = '—'; return; }
+  if (pct > 0)  { el.className = 'delta up';   el.textContent = `↑ ${pct}%`; }
+  else if (pct < 0) { el.className = 'delta down'; el.textContent = `↓ ${Math.abs(pct)}%`; }
+  else              { el.className = 'delta flat'; el.textContent = '→ 横ばい'; }
+}
+
+// ─── Alert banner ─────────────────────────────────────────────────────────
+function renderAlertBanner(d) {
+  const alerts = [];
+  if (d.applications.pending >= 5) {
+    alerts.push(`審査待ちの応募が <strong>${d.applications.pending} 件</strong> あります。確認してください。`);
+  }
+  if (d.users.new_this_week >= 10) {
+    alerts.push(`今週 <strong>${d.users.new_this_week} 人</strong> が新規登録しました。`);
+  }
+  const banner = document.getElementById('alert-banner');
+  if (alerts.length) {
+    document.getElementById('alert-text').innerHTML = alerts.join('&emsp;／&emsp;');
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+// ─── SVG Line Chart ───────────────────────────────────────────────────────
+function buildLineChart(rows, series) {
+  if (!rows || rows.length < 2) return '<div class="empty">データなし</div>';
+
+  const W = 560, H = 148;
+  const P = { t: 12, r: 12, b: 34, l: 30 };
+  const cW = W - P.l - P.r;
+  const cH = H - P.t - P.b;
+
+  const maxVal = Math.max(1, ...series.flatMap(s => rows.map(r => parseInt(r[s.field]) || 0)));
+  const xOf = i => P.l + (rows.length < 2 ? cW / 2 : i / (rows.length - 1) * cW);
+  const yOf = v => P.t + cH - (v / maxVal * cH);
+
+  let defs = '<defs>';
+  series.forEach(s => {
+    defs += `<linearGradient id="g-${s.field}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${s.color}" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="${s.color}" stop-opacity="0"/>
+    </linearGradient>`;
+  });
+  defs += '</defs>';
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">${defs}`;
+
+  // Grid lines + Y labels
+  [0.25, 0.5, 0.75, 1].forEach(pct => {
+    const y = P.t + cH * (1 - pct);
+    svg += `<line x1="${P.l}" y1="${y}" x2="${P.l + cW}" y2="${y}" stroke="#E2E8F0" stroke-width="1"/>`;
+    svg += `<text x="${P.l - 4}" y="${y + 3.5}" font-size="9" fill="#94A3B8" text-anchor="end">${Math.round(maxVal * pct)}</text>`;
   });
 
-  function doLogout() {
-    currentSecret = '';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('admin-secret').value = '';
-  }
-
-  function selectRange(btn) {
-    document.querySelectorAll('.range-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentDays = parseInt(btn.dataset.days);
-    loadStats();
-  }
-
-  // ── データ取得 ─────────────────────────────────────────────────────────────
-  async function loadStats() {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/admin/stats?days=${currentDays}`, {
-        headers: { 'x-admin-secret': currentSecret },
-      });
-      if (res.status === 401) {
-        setLoading(false);
-        document.getElementById('login-error').style.display = 'block';
-        return;
-      }
-      document.getElementById('login-error').style.display = 'none';
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error);
-
-      // 認証OK → ダッシュボード表示
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-
-      renderAll(data);
-      document.getElementById('last-updated').textContent =
-        '最終更新: ' + new Date(data.generated_at).toLocaleString('ja-JP');
-    } catch (err) {
-      alert('データ取得エラー: ' + err.message);
-    } finally {
-      setLoading(false);
+  // X labels
+  const step = Math.max(1, Math.ceil(rows.length / 8));
+  rows.forEach((r, i) => {
+    if (i % step === 0 || i === rows.length - 1) {
+      const lbl = String(r.date).slice(5).replace('-', '/');
+      svg += `<text x="${xOf(i).toFixed(1)}" y="${H - 5}" font-size="9" fill="#94A3B8" text-anchor="middle">${lbl}</text>`;
     }
+  });
+
+  // Areas then lines
+  series.forEach(s => {
+    const pts = rows.map((r, i) => [xOf(i), yOf(parseInt(r[s.field]) || 0)]);
+    const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+    const areaD = lineD
+      + ` L${pts[pts.length-1][0].toFixed(1)},${(P.t + cH).toFixed(1)}`
+      + ` L${pts[0][0].toFixed(1)},${(P.t + cH).toFixed(1)} Z`;
+    svg += `<path d="${areaD}" fill="url(#g-${s.field})"/>`;
+    svg += `<path d="${lineD}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    // Last point dot
+    const lp = pts[pts.length - 1];
+    svg += `<circle cx="${lp[0].toFixed(1)}" cy="${lp[1].toFixed(1)}" r="3" fill="${s.color}" stroke="white" stroke-width="1.5"/>`;
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderUserTrend(rows, daysRange) {
+  const series = [
+    { field: 'doctors', label: '医師',     color: '#FF6B9D' },
+    { field: 'nurses',  label: '看護師',   color: '#10B981' },
+    { field: 'medical', label: '医療機関', color: '#3B82F6' },
+  ];
+  document.getElementById('trend-legend').innerHTML = series.map(s =>
+    `<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div>${s.label}</div>`
+  ).join('');
+  document.getElementById('chart-trend').innerHTML = buildLineChart(rows, series);
+  document.getElementById('trend-period-label').textContent = `直近 ${daysRange} 日`;
+}
+
+function renderAppTrend(rows) {
+  document.getElementById('chart-app-trend').innerHTML = buildLineChart(rows, [
+    { field: 'applications', label: '応募',   color: '#8B5CF6' },
+    { field: 'accepted',     label: '承認',   color: '#10B981' },
+  ]);
+}
+
+// ─── Pipeline ─────────────────────────────────────────────────────────────
+function renderPipeline(a) {
+  const segs = [
+    { label: '審査待',  value: a.pending,   color: '#F59E0B' },
+    { label: '審査中',  value: a.reviewing, color: '#3B82F6' },
+    { label: '承認',    value: a.accepted,  color: '#10B981' },
+    { label: '却下',    value: a.rejected,  color: '#EF4444' },
+    { label: '取下げ',  value: a.withdrawn, color: '#94A3B8' },
+  ];
+  const total = segs.reduce((s, g) => s + g.value, 0) || 1;
+
+  document.getElementById('pipeline').innerHTML = segs.map(g => {
+    const pct = g.value > 0 ? Math.max(4, Math.round(g.value / total * 100)) : 0;
+    return `<div class="pipeline-seg" style="flex-basis:${pct}%;background:${g.color}" title="${g.label}: ${g.value}件">
+      ${pct > 12 ? g.label : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('pipeline-legend').innerHTML = segs.map(g => `
+    <div class="pl-item">
+      <div class="pl-dot" style="background:${g.color}"></div>
+      <span class="pl-label">${g.label}</span>
+      <span class="pl-val">${g.value}</span>
+    </div>`).join('');
+}
+
+// ─── Bar charts ───────────────────────────────────────────────────────────
+function renderBars(id, rows, color) {
+  if (!rows || !rows.length) {
+    document.getElementById(id).innerHTML = '<div class="empty">データなし</div>';
+    return;
   }
+  const max = Math.max(...rows.map(r => r.count), 1);
+  document.getElementById(id).innerHTML = rows.map(r => `
+    <div class="bar-row">
+      <div class="bar-name" title="${esc(r.name)}">${esc(r.name)}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${Math.round(r.count / max * 100)}%;background:${color}"></div>
+      </div>
+      <div class="bar-num">${r.count}</div>
+    </div>`).join('');
+}
 
-  function setLoading(flag) {
-    document.getElementById('loading').style.display = flag ? 'flex' : 'none';
-  }
+// ─── Tables ───────────────────────────────────────────────────────────────
+const typeBadge = t => ({
+  doctor:  `<span class="badge b-doctor">医師</span>`,
+  nurse:   `<span class="badge b-nurse">看護師</span>`,
+  medical: `<span class="badge b-medical">医療機関</span>`,
+}[t] || '');
 
-  // ── レンダリング ───────────────────────────────────────────────────────────
-  function renderAll(d) {
-    renderKpiUsers(d.users);
-    renderKpiJobs(d.jobs, d.applications);
-    renderKpiMsg(d.messages, d.line_events);
-    renderUserTrend(d.trends.user_registrations);
-    renderAppStatus(d.applications);
-    renderBarChart('chart-pref-doctor', d.distributions.doctors_by_prefecture, '#FF6B9D');
-    renderBarChart('chart-specialties', d.distributions.top_job_specialties, '#A78BFA');
-    renderTableUsers(d.recent.users);
-    renderTableApps(d.recent.applications);
-    renderTableLine(d.recent.line_events);
-  }
+const statusBadge = s => ({
+  pending:   `<span class="badge b-pending">審査待ち</span>`,
+  reviewing: `<span class="badge b-reviewing">審査中</span>`,
+  accepted:  `<span class="badge b-accepted">承認</span>`,
+  rejected:  `<span class="badge b-rejected">却下</span>`,
+  withdrawn: `<span class="badge b-withdrawn">取下げ</span>`,
+}[s] || '');
 
-  function kpiCard(label, value, sub, colorClass, weekBadge) {
-    const badge = weekBadge != null
-      ? `<span class="kpi-badge badge-week">+${weekBadge} 今週</span>`
-      : '';
-    return `
-      <div class="kpi-card ${colorClass}">
-        <div class="kpi-label">${label}</div>
-        <div class="kpi-value">${value.toLocaleString()}${badge}</div>
-        ${sub ? `<div class="kpi-sub">${sub}</div>` : ''}
-      </div>`;
-  }
+function fmtDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })
+    + ' ' + dt.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+}
 
-  function renderKpiUsers(u) {
-    document.getElementById('kpi-users').innerHTML = [
-      kpiCard('総ユーザー数',      u.total,                '',                              'pink',   u.new_this_week),
-      kpiCard('医師',              u.doctors,              `アクティブ: ${u.active}`,        'pink',   null),
-      kpiCard('看護師',            u.nurses,               '',                              'green',  null),
-      kpiCard('医療機関',          u.medical_institutions, '',                              'blue',   null),
-      kpiCard('今月の新規登録',    u.new_this_month,       `今週: ${u.new_this_week}`,      'purple', null),
-    ].join('');
-  }
+function renderTableUsers(rows) {
+  const el = document.getElementById('table-users');
+  if (!rows || !rows.length) { el.innerHTML = noData(3); return; }
+  el.innerHTML =
+    `<thead><tr><th>名前</th><th>種別</th><th>登録日時</th></tr></thead>
+     <tbody>${rows.map(r => `<tr>
+       <td>${esc(r.name)}</td>
+       <td>${typeBadge(r.user_type)}</td>
+       <td style="color:var(--subtle);font-size:0.73rem">${fmtDate(r.created_at)}</td>
+     </tr>`).join('')}</tbody>`;
+}
 
-  function renderKpiJobs(j, a) {
-    document.getElementById('kpi-jobs').innerHTML = [
-      kpiCard('求人総数',          j.total,         `掲載中: ${j.active}`,           'teal',   j.new_this_week),
-      kpiCard('応募総数',          a.total,         `今週: ${a.new_this_week}`,       'purple', a.new_this_week),
-      kpiCard('承認済み応募',      a.accepted,      `マッチング率: ${a.acceptance_rate}%`, 'green', null),
-      kpiCard('審査待ち',          a.pending,       '',                              'yellow', null),
-      kpiCard('今月の応募',        a.new_this_month,'',                              'blue',   null),
-    ].join('');
-  }
+function renderTableApps(rows) {
+  const el = document.getElementById('table-apps');
+  if (!rows || !rows.length) { el.innerHTML = noData(4); return; }
+  el.innerHTML =
+    `<thead><tr><th>応募者</th><th>求人</th><th>状態</th><th>日時</th></tr></thead>
+     <tbody>${rows.map(r => `<tr>
+       <td>${esc(r.applicant_name)}&nbsp;${typeBadge(r.applicant_type)}</td>
+       <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.job_title)}">${esc(r.job_title)}</td>
+       <td>${statusBadge(r.status)}</td>
+       <td style="color:var(--subtle);font-size:0.73rem;white-space:nowrap">${fmtDate(r.created_at)}</td>
+     </tr>`).join('')}</tbody>`;
+}
 
-  function renderKpiMsg(m, l) {
-    document.getElementById('kpi-msg').innerHTML = [
-      kpiCard('会話数',            m.total_conversations, '',                          'teal',   null),
-      kpiCard('メッセージ総数',    m.total,               `未読: ${m.unread}`,          'blue',   m.new_this_week),
-      kpiCard('LINEイベント総数',  l.total,               `フォロー: ${l.follows}`,     'green',  l.new_this_week),
-      kpiCard('LINEメッセージ',   l.messages,            '',                          'purple', null),
-    ].join('');
-  }
+function renderTableLine(rows, lineStats) {
+  const el = document.getElementById('table-line');
+  document.getElementById('line-meta').textContent =
+    `フォロー ${lineStats.follows} / 解除 ${lineStats.unfollows} / メッセージ ${lineStats.messages}`;
 
-  function renderUserTrend(rows) {
-    if (!rows.length) {
-      document.getElementById('chart-user-trend').innerHTML = '<div class="empty-state">データなし</div>';
-      return;
-    }
-    const maxTotal = Math.max(...rows.map(r => r.total), 1);
-    const doctorColor  = '#FF6B9D';
-    const nurseColor   = '#34D399';
-    const medicalColor = '#4CC9F0';
+  if (!rows || !rows.length) { el.innerHTML = noData(4); return; }
 
-    const cols = rows.map(r => {
-      const dH = Math.max(Math.round(r.doctors  / maxTotal * 70), r.doctors  > 0 ? 4 : 0);
-      const nH = Math.max(Math.round(r.nurses   / maxTotal * 70), r.nurses   > 0 ? 4 : 0);
-      const mH = Math.max(Math.round(r.medical  / maxTotal * 70), r.medical  > 0 ? 4 : 0);
-      const dateStr = typeof r.date === 'string' ? r.date.slice(5) : new Date(r.date).toLocaleDateString('ja-JP', {month:'numeric',day:'numeric'});
-      return `
-        <div class="sparkline-col" title="${r.date}: 医師${r.doctors} 看護師${r.nurses} 医療機関${r.medical}">
-          <div class="sparkline-bar" style="height:${dH}px;background:${doctorColor};"></div>
-          <div class="sparkline-bar" style="height:${nH}px;background:${nurseColor};"></div>
-          <div class="sparkline-bar" style="height:${mH}px;background:${medicalColor};"></div>
-          <span class="sparkline-date">${dateStr}</span>
-        </div>`;
-    }).join('');
+  const lineBadge = t => ({
+    follow:   `<span class="badge b-follow">フォロー</span>`,
+    unfollow: `<span class="badge b-unfollow">解除</span>`,
+    message:  `<span class="badge b-message">メッセージ</span>`,
+  }[t] || `<span class="badge">${esc(t)}</span>`);
 
-    const legend = `
-      <div style="display:flex;gap:1rem;font-size:0.72rem;margin-bottom:0.75rem">
-        <span><span style="color:${doctorColor}">■</span> 医師</span>
-        <span><span style="color:${nurseColor}">■</span> 看護師</span>
-        <span><span style="color:${medicalColor}">■</span> 医療機関</span>
-      </div>`;
+  el.innerHTML =
+    `<thead><tr><th>種別</th><th>ユーザーID</th><th>内容</th><th>受信日時</th></tr></thead>
+     <tbody>${rows.map(r => `<tr>
+       <td>${lineBadge(r.event_type)}</td>
+       <td style="font-size:0.7rem;color:var(--subtle)">${r.source_user_id ? esc(r.source_user_id.slice(0, 16)) + '…' : '—'}</td>
+       <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.message_text ? esc(r.message_text) : '—'}</td>
+       <td style="color:var(--subtle);font-size:0.73rem;white-space:nowrap">${fmtDate(r.received_at)}</td>
+     </tr>`).join('')}</tbody>`;
+}
 
-    document.getElementById('chart-user-trend').innerHTML =
-      legend + `<div class="sparkline-bars">${cols}</div>`;
-  }
+// ─── Utilities ────────────────────────────────────────────────────────────
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-  function renderAppStatus(a) {
-    const items = [
-      { label: '審査待ち',   value: a.pending,   color: '#FBBF24' },
-      { label: '審査中',     value: a.reviewing, color: '#60A5FA' },
-      { label: '承認',       value: a.accepted,  color: '#34D399' },
-      { label: '却下',       value: a.rejected,  color: '#F87171' },
-      { label: '取下げ',     value: a.withdrawn, color: '#9CA3AF' },
-    ];
-    document.getElementById('chart-app-status').innerHTML = items.map(i => `
-      <div class="status-item">
-        <div class="status-dot" style="background:${i.color}"></div>
-        <div>
-          <div class="status-label">${i.label}</div>
-          <div class="status-value">${i.value.toLocaleString()}</div>
-        </div>
-      </div>`).join('');
-  }
-
-  function renderBarChart(containerId, rows, color) {
-    if (!rows.length) {
-      document.getElementById(containerId).innerHTML = '<div class="empty-state">データなし</div>';
-      return;
-    }
-    const max = Math.max(...rows.map(r => r.count), 1);
-    document.getElementById(containerId).innerHTML = rows.map(r => {
-      const pct = Math.round(r.count / max * 100);
-      return `
-        <div class="bar-row">
-          <div class="bar-label" title="${r.name}">${r.name}</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
-          </div>
-          <div class="bar-count">${r.count}</div>
-        </div>`;
-    }).join('');
-  }
-
-  function userTypeBadge(t) {
-    const map = { doctor: ['badge-doctor','医師'], nurse: ['badge-nurse','看護師'], medical: ['badge-medical','医療機関'] };
-    const [cls, label] = map[t] || ['',''];
-    return `<span class="badge ${cls}">${label}</span>`;
-  }
-
-  function statusBadge(s) {
-    const map = {
-      pending:   ['badge-pending',  '審査待ち'],
-      reviewing: ['badge-reviewing','審査中'],
-      accepted:  ['badge-accepted', '承認'],
-      rejected:  ['badge-rejected', '却下'],
-      withdrawn: ['badge-withdrawn','取下げ'],
-    };
-    const [cls, label] = map[s] || ['',''];
-    return `<span class="badge ${cls}">${label}</span>`;
-  }
-
-  function fmtDate(d) {
-    if (!d) return '-';
-    return new Date(d).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-  }
-
-  function renderTableUsers(rows) {
-    if (!rows.length) {
-      document.getElementById('table-users').innerHTML = '<tr><td class="empty-state" colspan="3">データなし</td></tr>';
-      return;
-    }
-    document.getElementById('table-users').innerHTML = `
-      <thead><tr><th>名前</th><th>種別</th><th>登録日</th></tr></thead>
-      <tbody>${rows.map(r => `
-        <tr>
-          <td>${escHtml(r.name)}</td>
-          <td>${userTypeBadge(r.user_type)}</td>
-          <td>${fmtDate(r.created_at)}</td>
-        </tr>`).join('')}
-      </tbody>`;
-  }
-
-  function renderTableApps(rows) {
-    if (!rows.length) {
-      document.getElementById('table-apps').innerHTML = '<tr><td class="empty-state" colspan="4">データなし</td></tr>';
-      return;
-    }
-    document.getElementById('table-apps').innerHTML = `
-      <thead><tr><th>応募者</th><th>求人</th><th>ステータス</th><th>日時</th></tr></thead>
-      <tbody>${rows.map(r => `
-        <tr>
-          <td>${escHtml(r.applicant_name)} ${userTypeBadge(r.applicant_type)}</td>
-          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(r.job_title)}">${escHtml(r.job_title)}</td>
-          <td>${statusBadge(r.status)}</td>
-          <td>${fmtDate(r.created_at)}</td>
-        </tr>`).join('')}
-      </tbody>`;
-  }
-
-  function renderTableLine(rows) {
-    if (!rows.length) {
-      document.getElementById('table-line').innerHTML = '<tr><td class="empty-state" colspan="4">データなし</td></tr>';
-      return;
-    }
-    const lineTypeBadge = (t) => {
-      const map = { follow: ['badge-follow','フォロー'], unfollow: ['badge-unfollow','フォロー解除'], message: ['badge-message','メッセージ'] };
-      const [cls, label] = map[t] || ['', t];
-      return `<span class="badge ${cls}">${label}</span>`;
-    };
-    document.getElementById('table-line').innerHTML = `
-      <thead><tr><th>種別</th><th>ユーザーID</th><th>メッセージ</th><th>受信日時</th></tr></thead>
-      <tbody>${rows.map(r => `
-        <tr>
-          <td>${lineTypeBadge(r.event_type)}</td>
-          <td style="font-size:0.72rem;color:var(--gray-400)">${r.source_user_id ? escHtml(r.source_user_id.slice(0,16)) + '…' : '-'}</td>
-          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.message_text ? escHtml(r.message_text) : '-'}</td>
-          <td>${fmtDate(r.received_at)}</td>
-        </tr>`).join('')}
-      </tbody>`;
-  }
-
-  function escHtml(s) {
-    if (s == null) return '';
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+function noData(cols) {
+  return `<tr><td colspan="${cols}" class="empty">データなし</td></tr>`;
+}
 </script>
 </body>
 </html>
