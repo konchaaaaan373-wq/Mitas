@@ -12,6 +12,53 @@
 const { getDb } = require('./lib/db');
 const { verifyToken, json, safeParseJson, getBearerToken, CORS_HEADERS } = require('./lib/auth-utils');
 
+// ── メール通知送信（Resend API 利用） ────────────────────────────────────────
+async function sendEmailNotification({ toEmail, toName, fromName, messagePreview }) {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const EMAIL_FROM = process.env.EMAIL_FROM || 'Neco <noreply@neco.jp>';
+  if (!RESEND_API_KEY) return; // 環境変数未設定時はスキップ
+
+  const preview = messagePreview.length > 80
+    ? messagePreview.slice(0, 80) + '…'
+    : messagePreview;
+
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: EMAIL_FROM,
+        to: [toEmail],
+        subject: `【Neco】${fromName}さんからメッセージが届きました`,
+        html: `
+          <div style="font-family:'Noto Sans JP',sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#fff;border-radius:12px;">
+            <div style="text-align:center;margin-bottom:24px;">
+              <span style="font-family:'Zen Kaku Gothic New',sans-serif;font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#FF6B9D,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Neco</span>
+            </div>
+            <p style="font-size:1rem;color:#2D3142;margin-bottom:8px;">${toName} さん、</p>
+            <p style="font-size:1rem;color:#2D3142;margin-bottom:24px;"><strong>${fromName}</strong> さんからメッセージが届きました。</p>
+            <div style="background:#F3F4F6;border-radius:8px;padding:16px 20px;margin-bottom:24px;border-left:4px solid #FF6B9D;">
+              <p style="font-size:0.9rem;color:#374151;margin:0;">${preview}</p>
+            </div>
+            <div style="text-align:center;margin-bottom:24px;">
+              <a href="https://neco.jp/dashboard.html" style="display:inline-block;background:linear-gradient(135deg,#FF6B9D,#A78BFA);color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:0.95rem;">メッセージを確認する</a>
+            </div>
+            <hr style="border:none;border-top:1px solid #E5E7EB;margin-bottom:16px;">
+            <p style="font-size:0.75rem;color:#9CA3AF;text-align:center;">
+              メール通知を停止する場合は、<a href="https://neco.jp/profile-doctor.html" style="color:#9CA3AF;">設定ページ</a>からオフにしてください。
+            </p>
+          </div>
+        `,
+      }),
+    });
+  } catch (err) {
+    console.error('[messages] sendEmailNotification error:', err.message);
+  }
+}
+
 const getSubPath = (path) =>
   (path || '').replace(/\/?\.netlify\/functions\/messages\/?/, '').replace(/^\/+/, '');
 
@@ -180,6 +227,23 @@ exports.handler = async (event) => {
 
       // 会話の last_message_at を更新
       await sql`UPDATE conversations SET last_message_at = NOW() WHERE id = ${convId}`;
+
+      // 受信者のメール通知設定を確認して送信
+      const recipientId = conv.participant1_id === payload.id
+        ? conv.participant2_id
+        : conv.participant1_id;
+      const [recipient] = await sql`
+        SELECT email, name, email_notification FROM users WHERE id = ${recipientId}
+      `;
+      if (recipient?.email_notification) {
+        const [sender] = await sql`SELECT name FROM users WHERE id = ${payload.id}`;
+        sendEmailNotification({
+          toEmail: recipient.email,
+          toName: recipient.name,
+          fromName: sender?.name || 'Necoユーザー',
+          messagePreview: String(content).trim(),
+        }).catch(() => {});
+      }
 
       return json(201, { ok: true, message: msg });
     } catch (err) {
