@@ -110,18 +110,17 @@ async function createNecoWelcomeConversation(sql, newUserId, userType) {
     const p1 = newUserId < necoId ? newUserId : necoId;
     const p2 = newUserId < necoId ? necoId : newUserId;
 
-    // 既存の会話を確認
-    let [conv] = await sql`
+    // 既存の会話を確認（冪等: 既に会話があれば重複作成しない）
+    const [existingConv] = await sql`
       SELECT id FROM conversations WHERE participant1_id = ${p1} AND participant2_id = ${p2}
     `;
+    if (existingConv) return;
 
-    if (!conv) {
-      [conv] = await sql`
-        INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
-        VALUES (${p1}, ${p2}, NOW())
-        RETURNING id
-      `;
-    }
+    const [conv] = await sql`
+      INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
+      VALUES (${p1}, ${p2}, NOW())
+      RETURNING id
+    `;
 
     // ユーザー種別に合わせたウェルカムメッセージを Neco から送信
     const welcomeMessage = getWelcomeMessage(userType);
