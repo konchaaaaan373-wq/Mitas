@@ -538,6 +538,42 @@
             color: var(--gray-400);
         }
 
+        /* Read receipt (既読) */
+        .msg-receipt {
+            font-size: 0.68rem;
+            color: var(--gray-400);
+            align-self: flex-end;
+            margin-right: 2px;
+        }
+
+        .msg-receipt.read {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Message grouping: hide avatar+sender for consecutive same-sender msgs */
+        .message.grouped .msg-avatar {
+            visibility: hidden;
+        }
+
+        .message.grouped .msg-sender {
+            display: none;
+        }
+
+        .message.grouped {
+            margin-top: -0.5rem;
+        }
+
+        /* Message entry animation */
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.new-msg {
+            animation: msgIn 0.22s ease;
+        }
+
         /* Typing indicator */
         .typing-indicator {
             display: none;
@@ -572,11 +608,63 @@
             30% { transform: translateY(-6px); }
         }
 
+        /* ===== QUICK REPLIES ===== */
+        .quick-replies {
+            padding: 0.6rem 1.5rem 0;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        .quick-reply-chip {
+            padding: 0.35rem 0.85rem;
+            background: var(--light);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.78rem;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .quick-reply-chip:hover {
+            border-color: var(--primary);
+            background: rgba(255, 107, 157, 0.06);
+            color: var(--primary);
+        }
+
+        /* Character counter */
+        .input-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.3rem 1.5rem 0;
+            background: var(--white);
+        }
+
+        .input-hint {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+
+        .char-counter {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+            transition: color 0.2s;
+        }
+
+        .char-counter.warn { color: #f59e0b; }
+        .char-counter.danger { color: var(--error); }
+
         /* ===== INPUT AREA ===== */
         .input-area {
             background: var(--white);
-            border-top: 1px solid var(--border);
-            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-100);
+            padding: 0.75rem 1.5rem 1rem;
             display: flex;
             gap: 0.75rem;
             align-items: flex-end;
@@ -792,7 +880,17 @@
         <div class="chat-area" id="chat-area">
             <!-- Initial empty state -->
             <div class="empty-chat" id="empty-state">
-                <div class="empty-chat-icon" aria-hidden="true">💬</div>
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="opacity:0.35;margin-bottom:1.25rem;">
+                    <rect x="8" y="14" width="50" height="36" rx="8" fill="#FF6B9D"/>
+                    <rect x="14" y="20" width="38" height="4" rx="2" fill="white" opacity="0.7"/>
+                    <rect x="14" y="28" width="28" height="4" rx="2" fill="white" opacity="0.5"/>
+                    <rect x="14" y="36" width="20" height="4" rx="2" fill="white" opacity="0.35"/>
+                    <path d="M8 50 L16 44 L8 50Z" fill="#FF6B9D"/>
+                    <rect x="30" y="32" width="42" height="28" rx="7" fill="#A78BFA"/>
+                    <rect x="36" y="38" width="30" height="3" rx="1.5" fill="white" opacity="0.7"/>
+                    <rect x="36" y="44" width="22" height="3" rx="1.5" fill="white" opacity="0.5"/>
+                    <path d="M72 60 L64 54 L72 60Z" fill="#A78BFA"/>
+                </svg>
                 <h3>会話を選択してください</h3>
                 <p>左のリストから医療機関を選んで<br>メッセージを送りましょう</p>
             </div>
@@ -1016,6 +1114,12 @@ async function openConversation(convId) {
                 <div class="typing-dot"></div>
             </div>
         </div>
+        <div class="quick-replies" id="quick-replies" role="group" aria-label="クイック返信">
+            <button class="quick-reply-chip" onclick="insertQuickReply('承知しました')">承知しました</button>
+            <button class="quick-reply-chip" onclick="insertQuickReply('ありがとうございます')">ありがとうございます</button>
+            <button class="quick-reply-chip" onclick="insertQuickReply('確認します')">確認します</button>
+            <button class="quick-reply-chip" onclick="insertQuickReply('後ほどご連絡します')">後ほどご連絡します</button>
+        </div>
         <div class="input-area">
             <textarea
                 class="message-input"
@@ -1031,6 +1135,10 @@ async function openConversation(convId) {
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
             </button>
+        </div>
+        <div class="input-footer">
+            <span class="input-hint">Ctrl+Enter で送信</span>
+            <span class="char-counter" id="char-counter" aria-live="polite"></span>
         </div>
     `;
 
@@ -1058,7 +1166,7 @@ async function openConversation(convId) {
 // -----------------------------------------------------------------------
 // 7. Render messages in the chat area
 // -----------------------------------------------------------------------
-function renderMessages(convId) {
+function renderMessages(convId, isAppend) {
     const container = document.getElementById('messages-container');
     if (!container) return;
 
@@ -1070,9 +1178,22 @@ function renderMessages(convId) {
         return;
     }
 
-    let lastDateStr = '';
+    // Determine read receipt state:
+    // If the OTHER person sent the last message, our messages are all 既読.
+    // If WE sent the last message, the last own message is "送信済み".
+    const conv = conversations.find(c => c.id === convId);
+    const otherSentLast = conv && conv.last_message_sender_id !== currentUser.id;
 
-    messages.forEach(msg => {
+    // Find index of last own message for "送信済み"
+    let lastOwnIdx = -1;
+    for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i].sender_id === currentUser.id) { lastOwnIdx = i; break; }
+    }
+
+    let lastDateStr = '';
+    const GROUPING_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes
+
+    messages.forEach((msg, i) => {
         const dateStr = formatDateHeader(msg.created_at);
         if (dateStr !== lastDateStr) {
             const divider = document.createElement('div');
@@ -1085,19 +1206,39 @@ function renderMessages(convId) {
 
         const isOwn = msg.sender_id === currentUser.id;
         const isNecoMsg = !isOwn && msg.sender_name === 'Neco' && msg.avatar_color === '#FF6B9D';
+
+        // Grouping: same sender, within threshold, no date divider between
+        const prevMsg = i > 0 ? messages[i - 1] : null;
+        const isGrouped = prevMsg &&
+            prevMsg.sender_id === msg.sender_id &&
+            formatDateHeader(prevMsg.created_at) === dateStr &&
+            (new Date(msg.created_at) - new Date(prevMsg.created_at)) < GROUPING_THRESHOLD_MS;
+
         const wrapper = document.createElement('div');
-        wrapper.className = `message ${isOwn ? 'own' : 'other'}`;
+        const isNew = isAppend && i === messages.length - 1;
+        wrapper.className = `message ${isOwn ? 'own' : 'other'}${isGrouped ? ' grouped' : ''}${isNew ? ' new-msg' : ''}`;
 
         const otherAvatarHtml = isNecoMsg
             ? necoAvatarHtml('msg-avatar')
             : `<div class="msg-avatar" style="background: ${escapeHtml(msg.avatar_color || '#4ECDC4')}" aria-hidden="true">${escapeHtml(msg.avatar_initial || msg.sender_name?.charAt(0) || '?')}</div>`;
 
+        // Read receipt HTML
+        let receiptHtml = '';
+        if (isOwn) {
+            if (otherSentLast) {
+                receiptHtml = '<span class="msg-receipt read" aria-label="既読">既読</span>';
+            } else if (i === lastOwnIdx) {
+                receiptHtml = '<span class="msg-receipt" aria-label="送信済み">送信済み</span>';
+            }
+        }
+
         wrapper.innerHTML = `
             ${!isOwn ? otherAvatarHtml : ''}
             <div class="msg-content">
-                ${!isOwn ? `<span class="msg-sender">${escapeHtml(msg.sender_name || '')}</span>` : ''}
+                ${!isOwn && !isGrouped ? `<span class="msg-sender">${escapeHtml(msg.sender_name || '')}</span>` : ''}
                 <div class="msg-bubble">${escapeHtml(msg.content || '').replace(/\n/g, '<br>')}</div>
                 <span class="msg-time">${formatTime(msg.created_at)}</span>
+                ${receiptHtml}
             </div>
             ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#FF6B9D')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name?.charAt(0) || '?')}</div>` : ''}
         `;
@@ -1111,14 +1252,33 @@ function renderMessages(convId) {
 // 8. Input handlers and send
 // -----------------------------------------------------------------------
 function setupInputHandlers() {
-    const input   = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
+    const input       = document.getElementById('message-input');
+    const sendBtn     = document.getElementById('send-btn');
+    const charCounter = document.getElementById('char-counter');
+    const quickReplies = document.getElementById('quick-replies');
     if (!input || !sendBtn) return;
 
     input.addEventListener('input', () => {
+        const len = input.value.length;
         sendBtn.disabled = input.value.trim().length === 0;
         input.style.height = 'auto';
         input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+
+        // Show char counter after 50 chars
+        if (charCounter) {
+            const remaining = 1000 - len;
+            if (len >= 50) {
+                charCounter.textContent = `${remaining}`;
+                charCounter.className = 'char-counter' + (remaining < 100 ? ' danger' : remaining < 200 ? ' warn' : '');
+            } else {
+                charCounter.textContent = '';
+            }
+        }
+
+        // Hide quick replies once user starts typing
+        if (quickReplies) {
+            quickReplies.style.display = len > 0 ? 'none' : '';
+        }
     });
 
     input.addEventListener('keydown', (e) => {
@@ -1127,6 +1287,19 @@ function setupInputHandlers() {
             if (!sendBtn.disabled) sendMessage();
         }
     });
+}
+
+function insertQuickReply(text) {
+    const input = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const quickReplies = document.getElementById('quick-replies');
+    if (!input) return;
+    input.value = text;
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+    sendBtn.disabled = false;
+    if (quickReplies) quickReplies.style.display = 'none';
+    input.focus();
 }
 
 async function sendMessage() {
@@ -1157,7 +1330,11 @@ async function sendMessage() {
             };
             if (!messagesByConvId[activeConvId]) messagesByConvId[activeConvId] = [];
             messagesByConvId[activeConvId].push(msg);
-            renderMessages(activeConvId);
+            renderMessages(activeConvId, true);
+
+            // Show quick replies again after sending
+            const qr = document.getElementById('quick-replies');
+            if (qr) qr.style.display = '';
 
             const conv = conversations.find(c => c.id === activeConvId);
             if (conv) {
