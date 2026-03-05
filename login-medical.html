@@ -607,14 +607,18 @@
     </main>
 
     <script>
-        (function checkExistingSession() {
+        (function prefillIfAuthenticated() {
             try {
-                const token = localStorage.getItem('neco_token');
                 const userStr = localStorage.getItem('neco_user');
-                if (!token || !userStr) return;
+                if (!userStr) return;
                 const user = JSON.parse(userStr);
-                if (user.type === 'doctor') window.location.replace('/dashboard.html');
-                else if (user.type === 'medical') window.location.replace('/medical-dashboard.html');
+                if (!user || !user.email) return;
+                const emailEl = document.getElementById('email');
+                if (emailEl) {
+                    emailEl.value = user.email;
+                    const pwEl = document.getElementById('password');
+                    if (pwEl) pwEl.focus();
+                }
             } catch (_) {
                 localStorage.removeItem('neco_token');
                 localStorage.removeItem('neco_user');
