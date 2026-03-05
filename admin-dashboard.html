@@ -597,6 +597,254 @@
       color: var(--subtle);
       font-size: 0.8rem;
     }
+
+    /* ─── Header left branding ───────────────────────────────────────────── */
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+    .header-brand-logo {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .header-brand-name {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--brand), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-brand-sep {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.15);
+    }
+    .header-brand-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.04em;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 6px #10B981;
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── Admin badge ────────────────────────────────────────────────────── */
+    .admin-badge {
+      background: rgba(139,92,246,0.25);
+      border: 1px solid rgba(139,92,246,0.4);
+      color: #C4B5FD;
+      padding: 0.18rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    /* ─── Cat dropdown ───────────────────────────────────────────────────── */
+    .cat-menu-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .btn-cat {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      padding: 0;
+    }
+    .btn-cat:hover { background: rgba(255,255,255,0.16); }
+    .btn-cat svg { width: 20px; height: 20px; }
+    .cat-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      min-width: 180px;
+      z-index: 500;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .cat-dropdown.open { display: block; }
+    .cat-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1rem;
+      font-size: 0.83rem;
+      color: var(--slate);
+      cursor: pointer;
+      transition: background 0.1s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-family: inherit;
+      text-align: left;
+    }
+    .cat-dropdown-item:hover { background: var(--surface); }
+    .cat-dropdown-item.danger { color: #DC2626; }
+    .cat-dropdown-item.danger:hover { background: #FEF2F2; }
+    .cat-dropdown-divider {
+      margin: 0.2rem 0;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── Content tabs ───────────────────────────────────────────────────── */
+    .content-tabs {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 0;
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 54px;
+      z-index: 100;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .content-tab {
+      padding: 0.75rem 1.1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .content-tab:hover { color: var(--slate); }
+    .content-tab.active { color: var(--navy); border-bottom-color: var(--brand); }
+
+    /* ─── Tab panels ─────────────────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Settings modal ─────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 1.75rem 2rem;
+      width: 440px;
+      max-width: calc(100vw - 2rem);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+    }
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .modal-close {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--subtle);
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--dark); }
+    .modal-section {
+      margin-bottom: 1.25rem;
+    }
+    .modal-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .modal-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.83rem;
+      color: var(--slate);
+    }
+    .modal-row:last-child { border-bottom: none; }
+    .modal-toggle {
+      width: 38px;
+      height: 22px;
+      border-radius: 11px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-toggle.on { background: var(--green); }
+    .modal-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.2s;
+    }
+    .modal-toggle.on::after { transform: translateX(16px); }
+    .modal-select {
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      font-family: inherit;
+      color: var(--dark);
+      background: var(--surface);
+      outline: none;
+      cursor: pointer;
+    }
+    .modal-select:focus { border-color: var(--purple); }
   </style>
 </head>
 <body>
@@ -624,8 +872,25 @@
 
   <!-- Header -->
   <header class="header">
-    <div class="header-logo"><span>neco</span>&nbsp;admin</div>
+    <!-- Left: brand -->
+    <div class="header-brand">
+      <svg class="header-brand-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+        <defs>
+          <linearGradient id="hg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FF6B9D"/>
+            <stop offset="100%" stop-color="#A78BFA"/>
+          </linearGradient>
+        </defs>
+        <path d="M 16 28 Q 23 28 26 22 L 26 16 L 23 6 L 18 13 Q 17 12 16 12 Q 15 12 14 13 L 9 6 L 6 16 L 6 22 Q 9 28 16 28 Z"
+              stroke="url(#hg)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div class="header-brand-name">neco</div>
+      <div class="header-brand-sep"></div>
+      <div class="header-brand-label">Admin Console</div>
+      <div class="live-dot" title="Live"></div>
+    </div>
 
+    <!-- Center: period tabs -->
     <div class="period-tabs" role="group" aria-label="集計期間">
       <button class="period-tab active" data-days="7"  onclick="selectPeriod(this)">7日</button>
       <button class="period-tab"        data-days="14" onclick="selectPeriod(this)">14日</button>
@@ -635,11 +900,44 @@
 
     <div class="header-spacer"></div>
 
+    <!-- Right: meta + controls -->
     <span class="header-meta" id="last-updated"></span>
     <button class="header-btn btn-refresh" onclick="loadStats()" title="更新 (R キー)">↻ 更新</button>
-    <button class="header-btn btn-logout"  onclick="doLogout()">ログアウト</button>
+    <div class="admin-badge">admin</div>
+
+    <!-- Cat icon dropdown -->
+    <div class="cat-menu-wrap" id="cat-menu-wrap">
+      <button class="btn-cat" onclick="toggleCatMenu(event)" title="メニュー" aria-label="メニュー">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FF6B9D"/>
+              <stop offset="100%" stop-color="#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M 16 28 Q 23 28 26 22 L 26 16 L 23 6 L 18 13 Q 17 12 16 12 Q 15 12 14 13 L 9 6 L 6 16 L 6 22 Q 9 28 16 28 Z"
+                stroke="url(#cg)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="cat-dropdown" id="cat-dropdown">
+        <button class="cat-dropdown-item" onclick="switchTab('kpi');closeCatMenu()">📊 ダッシュボード</button>
+        <button class="cat-dropdown-item" onclick="openSettings();closeCatMenu()">⚙️ 設定</button>
+        <hr class="cat-dropdown-divider">
+        <button class="cat-dropdown-item danger" onclick="doLogout()">→ ログアウト</button>
+      </div>
+    </div>
   </header>
 
+  <!-- Content tabs -->
+  <nav class="content-tabs" role="tablist" aria-label="コンテンツタブ">
+    <button class="content-tab active" data-tab="kpi"     onclick="switchTab('kpi')"     role="tab" aria-selected="true">📊 KPI概要</button>
+    <button class="content-tab"        data-tab="doctors" onclick="switchTab('doctors')" role="tab" aria-selected="false">👨‍⚕️ 医師管理</button>
+    <button class="content-tab"        data-tab="nurses"  onclick="switchTab('nurses')"  role="tab" aria-selected="false">👩‍⚕️ 看護師管理</button>
+    <button class="content-tab"        data-tab="medical" onclick="switchTab('medical')" role="tab" aria-selected="false">🏥 医療機関管理</button>
+  </nav>
+
+  <!-- ── Tab Panel: KPI概要 ─────────────────────────────────────────────── -->
+  <div class="tab-panel active" id="panel-kpi">
   <main class="main">
 
     <!-- Alert banner (conditional) -->
@@ -778,6 +1076,179 @@
     </div>
 
   </main>
+  </div><!-- /panel-kpi -->
+
+  <!-- ── Tab Panel: 医師管理 ─────────────────────────────────────────────── -->
+  <div class="tab-panel" id="panel-doctors">
+  <main class="main">
+    <div class="section-label">医師 — 主要指標</div>
+    <div class="hero-grid row">
+      <div class="hero-card c-brand">
+        <div class="hero-label">登録医師数</div>
+        <div class="hero-value" id="d-total">—</div>
+        <div class="hero-meta"><span class="hero-sub">全ユーザー中の医師</span></div>
+      </div>
+      <div class="hero-card c-blue">
+        <div class="hero-label">今月の新規医師</div>
+        <div class="hero-value" id="d-new-month">—</div>
+        <div class="hero-meta"><span class="delta" id="d-new-delta"></span></div>
+      </div>
+      <div class="hero-card c-green">
+        <div class="hero-label">応募承認率</div>
+        <div class="hero-value" id="d-match-rate">—</div>
+        <div class="hero-meta"><span class="hero-sub">全体マッチング率</span></div>
+      </div>
+      <div class="hero-card c-yellow">
+        <div class="hero-label">今週の新規医師</div>
+        <div class="hero-value" id="d-new-week">—</div>
+        <div class="hero-meta"><span class="hero-sub">直近7日間</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">都道府県分布</div>
+    <div class="col-2 row">
+      <div class="card">
+        <div class="card-title">医師の都道府県 TOP 10</div>
+        <div class="bar-list" id="bars-doctor-pref-d"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">新着医師 <span class="card-title-meta">直近10件</span></div>
+        <table class="data-table" id="table-doctors"></table>
+      </div>
+    </div>
+  </main>
+  </div><!-- /panel-doctors -->
+
+  <!-- ── Tab Panel: 看護師管理 ──────────────────────────────────────────── -->
+  <div class="tab-panel" id="panel-nurses">
+  <main class="main">
+    <div class="section-label">看護師 — 主要指標</div>
+    <div class="hero-grid row">
+      <div class="hero-card c-green">
+        <div class="hero-label">登録看護師数</div>
+        <div class="hero-value" id="n-total">—</div>
+        <div class="hero-meta"><span class="hero-sub">全ユーザー中の看護師</span></div>
+      </div>
+      <div class="hero-card c-blue">
+        <div class="hero-label">今月の新規看護師</div>
+        <div class="hero-value" id="n-new-month">—</div>
+        <div class="hero-meta"><span class="delta" id="n-new-delta"></span></div>
+      </div>
+      <div class="hero-card c-yellow">
+        <div class="hero-label">今週の新規看護師</div>
+        <div class="hero-value" id="n-new-week">—</div>
+        <div class="hero-meta"><span class="hero-sub">直近7日間</span></div>
+      </div>
+      <div class="hero-card c-brand">
+        <div class="hero-label">全新規登録に占める割合</div>
+        <div class="hero-value" id="n-ratio">—</div>
+        <div class="hero-meta"><span class="hero-sub">今月のユーザー構成比</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">都道府県分布</div>
+    <div class="col-2 row">
+      <div class="card">
+        <div class="card-title">看護師の都道府県 TOP 10</div>
+        <div class="bar-list" id="bars-nurse-pref-n"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">新着看護師 <span class="card-title-meta">直近10件</span></div>
+        <table class="data-table" id="table-nurses"></table>
+      </div>
+    </div>
+  </main>
+  </div><!-- /panel-nurses -->
+
+  <!-- ── Tab Panel: 医療機関管理 ────────────────────────────────────────── -->
+  <div class="tab-panel" id="panel-medical">
+  <main class="main">
+    <div class="section-label">医療機関 — 主要指標</div>
+    <div class="hero-grid row">
+      <div class="hero-card c-blue">
+        <div class="hero-label">登録医療機関数</div>
+        <div class="hero-value" id="m-total">—</div>
+        <div class="hero-meta"><span class="hero-sub">全ユーザー中の医療機関</span></div>
+      </div>
+      <div class="hero-card c-green">
+        <div class="hero-label">今月の新規医療機関</div>
+        <div class="hero-value" id="m-new-month">—</div>
+        <div class="hero-meta"><span class="delta" id="m-new-delta"></span></div>
+      </div>
+      <div class="hero-card c-yellow" id="m-pending-card">
+        <div class="hero-label">審査待ち応募</div>
+        <div class="hero-value" id="m-pending">—</div>
+        <div id="m-pending-tag"></div>
+      </div>
+      <div class="hero-card c-brand">
+        <div class="hero-label">応募承認率</div>
+        <div class="hero-value" id="m-match-rate">—</div>
+        <div class="hero-meta"><span class="hero-sub">全体マッチング率</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">応募パイプライン &amp; 機関一覧</div>
+    <div class="col-3-2 row">
+      <div class="card">
+        <div class="card-title">新着医療機関 <span class="card-title-meta">直近10件</span></div>
+        <table class="data-table" id="table-medical"></table>
+      </div>
+      <div class="card">
+        <div class="card-title">応募パイプライン</div>
+        <div class="pipeline" id="pipeline-m"></div>
+        <div class="pipeline-legend" id="pipeline-legend-m"></div>
+      </div>
+    </div>
+  </main>
+  </div><!-- /panel-medical -->
+
+</div><!-- /#dashboard -->
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal" onclick="closeSettingsOutside(event)">
+  <div class="modal-box">
+    <div class="modal-title">
+      ⚙️ 設定
+      <button class="modal-close" onclick="closeSettings()" aria-label="閉じる">✕</button>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">表示設定</div>
+      <div class="modal-row">
+        <span>ダークモード（準備中）</span>
+        <button class="modal-toggle" id="toggle-dark" onclick="toggleSetting('toggle-dark')" title="近日公開"></button>
+      </div>
+      <div class="modal-row">
+        <span>アニメーション</span>
+        <button class="modal-toggle on" id="toggle-anim" onclick="toggleSetting('toggle-anim')"></button>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">自動更新</div>
+      <div class="modal-row">
+        <span>更新間隔</span>
+        <select class="modal-select" id="refresh-interval" onchange="applyRefreshInterval()">
+          <option value="0">手動</option>
+          <option value="30">30秒</option>
+          <option value="60">1分</option>
+          <option value="300">5分</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">通知設定</div>
+      <div class="modal-row">
+        <span>審査待ちアラート</span>
+        <button class="modal-toggle on" id="toggle-alert" onclick="toggleSetting('toggle-alert')"></button>
+      </div>
+      <div class="modal-row">
+        <span>新規登録通知</span>
+        <button class="modal-toggle on" id="toggle-notify" onclick="toggleSetting('toggle-notify')"></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Loading overlay -->
@@ -876,6 +1347,47 @@ function setLoading(on) {
   document.getElementById('loading').classList.toggle('show', on);
 }
 
+// ─── Content Tabs ─────────────────────────────────────────────────────────
+function switchTab(tabId) {
+  document.querySelectorAll('.content-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabId);
+    t.setAttribute('aria-selected', t.dataset.tab === tabId ? 'true' : 'false');
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + tabId);
+  });
+}
+
+// ─── Cat dropdown ─────────────────────────────────────────────────────────
+function toggleCatMenu(e) {
+  e.stopPropagation();
+  document.getElementById('cat-dropdown').classList.toggle('open');
+}
+function closeCatMenu() {
+  document.getElementById('cat-dropdown').classList.remove('open');
+}
+document.addEventListener('click', () => closeCatMenu());
+
+// ─── Settings modal ───────────────────────────────────────────────────────
+let refreshTimer = null;
+function openSettings() {
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+function closeSettingsOutside(e) {
+  if (e.target === document.getElementById('settings-modal')) closeSettings();
+}
+function toggleSetting(id) {
+  document.getElementById(id).classList.toggle('on');
+}
+function applyRefreshInterval() {
+  clearInterval(refreshTimer);
+  const val = parseInt(document.getElementById('refresh-interval').value);
+  if (val > 0) refreshTimer = setInterval(loadStats, val * 1000);
+}
+
 // ─── Render all ───────────────────────────────────────────────────────────
 function renderAll(d) {
   renderHero(d);
@@ -889,6 +1401,103 @@ function renderAll(d) {
   renderTableUsers(d.recent.users);
   renderTableApps(d.recent.applications);
   renderTableLine(d.recent.line_events, d.line_events);
+  renderDoctorTab(d);
+  renderNurseTab(d);
+  renderMedicalTab(d);
+}
+
+// ─── Doctor tab ───────────────────────────────────────────────────────────
+function renderDoctorTab(d) {
+  const { users, applications } = d;
+  document.getElementById('d-total').textContent = users.doctors.toLocaleString();
+  document.getElementById('d-new-month').textContent = users.new_this_month.toLocaleString();
+  applyDelta('d-new-delta', trendDelta(d.trends.user_registrations, 'doctors'));
+  document.getElementById('d-match-rate').textContent = applications.acceptance_rate + '%';
+  document.getElementById('d-new-week').textContent = users.new_this_week.toLocaleString();
+  renderBars('bars-doctor-pref-d', d.distributions.doctors_by_prefecture, '#FF6B9D');
+  const doctorRows = (d.recent.users || []).filter(u => u.user_type === 'doctor');
+  const el = document.getElementById('table-doctors');
+  if (!doctorRows.length) { el.innerHTML = noData(3); return; }
+  el.innerHTML =
+    `<thead><tr><th>名前</th><th>種別</th><th>登録日時</th></tr></thead>
+     <tbody>${doctorRows.map(r => `<tr>
+       <td>${esc(r.name)}</td>
+       <td>${typeBadge(r.user_type)}</td>
+       <td style="color:var(--subtle);font-size:0.73rem">${fmtDate(r.created_at)}</td>
+     </tr>`).join('')}</tbody>`;
+}
+
+// ─── Nurse tab ────────────────────────────────────────────────────────────
+function renderNurseTab(d) {
+  const { users } = d;
+  document.getElementById('n-total').textContent = users.nurses.toLocaleString();
+  document.getElementById('n-new-month').textContent = users.new_this_month.toLocaleString();
+  applyDelta('n-new-delta', trendDelta(d.trends.user_registrations, 'nurses'));
+  document.getElementById('n-new-week').textContent = users.new_this_week.toLocaleString();
+  const ratio = users.new_this_month > 0
+    ? Math.round(users.nurses / users.total * 100) + '%' : '—';
+  document.getElementById('n-ratio').textContent = ratio;
+  renderBars('bars-nurse-pref-n', d.distributions.nurses_by_prefecture, '#10B981');
+  const nurseRows = (d.recent.users || []).filter(u => u.user_type === 'nurse');
+  const el = document.getElementById('table-nurses');
+  if (!nurseRows.length) { el.innerHTML = noData(3); return; }
+  el.innerHTML =
+    `<thead><tr><th>名前</th><th>種別</th><th>登録日時</th></tr></thead>
+     <tbody>${nurseRows.map(r => `<tr>
+       <td>${esc(r.name)}</td>
+       <td>${typeBadge(r.user_type)}</td>
+       <td style="color:var(--subtle);font-size:0.73rem">${fmtDate(r.created_at)}</td>
+     </tr>`).join('')}</tbody>`;
+}
+
+// ─── Medical tab ──────────────────────────────────────────────────────────
+function renderMedicalTab(d) {
+  const { users, applications } = d;
+  document.getElementById('m-total').textContent = users.medical_institutions.toLocaleString();
+  document.getElementById('m-new-month').textContent = users.new_this_month.toLocaleString();
+  applyDelta('m-new-delta', trendDelta(d.trends.user_registrations, 'medical'));
+  document.getElementById('m-pending').textContent = applications.pending.toLocaleString();
+  document.getElementById('m-match-rate').textContent = applications.acceptance_rate + '%';
+  const card   = document.getElementById('m-pending-card');
+  const tagEl  = document.getElementById('m-pending-tag');
+  if (applications.pending > 0) {
+    card.classList.add('is-warning');
+    tagEl.innerHTML = `<div class="warn-tag">⚠ ${applications.pending}件 対応が必要</div>`;
+  } else {
+    card.classList.remove('is-warning');
+    tagEl.innerHTML = `<div class="ok-tag">✓ 未対応なし</div>`;
+  }
+  // Pipeline (duplicate)
+  const segs = [
+    { label: '審査待',  value: applications.pending,   color: '#F59E0B' },
+    { label: '審査中',  value: applications.reviewing, color: '#3B82F6' },
+    { label: '承認',    value: applications.accepted,  color: '#10B981' },
+    { label: '却下',    value: applications.rejected,  color: '#EF4444' },
+    { label: '取下げ',  value: applications.withdrawn, color: '#94A3B8' },
+  ];
+  const total = segs.reduce((s, g) => s + g.value, 0) || 1;
+  document.getElementById('pipeline-m').innerHTML = segs.map(g => {
+    const pct = g.value > 0 ? Math.max(4, Math.round(g.value / total * 100)) : 0;
+    return `<div class="pipeline-seg" style="flex-basis:${pct}%;background:${g.color}" title="${g.label}: ${g.value}件">
+      ${pct > 12 ? g.label : ''}
+    </div>`;
+  }).join('');
+  document.getElementById('pipeline-legend-m').innerHTML = segs.map(g => `
+    <div class="pl-item">
+      <div class="pl-dot" style="background:${g.color}"></div>
+      <span class="pl-label">${g.label}</span>
+      <span class="pl-val">${g.value}</span>
+    </div>`).join('');
+  const medRows = (d.recent.users || []).filter(u => u.user_type === 'medical');
+  const el = document.getElementById('table-medical');
+  if (!medRows.length) { el.innerHTML = noData(3); return; }
+  el.innerHTML =
+    `<thead><tr><th>名前</th><th>種別</th><th>登録日時</th></tr></thead>
+     <tbody>${medRows.map(r => `<tr>
+       <td>${esc(r.name)}</td>
+       <td>${typeBadge(r.user_type)}</td>
+       <td style="color:var(--subtle);font-size:0.73rem">${fmtDate(r.created_at)}</td>
+     </tr>`).join('')}</tbody>`;
 }
 
 // ─── Hero ─────────────────────────────────────────────────────────────────
