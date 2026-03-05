@@ -1359,6 +1359,22 @@
         }
 
         /* Responsive */
+        /* PC小ウィンドウ対応: ヘッダーが縦に伸びないよう1060px以下でハンバーガー表示 */
+        @media (max-width: 1060px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-secondary-btn,
+            .nav-login-btn {
+                display: none;
+            }
+
+            .hamburger-btn {
+                display: block;
+            }
+        }
+
         @media (max-width: 1024px) {
             .hero-content {
                 grid-template-columns: 1fr;
