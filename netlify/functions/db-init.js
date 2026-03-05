@@ -251,16 +251,17 @@ async function createNecoWelcomeConversation(sql, necoId, userId, userType) {
   const p1 = userId < necoId ? userId : necoId;
   const p2 = userId < necoId ? necoId : userId;
 
-  let [conv] = await sql`
+  const [existing] = await sql`
     SELECT id FROM conversations WHERE participant1_id = ${p1} AND participant2_id = ${p2}
   `;
-  if (!conv) {
-    [conv] = await sql`
-      INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
-      VALUES (${p1}, ${p2}, NOW())
-      RETURNING id
-    `;
-  }
+  // 既に会話が存在する場合は重複を避けてスキップ
+  if (existing) return;
+
+  const [conv] = await sql`
+    INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
+    VALUES (${p1}, ${p2}, NOW())
+    RETURNING id
+  `;
 
   const welcomeMessage = getWelcomeMessage(userType);
   await sql`
@@ -339,9 +340,12 @@ async function runSeed(sql) {
   ];
 
   for (const u of users) {
-    // Skip if already exists
+    // 既存ユーザーでもウェルカム会話がなければ作成する
     const existing = await sql`SELECT id FROM users WHERE email = ${u.email}`;
-    if (existing.length > 0) continue;
+    if (existing.length > 0) {
+      await createNecoWelcomeConversation(sql, necoId, existing[0].id, u.user_type);
+      continue;
+    }
 
     const password_hash = await hash(u.password);
     const [row] = await sql`
