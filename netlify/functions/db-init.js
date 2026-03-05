@@ -219,6 +219,57 @@ async function ensureNecoSystemUser(sql) {
   return row.id;
 }
 
+// ── Welcome conversation helper ───────────────────────────────────────────────
+
+/**
+ * ユーザー種別に応じたウェルカムメッセージを返す。
+ */
+function getWelcomeMessage(userType) {
+  if (userType === 'doctor') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。あなたのご経験やスキルに興味がある求人がある場合、医療機関からメッセージが送られてきます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'nurse') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。あなたのご経験やスキルに興味がある求人がある場合、医療機関からメッセージが送られてきます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'medical') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。求人に興味を持った医師・看護師から応募や問い合わせのメッセージが届きます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  return `こんにちは、Necoです。
+こちらはメッセージ画面です。Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+}
+
+/**
+ * ユーザーと Neco システムユーザーのウェルカム会話を作成する。
+ */
+async function createNecoWelcomeConversation(sql, necoId, userId, userType) {
+  const p1 = userId < necoId ? userId : necoId;
+  const p2 = userId < necoId ? necoId : userId;
+
+  let [conv] = await sql`
+    SELECT id FROM conversations WHERE participant1_id = ${p1} AND participant2_id = ${p2}
+  `;
+  if (!conv) {
+    [conv] = await sql`
+      INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
+      VALUES (${p1}, ${p2}, NOW())
+      RETURNING id
+    `;
+  }
+
+  const welcomeMessage = getWelcomeMessage(userType);
+  await sql`
+    INSERT INTO messages (conversation_id, sender_id, content)
+    VALUES (${conv.id}, ${necoId}, ${welcomeMessage})
+  `;
+  await sql`UPDATE conversations SET last_message_at = NOW() WHERE id = ${conv.id}`;
+}
+
 // ── Seed data ────────────────────────────────────────────────────────────────
 
 async function runSeed(sql) {
@@ -226,7 +277,7 @@ async function runSeed(sql) {
   const hash = (pw) => bcrypt.hash(pw, SALT_ROUNDS);
 
   // Neco システムユーザー（必ず存在させる）
-  await ensureNecoSystemUser(sql);
+  const necoId = await ensureNecoSystemUser(sql);
 
   // Demo users
   const users = [
@@ -348,6 +399,9 @@ async function runSeed(sql) {
         `;
       }
     }
+
+    // Neco とのウェルカム会話を作成
+    await createNecoWelcomeConversation(sql, necoId, userId, u.user_type);
   }
 }
 

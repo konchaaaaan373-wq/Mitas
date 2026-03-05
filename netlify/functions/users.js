@@ -77,9 +77,32 @@ async function getOrCreateNecoUser(sql) {
 }
 
 /**
+ * ユーザー種別に応じたウェルカムメッセージを返す。
+ */
+function getWelcomeMessage(userType) {
+  if (userType === 'doctor') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。あなたのご経験やスキルに興味がある求人がある場合、医療機関からメッセージが送られてきます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'nurse') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。あなたのご経験やスキルに興味がある求人がある場合、医療機関からメッセージが送られてきます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'medical') {
+    return `こんにちは、Necoです。
+こちらはメッセージ画面です。求人に興味を持った医師・看護師から応募や問い合わせのメッセージが届きます。
+また、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  return `こんにちは、Necoです。
+こちらはメッセージ画面です。Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+}
+
+/**
  * 新規ユーザーのウェルカム会話を Neco との間に作成し、ウェルカムメッセージを送信する。
  */
-async function createNecoWelcomeConversation(sql, newUserId) {
+async function createNecoWelcomeConversation(sql, newUserId, userType) {
   try {
     const necoId = await getOrCreateNecoUser(sql);
 
@@ -100,13 +123,8 @@ async function createNecoWelcomeConversation(sql, newUserId) {
       `;
     }
 
-    // ウェルカムメッセージを Neco から送信
-    const welcomeMessage = `はじめまして！Necoです。あなたの転職・キャリアアップを全力で応援します🐱
-
-在宅医療・訪問診療に特化した求人情報をご紹介しています。
-ご質問やご要望があれば、お気軽にこちらでメッセージをお送りください。
-
-✨ 転職案件のご提案や、医療機関からのスカウトメッセージもこちらに届きます。どうぞよろしくお願いいたします！`;
+    // ユーザー種別に合わせたウェルカムメッセージを Neco から送信
+    const welcomeMessage = getWelcomeMessage(userType);
 
     await sql`
       INSERT INTO messages (conversation_id, sender_id, content)
@@ -232,7 +250,7 @@ exports.handler = async (event) => {
       }
 
       // Neco とのウェルカム会話を作成（非同期で行い、失敗してもユーザー登録は成功）
-      await createNecoWelcomeConversation(sql, userRow.id);
+      await createNecoWelcomeConversation(sql, userRow.id, user_type);
 
       const profile  = await fetchProfile(sql, userRow.id, user_type);
       const userData = formatUser(userRow, profile);
