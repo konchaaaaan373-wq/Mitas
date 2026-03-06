@@ -731,147 +731,143 @@
             line-height: 1.8;
         }
 
-        /* Features Section */
+        /* Features Section (reasons-section style) */
         .features {
-            padding: 8rem 2rem;
-            background: linear-gradient(135deg, #FFF5F7 0%, #F0F9FF 100%);
+            padding: 6rem 2rem;
+            background: var(--white);
             position: relative;
-            overflow: hidden;
+        }
+
+        .features .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
         }
 
         .features-grid {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.5rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
         }
 
         .feature-card {
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 30px;
-            display: flex;
-            gap: 2rem;
-            align-items: start;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 2.8rem 2rem 2.2rem;
+            border-radius: 24px;
+            text-align: center;
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
         }
+
+        /* Per-card soft gradient backgrounds */
+        .feature-card:nth-child(1) { background: linear-gradient(145deg, rgba(255,107,157,0.07) 0%, rgba(167,139,250,0.1) 100%); }
+        .feature-card:nth-child(2) { background: linear-gradient(145deg, rgba(78,205,196,0.07) 0%, rgba(76,201,240,0.1) 100%); }
+        .feature-card:nth-child(3) { background: linear-gradient(145deg, rgba(167,139,250,0.07) 0%, rgba(255,107,157,0.1) 100%); }
+        .feature-card:nth-child(4) { background: linear-gradient(145deg, rgba(255,140,66,0.07) 0%, rgba(255,230,109,0.1) 100%); }
 
         .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--purple));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
+            right: 0;
+            height: 4px;
+            border-radius: 24px 24px 0 0;
+            transition: height 0.3s ease;
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
+        .feature-card:nth-child(1)::before { background: linear-gradient(90deg, var(--primary), var(--purple)); }
+        .feature-card:nth-child(2)::before { background: linear-gradient(90deg, var(--secondary), var(--blue)); }
+        .feature-card:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), var(--primary)); }
+        .feature-card:nth-child(4)::before { background: linear-gradient(90deg, var(--orange), var(--accent)); }
 
         .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
         }
 
-        .feature-icon-box {
-            min-width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        .feature-card:hover::before {
+            height: 6px;
         }
 
-        .feature-icon-box svg {
-            width: 40px;
-            height: 40px;
+        /* Faint background watermark icon */
+        .feature-bg-icon {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            width: 110px;
+            height: 110px;
+            pointer-events: none;
+            opacity: 0.09;
         }
 
-        .feature-card:nth-child(1) .feature-icon-box {
+        .feature-bg-icon svg {
+            width: 110px;
+            height: 110px;
+        }
+
+        .feature-card:nth-child(1) .feature-bg-icon svg path,
+        .feature-card:nth-child(1) .feature-bg-icon svg circle,
+        .feature-card:nth-child(1) .feature-bg-icon svg rect { stroke: var(--primary); fill: none; stroke-width: 1.5; }
+        .feature-card:nth-child(2) .feature-bg-icon svg path,
+        .feature-card:nth-child(2) .feature-bg-icon svg circle,
+        .feature-card:nth-child(2) .feature-bg-icon svg rect { stroke: var(--secondary); fill: none; stroke-width: 1.5; }
+        .feature-card:nth-child(3) .feature-bg-icon svg path,
+        .feature-card:nth-child(3) .feature-bg-icon svg circle,
+        .feature-card:nth-child(3) .feature-bg-icon svg rect { stroke: var(--purple); fill: none; stroke-width: 1.5; }
+        .feature-card:nth-child(4) .feature-bg-icon svg path,
+        .feature-card:nth-child(4) .feature-bg-icon svg circle,
+        .feature-card:nth-child(4) .feature-bg-icon svg rect { stroke: var(--orange); fill: none; stroke-width: 1.5; }
+
+        /* Number badge */
+        .feature-num {
+            display: block;
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
+        }
+
+        .feature-card:nth-child(1) .feature-num {
             background: linear-gradient(135deg, var(--primary), var(--purple));
-            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .feature-card:nth-child(1) .feature-icon-box svg path,
-        .feature-card:nth-child(1) .feature-icon-box svg circle,
-        .feature-card:nth-child(1) .feature-icon-box svg rect {
-            stroke: white;
-            fill: none;
-        }
-
-        .feature-card:nth-child(1) .feature-icon-box svg [fill]:not([fill="none"]) {
-            fill: white;
-        }
-
-        .feature-card:nth-child(2) .feature-icon-box {
+        .feature-card:nth-child(2) .feature-num {
             background: linear-gradient(135deg, var(--secondary), var(--blue));
-            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .feature-card:nth-child(3) .feature-num {
+            background: linear-gradient(135deg, var(--purple), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .feature-card:nth-child(4) .feature-num {
+            background: linear-gradient(135deg, var(--orange), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .feature-card:nth-child(2) .feature-icon-box svg path,
-        .feature-card:nth-child(2) .feature-icon-box svg circle,
-        .feature-card:nth-child(2) .feature-icon-box svg rect {
-            stroke: white;
-            fill: none;
-        }
-
-        .feature-card:nth-child(2) .feature-icon-box svg [fill]:not([fill="none"]) {
-            fill: white;
-        }
-
-        .feature-card:nth-child(3) .feature-icon-box {
-            background: linear-gradient(135deg, var(--accent), var(--orange));
-            box-shadow: 0 10px 30px rgba(255, 230, 109, 0.3);
-        }
-
-        .feature-card:nth-child(3) .feature-icon-box svg path,
-        .feature-card:nth-child(3) .feature-icon-box svg circle,
-        .feature-card:nth-child(3) .feature-icon-box svg rect {
-            stroke: white;
-            fill: none;
-        }
-
-        .feature-card:nth-child(3) .feature-icon-box svg [fill]:not([fill="none"]) {
-            fill: white;
-        }
-
-        .feature-card:nth-child(4) .feature-icon-box {
-            background: linear-gradient(135deg, var(--purple), var(--blue));
-            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
-        }
-
-        .feature-card:nth-child(4) .feature-icon-box svg path,
-        .feature-card:nth-child(4) .feature-icon-box svg circle,
-        .feature-card:nth-child(4) .feature-icon-box svg rect {
-            stroke: white;
-            fill: none;
-        }
-
-        .feature-card:nth-child(4) .feature-icon-box svg [fill]:not([fill="none"]) {
-            fill: white;
-        }
-
-        .feature-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.8rem;
+        .feature-card h3 {
+            font-size: 1.15rem;
             color: var(--dark);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
             word-break: keep-all;
+            line-height: 1.45;
         }
 
-        .feature-content p {
+        .feature-card p {
+            font-size: 0.9rem;
             color: #6B7280;
-            line-height: 1.8;
-            font-size: 1.05rem;
+            line-height: 1.7;
         }
 
         /* Stats Section */
@@ -1180,7 +1176,7 @@
             }
 
             .features-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .process-grid {
@@ -1381,38 +1377,40 @@
             }
 
             .features-grid {
-                gap: 1.3rem;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
             }
 
             .feature-card {
-                flex-direction: column;
-                padding: 1.8rem 1.3rem;
-                gap: 1.3rem;
+                padding: 1.8rem 1.2rem 1.4rem;
+                border-radius: 18px;
             }
 
-            .feature-icon-box {
-                width: 65px;
-                height: 65px;
-                margin: 0 auto;
+            .feature-num {
+                font-size: 1.7rem;
+                margin-bottom: 0.6rem;
             }
 
-            .feature-icon-box svg {
-                width: 32px;
-                height: 32px;
+            .feature-bg-icon {
+                width: 80px;
+                height: 80px;
+                bottom: -8px;
+                right: -8px;
             }
 
-            .feature-content {
-                text-align: center;
+            .feature-bg-icon svg {
+                width: 80px;
+                height: 80px;
             }
 
-            .feature-content h3 {
-                font-size: 1.2rem;
-                margin-bottom: 0.7rem;
+            .feature-card h3 {
+                font-size: 0.95rem;
+                margin-bottom: 0.5rem;
             }
 
-            .feature-content p {
-                font-size: 0.85rem;
-                line-height: 1.65;
+            .feature-card p {
+                font-size: 0.8rem;
+                line-height: 1.6;
             }
 
             /* 統計セクション */
@@ -2009,7 +2007,6 @@
             <ul class="nav-links">
                 <li><a href="#process">サービス内容</a></li>
                 <li><a href="#features">特徴</a></li>
-                <li><a href="#stats">実績</a></li>
                 <li><a href="#contact">お問い合わせ</a></li>
             </ul>
             <div class="nav-cta">
@@ -2021,7 +2018,6 @@
             <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="navigation" aria-label="モバイルメニュー">
                 <a href="#process" onclick="closeMobileNav()">サービス内容</a>
                 <a href="#features" onclick="closeMobileNav()">特徴</a>
-                <a href="#stats" onclick="closeMobileNav()">実績</a>
                 <a href="#contact" onclick="closeMobileNav()">お問い合わせ</a>
                 <div class="drawer-divider"></div>
                 <a href="for-medical.html" class="drawer-medical-link">医療機関の方はこちら</a>
@@ -2448,82 +2444,61 @@
     </section>
 
     <section id="features" class="features">
-        <div class="poly-bg">
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-        </div>
         <div class="section-header fade-in">
-            <span class="section-tag">Features</span>
-            <h2>Necoの特徴</h2>
-            <p>従来の求人サイトにはない、看護師のためのAIプラットフォーム</p>
+            <span class="section-tag">What Neco?</span>
+            <h2>Necoとは？<span class="gradient-text">4つの特徴</span></h2>
+            <p>専門性評価と伴走サポートで、あなたに合う訪問看護の仕事を見つけるサービスです</p>
         </div>
         <div class="features-grid">
             <div class="feature-card fade-in">
-                <div class="feature-icon-box">
+                <div class="feature-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 11L12 14L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <rect x="7" y="7" width="4" height="4" rx="0.5" stroke-width="1.5" opacity="0.3"/>
-                        <rect x="7" y="13" width="4" height="4" rx="0.5" stroke-width="1.5" opacity="0.3"/>
+                        <rect x="7" y="7" width="4" height="4" rx="0.5" stroke-width="1.5"/>
+                        <rect x="7" y="13" width="4" height="4" rx="0.5" stroke-width="1.5"/>
                     </svg>
                 </div>
-                <div class="feature-content">
-                    <h3>処置スキルの<wbr>定量評価システム</h3>
-                    <p>エンゼルケア、ストマ交換、吸引、点滴管理、バルーン交換など、対応可能な処置を具体的に評価。あなたの専門性を正確に可視化します。</p>
-                </div>
+                <span class="feature-num">01</span>
+                <h3>処置スキルの<wbr>定量評価システム</h3>
+                <p>エンゼルケア、ストマ交換、吸引、点滴管理、バルーン交換など、対応可能な処置を具体的に評価。あなたの専門性を正確に可視化します。</p>
             </div>
             <div class="feature-card fade-in">
-                <div class="feature-icon-box">
+                <div class="feature-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="3" stroke-width="2"/>
-                        <path d="M12 1V3M12 21V23M23 12H21M3 12H1" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M18.36 5.64L16.95 7.05M7.05 16.95L5.64 18.36M18.36 18.36L16.95 16.95M7.05 7.05L5.64 5.64" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <circle cx="12" cy="7" r="4.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 22 C3 16.5 7 13 12 13 C17 13 21 16.5 21 22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <div class="feature-content">
-                    <h3>専任コンシェルジュによる<wbr>マッチング</h3>
-                    <p>単なる求人紹介ではなく、専任担当が一人ひとりの専門性と希望を分析。あなたに最適な職場環境をご提案します。</p>
-                </div>
+                <span class="feature-num">02</span>
+                <h3>専任コンシェルジュが<wbr>長期伴走</h3>
+                <p>医療業界に精通した専任担当が、希望やライフスタイルに寄り添いながら最適な職場を探索。急かさず、入職後まで長期にわたりフォローします。</p>
             </div>
             <div class="feature-card fade-in">
-                <div class="feature-icon-box">
+                <div class="feature-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V5C20 3.89543 19.1046 3 18 3H6C4.89543 3 4 3.89543 4 5V21" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M2 21H22" stroke-width="2" stroke-linecap="round"/>
-                        <circle cx="12" cy="9" r="2.5" stroke-width="1.5"/>
-                        <path d="M8 15C8 13.8954 8.89543 13 10 13H14C15.1046 13 16 13.8954 16 15V21H8V15Z" stroke-width="1.5"/>
+                        <path d="M7 2 L17 2 Q19 2 19 4 L19 20 Q19 22 17 22 L7 22 Q5 22 5 20 L5 4 Q5 2 7 2 Z" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M10.5 5 L13.5 5" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="12" cy="19" r="1.2" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="2" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="4" stroke-width="1"/>
                     </svg>
                 </div>
-                <div class="feature-content">
-                    <h3>関東エリアの厚い求人ネットワーク</h3>
-                    <p>東京・千葉・埼玉・神奈川の在宅医療・訪問看護ステーションに特化した独自ネットワークで、関東エリアの厳選求人をご紹介。あなたのスキルを最大限活かせる環境が見つかります。</p>
-                </div>
+                <span class="feature-num">03</span>
+                <h3>関東エリアの厚い<wbr>求人ネットワーク</h3>
+                <p>東京・千葉・埼玉・神奈川の在宅医療・訪問看護ステーションに特化した独自ネットワークで、関東エリアの厳選求人をご紹介。あなたのスキルを最大限活かせる環境が見つかります。</p>
             </div>
             <div class="feature-card fade-in">
-                <div class="feature-icon-box">
+                <div class="feature-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="12" r="4" stroke-width="1.5" opacity="0.4"/>
+                        <circle cx="12" cy="12" r="4" stroke-width="1.5"/>
                         <path d="M12 8V12L14 13.5" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <div class="feature-content">
-                    <h3>手技獲得から<wbr>就職後まで<wbr>徹底サポート</h3>
-                    <p>訪問看護が初めての方も安心。必要な手技の研修サポート、同行訪問支援、入職後のフォローアップまで、長期的にキャリアをサポートします。</p>
-                </div>
+                <span class="feature-num">04</span>
+                <h3>手技獲得から<wbr>就職後まで<wbr>徹底サポート</h3>
+                <p>訪問看護が初めての方も安心。必要な手技の研修サポート、同行訪問支援、入職後のフォローアップまで、長期的にキャリアをサポートします。</p>
             </div>
         </div>
     </section>
@@ -2633,7 +2608,6 @@
                 <ul class="footer-links">
                     <li><a href="#process">サービス内容</a></li>
                     <li><a href="#features">特徴</a></li>
-                    <li><a href="#stats">実績</a></li>
                     <li><a href="faq.html">よくある質問</a></li>
                 </ul>
             </div>
