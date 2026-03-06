@@ -1092,28 +1092,15 @@
                         <span class="form-error">施設名を入力してください</span>
                     </div>
 
-                    <div class="form-group required">
-                        <label for="facilityType">種別</label>
-                        <select id="facilityType" name="facilityType" required>
-                            <option value="">選択してください</option>
-                            <option value="hospital">病院</option>
-                            <option value="clinic">診療所</option>
-                            <option value="visiting-nurse">訪問看護ステーション</option>
-                            <option value="facility">施設</option>
-                        </select>
-                        <span class="form-error">種別を選択してください</span>
-                    </div>
-
-                    <div class="form-group required">
+                    <div class="form-group">
                         <label for="prefecture">所在地（都道府県）</label>
-                        <select id="prefecture" name="prefecture" required>
+                        <select id="prefecture" name="prefecture">
                             <option value="">選択してください</option>
                             <option value="北海道">北海道</option>
                             <option value="東京都">東京都</option>
                             <option value="大阪府">大阪府</option>
                             <option value="その他">その他</option>
                         </select>
-                        <span class="form-error">都道府県を選択してください</span>
                     </div>
 
                     <div class="form-group required">
@@ -1140,20 +1127,20 @@
                         <label>導入目的（複数選択可）</label>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
-                                <input type="checkbox" id="purpose1" name="purpose" value="採用">
-                                <label for="purpose1">採用</label>
+                                <input type="checkbox" id="purpose1" name="purpose" value="新規常勤採用">
+                                <label for="purpose1">新規常勤採用</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="purpose2" name="purpose" value="欠員補充">
-                                <label for="purpose2">欠員補充</label>
+                                <input type="checkbox" id="purpose2" name="purpose" value="新規非常勤採用">
+                                <label for="purpose2">新規非常勤採用</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="purpose3" name="purpose" value="教育負担軽減">
-                                <label for="purpose3">教育負担軽減</label>
+                                <input type="checkbox" id="purpose3" name="purpose" value="欠員補充">
+                                <label for="purpose3">欠員補充</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="purpose4" name="purpose" value="定着改善">
-                                <label for="purpose4">定着改善</label>
+                                <input type="checkbox" id="purpose4" name="purpose" value="教育負担軽減">
+                                <label for="purpose4">教育負担軽減</label>
                             </div>
                             <div class="checkbox-item">
                                 <input type="checkbox" id="purpose5" name="purpose" value="採用費削減">
@@ -1186,19 +1173,6 @@
                         <span class="form-error">少なくとも1つ選択してください</span>
                     </div>
 
-                    <div class="form-group required">
-                        <label for="scale">利用規模</label>
-                        <select id="scale" name="scale" required>
-                            <option value="">選択してください</option>
-                            <option value="1-5名">1〜5名</option>
-                            <option value="6-20名">6〜20名</option>
-                            <option value="21-50名">21〜50名</option>
-                            <option value="51-100名">51〜100名</option>
-                            <option value="101名以上">101名以上</option>
-                        </select>
-                        <span class="form-error">利用規模を選択してください</span>
-                    </div>
-
                     <div class="form-group">
                         <label for="startTiming">希望開始時期</label>
                         <select id="startTiming" name="startTiming">
@@ -1215,32 +1189,6 @@
                         <input type="text" id="challenges" name="challenges" placeholder="例：夜勤帯の人手不足">
                     </div>
 
-                    <div class="form-group">
-                        <label for="hasTrainer">教育担当の有無</label>
-                        <select id="hasTrainer" name="hasTrainer">
-                            <option value="">選択してください</option>
-                            <option value="あり">あり</option>
-                            <option value="なし">なし</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>既存ツール（複数選択可）</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="tool1" name="tools" value="電子カルテ">
-                                <label for="tool1">電子カルテ</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="tool2" name="tools" value="勤怠管理">
-                                <label for="tool2">勤怠管理</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="tool3" name="tools" value="なし">
-                                <label for="tool3">なし</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <button type="submit" class="cta-button submit-button">入力内容を確認</button>
@@ -1329,18 +1277,14 @@
             // フォームデータ収集
             formData = {
                 facilityName: form.facilityName.value,
-                facilityType: form.facilityType.value,
-                prefecture: form.prefecture.value,
+                prefecture: form.prefecture.value || '未選択',
                 contactName: form.contactName.value,
                 email: form.email.value,
                 phone: form.phone.value,
                 purpose: Array.from(form.querySelectorAll('[name="purpose"]:checked')).map(cb => cb.value).join(', '),
                 occupation: Array.from(form.querySelectorAll('[name="occupation"]:checked')).map(cb => cb.value).join(', '),
-                scale: form.scale.value,
                 startTiming: form.startTiming.value || '未定',
-                challenges: form.challenges.value || 'なし',
-                hasTrainer: form.hasTrainer.value || '未選択',
-                tools: Array.from(form.querySelectorAll('[name="tools"]:checked')).map(cb => cb.value).join(', ') || 'なし'
+                challenges: form.challenges.value || 'なし'
             };
 
             // 確認画面表示
@@ -1353,10 +1297,6 @@
                 <div class="confirm-item">
                     <div class="confirm-label">施設名</div>
                     <div class="confirm-value">${formData.facilityName}</div>
-                </div>
-                <div class="confirm-item">
-                    <div class="confirm-label">種別</div>
-                    <div class="confirm-value">${formData.facilityType}</div>
                 </div>
                 <div class="confirm-item">
                     <div class="confirm-label">所在地</div>
@@ -1382,10 +1322,6 @@
                     <div class="confirm-label">対象職種</div>
                     <div class="confirm-value">${formData.occupation}</div>
                 </div>
-                <div class="confirm-item">
-                    <div class="confirm-label">利用規模</div>
-                    <div class="confirm-value">${formData.scale}</div>
-                </div>
             `;
 
             document.getElementById('confirmModal').classList.add('active');
@@ -1408,7 +1344,6 @@
 【Neco導入のお問い合わせ】
 
 施設名: ${formData.facilityName}
-種別: ${formData.facilityType}
 所在地: ${formData.prefecture}
 担当者氏名: ${formData.contactName}
 メールアドレス: ${formData.email}
@@ -1416,12 +1351,9 @@
 
 導入目的: ${formData.purpose}
 対象職種: ${formData.occupation}
-利用規模: ${formData.scale}
 
 希望開始時期: ${formData.startTiming}
 現状の課題: ${formData.challenges}
-教育担当の有無: ${formData.hasTrainer}
-既存ツール: ${formData.tools}
             `);
 
             window.location.href = `mailto:neco.oncall@gmail.com?subject=${subject}&body=${body}`;
