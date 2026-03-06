@@ -670,15 +670,19 @@
         }
 
         .reason-card {
-            background: var(--light);
-            padding: 2.5rem 2rem;
+            padding: 2.8rem 2rem 2.2rem;
             border-radius: 24px;
             text-align: center;
-            border: 2px solid transparent;
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
         }
+
+        /* Per-card soft gradient backgrounds */
+        .reason-card:nth-child(1) { background: linear-gradient(145deg, rgba(255,107,157,0.07) 0%, rgba(167,139,250,0.1) 100%); }
+        .reason-card:nth-child(2) { background: linear-gradient(145deg, rgba(78,205,196,0.07) 0%, rgba(76,201,240,0.1) 100%); }
+        .reason-card:nth-child(3) { background: linear-gradient(145deg, rgba(167,139,250,0.07) 0%, rgba(255,107,157,0.1) 100%); }
+        .reason-card:nth-child(4) { background: linear-gradient(145deg, rgba(255,140,66,0.07) 0%, rgba(255,230,109,0.1) 100%); }
 
         .reason-card::before {
             content: '';
@@ -699,56 +703,71 @@
         .reason-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 0, 0, 0.05);
         }
 
         .reason-card:hover::before {
             height: 6px;
         }
 
-        .reason-icon {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
+        /* Faint background watermark icon */
+        .reason-bg-icon {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            width: 110px;
+            height: 110px;
+            pointer-events: none;
+            opacity: 0.09;
         }
 
-        .reason-card:nth-child(1) .reason-icon {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(167, 139, 250, 0.15));
-        }
-        .reason-card:nth-child(2) .reason-icon {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(76, 201, 240, 0.15));
-        }
-        .reason-card:nth-child(3) .reason-icon {
-            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(255, 107, 157, 0.15));
-        }
-        .reason-card:nth-child(4) .reason-icon {
-            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 230, 109, 0.15));
+        .reason-bg-icon svg {
+            width: 110px;
+            height: 110px;
         }
 
-        .reason-icon svg {
-            width: 36px;
-            height: 36px;
+        .reason-card:nth-child(1) .reason-bg-icon svg path,
+        .reason-card:nth-child(1) .reason-bg-icon svg circle { stroke: var(--primary); fill: none; stroke-width: 1.5; }
+        .reason-card:nth-child(2) .reason-bg-icon svg path,
+        .reason-card:nth-child(2) .reason-bg-icon svg circle { stroke: var(--secondary); fill: none; stroke-width: 1.5; }
+        .reason-card:nth-child(3) .reason-bg-icon svg path,
+        .reason-card:nth-child(3) .reason-bg-icon svg circle { stroke: var(--purple); fill: none; stroke-width: 1.5; }
+        .reason-card:nth-child(4) .reason-bg-icon svg path,
+        .reason-card:nth-child(4) .reason-bg-icon svg circle { stroke: var(--orange); fill: none; stroke-width: 1.5; }
+
+        /* Number badge */
+        .reason-num {
+            display: block;
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
         }
 
-        .reason-card:nth-child(1) .reason-icon svg path,
-        .reason-card:nth-child(1) .reason-icon svg circle { stroke: var(--primary); }
-        .reason-card:nth-child(1) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--primary); }
-
-        .reason-card:nth-child(2) .reason-icon svg path,
-        .reason-card:nth-child(2) .reason-icon svg circle { stroke: var(--secondary); }
-        .reason-card:nth-child(2) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--secondary); }
-
-        .reason-card:nth-child(3) .reason-icon svg path,
-        .reason-card:nth-child(3) .reason-icon svg circle { stroke: var(--purple); }
-        .reason-card:nth-child(3) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--purple); }
-
-        .reason-card:nth-child(4) .reason-icon svg path,
-        .reason-card:nth-child(4) .reason-icon svg circle { stroke: var(--orange); }
-        .reason-card:nth-child(4) .reason-icon svg [fill]:not([fill="none"]) { fill: var(--orange); }
+        .reason-card:nth-child(1) .reason-num {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .reason-card:nth-child(2) .reason-num {
+            background: linear-gradient(135deg, var(--secondary), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .reason-card:nth-child(3) .reason-num {
+            background: linear-gradient(135deg, var(--purple), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .reason-card:nth-child(4) .reason-num {
+            background: linear-gradient(135deg, var(--orange), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .reason-card h3 {
             font-size: 1.15rem;
@@ -756,6 +775,7 @@
             margin-bottom: 0.8rem;
             font-weight: 700;
             word-break: keep-all;
+            line-height: 1.45;
         }
 
         .reason-card p {
@@ -1450,19 +1470,25 @@
             }
 
             .reason-card {
-                padding: 1.5rem 1.2rem;
-                border-radius: 16px;
+                padding: 1.8rem 1.2rem 1.4rem;
+                border-radius: 18px;
             }
 
-            .reason-icon {
-                width: 56px;
-                height: 56px;
-                margin-bottom: 1rem;
+            .reason-num {
+                font-size: 1.7rem;
+                margin-bottom: 0.6rem;
             }
 
-            .reason-icon svg {
-                width: 28px;
-                height: 28px;
+            .reason-bg-icon {
+                width: 80px;
+                height: 80px;
+                bottom: -8px;
+                right: -8px;
+            }
+
+            .reason-bg-icon svg {
+                width: 80px;
+                height: 80px;
             }
 
             .reason-card h3 {
@@ -2240,50 +2266,54 @@
         </div>
         <div class="reasons-grid">
             <div class="reason-card">
-                <div class="reason-icon">
+                <div class="reason-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="7" r="4.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M3 22 C3 16.5 7 13 12 13 C17 13 21 16.5 21 22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
+                <span class="reason-num">01</span>
                 <h3>専任コンシェルジュが<wbr>長期伴走</h3>
                 <p>医療業界に精通した専任担当が、希望やライフスタイルに寄り添いながら最適な職場を探索。急かさず、入職後まで長期にわたりフォローします。</p>
             </div>
             <div class="reason-card">
-                <div class="reason-icon">
+                <div class="reason-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2.5 L21 8.5 L17.8 20 L6.2 20 L3 8.5 Z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                        <path d="M12 7 L16.5 10 L14.8 16 L9.2 16 L7.5 10 Z" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.5"/>
-                        <path d="M12 2.5 L12 7 M21 8.5 L16.5 10 M17.8 20 L14.8 16 M6.2 20 L9.2 16 M3 8.5 L7.5 10" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+                        <path d="M12 7 L16.5 10 L14.8 16 L9.2 16 L7.5 10 Z" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+                        <path d="M12 2.5 L12 7 M21 8.5 L16.5 10 M17.8 20 L14.8 16 M6.2 20 L9.2 16 M3 8.5 L7.5 10" stroke-width="1" stroke-linecap="round"/>
                     </svg>
                 </div>
+                <span class="reason-num">02</span>
                 <h3>専門性の定量評価と<wbr>MedType診断</h3>
                 <p>スキル・経験を定量評価し、市場価値を可視化。MedType診断も活用して、強みと志向に合う非常勤案件をご提案します。</p>
             </div>
             <div class="reason-card">
-                <div class="reason-icon">
+                <div class="reason-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 2 L17 2 Q19 2 19 4 L19 20 Q19 22 17 22 L7 22 Q5 22 5 20 L5 4 Q5 2 7 2 Z" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M10.5 5 L13.5 5" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-                        <circle cx="12" cy="19" r="1.2" stroke-width="1.5" opacity="0.4"/>
-                        <circle cx="12" cy="12" r="2" stroke-width="1.5" opacity="0.7"/>
-                        <circle cx="12" cy="12" r="4" stroke-width="1" opacity="0.3"/>
+                        <path d="M10.5 5 L13.5 5" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="12" cy="19" r="1.2" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="2" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="4" stroke-width="1"/>
                     </svg>
                 </div>
+                <span class="reason-num">03</span>
                 <h3>LINE・メールで完結</h3>
                 <p>連絡はLINE・メール中心で、忙しい勤務の合間でもやり取りしやすい設計です。迷惑な電話などは一切ございません。</p>
             </div>
             <div class="reason-card">
-                <div class="reason-icon">
+                <div class="reason-bg-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 4.5 C6.5 4.5 4.5 6.5 4.5 9 C4.5 11 5.5 12.5 7 13.5 C7 15.5 8 17.5 9.5 18.5 L14.5 18.5 C16 17.5 17 15.5 17 13.5 C18.5 12.5 19.5 11 19.5 9 C19.5 6.5 17.5 4.5 15 4.5 C14 4.5 13 5 12 5.5 C11 5 10 4.5 9 4.5 Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 5.5 L12 18.5" stroke-width="1" stroke-linecap="round" opacity="0.35"/>
-                        <path d="M7 9 Q8.5 8 10 9" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-                        <path d="M7.5 12.5 Q9 11.5 10.5 12.5" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-                        <path d="M14 9 Q15.5 8 17 9" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-                        <path d="M13.5 12.5 Q15 11.5 17 12.5" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+                        <path d="M12 5.5 L12 18.5" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M7 9 Q8.5 8 10 9" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M7.5 12.5 Q9 11.5 10.5 12.5" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M14 9 Q15.5 8 17 9" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M13.5 12.5 Q15 11.5 17 12.5" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </div>
+                <span class="reason-num">04</span>
                 <h3>AIによる<wbr>最適なマッチング</h3>
                 <p>独自のAIアルゴリズムが、あなたの経験・希望条件・将来のキャリアプランを分析し、最適な求人を提案します。</p>
             </div>
