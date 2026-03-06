@@ -743,9 +743,117 @@
             outline-offset: 2px;
         }
 
+        /* === 桜の花びらアニメーション === */
+        .sakura-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .sakura-petal {
+            position: absolute;
+            top: -30px;
+            opacity: 0;
+            pointer-events: none;
+            animation: sakuraFall var(--fall-dur, 9s) var(--fall-delay, 0s) ease-in-out infinite;
+            filter: drop-shadow(0 1px 3px rgba(220, 80, 110, 0.15));
+        }
+
+        .sakura-petal::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--petal-color, rgba(255, 183, 197, 0.88));
+            border-radius: 100% 0% 100% 0%;
+            transform-origin: 50% 80%;
+            animation: petalTumble var(--tumble-dur, 3.5s) var(--fall-delay, 0s) ease-in-out infinite;
+        }
+
+        .sakura-petal::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 8%; left: 8%;
+            width: 84%; height: 84%;
+            background: rgba(255, 248, 250, 0.38);
+            border-radius: 100% 0% 100% 0%;
+            transform: rotate(40deg);
+        }
+
+        @keyframes sakuraFall {
+            0%   { transform: translateX(0px)               translateY(0px);    opacity: 0; }
+            6%   { opacity: 0.88; }
+            20%  { transform: translateX(var(--sw1,  25px)) translateY(20vh); }
+            40%  { transform: translateX(var(--sw2, -18px)) translateY(40vh); }
+            60%  { transform: translateX(var(--sw3,  32px)) translateY(60vh); }
+            80%  { transform: translateX(var(--sw4, -12px)) translateY(80vh); opacity: 0.65; }
+            95%  { opacity: 0.3; }
+            100% { transform: translateX(var(--sw5,  20px)) translateY(112vh); opacity: 0; }
+        }
+
+        @keyframes petalTumble {
+            0%   { transform: rotate(0deg)   scaleX(1)     scaleY(1); }
+            25%  { transform: rotate(90deg)  scaleX(-0.7)  scaleY(0.9); }
+            50%  { transform: rotate(180deg) scaleX(0.85)  scaleY(1.1); }
+            75%  { transform: rotate(270deg) scaleX(-0.65) scaleY(0.85); }
+            100% { transform: rotate(360deg) scaleX(1)     scaleY(1); }
+        }
+
+        .sakura-petal:nth-child(1)  { left: 5%;  width: 13px; height: 17px; --fall-dur: 9.2s;  --fall-delay: 0.0s;  --tumble-dur: 3.8s; --sw1: 22px;  --sw2: -16px; --sw3: 28px;  --sw4: -12px; --sw5: 18px;  --petal-color: rgba(255, 182, 193, 0.75); }
+        .sakura-petal:nth-child(2)  { left: 15%; width: 16px; height: 20px; --fall-dur: 10.5s; --fall-delay: 1.2s;  --tumble-dur: 4.2s; --sw1: -20px; --sw2: 30px;  --sw3: -15px; --sw4: 25px;  --sw5: -10px; --petal-color: rgba(255, 192, 203, 0.70); }
+        .sakura-petal:nth-child(3)  { left: 28%; width: 11px; height: 15px; --fall-dur: 8.8s;  --fall-delay: 2.5s;  --tumble-dur: 3.2s; --sw1: 30px;  --sw2: -22px; --sw3: 38px;  --sw4: -18px; --sw5: -8px;  --petal-color: rgba(255, 172, 188, 0.78); }
+        .sakura-petal:nth-child(4)  { left: 40%; width: 15px; height: 19px; --fall-dur: 11.0s; --fall-delay: 0.8s;  --tumble-dur: 4.8s; --sw1: -25px; --sw2: 15px;  --sw3: -30px; --sw4: 20px;  --sw5: -15px; --petal-color: rgba(255, 200, 210, 0.72); }
+        .sakura-petal:nth-child(5)  { left: 55%; width: 12px; height: 16px; --fall-dur: 9.5s;  --fall-delay: 3.6s;  --tumble-dur: 3.6s; --sw1: 18px;  --sw2: -28px; --sw3: 22px;  --sw4: -16px; --sw5: 12px;  --petal-color: rgba(255, 175, 193, 0.76); }
+        .sakura-petal:nth-child(6)  { left: 68%; width: 17px; height: 21px; --fall-dur: 10.2s; --fall-delay: 2.0s;  --tumble-dur: 4.5s; --sw1: -15px; --sw2: 25px;  --sw3: -18px; --sw4: 30px;  --sw5: -12px; --petal-color: rgba(255, 190, 205, 0.73); }
+        .sakura-petal:nth-child(7)  { left: 80%; width: 10px; height: 14px; --fall-dur: 8.5s;  --fall-delay: 4.4s;  --tumble-dur: 3.0s; --sw1: 26px;  --sw2: -12px; --sw3: 34px;  --sw4: -20px; --sw5: 16px;  --petal-color: rgba(255, 178, 196, 0.77); }
+        .sakura-petal:nth-child(8)  { left: 90%; width: 14px; height: 18px; --fall-dur: 10.8s; --fall-delay: 1.5s;  --tumble-dur: 4.0s; --sw1: -28px; --sw2: 18px;  --sw3: -24px; --sw4: 14px;  --sw5: -20px; --petal-color: rgba(255, 195, 208, 0.71); }
+        .sakura-petal:nth-child(9)  { left: 10%; width: 16px; height: 20px; --fall-dur: 9.8s;  --fall-delay: 5.2s;  --tumble-dur: 3.9s; --sw1: 20px;  --sw2: -24px; --sw3: 16px;  --sw4: -28px; --sw5: 10px;  --petal-color: rgba(255, 185, 200, 0.74); }
+        .sakura-petal:nth-child(10) { left: 22%; width: 18px; height: 22px; --fall-dur: 11.5s; --fall-delay: 3.0s;  --tumble-dur: 5.0s; --sw1: -18px; --sw2: 26px;  --sw3: -14px; --sw4: 22px;  --sw5: -10px; --petal-color: rgba(255, 205, 215, 0.70); }
+        .sakura-petal:nth-child(11) { left: 35%; width: 12px; height: 16px; --fall-dur: 9.1s;  --fall-delay: 0.6s;  --tumble-dur: 3.4s; --sw1: 24px;  --sw2: -20px; --sw3: 30px;  --sw4: -18px; --sw5: 22px;  --petal-color: rgba(255, 180, 196, 0.76); }
+        .sakura-petal:nth-child(12) { left: 48%; width: 15px; height: 19px; --fall-dur: 10.0s; --fall-delay: 4.8s;  --tumble-dur: 4.3s; --sw1: -22px; --sw2: 16px;  --sw3: -26px; --sw4: 12px;  --sw5: -18px; --petal-color: rgba(255, 198, 212, 0.72); }
+        .sakura-petal:nth-child(13) { left: 62%; width: 11px; height: 15px; --fall-dur: 8.6s;  --fall-delay: 2.2s;  --tumble-dur: 3.1s; --sw1: 28px;  --sw2: -14px; --sw3: 20px;  --sw4: -24px; --sw5: 14px;  --petal-color: rgba(255, 174, 191, 0.78); }
+        .sakura-petal:nth-child(14) { left: 75%; width: 17px; height: 21px; --fall-dur: 11.2s; --fall-delay: 5.6s;  --tumble-dur: 4.6s; --sw1: -16px; --sw2: 28px;  --sw3: -20px; --sw4: 32px;  --sw5: -14px; --petal-color: rgba(255, 202, 214, 0.71); }
+        .sakura-petal:nth-child(15) { left: 88%; width: 13px; height: 17px; --fall-dur: 9.4s;  --fall-delay: 1.8s;  --tumble-dur: 3.7s; --sw1: 22px;  --sw2: -18px; --sw3: 26px;  --sw4: -14px; --sw5: 20px;  --petal-color: rgba(255, 188, 202, 0.74); }
+        .sakura-petal:nth-child(16) { left: 3%;  width: 14px; height: 18px; --fall-dur: 10.6s; --fall-delay: 6.0s;  --tumble-dur: 4.1s; --sw1: -24px; --sw2: 20px;  --sw3: -28px; --sw4: 16px;  --sw5: -22px; --petal-color: rgba(255, 193, 206, 0.73); }
+        .sakura-petal:nth-child(17) { left: 45%; width: 10px; height: 14px; --fall-dur: 9.0s;  --fall-delay: 3.3s;  --tumble-dur: 3.3s; --sw1: 26px;  --sw2: -22px; --sw3: 18px;  --sw4: -26px; --sw5: 12px;  --petal-color: rgba(255, 177, 194, 0.77); }
+        .sakura-petal:nth-child(18) { left: 58%; width: 19px; height: 23px; --fall-dur: 11.8s; --fall-delay: 0.4s;  --tumble-dur: 4.9s; --sw1: -18px; --sw2: 24px;  --sw3: -12px; --sw4: 28px;  --sw5: -16px; --petal-color: rgba(255, 207, 218, 0.70); }
+        .sakura-petal:nth-child(19) { left: 72%; width: 12px; height: 16px; --fall-dur: 8.9s;  --fall-delay: 4.2s;  --tumble-dur: 3.5s; --sw1: 20px;  --sw2: -26px; --sw3: 24px;  --sw4: -18px; --sw5: 16px;  --petal-color: rgba(255, 181, 198, 0.76); }
+        .sakura-petal:nth-child(20) { left: 93%; width: 16px; height: 20px; --fall-dur: 10.3s; --fall-delay: 5.0s;  --tumble-dur: 4.4s; --sw1: -26px; --sw2: 14px;  --sw3: -32px; --sw4: 10px;  --sw5: -24px; --petal-color: rgba(255, 196, 210, 0.72); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sakura-overlay { display: none; }
+        }
+
     </style>
 </head>
 <body>
+    <!-- 桜の花びらアニメーション -->
+    <div class="sakura-overlay" aria-hidden="true">
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+        <div class="sakura-petal"></div>
+    </div>
     <header>
         <nav>
             <a href="/" class="logo" aria-label="Neco トップページ">
