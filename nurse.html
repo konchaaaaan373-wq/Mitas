@@ -733,8 +733,8 @@
 
         /* Features Section (reasons-section style) */
         .features {
-            padding: 6rem 2rem;
-            background: var(--white);
+            padding: 7rem 2rem;
+            background: linear-gradient(135deg, #FFF5F7 0%, #F0F9FF 100%);
             position: relative;
         }
 
@@ -752,19 +752,20 @@
         }
 
         .feature-card {
-            padding: 2.8rem 2rem 2.2rem;
+            padding: 3rem 2rem 2.4rem;
             border-radius: 24px;
             text-align: center;
-            transition: all 0.4s ease;
+            transition: all 0.35s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
 
         /* Per-card soft gradient backgrounds */
-        .feature-card:nth-child(1) { background: linear-gradient(145deg, rgba(255,107,157,0.07) 0%, rgba(167,139,250,0.1) 100%); }
-        .feature-card:nth-child(2) { background: linear-gradient(145deg, rgba(78,205,196,0.07) 0%, rgba(76,201,240,0.1) 100%); }
-        .feature-card:nth-child(3) { background: linear-gradient(145deg, rgba(167,139,250,0.07) 0%, rgba(255,107,157,0.1) 100%); }
-        .feature-card:nth-child(4) { background: linear-gradient(145deg, rgba(255,140,66,0.07) 0%, rgba(255,230,109,0.1) 100%); }
+        .feature-card:nth-child(1) { background: linear-gradient(145deg, rgba(255,107,157,0.09) 0%, rgba(167,139,250,0.12) 100%); }
+        .feature-card:nth-child(2) { background: linear-gradient(145deg, rgba(78,205,196,0.09) 0%, rgba(76,201,240,0.12) 100%); }
+        .feature-card:nth-child(3) { background: linear-gradient(145deg, rgba(167,139,250,0.09) 0%, rgba(255,107,157,0.12) 100%); }
+        .feature-card:nth-child(4) { background: linear-gradient(145deg, rgba(255,140,66,0.09) 0%, rgba(255,230,109,0.12) 100%); }
 
         .feature-card::before {
             content: '';
@@ -783,8 +784,8 @@
         .feature-card:nth-child(4)::before { background: linear-gradient(90deg, var(--orange), var(--accent)); }
 
         .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 24px 56px rgba(0, 0, 0, 0.11);
         }
 
         .feature-card:hover::before {
@@ -794,17 +795,17 @@
         /* Faint background watermark icon */
         .feature-bg-icon {
             position: absolute;
-            bottom: -12px;
-            right: -12px;
-            width: 110px;
-            height: 110px;
+            bottom: -10px;
+            right: -10px;
+            width: 120px;
+            height: 120px;
             pointer-events: none;
-            opacity: 0.09;
+            opacity: 0.11;
         }
 
         .feature-bg-icon svg {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
         }
 
         .feature-card:nth-child(1) .feature-bg-icon svg path,
@@ -823,10 +824,10 @@
         /* Number badge */
         .feature-num {
             display: block;
-            font-size: 2.4rem;
+            font-size: 2.6rem;
             font-weight: 900;
             line-height: 1;
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
             letter-spacing: -0.05em;
         }
 
@@ -858,16 +859,16 @@
         .feature-card h3 {
             font-size: 1.15rem;
             color: var(--dark);
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.9rem;
             font-weight: 700;
             word-break: keep-all;
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
         .feature-card p {
-            font-size: 0.9rem;
-            color: #6B7280;
-            line-height: 1.7;
+            font-size: 0.925rem;
+            color: #4B5563;
+            line-height: 1.75;
         }
 
         /* Stats Section */
@@ -1373,44 +1374,44 @@
 
             /* 機能セクション */
             .features {
-                padding: 3rem 1.2rem;
+                padding: 3.5rem 1.2rem;
             }
 
             .features-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 1rem;
+                gap: 1.1rem;
             }
 
             .feature-card {
-                padding: 1.8rem 1.2rem 1.4rem;
-                border-radius: 18px;
+                padding: 2rem 1.4rem 1.6rem;
+                border-radius: 20px;
             }
 
             .feature-num {
-                font-size: 1.7rem;
-                margin-bottom: 0.6rem;
+                font-size: 1.8rem;
+                margin-bottom: 0.7rem;
             }
 
             .feature-bg-icon {
-                width: 80px;
-                height: 80px;
+                width: 88px;
+                height: 88px;
                 bottom: -8px;
                 right: -8px;
             }
 
             .feature-bg-icon svg {
-                width: 80px;
-                height: 80px;
+                width: 88px;
+                height: 88px;
             }
 
             .feature-card h3 {
-                font-size: 0.95rem;
-                margin-bottom: 0.5rem;
+                font-size: 0.97rem;
+                margin-bottom: 0.55rem;
             }
 
             .feature-card p {
-                font-size: 0.8rem;
-                line-height: 1.6;
+                font-size: 0.82rem;
+                line-height: 1.65;
             }
 
             /* 統計セクション */
@@ -2078,6 +2079,105 @@
 
 
 
+    <section id="features" class="features">
+        <div class="section-header fade-in">
+            <span class="section-tag">What Neco?</span>
+            <h2>Necoとは？<span class="gradient-text">4つの特徴</span></h2>
+            <p>専門性評価と伴走サポートで、あなたに合う訪問看護の仕事を見つけるサービスです</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-bg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11L12 14L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="7" y="7" width="4" height="4" rx="0.5" stroke-width="1.5"/>
+                        <rect x="7" y="13" width="4" height="4" rx="0.5" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <span class="feature-num">01</span>
+                <h3>処置スキルの<wbr>定量評価システム</h3>
+                <p>エンゼルケア、ストマ交換、吸引、点滴管理、バルーン交換など、対応可能な処置を具体的に評価。あなたの専門性を正確に可視化します。</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-bg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="7" r="4.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 22 C3 16.5 7 13 12 13 C17 13 21 16.5 21 22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="feature-num">02</span>
+                <h3>専任コンシェルジュが<wbr>長期伴走</h3>
+                <p>医療業界に精通した専任担当が、希望やライフスタイルに寄り添いながら最適な職場を探索。急かさず、入職後まで長期にわたりフォローします。</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-bg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C8.686 2 6 4.686 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.314-2.686-6-6-6z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="8" r="2.2" stroke-width="1.8"/>
+                        <path d="M4 20 Q8 17 12 20 Q16 23 20 20" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="feature-num">03</span>
+                <h3>関東エリアの厚い<wbr>求人ネットワーク</h3>
+                <p>東京・千葉・埼玉・神奈川の在宅医療・訪問看護ステーションに特化した独自ネットワークで、関東エリアの厳選求人をご紹介。あなたのスキルを最大限活かせる環境が見つかります。</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-bg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 17.5 C5 15 4 12.5 4.5 10 C5.5 6 9 4 12 4 C15 4 18.5 6 19.5 10 C20 12.5 19 15 17.5 17.5" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M9 21 L12 17 L15 21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="2.5" stroke-width="1.8"/>
+                        <path d="M12 9.5 V7" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M14.2 10.8 L16 9.5" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M14.2 13.2 L16 14.5" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="feature-num">04</span>
+                <h3>手技獲得から<wbr>就職後まで<wbr>徹底サポート</h3>
+                <p>訪問看護が初めての方も安心。必要な手技の研修サポート、同行訪問支援、入職後のフォローアップまで、長期的にキャリアをサポートします。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 利用者の声セクション -->
+    <section id="process" class="process">
+        <div class="poly-bg">
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+            <div class="quantum-particle"></div>
+        </div>
+        <div class="section-header fade-in">
+            <span class="section-tag">Process</span>
+            <h2>専任コンシェルジュによる<br>丁寧なマッチング体験</h2>
+            <p>あなたのスキルを正しく評価し、最適な職場へ</p>
+        </div>
+        <div class="process-grid">
+            <div class="process-card fade-in">
+                <div class="process-number">01</div>
+                <h3>専門性の詳細評価</h3>
+                <p>経験した処置内容、症例数、手技の習熟度を詳細にヒアリング。ストマ交換、吸引、点滴管理など、具体的なスキルを定量化します。</p>
+            </div>
+            <div class="process-card fade-in">
+                <div class="process-number">02</div>
+                <h3>AIによる<wbr>最適マッチング</h3>
+                <p>専任コンシェルジュがあなたのスキルセットと希望条件を分析。幅広い求人の中から、あなたに最適な案件をご提案します。</p>
+            </div>
+            <div class="process-card fade-in">
+                <div class="process-number">03</div>
+                <h3>継続的なスキルサポート</h3>
+                <p>訪問看護が初めての方も安心。就職前の研修から、手技獲得のサポート、入職後のフォローまで、長期的にサポートします。</p>
+            </div>
+        </div>
+    </section>
+
     <!-- MedType 診断CTA -->
     <section id="skill-chart" class="medtype-cta-section">
         <!-- Cherry blossom petals -->
@@ -2406,104 +2506,6 @@
     </section>
 
 
-    <section id="process" class="process">
-        <div class="poly-bg">
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-        </div>
-        <div class="section-header fade-in">
-            <span class="section-tag">Process</span>
-            <h2>専任コンシェルジュによる<br>丁寧なマッチング体験</h2>
-            <p>あなたのスキルを正しく評価し、最適な職場へ</p>
-        </div>
-        <div class="process-grid">
-            <div class="process-card fade-in">
-                <div class="process-number">01</div>
-                <h3>専門性の詳細評価</h3>
-                <p>経験した処置内容、症例数、手技の習熟度を詳細にヒアリング。ストマ交換、吸引、点滴管理など、具体的なスキルを定量化します。</p>
-            </div>
-            <div class="process-card fade-in">
-                <div class="process-number">02</div>
-                <h3>AIによる<wbr>最適マッチング</h3>
-                <p>専任コンシェルジュがあなたのスキルセットと希望条件を分析。幅広い求人の中から、あなたに最適な案件をご提案します。</p>
-            </div>
-            <div class="process-card fade-in">
-                <div class="process-number">03</div>
-                <h3>継続的なスキルサポート</h3>
-                <p>訪問看護が初めての方も安心。就職前の研修から、手技獲得のサポート、入職後のフォローまで、長期的にサポートします。</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="features" class="features">
-        <div class="section-header fade-in">
-            <span class="section-tag">What Neco?</span>
-            <h2>Necoとは？<span class="gradient-text">4つの特徴</span></h2>
-            <p>専門性評価と伴走サポートで、あなたに合う訪問看護の仕事を見つけるサービスです</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <div class="feature-bg-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 11L12 14L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <rect x="7" y="7" width="4" height="4" rx="0.5" stroke-width="1.5"/>
-                        <rect x="7" y="13" width="4" height="4" rx="0.5" stroke-width="1.5"/>
-                    </svg>
-                </div>
-                <span class="feature-num">01</span>
-                <h3>処置スキルの<wbr>定量評価システム</h3>
-                <p>エンゼルケア、ストマ交換、吸引、点滴管理、バルーン交換など、対応可能な処置を具体的に評価。あなたの専門性を正確に可視化します。</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-bg-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="7" r="4.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M3 22 C3 16.5 7 13 12 13 C17 13 21 16.5 21 22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <span class="feature-num">02</span>
-                <h3>専任コンシェルジュが<wbr>長期伴走</h3>
-                <p>医療業界に精通した専任担当が、希望やライフスタイルに寄り添いながら最適な職場を探索。急かさず、入職後まで長期にわたりフォローします。</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-bg-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 2 L17 2 Q19 2 19 4 L19 20 Q19 22 17 22 L7 22 Q5 22 5 20 L5 4 Q5 2 7 2 Z" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M10.5 5 L13.5 5" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="12" cy="19" r="1.2" stroke-width="1.5"/>
-                        <circle cx="12" cy="12" r="2" stroke-width="1.5"/>
-                        <circle cx="12" cy="12" r="4" stroke-width="1"/>
-                    </svg>
-                </div>
-                <span class="feature-num">03</span>
-                <h3>関東エリアの厚い<wbr>求人ネットワーク</h3>
-                <p>東京・千葉・埼玉・神奈川の在宅医療・訪問看護ステーションに特化した独自ネットワークで、関東エリアの厳選求人をご紹介。あなたのスキルを最大限活かせる環境が見つかります。</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-bg-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="12" r="4" stroke-width="1.5"/>
-                        <path d="M12 8V12L14 13.5" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <span class="feature-num">04</span>
-                <h3>手技獲得から<wbr>就職後まで<wbr>徹底サポート</h3>
-                <p>訪問看護が初めての方も安心。必要な手技の研修サポート、同行訪問支援、入職後のフォローアップまで、長期的にキャリアをサポートします。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 利用者の声セクション -->
     <section id="testimonials" class="testimonials-section">
         <h2 class="section-title fade-in">利用者の声</h2>
         <p class="section-subtitle fade-in">Necoで理想の働き方を見つけた看護師たち</p>
