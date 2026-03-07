@@ -205,15 +205,38 @@ exports.handler = async (event) => {
 
       const emailNotifValue = emailNotification === true || emailNotification === 'true';
 
-      const [userRow] = await sql`
-        INSERT INTO users
-          (email, password_hash, user_type, name, name_kana, avatar_initial, avatar_color, email_notification)
-        VALUES
-          (${normalizedEmail}, ${password_hash}, ${user_type}, ${name},
-           ${nameKana || null}, ${avatarInitial || name[0] || null}, ${avatarColor || null},
-           ${emailNotifValue})
-        RETURNING *
-      `;
+      // email_notification 列が存在しない場合（マイグレーション未適用）に備えて
+      // 列ありで INSERT を試み、列なしエラー(42703)ならば列を除いてリトライする
+      let userRow;
+      try {
+        [userRow] = await sql`
+          INSERT INTO users
+            (email, password_hash, user_type, name, name_kana, avatar_initial, avatar_color, email_notification)
+          VALUES
+            (${normalizedEmail}, ${password_hash}, ${user_type}, ${name},
+             ${nameKana || null}, ${avatarInitial || name[0] || null}, ${avatarColor || null},
+             ${emailNotifValue})
+          RETURNING *
+        `;
+      } catch (insertErr) {
+        // PostgreSQL error 42703 = undefined_column
+        const isColumnMissing =
+          insertErr.code === '42703' ||
+          (insertErr.message && insertErr.message.includes('email_notification'));
+        if (!isColumnMissing) throw insertErr;
+
+        // email_notification 列なしで再試行
+        [userRow] = await sql`
+          INSERT INTO users
+            (email, password_hash, user_type, name, name_kana, avatar_initial, avatar_color)
+          VALUES
+            (${normalizedEmail}, ${password_hash}, ${user_type}, ${name},
+             ${nameKana || null}, ${avatarInitial || name[0] || null}, ${avatarColor || null})
+          RETURNING *
+        `;
+        userRow.email_notification = false;
+        console.warn('[users] email_notification column missing – run /api/admin/db-init to apply migration');
+      }
 
       // プロフィール挿入
       if (user_type === 'doctor') {
