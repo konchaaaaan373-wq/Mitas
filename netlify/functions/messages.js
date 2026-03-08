@@ -9,8 +9,62 @@
  *   POST   /api/messages/conversations/:id/read     – 既読マーク（要認証）
  */
 
+const bcrypt = require('bcryptjs');
 const { getDb } = require('./lib/db');
 const { verifyToken, json, safeParseJson, getBearerToken, CORS_HEADERS } = require('./lib/auth-utils');
+
+// ── Neco ウェルカム会話の自動補完 ─────────────────────────────────────────────
+
+function getWelcomeMessage(userType) {
+  if (userType === 'doctor') {
+    return `こんにちは、Necoです。\nこちらはメッセージ画面です。あなたのご経験やスキルに興味がある施設がある場合、医療機関からメッセージが送られてきます。\nまた、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'nurse') {
+    return `こんにちは、Necoです。\nこちらはメッセージ画面です。あなたのご経験やスキルに興味がある施設がある場合、医療機関からメッセージが送られてきます。\nまた、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  if (userType === 'medical') {
+    return `こんにちは、Necoです。\nこちらはメッセージ画面です。登録した医師・看護師から問い合わせのメッセージが届きます。\nまた、Neco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。返信には時間をいただくことがありますのでご了承ください。`;
+  }
+  return `こんにちは、Necoです。\nNeco運営とやり取りをしたい場合はこのチャットにメッセージをお送りください。`;
+}
+
+async function ensureNecoWelcomeConversation(sql, userId, userType) {
+  try {
+    // Neco システムユーザーを取得（なければ作成）
+    let [necoRow] = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
+    if (!necoRow) {
+      const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+      [necoRow] = await sql`
+        INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
+        VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)
+        RETURNING id
+      `;
+    }
+    const necoId = necoRow.id;
+
+    const p1 = userId < necoId ? userId : necoId;
+    const p2 = userId < necoId ? necoId : userId;
+
+    const [existing] = await sql`
+      SELECT id FROM conversations WHERE participant1_id = ${p1} AND participant2_id = ${p2}
+    `;
+    if (existing) return; // すでに存在する
+
+    const [conv] = await sql`
+      INSERT INTO conversations (participant1_id, participant2_id, last_message_at)
+      VALUES (${p1}, ${p2}, NOW())
+      RETURNING id
+    `;
+    const welcomeMsg = getWelcomeMessage(userType);
+    await sql`
+      INSERT INTO messages (conversation_id, sender_id, content)
+      VALUES (${conv.id}, ${necoId}, ${welcomeMsg})
+    `;
+    await sql`UPDATE conversations SET last_message_at = NOW() WHERE id = ${conv.id}`;
+  } catch (err) {
+    console.error('[messages] ensureNecoWelcomeConversation error:', err.message);
+  }
+}
 
 // ── メール通知送信（Resend API 利用） ────────────────────────────────────────
 async function sendEmailNotification({ toEmail, toName, fromName, messagePreview }) {
@@ -115,6 +169,42 @@ exports.handler = async (event) => {
         WHERE c.participant1_id = ${payload.id} OR c.participant2_id = ${payload.id}
         ORDER BY COALESCE(c.last_message_at, c.created_at) DESC
       `;
+
+      // Neco ウェルカム会話が存在しない場合は自動作成してリストに反映
+      const hasNeco = rows.some(r => r.other_user_type === 'admin' && r.other_user_name === 'Neco');
+      if (!hasNeco) {
+        await ensureNecoWelcomeConversation(sql, payload.id, payload.type);
+        // 作成後に再取得
+        const updated = await sql`
+          SELECT
+            c.id,
+            c.last_message_at,
+            c.created_at,
+            CASE WHEN c.participant1_id = ${payload.id}
+                 THEN c.participant2_id ELSE c.participant1_id END AS other_user_id,
+            u.name           AS other_user_name,
+            u.user_type      AS other_user_type,
+            u.avatar_initial AS other_user_avatar_initial,
+            u.avatar_color   AS other_user_avatar_color,
+            m.content        AS last_message_content,
+            m.sender_id      AS last_message_sender_id,
+            (SELECT COUNT(*) FROM messages
+             WHERE conversation_id = c.id AND is_read = false AND sender_id != ${payload.id}
+            )::int            AS unread_count
+          FROM conversations c
+          JOIN users u ON u.id = CASE WHEN c.participant1_id = ${payload.id}
+                                      THEN c.participant2_id ELSE c.participant1_id END
+          LEFT JOIN LATERAL (
+            SELECT content, sender_id FROM messages
+            WHERE conversation_id = c.id
+            ORDER BY created_at DESC LIMIT 1
+          ) m ON true
+          WHERE c.participant1_id = ${payload.id} OR c.participant2_id = ${payload.id}
+          ORDER BY COALESCE(c.last_message_at, c.created_at) DESC
+        `;
+        return json(200, { ok: true, conversations: updated });
+      }
+
       return json(200, { ok: true, conversations: rows });
     } catch (err) {
       console.error('[messages] conversations list error:', err.message);
