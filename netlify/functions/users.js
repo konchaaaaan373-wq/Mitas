@@ -329,15 +329,36 @@ exports.handler = async (event) => {
         const emailNotifValue = body.emailNotification !== undefined
           ? (body.emailNotification === true || body.emailNotification === 'true')
           : null;
-        await sql`
-          UPDATE users SET
-            name               = COALESCE(${body.name || null},          name),
-            name_kana          = COALESCE(${body.nameKana || null},      name_kana),
-            avatar_initial     = COALESCE(${body.avatarInitial || null}, avatar_initial),
-            avatar_color       = COALESCE(${body.avatarColor || null},   avatar_color),
-            email_notification = COALESCE(${emailNotifValue},            email_notification)
-          WHERE id = ${user.id}
-        `;
+
+        // email_notification 列が存在しない場合（マイグレーション未適用）に備えて
+        // 列ありで UPDATE を試み、列なしエラー(42703)ならば列を除いてリトライする
+        try {
+          await sql`
+            UPDATE users SET
+              name               = COALESCE(${body.name || null},          name),
+              name_kana          = COALESCE(${body.nameKana || null},      name_kana),
+              avatar_initial     = COALESCE(${body.avatarInitial || null}, avatar_initial),
+              avatar_color       = COALESCE(${body.avatarColor || null},   avatar_color),
+              email_notification = COALESCE(${emailNotifValue},            email_notification)
+            WHERE id = ${user.id}
+          `;
+        } catch (updateErr) {
+          const isColumnMissing =
+            updateErr.code === '42703' ||
+            (updateErr.message && updateErr.message.includes('email_notification'));
+          if (!isColumnMissing) throw updateErr;
+
+          // email_notification 列なしで再試行
+          await sql`
+            UPDATE users SET
+              name           = COALESCE(${body.name || null},          name),
+              name_kana      = COALESCE(${body.nameKana || null},      name_kana),
+              avatar_initial = COALESCE(${body.avatarInitial || null}, avatar_initial),
+              avatar_color   = COALESCE(${body.avatarColor || null},   avatar_color)
+            WHERE id = ${user.id}
+          `;
+          console.warn('[users] email_notification column missing – run /api/admin/db-init to apply migration');
+        }
       }
 
       // プロフィールテーブル更新
