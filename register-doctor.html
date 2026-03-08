@@ -617,9 +617,9 @@
                 3分で登録完了。<br>
                 <strong>理想の職場を探そう。</strong>
             </h1>
-            <p class="left-sub">
-                在宅医療に特化した求人プラットフォーム。<br>
-                登録無料で、あなたにぴったりの求人をご紹介します。
+            <p class="left-sub" id="left-sub-text">
+                在宅医療に特化したマッチングサービス。<br>
+                登録無料で、あなたにぴったりの医療機関をご紹介します。
             </p>
             <div class="step-guide" aria-label="登録ステップ">
                 <div class="step-guide-item active" id="guide-1">
@@ -641,8 +641,8 @@
     <!-- ===== RIGHT FORM PANEL ===== -->
     <main class="login-right" role="main">
         <div class="right-header">
-            <h2>医師・看護師 新規登録</h2>
-            <p>すべて無料。登録後すぐに求人を閲覧できます。</p>
+            <h2 id="register-page-title">医師・看護師 新規登録</h2>
+            <p>すべて無料。登録後すぐにNecoを利用できます。</p>
         </div>
 
         <!-- Progress indicator -->
@@ -710,17 +710,17 @@
 
         <!-- STEP 2: 職種・専門情報 -->
         <div class="form-step" id="step-2">
-            <div class="form-group">
+            <div class="form-group" id="profession-selector-group">
                 <label>職種<span class="req">*</span></label>
                 <div class="type-selector">
-                    <label class="type-option">
+                    <label class="type-option" id="profession-doctor-option">
                         <input type="radio" name="profession" value="doctor" checked>
                         <div class="type-card">
                             <span class="type-name">医師</span>
                             <span class="type-sub">MD / 医学博士</span>
                         </div>
                     </label>
-                    <label class="type-option">
+                    <label class="type-option" id="profession-nurse-option">
                         <input type="radio" name="profession" value="nurse">
                         <div class="type-card">
                             <span class="type-name">看護師</span>
@@ -1035,9 +1035,9 @@
             <p class="success-sub">
                 ご登録いただいたメールアドレスに<br>
                 確認メールをお送りしました。<br><br>
-                さっそく求人・転職情報を確認しましょう。
+                さっそくNecoを使いはじめましょう。
             </p>
-            <a href="/dashboard.html" class="success-btn">求人・転職情報を見に行く →</a>
+            <a href="/dashboard.html" class="success-btn">Necoをはじめる →</a>
         </div>
 
         <div class="divider">または</div>
@@ -1051,6 +1051,55 @@
     <script>
         let currentStep = 1;
         const TOTAL_STEPS = 3;
+
+        // ── URL ?type=nurse or ?type=doctor で職種を固定 ──────────────────────
+        (function applyTypeParam() {
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get('type');
+            if (type === 'nurse') {
+                // 看護師固定：医師ラジオを非表示にし、看護師を選択
+                const doctorOpt = document.getElementById('profession-doctor-option');
+                if (doctorOpt) doctorOpt.style.display = 'none';
+                const nurseRadio = document.querySelector('input[name="profession"][value="nurse"]');
+                if (nurseRadio) nurseRadio.checked = true;
+                // ページタイトル更新
+                const title = document.getElementById('register-page-title');
+                if (title) title.textContent = '看護師 新規登録';
+                document.title = '看護師 新規登録 - Neco';
+                const leftSub = document.getElementById('left-sub-text');
+                if (leftSub) leftSub.innerHTML = '在宅医療に特化したマッチングサービス。<br>登録無料で、あなたにぴったりの訪問看護ステーションをご紹介します。';
+                // 看護師フィールドを表示、医師フィールドを非表示
+                const specialtyGroup = document.getElementById('specialty-group');
+                const qualGroup = document.getElementById('qualification-group');
+                const licGroup = document.getElementById('license-group');
+                const certGroup = document.getElementById('specialist-cert-group');
+                const uploadGroup = document.getElementById('doc-upload-group');
+                if (specialtyGroup) specialtyGroup.style.display = 'none';
+                if (qualGroup) qualGroup.style.display = '';
+                if (licGroup) licGroup.style.display = 'none';
+                if (certGroup) certGroup.style.display = 'none';
+                if (uploadGroup) uploadGroup.style.display = 'none';
+                // 経験年数を看護師用に切り替え
+                const doctorExpGroup = document.getElementById('exp-doctor-group');
+                const nurseExpGroup = document.getElementById('exp-nurse-group');
+                const hintDoctor = document.getElementById('exp-hint-doctor');
+                const hintNurse = document.getElementById('exp-hint-nurse');
+                if (doctorExpGroup) doctorExpGroup.style.display = 'none';
+                if (nurseExpGroup) nurseExpGroup.removeAttribute('style');
+                if (hintDoctor) hintDoctor.style.display = 'none';
+                if (hintNurse) hintNurse.style.display = '';
+            } else if (type === 'doctor') {
+                // 医師固定：看護師ラジオを非表示にする
+                const nurseOpt = document.getElementById('profession-nurse-option');
+                if (nurseOpt) nurseOpt.style.display = 'none';
+                const doctorRadio = document.querySelector('input[name="profession"][value="doctor"]');
+                if (doctorRadio) doctorRadio.checked = true;
+                // ページタイトル更新
+                const title = document.getElementById('register-page-title');
+                if (title) title.textContent = '医師 新規登録';
+                document.title = '医師 新規登録 - Neco';
+            }
+        })();
 
         // Update profession-specific fields
         document.querySelectorAll('input[name="profession"]').forEach(radio => {
