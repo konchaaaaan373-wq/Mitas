@@ -204,13 +204,23 @@ const RESET_TABLES = [
 /**
  * Neco システムユーザーを取得または作成する。
  * user_type = 'admin'、email = 'neco-system@neco.jp で固定。
+ * NECO_ADMIN_PASSWORD 環境変数が設定されていれば、そのパスワードで作成・更新する。
  */
 async function ensureNecoSystemUser(sql) {
-  const existing = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
-  if (existing.length > 0) return existing[0].id;
+  const adminPassword = process.env.NECO_ADMIN_PASSWORD;
+  const password_hash = await bcrypt.hash(
+    adminPassword || ('neco-system-' + Date.now()), 10
+  );
 
-  const bcrypt = require('bcryptjs');
-  const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+  const [existing] = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
+  if (existing) {
+    // パスワードを常に最新の設定値で更新する
+    if (adminPassword) {
+      await sql`UPDATE users SET password_hash = ${password_hash} WHERE id = ${existing.id}`;
+    }
+    return existing.id;
+  }
+
   const [row] = await sql`
     INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
     VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)
