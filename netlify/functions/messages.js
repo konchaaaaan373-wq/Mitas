@@ -33,7 +33,8 @@ async function ensureNecoWelcomeConversation(sql, userId, userType) {
     // Neco システムユーザーを取得（なければ作成）
     let [necoRow] = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
     if (!necoRow) {
-      const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+      const adminPassword = process.env.NECO_ADMIN_PASSWORD || ('neco-system-' + Date.now());
+      const password_hash = await bcrypt.hash(adminPassword, 10);
       [necoRow] = await sql`
         INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
         VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)

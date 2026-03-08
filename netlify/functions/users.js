@@ -63,11 +63,11 @@ function formatUser(user, profile = {}) {
  * 新規ユーザー登録時にウェルカム会話を作るために使用。
  */
 async function getOrCreateNecoUser(sql) {
-  const existing = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
-  if (existing.length > 0) return existing[0].id;
+  const [existing] = await sql`SELECT id FROM users WHERE email = 'neco-system@neco.jp'`;
+  if (existing) return existing.id;
 
-  const bcrypt = require('bcryptjs');
-  const password_hash = await bcrypt.hash('neco-system-' + Date.now(), 10);
+  const adminPassword = process.env.NECO_ADMIN_PASSWORD || ('neco-system-' + Date.now());
+  const password_hash = await bcrypt.hash(adminPassword, 10);
   const [row] = await sql`
     INSERT INTO users (email, password_hash, user_type, name, avatar_initial, avatar_color, is_active)
     VALUES ('neco-system@neco.jp', ${password_hash}, 'admin', 'Neco', 'N', '#FF6B9D', true)
