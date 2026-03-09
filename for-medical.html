@@ -159,6 +159,14 @@
             border-radius: 30px;
         }
 
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
@@ -169,14 +177,32 @@
             font-size: 1.2rem;
             color: #4B5563;
             margin-bottom: 2.5rem;
-            max-width: 800px;
             line-height: 1.8;
         }
 
         .hero-ctas {
             display: flex;
             gap: 1.5rem;
-            margin-bottom: 4rem;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeInRight 1s ease;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 24px;
+            object-fit: cover;
+            height: 480px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
         }
 
         .strength-cards {
@@ -716,6 +742,18 @@
                 display: none;
             }
 
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                justify-content: center;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
             .hero h1 {
                 font-size: 2rem;
             }
@@ -894,12 +932,18 @@
     </header>
 
     <div class="hero">
-        <h1>医師・看護師の確保を、速く・安く・定着まで。</h1>
-        <p class="hero-sub">東京・千葉・埼玉・神奈川に根ざしたNeco独自の医師・看護師ネットワークに、AIでの募集〜調整の効率化を重ね、手数料を極限まで圧縮。配置して終わりではなく、定着まで伴走します。</p>
-        
-        <div class="hero-ctas">
-            <button class="cta-button" onclick="scrollToSection('form')">導入相談</button>
-            <button class="cta-button secondary" onclick="scrollToSection('pricing')">料金の目安を見る</button>
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1>医師・看護師の確保を、速く・安く・定着まで。</h1>
+                <p class="hero-sub">東京・千葉・埼玉・神奈川に根ざしたNeco独自の医師・看護師ネットワークに、AIでの募集〜調整の効率化を重ね、手数料を極限まで圧縮。配置して終わりではなく、定着まで伴走します。</p>
+                <div class="hero-ctas">
+                    <button class="cta-button" onclick="scrollToSection('form')">導入相談</button>
+                    <button class="cta-button secondary" onclick="scrollToSection('pricing')">料金の目安を見る</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="images/clinic.png" alt="クリニックイメージ" class="hero-image" loading="eager" fetchpriority="high" decoding="async">
+            </div>
         </div>
 
         <div class="strength-cards">
