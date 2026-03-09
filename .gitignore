@@ -1,5 +1,35 @@
-# Local Netlify folder
-.netlify
+# Netlify
+.netlify/
 
-# GitHub Personal Access Token — never commit this
+# Dependencies
+node_modules/
+
+# Environment variables — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# GitHub Personal Access Token
 .github_token
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
