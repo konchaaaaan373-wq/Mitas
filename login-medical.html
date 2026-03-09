@@ -662,8 +662,8 @@
                 if (!data.ok) throw new Error(data.error || 'ログインに失敗しました');
                 localStorage.setItem('neco_token', data.token);
                 localStorage.setItem('neco_user', JSON.stringify(data.user));
-                if (data.user.type === 'doctor') window.location.replace('/dashboard.html');
-                else if (data.user.type === 'medical') window.location.replace('/medical-dashboard.html');
+                if (data.user.type === 'doctor' || data.user.type === 'nurse') window.location.replace('/dashboard.html');
+                else if (data.user.type === 'medical' || data.user.type === 'admin') window.location.replace('/medical-dashboard.html');
                 else window.location.replace('/');
             } catch (err) {
                 showError(errorEl, err.message || 'ログインに失敗しました。もう一度お試しください。');
