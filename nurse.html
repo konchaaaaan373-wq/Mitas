@@ -1077,9 +1077,32 @@
 
         /* Footer */
         footer {
-            background: var(--dark);
+            background: linear-gradient(160deg, #2C0F1E 0%, #5A1A3B 55%, #2C0F1E 100%);
             color: var(--white);
             padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), #FFB7D0, var(--primary), transparent);
+        }
+
+        footer::after {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .footer-content {
@@ -1089,6 +1112,8 @@
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 4rem;
             margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-brand {
@@ -1096,30 +1121,33 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+            background: linear-gradient(135deg, #FFB7D0, #E8A0FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .footer-desc {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 210, 228, 0.8);
             line-height: 1.8;
             margin-bottom: 1.5rem;
         }
 
         .footer-license {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 107, 157, 0.15);
+            border: 1px solid rgba(255, 107, 157, 0.25);
             padding: 1rem 1.5rem;
             border-radius: 15px;
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 210, 228, 0.9);
         }
 
         .footer-section h4 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 1.5rem;
             font-weight: 700;
+            color: rgba(255, 225, 238, 0.95);
+            letter-spacing: 0.05em;
         }
 
         .footer-links {
@@ -1131,22 +1159,25 @@
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 210, 228, 0.7);
             text-decoration: none;
             transition: color 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .footer-links a:hover {
-            color: var(--primary);
+            color: #FFB7D0;
         }
 
         .footer-bottom {
             max-width: 1400px;
             margin: 0 auto;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 107, 157, 0.25);
             text-align: center;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 210, 228, 0.45);
+            position: relative;
+            z-index: 1;
         }
 
         /* PC小ウィンドウ対応: ヘッダーが縦に伸びないよう1060px以下でハンバーガー表示 */
