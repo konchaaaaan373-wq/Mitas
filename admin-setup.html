@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neco 管理者セットアップ</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #F8F9FA;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 440px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logo-mark {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.8rem;
+        }
+        .logo h1 { font-size: 1.2rem; font-weight: 700; color: #2D3142; }
+        .logo p { font-size: 0.82rem; color: #9CA3AF; margin-top: 0.3rem; }
+
+        .step {
+            background: #F8F9FA;
+            border-radius: 12px;
+            padding: 1.25rem 1.25rem 1rem;
+            margin-bottom: 1rem;
+            border: 1.5px solid #E5E7EB;
+        }
+        .step-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .step-num {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.4rem;
+        }
+        input, input[type="password"] {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: #2D3142;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        input:focus { border-color: #FF6B9D; }
+
+        .note {
+            font-size: 0.76rem;
+            color: #9CA3AF;
+            margin-top: 0.4rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 1.25rem;
+            transition: opacity 0.15s, transform 0.15s;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .result {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .result.success {
+            display: block;
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            color: #166534;
+        }
+        .result.error {
+            display: block;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: #DC2626;
+        }
+        .go-login {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: #2D3142;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            text-align: center;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        .go-login:hover { opacity: 0.85; }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="logo">
+        <div class="logo-mark">🐱</div>
+        <h1>管理者パスワード設定</h1>
+        <p>Necoへの返信機能を有効にする初期設定です<br>最初に1回だけ行います</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><span class="step-num">1</span>管理者シークレット（ADMIN_SECRET）</div>
+        <label for="admin-secret">Netlify に設定した ADMIN_SECRET の値</label>
+        <input type="password" id="admin-secret" placeholder="貼り付けてください">
+        <p class="note">Netlify → Site configuration → Environment variables で確認できます</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><span class="step-num">2</span>管理者パスワードを決める（NECO_ADMIN_PASSWORD）</div>
+        <label for="admin-password">Netlify に設定した NECO_ADMIN_PASSWORD の値</label>
+        <input type="password" id="admin-password" placeholder="貼り付けてください">
+        <p class="note">先に Netlify の環境変数に <strong>NECO_ADMIN_PASSWORD</strong> を追加・保存してください<br>
+        例：<code>mySecretAdminPass123</code></p>
+    </div>
+
+    <button class="btn" id="setup-btn" onclick="runSetup()">設定を反映する</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+async function runSetup() {
+    const secret   = document.getElementById('admin-secret').value.trim();
+    const password = document.getElementById('admin-password').value.trim();
+    const btn      = document.getElementById('setup-btn');
+    const resultEl = document.getElementById('result');
+
+    resultEl.className = 'result';
+    resultEl.style.display = 'none';
+
+    if (!secret || !password) {
+        resultEl.className = 'result error';
+        resultEl.innerHTML = 'どちらも入力してください';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>設定中...';
+
+    try {
+        const res = await fetch('/.netlify/functions/db-init', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-secret': secret,
+            },
+        });
+        const data = await res.json();
+
+        if (res.ok && data.ok) {
+            resultEl.className = 'result success';
+            resultEl.innerHTML = `
+                ✅ <strong>設定が完了しました！</strong><br><br>
+                以下でログインできます：<br>
+                　メール：<code>neco-system@neco.jp</code><br>
+                　パスワード：設定した NECO_ADMIN_PASSWORD の値<br><br>
+                <a href="/admin-login.html" class="go-login">管理者ログインページへ →</a>
+            `;
+        } else {
+            resultEl.className = 'result error';
+            resultEl.innerHTML = `エラー：${data.error || data.message || '不明なエラー'}`;
+        }
+    } catch (err) {
+        resultEl.className = 'result error';
+        resultEl.innerHTML = '通信エラー。ネットワーク接続を確認してください。';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '設定を反映する';
+}
+</script>
+</body>
+</html>
