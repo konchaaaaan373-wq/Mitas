@@ -117,7 +117,17 @@ async function sendEmailNotification({ toEmail, toName, fromName, messagePreview
 const getSubPath = (path) =>
   (path || '').replace(/\/?\.netlify\/functions\/messages\/?/, '').replace(/^\/+/, '');
 
-const authenticate = (event) => {
+const authenticate = async (event, sql) => {
+  // Admin dashboard uses x-admin-secret instead of Bearer JWT
+  const adminSecret = (event.headers || {})['x-admin-secret'];
+  if (adminSecret) {
+    const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+    if (!ADMIN_SECRET || adminSecret !== ADMIN_SECRET) return null;
+    try {
+      const [row] = await sql`SELECT id, name, user_type AS type FROM users WHERE email = 'neco-system@neco.jp'`;
+      return row || null;
+    } catch (_) { return null; }
+  }
   const token = getBearerToken(event);
   if (!token) return null;
   return verifyToken(token);
@@ -132,7 +142,7 @@ exports.handler = async (event) => {
   const subPath = getSubPath(event.path);
   const sql     = getDb();
 
-  const payload = authenticate(event);
+  const payload = await authenticate(event, sql);
   if (!payload) return json(401, { ok: false, error: '認証が必要です' });
 
   // ──────────────────────────────────────────────────────────────────────────
