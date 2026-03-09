@@ -165,10 +165,22 @@
         }
 
         footer {
-            background: var(--dark);
+            background: linear-gradient(160deg, #2C0F1E 0%, #5A1A3B 55%, #2C0F1E 100%);
             color: var(--white);
             padding: 3rem 2rem 2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), #FFB7D0, var(--primary), transparent);
         }
 
         .footer-links {
@@ -177,22 +189,26 @@
             gap: 2rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 210, 228, 0.75);
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: var(--primary);
+            color: #FFB7D0;
         }
 
         .footer-bottom {
             padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 107, 157, 0.25);
+            color: rgba(255, 210, 228, 0.45);
+            position: relative;
+            z-index: 1;
         }
 
                 @media (max-width: 768px) {
@@ -478,11 +494,11 @@
         <div class="footer-content" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem;">
             <div>
                 <div class="footer-brand" style="font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #FF6B9D, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.02em;">Neco</div>
-                <p class="footer-desc" style="color: rgba(255, 255, 255, 0.7); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1rem;">
+                <p class="footer-desc" style="color: rgba(255, 210, 228, 0.8); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1rem;">
                     医療従事者の皆様のキャリアとライフスタイルを大切にした、<br>
                     医療求人コンシェルジュサービス。
                 </p>
-                <div class="footer-license" style="background: rgba(255, 255, 255, 0.1); padding: 1rem 1.5rem; border-radius: 15px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">
+                <div class="footer-license" style="background: rgba(255, 107, 157, 0.15); border: 1px solid rgba(255, 107, 157, 0.25); padding: 1rem 1.5rem; border-radius: 15px; font-size: 0.9rem; color: rgba(255, 210, 228, 0.9);">
                     📋 有料職業紹介事業許可番号：13-ユ-319230<br>
                     許可年月日：令和8年3月1日<br>
                     株式会社Neco
@@ -516,7 +532,7 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom" style="max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center; color: rgba(255, 255, 255, 0.5);">
+        <div class="footer-bottom" style="max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255, 107, 157, 0.25); text-align: center; color: rgba(255, 210, 228, 0.45);">
             <p>&copy; 2026 Neco Inc. All rights reserved.</p>
         </div>
     </footer>
