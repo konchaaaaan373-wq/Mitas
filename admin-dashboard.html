@@ -749,6 +749,136 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* ─── Messages tab panel ─────────────────────────────────────────────── */
+    #panel-messages.active {
+      display: flex;
+      height: calc(100vh - 98px); /* header 54px + content-tabs 44px */
+      overflow: hidden;
+    }
+    #msg-sidebar {
+      width: 300px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    #msg-sidebar-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .msg-sidebar-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .msg-unread-badge {
+      background: var(--brand);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.12rem 0.45rem;
+      min-width: 18px;
+      text-align: center;
+    }
+    #msg-conv-list { overflow-y: auto; flex: 1; }
+    .msg-conv-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.25rem;
+      cursor: pointer;
+      border-bottom: 1px solid #F1F5F9;
+      transition: background 0.12s;
+    }
+    .msg-conv-item:hover { background: #F8FAFC; }
+    .msg-conv-item.active {
+      background: linear-gradient(90deg, rgba(255,107,157,0.07), transparent);
+      border-left: 3px solid var(--brand);
+    }
+    .msg-conv-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0;
+    }
+    .msg-conv-info { flex: 1; overflow: hidden; }
+    .msg-conv-name { font-size: 0.85rem; font-weight: 600; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-conv-sub  { font-size: 0.7rem; color: var(--muted); margin: 1px 0; }
+    .msg-conv-preview { font-size: 0.75rem; color: var(--subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-conv-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
+    .msg-conv-time { font-size: 0.68rem; color: var(--subtle); white-space: nowrap; }
+    .msg-unread-dot {
+      background: var(--brand); color: #fff; border-radius: 10px;
+      font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; min-width: 18px; text-align: center;
+    }
+    #msg-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
+    #msg-chat-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    #msg-chat-header {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.5rem; display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+    }
+    .msg-chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; color: #fff; }
+    #msg-chat-name { font-size: 0.95rem; font-weight: 700; color: var(--dark); }
+    #msg-chat-sub { font-size: 0.75rem; color: var(--muted); }
+    #msg-messages {
+      flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem;
+      display: flex; flex-direction: column; gap: 0.85rem;
+    }
+    .msg-date-divider { text-align: center; font-size: 0.72rem; color: var(--muted); margin: 0.25rem 0; }
+    .msg-bubble-wrap { display: flex; gap: 0.6rem; max-width: 70%; }
+    .msg-bubble-wrap.own { flex-direction: row-reverse; align-self: flex-end; }
+    .msg-bubble-wrap.other { align-self: flex-start; }
+    .msg-bubble-wrap.grouped .msg-bubble-avatar { visibility: hidden; }
+    .msg-bubble-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: #fff; flex-shrink: 0; align-self: flex-end; }
+    .msg-bubble-body { display: flex; flex-direction: column; gap: 0.2rem; }
+    .msg-bubble-wrap.own .msg-bubble-body { align-items: flex-end; }
+    .msg-sender-name { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+    .msg-bubble {
+      padding: 0.65rem 0.9rem; border-radius: 14px; font-size: 0.875rem; line-height: 1.6; word-break: break-word;
+    }
+    .msg-bubble-wrap.own .msg-bubble { background: linear-gradient(135deg, #FF6B9D, #A78BFA); color: #fff; border-bottom-right-radius: 4px; }
+    .msg-bubble-wrap.other .msg-bubble { background: var(--white); color: var(--dark); border: 1px solid var(--border); border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .msg-bubble-time { font-size: 0.67rem; color: var(--muted); }
+    .msg-empty-state {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--muted); padding: 2rem; text-align: center;
+    }
+    .msg-empty-state h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--slate); }
+    .msg-empty-state p { font-size: 0.85rem; line-height: 1.7; }
+    #msg-quick-replies {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.6rem 1.5rem;
+      background: var(--white); border-top: 1px solid var(--border);
+    }
+    .msg-qr-chip {
+      padding: 0.3rem 0.8rem; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 14px; font-family: inherit; font-size: 0.75rem; color: var(--slate);
+      cursor: pointer; transition: all 0.12s; white-space: nowrap;
+    }
+    .msg-qr-chip:hover { border-color: var(--brand); color: var(--brand); background: rgba(255,107,157,0.06); }
+    #msg-input-area {
+      background: var(--white); border-top: 1px solid #EEF2F7;
+      padding: 0.75rem 1.5rem; display: flex; gap: 0.6rem; align-items: flex-end; flex-shrink: 0;
+    }
+    #msg-textarea {
+      flex: 1; min-height: 42px; max-height: 120px; padding: 0.6rem 0.9rem;
+      border: 2px solid var(--border); border-radius: 20px; font-family: inherit; font-size: 0.875rem;
+      color: var(--dark); background: var(--surface); resize: none; outline: none; transition: border-color 0.2s; line-height: 1.5; overflow-y: auto;
+    }
+    #msg-textarea:focus { border-color: var(--brand); background: var(--white); }
+    #msg-textarea::placeholder { color: var(--subtle); }
+    #msg-send-btn {
+      width: 42px; height: 42px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #FF6B9D, #A78BFA); color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s;
+    }
+    #msg-send-btn:hover:not(:disabled) { transform: scale(1.08); box-shadow: 0 4px 14px rgba(255,107,157,0.4); }
+    #msg-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
     /* ─── Settings modal ─────────────────────────────────────────────────── */
     .modal-overlay {
       display: none;
@@ -933,7 +1063,8 @@
     <button class="content-tab active" data-tab="kpi"     onclick="switchTab('kpi')"     role="tab" aria-selected="true">📊 KPI概要</button>
     <button class="content-tab"        data-tab="doctors" onclick="switchTab('doctors')" role="tab" aria-selected="false">👨‍⚕️ 医師管理</button>
     <button class="content-tab"        data-tab="nurses"  onclick="switchTab('nurses')"  role="tab" aria-selected="false">👩‍⚕️ 看護師管理</button>
-    <button class="content-tab"        data-tab="medical" onclick="switchTab('medical')" role="tab" aria-selected="false">🏥 医療機関管理</button>
+    <button class="content-tab"        data-tab="medical"   onclick="switchTab('medical')"   role="tab" aria-selected="false">🏥 医療機関管理</button>
+    <button class="content-tab"        data-tab="messages" onclick="switchTab('messages')" role="tab" aria-selected="false">💬 メッセージ管理</button>
   </nav>
 
   <!-- ── Tab Panel: KPI概要 ─────────────────────────────────────────────── -->
@@ -1202,6 +1333,34 @@
   </main>
   </div><!-- /panel-medical -->
 
+  <!-- ── Tab Panel: メッセージ管理 ──────────────────────────────────────── -->
+  <div class="tab-panel" id="panel-messages">
+
+    <!-- Sidebar: conversation list -->
+    <aside id="msg-sidebar" aria-label="ユーザーとの会話リスト">
+      <div id="msg-sidebar-header">
+        <span class="msg-sidebar-title">💬 ユーザーからのメッセージ</span>
+        <span class="msg-unread-badge" id="msg-total-unread" style="display:none">0</span>
+      </div>
+      <div id="msg-conv-list" role="list"></div>
+    </aside>
+
+    <!-- Main: chat area -->
+    <div id="msg-main">
+      <div id="msg-chat-area">
+        <div class="msg-empty-state" id="msg-empty">
+          <svg width="64" height="64" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.25;margin-bottom:1rem" aria-hidden="true">
+            <rect x="8" y="14" width="50" height="36" rx="8" fill="#FF6B9D"/>
+            <rect x="30" y="32" width="42" height="28" rx="7" fill="#A78BFA"/>
+          </svg>
+          <h3>会話を選んでください</h3>
+          <p>左のリストからユーザーを選んで<br>Necoとしてメッセージを返信します</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-messages -->
+
 </div><!-- /#dashboard -->
 
 <!-- Settings Modal -->
@@ -1356,6 +1515,245 @@ function switchTab(tabId) {
   document.querySelectorAll('.tab-panel').forEach(p => {
     p.classList.toggle('active', p.id === 'panel-' + tabId);
   });
+  if (tabId === 'messages' && !msgInitialized) initMessages();
+}
+
+// ─── Messages Tab ──────────────────────────────────────────────────────────
+let msgInitialized     = false;
+let msgConversations   = [];
+let msgMessages        = {};
+let msgActiveConvId    = null;
+let msgSending         = false;
+let msgPolling         = null;
+
+function msgApiFetch(path, opts = {}) {
+  return fetch(`/.netlify/functions${path}`, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret, ...(opts.headers || {}) },
+  }).then(r => r.json());
+}
+
+function msgFmtTime(iso) {
+  const d = new Date(iso), now = new Date();
+  const diff = Math.floor((now - d) / 86400000);
+  if (diff === 0) return d.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+  if (diff === 1) return '昨日';
+  if (diff < 7)  return `${diff}日前`;
+  return d.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+}
+
+function msgFmtDate(iso) {
+  const d = new Date(iso), now = new Date();
+  if (d.toDateString() === now.toDateString()) return '今日';
+  const y = new Date(now); y.setDate(y.getDate() - 1);
+  if (d.toDateString() === y.toDateString()) return '昨日';
+  return d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function msgEsc(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function msgUserLabel(type) {
+  return type === 'doctor' ? '医師' : type === 'nurse' ? '看護師' : type === 'medical' ? '医療機関' : (type || '');
+}
+
+async function initMessages() {
+  msgInitialized = true;
+  await msgLoadConversations();
+}
+
+async function msgLoadConversations() {
+  try {
+    const data = await msgApiFetch('/messages/conversations');
+    if (data.ok) msgConversations = data.conversations || [];
+  } catch (e) { console.error('[msg]', e.message); }
+  msgRenderSidebar();
+}
+
+function msgRenderSidebar() {
+  const list = document.getElementById('msg-conv-list');
+  list.innerHTML = '';
+  let totalUnread = 0;
+
+  if (msgConversations.length === 0) {
+    list.innerHTML = '<div style="padding:1.5rem;color:#94A3B8;font-size:0.85rem;text-align:center;">メッセージはまだありません</div>';
+  }
+
+  msgConversations.forEach(c => {
+    const unread = c.unread_count || 0;
+    totalUnread += unread;
+    const preview = c.last_message_content ? c.last_message_content.slice(0, 30) + (c.last_message_content.length > 30 ? '…' : '') : 'メッセージなし';
+    const div = document.createElement('div');
+    div.className = 'msg-conv-item' + (msgActiveConvId === c.id ? ' active' : '');
+    div.innerHTML = `
+      <div class="msg-conv-avatar" style="background:${msgEsc(c.other_user_avatar_color || '#4ECDC4')}">${msgEsc(c.other_user_avatar_initial || '?')}</div>
+      <div class="msg-conv-info">
+        <div class="msg-conv-name">${msgEsc(c.other_user_name || '')}</div>
+        <div class="msg-conv-sub">${msgUserLabel(c.other_user_type)}</div>
+        <div class="msg-conv-preview">${msgEsc(preview)}</div>
+      </div>
+      <div class="msg-conv-meta">
+        <span class="msg-conv-time">${c.last_message_at ? msgFmtTime(c.last_message_at) : ''}</span>
+        ${unread > 0 ? `<span class="msg-unread-dot">${unread}</span>` : ''}
+      </div>`;
+    div.onclick = () => msgOpenConv(c.id);
+    list.appendChild(div);
+  });
+
+  const badge = document.getElementById('msg-total-unread');
+  badge.textContent = totalUnread;
+  badge.style.display = totalUnread > 0 ? '' : 'none';
+}
+
+async function msgOpenConv(convId) {
+  msgActiveConvId = convId;
+  if (msgPolling) { clearInterval(msgPolling); msgPolling = null; }
+
+  const conv = msgConversations.find(c => c.id === convId);
+  if (!conv) return;
+  msgRenderSidebar();
+
+  const chatArea = document.getElementById('msg-chat-area');
+  chatArea.innerHTML = `
+    <div id="msg-chat-header">
+      <div class="msg-chat-avatar" style="background:${msgEsc(conv.other_user_avatar_color || '#4ECDC4')}">${msgEsc(conv.other_user_avatar_initial || '?')}</div>
+      <div>
+        <div id="msg-chat-name">${msgEsc(conv.other_user_name || '')}</div>
+        <div id="msg-chat-sub">${msgUserLabel(conv.other_user_type)}</div>
+      </div>
+    </div>
+    <div id="msg-messages" aria-label="メッセージ一覧">
+      <div style="text-align:center;color:#94A3B8;font-size:0.85rem;padding:2rem">読み込み中...</div>
+    </div>
+    <div id="msg-quick-replies">
+      <button class="msg-qr-chip" onclick="msgInsertQR('承知しました')">承知しました</button>
+      <button class="msg-qr-chip" onclick="msgInsertQR('ありがとうございます')">ありがとうございます</button>
+      <button class="msg-qr-chip" onclick="msgInsertQR('ご登録ありがとうございます！')">ご登録ありがとうございます！</button>
+      <button class="msg-qr-chip" onclick="msgInsertQR('少々お待ちください')">少々お待ちください</button>
+    </div>
+    <div id="msg-input-area">
+      <textarea id="msg-textarea" placeholder="Necoとして${msgEsc(conv.other_user_name || '')}に返信する..." rows="1" maxlength="1000"></textarea>
+      <button id="msg-send-btn" onclick="msgSend()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>`;
+
+  const ta = document.getElementById('msg-textarea');
+  const sb = document.getElementById('msg-send-btn');
+  ta.addEventListener('input', () => {
+    sb.disabled = !ta.value.trim();
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+    document.getElementById('msg-quick-replies').style.display = ta.value ? 'none' : '';
+  });
+  ta.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); if (!sb.disabled) msgSend(); } });
+
+  try {
+    const data = await msgApiFetch(`/messages/conversations/${convId}`);
+    if (data.ok) msgMessages[convId] = data.messages || [];
+  } catch (e) { console.error('[msg]', e.message); }
+
+  msgRenderMessages(convId);
+  msgApiFetch(`/messages/conversations/${convId}/read`, { method: 'POST' }).then(() => {
+    const c = msgConversations.find(x => x.id === convId);
+    if (c) { c.unread_count = 0; msgRenderSidebar(); }
+  }).catch(() => {});
+
+  msgPolling = setInterval(async () => {
+    if (msgActiveConvId !== convId) { clearInterval(msgPolling); return; }
+    try {
+      const data = await msgApiFetch(`/messages/conversations/${convId}`);
+      if (!data.ok) return;
+      const cur = msgMessages[convId] || [];
+      if (data.messages.length > cur.length) {
+        msgMessages[convId] = data.messages;
+        msgRenderMessages(convId);
+        const cl = await msgApiFetch('/messages/conversations');
+        if (cl.ok) { msgConversations = cl.conversations || []; msgRenderSidebar(); }
+      }
+    } catch (_) {}
+  }, 10000);
+}
+
+function msgRenderMessages(convId) {
+  const container = document.getElementById('msg-messages');
+  if (!container) return;
+  const msgs = msgMessages[convId] || [];
+  container.innerHTML = '';
+  if (msgs.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#94A3B8;font-size:0.85rem;padding:2rem">メッセージはまだありません</div>';
+    return;
+  }
+  let lastDate = '';
+  const THRESH = 5 * 60 * 1000;
+  msgs.forEach((msg, i) => {
+    const dateStr = msgFmtDate(msg.created_at);
+    if (dateStr !== lastDate) {
+      const div = document.createElement('div');
+      div.className = 'msg-date-divider';
+      div.textContent = dateStr;
+      container.appendChild(div);
+      lastDate = dateStr;
+    }
+    const isOwn = msg.sender_id === msg.neco_id || msg.sender_type === 'admin';
+    const prev  = i > 0 ? msgs[i - 1] : null;
+    const grouped = prev && prev.sender_id === msg.sender_id && (new Date(msg.created_at) - new Date(prev.created_at)) < THRESH;
+    const wrap = document.createElement('div');
+    wrap.className = `msg-bubble-wrap ${isOwn ? 'own' : 'other'}${grouped ? ' grouped' : ''}`;
+    wrap.innerHTML = `
+      ${!isOwn ? `<div class="msg-bubble-avatar" style="background:${msgEsc(msg.avatar_color || '#4ECDC4')}">${msgEsc(msg.avatar_initial || '?')}</div>` : ''}
+      <div class="msg-bubble-body">
+        ${!isOwn && !grouped ? `<span class="msg-sender-name">${msgEsc(msg.sender_name || '')}</span>` : ''}
+        <div class="msg-bubble">${msgEsc(msg.content || '').replace(/\n/g, '<br>')}</div>
+        <span class="msg-bubble-time">${msgFmtTime(msg.created_at)}</span>
+      </div>
+      ${isOwn ? `<div class="msg-bubble-avatar" style="background:linear-gradient(135deg,#FF6B9D,#A78BFA)">N</div>` : ''}`;
+    container.appendChild(wrap);
+  });
+  setTimeout(() => { container.scrollTop = container.scrollHeight; }, 0);
+}
+
+function msgInsertQR(text) {
+  const ta = document.getElementById('msg-textarea');
+  const sb = document.getElementById('msg-send-btn');
+  if (!ta) return;
+  ta.value = text;
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+  sb.disabled = false;
+  document.getElementById('msg-quick-replies').style.display = 'none';
+  ta.focus();
+}
+
+async function msgSend() {
+  if (!msgActiveConvId || msgSending) return;
+  const ta = document.getElementById('msg-textarea');
+  const sb = document.getElementById('msg-send-btn');
+  const text = ta.value.trim();
+  if (!text) return;
+  msgSending = true;
+  sb.disabled = true;
+  ta.value = '';
+  ta.style.height = 'auto';
+  try {
+    const data = await msgApiFetch(`/messages/conversations/${msgActiveConvId}/send`, {
+      method: 'POST',
+      body: JSON.stringify({ content: text }),
+    });
+    if (data.ok) {
+      const msg = { ...data.message, sender_type: 'admin', sender_name: 'Neco', avatar_initial: 'N', avatar_color: '#FF6B9D' };
+      if (!msgMessages[msgActiveConvId]) msgMessages[msgActiveConvId] = [];
+      msgMessages[msgActiveConvId].push(msg);
+      msgRenderMessages(msgActiveConvId);
+      document.getElementById('msg-quick-replies').style.display = '';
+      const c = msgConversations.find(x => x.id === msgActiveConvId);
+      if (c) { c.last_message_content = text; c.last_message_at = new Date().toISOString(); msgRenderSidebar(); }
+    } else { ta.value = text; }
+  } catch (e) { console.error('[msg]', e.message); ta.value = text; }
+  finally { msgSending = false; sb.disabled = !ta.value.trim(); }
 }
 
 // ─── Cat dropdown ─────────────────────────────────────────────────────────

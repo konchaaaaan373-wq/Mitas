@@ -1005,9 +1005,9 @@
                 localStorage.setItem('neco_user', JSON.stringify(data.user));
 
                 // Redirect
-                if (data.user.type === 'doctor' || data.user.type === 'nurse') {
+                if (data.user.type === 'doctor') {
                     window.location.replace('/dashboard.html');
-                } else if (data.user.type === 'medical' || data.user.type === 'admin') {
+                } else if (data.user.type === 'medical') {
                     window.location.replace('/medical-dashboard.html');
                 } else {
                     window.location.replace('/');

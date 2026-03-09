@@ -944,22 +944,14 @@ let currentUser = null;
         if (!token || !userStr) throw new Error('no session');
 
         currentUser = JSON.parse(userStr);
-        if (!currentUser || (currentUser.type !== 'medical' && currentUser.type !== 'admin')) throw new Error('wrong type');
+        if (!currentUser || currentUser.type !== 'medical') throw new Error('wrong type');
 
         const _nameEl = document.getElementById('menu-user-name');
         const _roleEl = document.getElementById('menu-user-role');
-        const _badge  = document.querySelector('.header-badge');
         if (_nameEl) _nameEl.textContent = currentUser.name;
-        if (currentUser.type === 'admin') {
-            if (_roleEl) _roleEl.textContent = '管理者';
-            if (_badge)  _badge.textContent = '管理者';
-            const sidebarTitle = document.querySelector('.sidebar-title');
-            if (sidebarTitle) sidebarTitle.textContent = '💬 ユーザーからのメッセージ';
-        } else {
-            if (_roleEl) _roleEl.textContent = currentUser.facilityType || '医療機関';
-        }
+        if (_roleEl) _roleEl.textContent = currentUser.facilityType || '医療機関';
     } catch (_) {
-        window.location.replace('/login.html');
+        window.location.replace('/login-medical.html');
     }
 })();
 
@@ -1409,7 +1401,7 @@ function logout() {
     if (!confirm('ログアウトしますか？')) return;
     localStorage.removeItem('neco_token');
     localStorage.removeItem('neco_user');
-    window.location.replace('/login.html');
+    window.location.replace('/login-medical.html');
 }
 
 // -----------------------------------------------------------------------
