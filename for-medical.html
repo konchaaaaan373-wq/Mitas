@@ -22,13 +22,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 文言編集：下のCONSTANTS配列を編集 */
+        /* 医療機関向けページ：ブランド色はティール系 */
         :root {
-            --primary: #FF6B9D;
-            --secondary: #4ECDC4;
-            --purple: #A78BFA;
-            --dark: #2D3142;
-            --light: #F8F9FA;
+            /* ブランド色（医療機関向け） */
+            --brand: #1A8A7A;
+            --brand-light: #EBF6F4;
+            --brand-muted: #A3D4CE;
+
+            /* アクション色（CTAボタン専用） */
+            --action: #1A1A2E;
+            --action-hover: #2D2D50;
+
+            /* 状態色 */
+            --success: #166D4F;
+            --success-bg: #ECFDF5;
+            --warning: #B45309;
+            --warning-bg: #FEF3C7;
+            --error: #B91C1C;
+            --error-bg: #FEF2F2;
+
+            /* テキスト階層 */
+            --text-primary: #1A1A2E;
+            --text-secondary: #4A5568;
+            --text-muted: #718096;
+
+            /* 背景・面 */
+            --surface-page: #F8F8FC;
+            --surface-card: #FFFFFF;
+            --surface-subtle: #F3F4F6;
+
+            /* ボーダー */
+            --border: #E5E7EB;
+            --border-strong: #D1D5DB;
+
+            /* レガシー互換（施設向けはteal/medical） */
+            --primary: #1A8A7A;
+            --secondary: #1A8A7A;
+            --dark: #1A1A2E;
+            --light: #F8F8FC;
             --white: #FFFFFF;
         }
 
@@ -95,10 +126,7 @@
             font-family: 'Zen Kaku Gothic New', sans-serif;
             font-size: 2rem;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--brand);
             letter-spacing: -0.02em;
         }
 
@@ -109,50 +137,51 @@
         }
 
         .nav-link {
-            color: var(--dark);
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
             cursor: pointer;
         }
 
         .nav-link:hover {
-            color: var(--primary);
+            color: var(--brand);
         }
 
+        /* 施設向けCTAはアクション色（ダーク） */
         .cta-button {
-            background: linear-gradient(135deg, var(--primary), var(--purple));
+            background: var(--action);
             color: var(--white);
             padding: 0.8rem 2rem;
-            border-radius: 50px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(26, 26, 46, 0.2);
             cursor: pointer;
             border: none;
             font-size: 1rem;
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
+            background: var(--action-hover);
+            box-shadow: 0 4px 16px rgba(26, 26, 46, 0.25);
         }
 
         .cta-button.secondary {
-            background: var(--white);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+            background: transparent;
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-strong);
+            box-shadow: none;
         }
 
         .cta-button.secondary:hover {
-            background: rgba(255, 107, 157, 0.1);
+            background: var(--surface-subtle);
         }
 
         /* Hero */
         .hero {
-            padding: 7rem 2rem 5rem;
+            padding: 6rem 2rem 4rem;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -162,91 +191,81 @@
             grid-template-columns: 1fr 1.55fr;
             gap: 4rem;
             align-items: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             margin-bottom: 1.5rem;
-            color: var(--dark);
+            color: var(--text-primary);
             line-height: 1.3;
         }
 
         .hero-sub {
-            font-size: 1.1rem;
-            color: #4B5563;
+            font-size: 1rem;
+            color: var(--text-secondary);
             margin-bottom: 2.5rem;
             line-height: 1.9;
         }
 
         .hero-ctas {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .hero-visual {
             position: relative;
-            animation: fadeInRight 1s ease;
+            animation: fadeInRight 0.8s ease;
         }
 
         @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(50px); }
+            from { opacity: 0; transform: translateX(30px); }
             to   { opacity: 1; transform: translateX(0); }
         }
 
-        .hero-visual::before {
-            content: '';
-            position: absolute;
-            inset: -16px -16px 16px 16px;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.18), rgba(167, 139, 250, 0.18));
-            border-radius: 32px;
-            z-index: 0;
-        }
+        /* シンプルな影のみ（グラデーション装飾廃止） */
+        .hero-visual::before { display: none; }
 
         .hero-image {
             width: 100%;
-            border-radius: 24px;
+            border-radius: 16px;
             object-fit: cover;
-            height: 580px;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
-            position: relative;
-            z-index: 1;
+            height: 520px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
             display: block;
         }
-
 
         .strength-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
         }
 
         .strength-card {
-            background: var(--white);
+            background: var(--surface-card);
             padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(45, 49, 66, 0.1);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .strength-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 12px 35px rgba(255, 107, 157, 0.2);
+            border-color: var(--brand-muted);
+            box-shadow: 0 6px 20px rgba(26, 138, 122, 0.1);
         }
 
         .strength-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--brand);
             word-break: keep-all;
         }
 
         .strength-card p {
-            color: #4B5563;
+            color: var(--text-secondary);
             line-height: 1.7;
+            font-size: 0.9375rem;
         }
 
         /* Sections */
@@ -262,36 +281,35 @@
         }
 
         .section-header h2 {
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             margin-bottom: 1rem;
-            color: var(--dark);
+            color: var(--text-primary);
         }
 
         .section-header p {
-            color: #6B7280;
-            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-size: 1rem;
         }
 
         /* Strength Details */
         .strength-detail {
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(45, 49, 66, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            background: var(--surface-card);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1.5px solid var(--border);
         }
 
         .strength-detail h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.875rem;
+            color: var(--brand);
             word-break: keep-all;
         }
 
         .strength-detail .desc {
-            font-size: 1.1rem;
-            color: #4B5563;
+            font-size: 1rem;
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
         }
 
@@ -301,17 +319,18 @@
         }
 
         .strength-detail li {
-            padding-left: 2rem;
-            margin-bottom: 1rem;
+            padding-left: 1.75rem;
+            margin-bottom: 0.875rem;
             position: relative;
-            color: #4B5563;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
         }
 
         .strength-detail li::before {
             content: '✓';
             position: absolute;
             left: 0;
-            color: var(--secondary);
+            color: var(--brand);
             font-weight: bold;
         }
 
@@ -375,22 +394,22 @@
         }
 
         .pricing-card .range {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--brand);
             margin-bottom: 0.5rem;
         }
 
         .pricing-card .note {
-            font-size: 0.9rem;
-            color: #6B7280;
+            font-size: 0.875rem;
+            color: var(--text-muted);
         }
 
         .pricing-note {
             text-align: center;
             margin-top: 2rem;
-            color: #6B7280;
-            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-size: 0.9375rem;
         }
 
         /* Flow */
@@ -411,15 +430,15 @@
         }
 
         .flow-step .number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            background: var(--brand);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             margin: 0 auto 1rem;
             color: var(--white);
         }
@@ -446,14 +465,15 @@
         }
 
         .faq-item h4 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.875rem;
+            color: var(--brand);
         }
 
         .faq-item p {
-            color: #4B5563;
+            color: var(--text-secondary);
             line-height: 1.7;
+            font-size: 0.9375rem;
         }
 
         /* Testimonials */
@@ -464,28 +484,28 @@
         }
 
         .testimonial-card {
-            background: var(--white);
+            background: var(--surface-card);
             padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(45, 49, 66, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
         }
 
         .testimonial-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.6rem;
-            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--brand);
         }
 
         .testimonial-role {
-            font-size: 0.88rem;
-            color: #6B7280;
-            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
         }
 
         .testimonial-card p {
-            color: #4B5563;
+            color: var(--text-secondary);
             line-height: 1.8;
+            font-size: 0.9375rem;
         }
 
         /* Form */
@@ -520,7 +540,7 @@
 
         .form-group.required label::after {
             content: ' *';
-            color: var(--primary);
+            color: var(--error);
         }
 
         .form-group input,
@@ -544,8 +564,8 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(26, 138, 122, 0.12);
         }
 
         .checkbox-group {
@@ -675,9 +695,10 @@
             margin-top: 2rem;
         }
 
-        /* Footer */
+        /* Footer（施設向け：ティールアクセント） */
         footer {
-            background: linear-gradient(160deg, #2C0F1E 0%, #5A1A3B 55%, #2C0F1E 100%);
+            background: #16161E;
+            color: rgba(255, 255, 255, 0.85);
             padding: 3rem 2rem 2rem;
             position: relative;
             overflow: hidden;
@@ -689,8 +710,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #FF6B9D, #FFB7D0, #FF6B9D, transparent);
+            height: 2px;
+            background: var(--brand);
         }
 
         .footer-content {
@@ -703,13 +724,13 @@
 
         .disclaimer {
             font-size: 0.85rem;
-            color: rgba(255, 210, 228, 0.7);
+            color: rgba(255, 255, 255, 0.45);
             margin-bottom: 2rem;
             line-height: 1.6;
         }
 
         .company-info {
-            color: rgba(255, 225, 238, 0.9);
+            color: rgba(255, 255, 255, 0.65);
             margin-bottom: 1rem;
         }
 
@@ -801,7 +822,7 @@
 
         /* フォーカスインジケーター */
         a:focus-visible, button:focus-visible, input:focus-visible {
-            outline: 3px solid #4CC9F0;
+            outline: 3px solid var(--brand);
             outline-offset: 2px;
         }
 
@@ -865,26 +886,16 @@
             100% { transform: rotate(360deg) scaleX(1)     scaleY(1); }
         }
 
-        .sakura-petal:nth-child(1)  { left: 5%;  width: 13px; height: 17px; --fall-dur: 9.2s;  --fall-delay: 0.0s;  --tumble-dur: 3.8s; --sw1: 22px;  --sw2: -16px; --sw3: 28px;  --sw4: -12px; --sw5: 18px;  --petal-color: rgba(255, 182, 193, 0.75); }
-        .sakura-petal:nth-child(2)  { left: 15%; width: 16px; height: 20px; --fall-dur: 10.5s; --fall-delay: 1.2s;  --tumble-dur: 4.2s; --sw1: -20px; --sw2: 30px;  --sw3: -15px; --sw4: 25px;  --sw5: -10px; --petal-color: rgba(255, 192, 203, 0.70); }
-        .sakura-petal:nth-child(3)  { left: 28%; width: 11px; height: 15px; --fall-dur: 8.8s;  --fall-delay: 2.5s;  --tumble-dur: 3.2s; --sw1: 30px;  --sw2: -22px; --sw3: 38px;  --sw4: -18px; --sw5: -8px;  --petal-color: rgba(255, 172, 188, 0.78); }
-        .sakura-petal:nth-child(4)  { left: 40%; width: 15px; height: 19px; --fall-dur: 11.0s; --fall-delay: 0.8s;  --tumble-dur: 4.8s; --sw1: -25px; --sw2: 15px;  --sw3: -30px; --sw4: 20px;  --sw5: -15px; --petal-color: rgba(255, 200, 210, 0.72); }
-        .sakura-petal:nth-child(5)  { left: 55%; width: 12px; height: 16px; --fall-dur: 9.5s;  --fall-delay: 3.6s;  --tumble-dur: 3.6s; --sw1: 18px;  --sw2: -28px; --sw3: 22px;  --sw4: -16px; --sw5: 12px;  --petal-color: rgba(255, 175, 193, 0.76); }
-        .sakura-petal:nth-child(6)  { left: 68%; width: 17px; height: 21px; --fall-dur: 10.2s; --fall-delay: 2.0s;  --tumble-dur: 4.5s; --sw1: -15px; --sw2: 25px;  --sw3: -18px; --sw4: 30px;  --sw5: -12px; --petal-color: rgba(255, 190, 205, 0.73); }
-        .sakura-petal:nth-child(7)  { left: 80%; width: 10px; height: 14px; --fall-dur: 8.5s;  --fall-delay: 4.4s;  --tumble-dur: 3.0s; --sw1: 26px;  --sw2: -12px; --sw3: 34px;  --sw4: -20px; --sw5: 16px;  --petal-color: rgba(255, 178, 196, 0.77); }
-        .sakura-petal:nth-child(8)  { left: 90%; width: 14px; height: 18px; --fall-dur: 10.8s; --fall-delay: 1.5s;  --tumble-dur: 4.0s; --sw1: -28px; --sw2: 18px;  --sw3: -24px; --sw4: 14px;  --sw5: -20px; --petal-color: rgba(255, 195, 208, 0.71); }
-        .sakura-petal:nth-child(9)  { left: 10%; width: 16px; height: 20px; --fall-dur: 9.8s;  --fall-delay: 5.2s;  --tumble-dur: 3.9s; --sw1: 20px;  --sw2: -24px; --sw3: 16px;  --sw4: -28px; --sw5: 10px;  --petal-color: rgba(255, 185, 200, 0.74); }
-        .sakura-petal:nth-child(10) { left: 22%; width: 18px; height: 22px; --fall-dur: 11.5s; --fall-delay: 3.0s;  --tumble-dur: 5.0s; --sw1: -18px; --sw2: 26px;  --sw3: -14px; --sw4: 22px;  --sw5: -10px; --petal-color: rgba(255, 205, 215, 0.70); }
-        .sakura-petal:nth-child(11) { left: 35%; width: 12px; height: 16px; --fall-dur: 9.1s;  --fall-delay: 0.6s;  --tumble-dur: 3.4s; --sw1: 24px;  --sw2: -20px; --sw3: 30px;  --sw4: -18px; --sw5: 22px;  --petal-color: rgba(255, 180, 196, 0.76); }
-        .sakura-petal:nth-child(12) { left: 48%; width: 15px; height: 19px; --fall-dur: 10.0s; --fall-delay: 4.8s;  --tumble-dur: 4.3s; --sw1: -22px; --sw2: 16px;  --sw3: -26px; --sw4: 12px;  --sw5: -18px; --petal-color: rgba(255, 198, 212, 0.72); }
-        .sakura-petal:nth-child(13) { left: 62%; width: 11px; height: 15px; --fall-dur: 8.6s;  --fall-delay: 2.2s;  --tumble-dur: 3.1s; --sw1: 28px;  --sw2: -14px; --sw3: 20px;  --sw4: -24px; --sw5: 14px;  --petal-color: rgba(255, 174, 191, 0.78); }
-        .sakura-petal:nth-child(14) { left: 75%; width: 17px; height: 21px; --fall-dur: 11.2s; --fall-delay: 5.6s;  --tumble-dur: 4.6s; --sw1: -16px; --sw2: 28px;  --sw3: -20px; --sw4: 32px;  --sw5: -14px; --petal-color: rgba(255, 202, 214, 0.71); }
-        .sakura-petal:nth-child(15) { left: 88%; width: 13px; height: 17px; --fall-dur: 9.4s;  --fall-delay: 1.8s;  --tumble-dur: 3.7s; --sw1: 22px;  --sw2: -18px; --sw3: 26px;  --sw4: -14px; --sw5: 20px;  --petal-color: rgba(255, 188, 202, 0.74); }
-        .sakura-petal:nth-child(16) { left: 3%;  width: 14px; height: 18px; --fall-dur: 10.6s; --fall-delay: 6.0s;  --tumble-dur: 4.1s; --sw1: -24px; --sw2: 20px;  --sw3: -28px; --sw4: 16px;  --sw5: -22px; --petal-color: rgba(255, 193, 206, 0.73); }
-        .sakura-petal:nth-child(17) { left: 45%; width: 10px; height: 14px; --fall-dur: 9.0s;  --fall-delay: 3.3s;  --tumble-dur: 3.3s; --sw1: 26px;  --sw2: -22px; --sw3: 18px;  --sw4: -26px; --sw5: 12px;  --petal-color: rgba(255, 177, 194, 0.77); }
-        .sakura-petal:nth-child(18) { left: 58%; width: 19px; height: 23px; --fall-dur: 11.8s; --fall-delay: 0.4s;  --tumble-dur: 4.9s; --sw1: -18px; --sw2: 24px;  --sw3: -12px; --sw4: 28px;  --sw5: -16px; --petal-color: rgba(255, 207, 218, 0.70); }
-        .sakura-petal:nth-child(19) { left: 72%; width: 12px; height: 16px; --fall-dur: 8.9s;  --fall-delay: 4.2s;  --tumble-dur: 3.5s; --sw1: 20px;  --sw2: -26px; --sw3: 24px;  --sw4: -18px; --sw5: 16px;  --petal-color: rgba(255, 181, 198, 0.76); }
-        .sakura-petal:nth-child(20) { left: 93%; width: 16px; height: 20px; --fall-dur: 10.3s; --fall-delay: 5.0s;  --tumble-dur: 4.4s; --sw1: -26px; --sw2: 14px;  --sw3: -32px; --sw4: 10px;  --sw5: -24px; --petal-color: rgba(255, 196, 210, 0.72); }
+        /* 施設向けページ：桜アニメーションはティール系に変更、8個に削減 */
+        .sakura-petal:nth-child(1)  { left: 8%;  width: 10px; height: 14px; --fall-dur: 11s;   --fall-delay: 0.0s;  --tumble-dur: 4s;   --sw1: 16px;  --sw2: -12px; --sw3: 20px;  --sw4: -10px; --sw5: 14px;  --petal-color: rgba(26, 138, 122, 0.15); }
+        .sakura-petal:nth-child(2)  { left: 28%; width: 8px;  height: 11px; --fall-dur: 13s;   --fall-delay: 2.5s;  --tumble-dur: 4.5s; --sw1: -14px; --sw2: 18px;  --sw3: -10px; --sw4: 16px;  --sw5: -8px;  --petal-color: rgba(26, 138, 122, 0.12); }
+        .sakura-petal:nth-child(3)  { left: 45%; width: 12px; height: 16px; --fall-dur: 12s;   --fall-delay: 1.0s;  --tumble-dur: 3.8s; --sw1: 18px;  --sw2: -16px; --sw3: 24px;  --sw4: -12px; --sw5: 10px;  --petal-color: rgba(26, 138, 122, 0.18); }
+        .sakura-petal:nth-child(4)  { left: 62%; width: 9px;  height: 12px; --fall-dur: 14s;   --fall-delay: 4.0s;  --tumble-dur: 5s;   --sw1: -16px; --sw2: 10px;  --sw3: -20px; --sw4: 14px;  --sw5: -10px; --petal-color: rgba(26, 138, 122, 0.13); }
+        .sakura-petal:nth-child(5)  { left: 75%; width: 11px; height: 15px; --fall-dur: 11.5s; --fall-delay: 6.0s;  --tumble-dur: 4.2s; --sw1: 20px;  --sw2: -14px; --sw3: 16px;  --sw4: -18px; --sw5: 12px;  --petal-color: rgba(26, 138, 122, 0.14); }
+        .sakura-petal:nth-child(6)  { left: 88%; width: 7px;  height: 10px; --fall-dur: 12.5s; --fall-delay: 3.0s;  --tumble-dur: 3.5s; --sw1: -10px; --sw2: 20px;  --sw3: -14px; --sw4: 18px;  --sw5: -8px;  --petal-color: rgba(26, 138, 122, 0.10); }
+        .sakura-petal:nth-child(7)  { left: 18%; width: 13px; height: 17px; --fall-dur: 13.5s; --fall-delay: 7.5s;  --tumble-dur: 4.8s; --sw1: 14px;  --sw2: -18px; --sw3: 22px;  --sw4: -12px; --sw5: 16px;  --petal-color: rgba(26, 138, 122, 0.12); }
+        .sakura-petal:nth-child(8)  { left: 52%; width: 9px;  height: 13px; --fall-dur: 10.5s; --fall-delay: 5.0s;  --tumble-dur: 3.6s; --sw1: -18px; --sw2: 14px;  --sw3: -22px; --sw4: 10px;  --sw5: -14px; --petal-color: rgba(26, 138, 122, 0.16); }
+        .sakura-petal:nth-child(n+9) { display: none; }
 
         @media (prefers-reduced-motion: reduce) {
             .sakura-overlay { display: none; }
@@ -920,14 +931,8 @@
         <nav>
             <a href="/" class="logo" aria-label="Neco トップページ">
                 <svg class="logo-cat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
-                    <defs>
-                        <linearGradient id="catGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#FF6B9D"/>
-                            <stop offset="100%" stop-color="#A78BFA"/>
-                        </linearGradient>
-                    </defs>
                     <path d="M 20 35 Q 29 35 32 28 L 32 20 L 29 8 L 23 16 Q 21.5 14.5 20 14.5 Q 18.5 14.5 17 16 L 11 8 L 8 20 L 8 28 Q 11 35 20 35 Z"
-                          stroke="url(#catGrad)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+                          stroke="#1A8A7A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
                 </svg>
                 <span class="logo-text">Neco</span>
             </a>
@@ -1297,7 +1302,7 @@
                 <strong>株式会社Neco</strong><br>
                 お問い合わせ: neco.oncall@gmail.com
             </p>
-            <p style="color: rgba(255, 210, 228, 0.45); font-size: 0.85rem;">&copy; 2026 Neco Inc. All rights reserved.</p>
+            <p style="color: rgba(255, 255, 255, 0.35); font-size: 0.85rem;">&copy; 2026 Neco Inc. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1324,14 +1329,14 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #FF6B9D 0%, #A78BFA 100%);
+            background: var(--action);
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             color: white;
             z-index: 9999;
-            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.5), 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 32px rgba(26, 26, 46, 0.35), 0 2px 8px rgba(0,0,0,0.15);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
             animation: fab-entrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1s both;
         }
@@ -1340,8 +1345,8 @@
             to   { transform: scale(1) rotate(0deg);   opacity: 1; }
         }
         .fab-consult:hover {
-            transform: scale(1.12);
-            box-shadow: 0 12px 40px rgba(255, 107, 157, 0.65), 0 4px 16px rgba(167, 139, 250, 0.4);
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(26, 26, 46, 0.5), 0 4px 16px rgba(0,0,0,0.2);
         }
         .fab-consult:active { transform: scale(0.95); }
         .fab-pulse {
@@ -1349,7 +1354,7 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: linear-gradient(135deg, #FF6B9D, #A78BFA);
+            background: var(--action);
             opacity: 0;
             animation: fab-pulse-ring 2.4s ease-out infinite;
         }
