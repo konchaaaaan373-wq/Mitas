@@ -16,12 +16,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #FF6B9D;
-            --secondary: #4ECDC4;
-            --purple: #A78BFA;
-            --dark: #2D3142;
-            --light: #F8F9FA;
+            --brand: #D94472;
+            --brand-light: #FDF0F4;
+            --action: #1A1A2E;
+            --dark: #1A1A2E;
+            --light: #F8F8FC;
             --white: #FFFFFF;
+            --primary: #D94472;
         }
 
         * {
@@ -76,10 +77,7 @@
             font-family: 'Zen Kaku Gothic New', sans-serif;
             font-size: 2rem;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--brand);
             letter-spacing: -0.02em;
             text-decoration: none;
         }
@@ -103,7 +101,7 @@
         }
 
         .profession-tab:hover {
-            background: rgba(255, 107, 157, 0.1);
+            background: var(--brand-light);
         }
 
         main {
@@ -139,7 +137,7 @@
             margin-bottom: 1.5rem;
             color: var(--dark);
             padding-bottom: 0.8rem;
-            border-bottom: 3px solid var(--primary);
+            border-bottom: 3px solid var(--brand);
         }
 
         .content-section h3 {
@@ -165,7 +163,7 @@
         }
 
         footer {
-            background: linear-gradient(160deg, #2C0F1E 0%, #5A1A3B 55%, #2C0F1E 100%);
+            background: #16161E;
             color: var(--white);
             padding: 3rem 2rem 2rem;
             text-align: center;
@@ -179,8 +177,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), #FFB7D0, var(--primary), transparent);
+            height: 2px;
+            background: var(--brand);
         }
 
         .footer-links {
@@ -194,19 +192,19 @@
         }
 
         .footer-links a {
-            color: rgba(255, 210, 228, 0.75);
+            color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
         }
 
         .footer-links a:hover {
-            color: #FFB7D0;
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .footer-bottom {
             padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 107, 157, 0.25);
-            color: rgba(255, 210, 228, 0.45);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.35);
             position: relative;
             z-index: 1;
         }
@@ -493,12 +491,12 @@
     <footer>
         <div class="footer-content" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem;">
             <div>
-                <div class="footer-brand" style="font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #FF6B9D, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.02em;">Neco</div>
-                <p class="footer-desc" style="color: rgba(255, 210, 228, 0.8); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1rem;">
+                <div class="footer-brand" style="font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 1rem; color: #D94472; letter-spacing: -0.02em;">Neco</div>
+                <p class="footer-desc" style="color: rgba(255, 255, 255, 0.65); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1rem;">
                     医療従事者の皆様のキャリアとライフスタイルを大切にした、<br>
                     医療求人コンシェルジュサービス。
                 </p>
-                <div class="footer-license" style="background: rgba(255, 107, 157, 0.15); border: 1px solid rgba(255, 107, 157, 0.25); padding: 1rem 1.5rem; border-radius: 15px; font-size: 0.9rem; color: rgba(255, 210, 228, 0.9);">
+                <div class="footer-license" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.65);">
                     📋 有料職業紹介事業許可番号：13-ユ-319230<br>
                     許可年月日：令和8年3月1日<br>
                     株式会社Neco
@@ -532,7 +530,7 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom" style="max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255, 107, 157, 0.25); text-align: center; color: rgba(255, 210, 228, 0.45);">
+        <div class="footer-bottom" style="max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.12); text-align: center; color: rgba(255, 255, 255, 0.35);">
             <p>&copy; 2026 Neco Inc. All rights reserved.</p>
         </div>
     </footer>
