@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プライバシーポリシー - Mitas</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1B3A6B;
+            --teal: #0EA5E9;
+            --gray: #64748B;
+            --gray-light: #F1F5F9;
+            --white: #FFFFFF;
+            --dark: #0F172A;
+            --border: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--white);
+            line-height: 1.8;
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--teal); }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: var(--navy); }
+
+        .btn-nav {
+            background: var(--navy);
+            color: var(--white) !important;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+        }
+
+        .page-hero {
+            background: var(--gray-light);
+            padding: 56px 24px 48px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .page-hero p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        main {
+            max-width: 760px;
+            margin: 64px auto;
+            padding: 0 24px 80px;
+        }
+
+        .intro {
+            font-size: 15px;
+            color: var(--dark);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 40px 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h2:first-of-type { margin-top: 0; }
+
+        p {
+            font-size: 15px;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        ol, ul {
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            font-size: 15px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--gray-light);
+            color: var(--navy);
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            vertical-align: top;
+        }
+
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.6);
+            padding: 48px 24px;
+        }
+
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .footer-logo span { color: var(--teal); }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+            width: 100%;
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 640px) {
+            nav a:not(.btn-nav) { display: none; }
+            table { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">mi<span>tas</span></a>
+            <nav>
+                <a href="/#how-it-works">使い方</a>
+                <a href="/#features">特徴</a>
+                <a href="/faq.html">よくある質問</a>
+                <a href="/register.html" class="btn-nav">無料で始める</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-hero">
+        <h1>プライバシーポリシー</h1>
+        <p>最終更新日：2026年3月14日</p>
+    </div>
+
+    <main>
+        <p class="intro">Mitas（以下「当社」）は、本サービスをご利用いただく医療機関・施設（以下「利用者」）からお預かりする個人情報の重要性を認識し、個人情報の保護に関する法律（個人情報保護法）その他の法令を遵守した上で、以下のとおりプライバシーポリシーを定めます。</p>
+
+        <h2>1. 取得する情報</h2>
+        <p>当社は、本サービスの提供にあたり、以下の情報を取得します。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>情報の種類</th>
+                    <th>具体的な内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>施設情報</td>
+                    <td>施設名、施設種別、所在地（都道府県）</td>
+                </tr>
+                <tr>
+                    <td>担当者情報</td>
+                    <td>担当者名、メールアドレス、電話番号</td>
+                </tr>
+                <tr>
+                    <td>採用要件情報</td>
+                    <td>お探しの職種、採用緊急度、採用要件・ご要望</td>
+                </tr>
+                <tr>
+                    <td>アクセスログ</td>
+                    <td>IPアドレス、ブラウザ情報、閲覧ページ、アクセス日時</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>2. 利用目的</h2>
+        <p>取得した情報は、以下の目的のために利用します。</p>
+        <ol>
+            <li>本サービスの提供・運営（施設登録の確認、コンシェルジュによる連絡・マッチング業務）</li>
+            <li>本サービスの改善・新機能開発</li>
+            <li>重要なお知らせ・サービス変更の通知</li>
+            <li>法令に基づく対応</li>
+        </ol>
+
+        <h2>3. 第三者への提供</h2>
+        <p>当社は、以下の場合を除き、取得した個人情報を第三者に提供しません。</p>
+        <ol>
+            <li>利用者本人の同意がある場合</li>
+            <li>候補者とのマッチングに必要な範囲で、当社の業務委託先に提供する場合（委託先は同等の情報管理を義務付けます）</li>
+            <li>法令に基づく開示請求がある場合</li>
+            <li>人の生命・身体・財産の保護のために必要で、本人の同意を得ることが困難な場合</li>
+        </ol>
+
+        <h2>4. 情報の管理</h2>
+        <p>当社は、取得した個人情報への不正アクセス・紛失・破壊・改ざん・漏洩を防止するため、適切な安全管理措置を講じます。情報の保管・処理は、SSL暗号化通信を使用した安全な環境で行います。</p>
+
+        <h2>5. Cookie・アクセス解析</h2>
+        <p>本サービスでは、サービス改善を目的としてGoogle Analyticsを使用する場合があります。Google Analyticsはデータ収集にCookieを使用します。収集されるデータは匿名化されており、個人を特定するものではありません。</p>
+
+        <h2>6. 個人情報の開示・訂正・削除</h2>
+        <p>利用者は、当社が保有するご自身の個人情報について、開示・訂正・削除を請求することができます。請求を希望される場合は、担当コンシェルジュまたは以下の窓口までご連絡ください。当社は、本人確認の上、合理的な期間内に対応いたします。</p>
+
+        <h2>7. 保存期間</h2>
+        <p>取得した個人情報は、利用目的の達成に必要な期間、または法令で定められた期間、適切に保管します。保管期間終了後は、安全な方法で廃棄します。</p>
+
+        <h2>8. プライバシーポリシーの変更</h2>
+        <p>当社は、法令改正やサービスの変更に伴い、本ポリシーを改定することがあります。改定後のポリシーは本ページに掲載した時点から効力を生じます。</p>
+
+        <h2>9. お問い合わせ</h2>
+        <p>個人情報の取り扱いに関するご質問・ご相談は、施設登録後に担当コンシェルジュまでお問い合わせください。</p>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <a href="/" class="footer-logo">mi<span>tas</span></a>
+            <div class="footer-links">
+                <a href="/terms.html">利用規約</a>
+                <a href="/privacy-policy.html">プライバシーポリシー</a>
+                <a href="/faq.html">よくある質問</a>
+                <a href="https://necofindjob.com" target="_blank" rel="noopener">求職者の方はneco</a>
+            </div>
+        </div>
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Mitas. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
