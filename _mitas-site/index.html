@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitas - 医療機関の人材要件マッチングプラットフォーム</title>
+    <meta name="description" content="Mitasは医療機関向けの人材要件マッチングプラットフォームです。必要な医師・看護師の要件を登録するだけで、最適な人材をご紹介します。">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mitas.necofindjob.com/">
+    <!-- OGP -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mitas - 医療機関の人材要件マッチングプラットフォーム">
+    <meta property="og:description" content="必要な人材要件を登録するだけ。医師・看護師のマッチングをシンプルに。">
+    <meta property="og:url" content="https://mitas.necofindjob.com/">
+    <meta property="og:site_name" content="Mitas">
+    <meta property="og:locale" content="ja_JP">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mitas - 医療機関の人材要件マッチングプラットフォーム">
+    <meta name="twitter:description" content="必要な人材要件を登録するだけ。医師・看護師のマッチングをシンプルに。">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1B3A6B;
+            --navy-light: #2A5298;
+            --teal: #0EA5E9;
+            --teal-light: #38BDF8;
+            --gray: #64748B;
+            --gray-light: #F1F5F9;
+            --white: #FFFFFF;
+            --dark: #0F172A;
+            --border: #E2E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--dark);
+            background: var(--white);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--teal);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: var(--navy); }
+
+        .btn-nav {
+            background: var(--navy);
+            color: var(--white) !important;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s !important;
+        }
+
+        .btn-nav:hover { background: var(--navy-light) !important; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1e4d8c 100%);
+            color: var(--white);
+            padding: 100px 24px 80px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.5);
+            color: var(--teal-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--teal-light);
+        }
+
+        .hero p {
+            font-size: clamp(15px, 2vw, 18px);
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: var(--white);
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--teal-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 15px 36px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: border-color 0.2s, background 0.2s;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            background: var(--gray-light);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 32px 24px;
+        }
+
+        .stats-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-num span { color: var(--teal); }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* Section */
+        section {
+            padding: 80px 24px;
+        }
+
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: var(--teal);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(22px, 3.5vw, 34px);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--gray);
+            max-width: 560px;
+            margin-bottom: 56px;
+        }
+
+        /* Problem section */
+        .problem {
+            background: var(--gray-light);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .problem-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .problem-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .problem-card p {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* How it works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+            position: relative;
+        }
+
+        .step {
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        .step-num {
+            width: 48px;
+            height: 48px;
+            background: var(--navy);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin-top: 48px;
+        }
+
+        .feature-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(22px, 3.5vw, 34px);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.85;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.6);
+            padding: 48px 24px;
+        }
+
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .footer-logo span { color: var(--teal); }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+            width: 100%;
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            nav a:not(.btn-nav) { display: none; }
+            .stats-inner { gap: 32px; }
+            .footer-inner { justify-content: center; text-align: center; }
+            .footer-links { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">mi<span>tas</span></a>
+            <nav>
+                <a href="#how-it-works">使い方</a>
+                <a href="#features">特徴</a>
+                <a href="/faq.html">よくある質問</a>
+                <a href="/register.html" class="btn-nav">無料で始める</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">医療機関向け 人材要件マッチング</div>
+        <h1>必要な人材要件を登録するだけ。<br><em>最適なマッチングを、シンプルに。</em></h1>
+        <p>採用に時間をかけすぎていませんか？Mitasは医療機関が必要とする医師・看護師の要件を登録するだけで、経験豊富なコンシェルジュが最適な候補者をご紹介します。</p>
+        <div class="hero-cta">
+            <a href="/register.html" class="btn-primary">無料で施設登録する</a>
+            <a href="#how-it-works" class="btn-outline">使い方を見る</a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+        <div class="stats-inner">
+            <div class="stat-item">
+                <div class="stat-num">98<span>%</span></div>
+                <div class="stat-label">施設満足度</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">14<span>日</span></div>
+                <div class="stat-label">平均マッチング期間</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">0<span>円</span></div>
+                <div class="stat-label">初期費用・月額費用</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem -->
+    <section class="problem">
+        <div class="section-inner">
+            <div class="section-label">PROBLEM</div>
+            <h2 class="section-title">こんなお悩みはありませんか？</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>採用に時間がかかりすぎる</h3>
+                    <p>求人票の作成・掲載・応募者の選考と、採用業務だけで月に何十時間も費やしてしまう。</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3>要件に合う人材が見つからない</h3>
+                    <p>在宅医療経験のある医師・看護師はそもそも求人サイトに登録していないことが多い。</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>採用コストが読めない</h3>
+                    <p>複数の求人媒体に掲載費を払っても成果が出ず、費用だけがかさんでしまう。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works">
+        <div class="section-inner">
+            <div class="section-label">HOW IT WORKS</div>
+            <h2 class="section-title">3ステップで完結</h2>
+            <p class="section-sub">煩雑な採用業務はすべてMitasにお任せください。</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>施設情報・要件を登録</h3>
+                    <p>施設の情報と、必要な人材の要件（職種・経験・勤務形態など）をフォームに入力するだけ。5分で完了します。</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>コンシェルジュがマッチング</h3>
+                    <p>専任コンシェルジュが要件を精査し、ネットワーク内から最適な候補者をご提案。非公開求人にも対応。</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>面談・採用へ</h3>
+                    <p>候補者との面談設定から採用後のフォローまで一貫サポート。採用が決まったときだけご請求。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" style="background: var(--gray-light);">
+        <div class="section-inner">
+            <div class="section-label">FEATURES</div>
+            <h2 class="section-title">Mitasが選ばれる理由</h2>
+            <p class="section-sub">医療機関の採用を知り尽くしたチームが、あなたの施設に最適な人材をご紹介します。</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h3>在宅医療特化のネットワーク</h3>
+                    <p>在宅医療経験者に特化した独自ネットワークを保有。一般の求人サイトでは出会えない人材へアクセスできます。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>専任コンシェルジュ制</h3>
+                    <p>担当者が施設の文化・雰囲気を深く理解した上でご提案。スキルだけでなく、カルチャーフィットも重視します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>完全成功報酬型</h3>
+                    <p>掲載費・月額費用は一切なし。採用が決まった時点でのみ費用が発生します。採用リスクを最小化できます。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>要件定義サポート</h3>
+                    <p>「どんな人材が必要か」から一緒に考えます。採用要件の整理・明確化もコンシェルジュが伴走します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>非公開・守秘徹底</h3>
+                    <p>採用情報の取り扱いは厳重に管理。求人の公開範囲や候補者への情報開示タイミングも施設側でコントロール可能。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>採用状況をダッシュボードで管理</h3>
+                    <p>候補者の進捗状況・面談スケジュール・採用結果をリアルタイムで確認。採用業務を可視化します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>まずは無料で、要件をご相談ください。</h2>
+        <p>登録後、専任コンシェルジュが24時間以内にご連絡いたします。</p>
+        <a href="/register.html" class="btn-primary">無料で施設登録する →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <a href="/" class="footer-logo">mi<span>tas</span></a>
+            <div class="footer-links">
+                <a href="/terms.html">利用規約</a>
+                <a href="/privacy-policy.html">プライバシーポリシー</a>
+                <a href="/faq.html">よくある質問</a>
+                <a href="https://necofindjob.com" target="_blank" rel="noopener">求職者の方はneco</a>
+            </div>
+        </div>
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Mitas. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
