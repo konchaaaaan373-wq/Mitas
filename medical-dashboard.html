@@ -11,42 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* ブランド色（医療機関向け） */
-            --brand: #1A8A7A;
-            --brand-light: #EBF6F4;
-            --brand-muted: #A3D4CE;
-
-            /* アクション色 */
-            --action: #1A1A2E;
-            --action-hover: #2D2D50;
-
-            /* 状態色（役割固定） */
-            --success: #166D4F;
-            --success-bg: #ECFDF5;
-            --warning: #B45309;
-            --warning-bg: #FEF3C7;
-            --error: #B91C1C;
-            --error-bg: #FEF2F2;
-
-            /* テキスト階層 */
-            --text-primary: #1A1A2E;
-            --text-secondary: #4A5568;
-            --text-muted: #718096;
-
-            /* 背景 */
-            --surface-page: #F8F8FC;
-            --surface-card: #FFFFFF;
-            --surface-subtle: #F3F4F6;
-
-            /* ボーダー */
-            --border: #E5E7EB;
-            --border-strong: #D1D5DB;
-
-            /* レガシー互換 */
-            --primary: #1A8A7A;
-            --dark: #1A1A2E;
-            --light: #F8F8FC;
+            --primary: #4ECDC4;
+            --primary-dark: #3ab5ad;
+            --secondary: #FF6B9D;
+            --purple: #A78BFA;
+            --blue: #4CC9F0;
+            --dark: #2D3142;
+            --light: #F8F9FA;
             --white: #FFFFFF;
+            --border: #E5E7EB;
             --gray-100: #F3F4F6;
             --gray-400: #9CA3AF;
             --gray-500: #6B7280;
@@ -85,16 +58,19 @@
             font-family: 'Zen Kaku Gothic New', sans-serif;
             font-size: 1.6rem;
             font-weight: 900;
-            color: var(--brand);
+            background: linear-gradient(135deg, #4ECDC4, #4CC9F0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
             flex-shrink: 0;
         }
 
         .header-badge {
             padding: 0.25rem 0.75rem;
-            background: var(--brand-light);
-            color: var(--brand);
-            border-radius: 4px;
+            background: linear-gradient(135deg, #4ECDC4, #4CC9F0);
+            color: var(--white);
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
             flex-shrink: 0;
@@ -156,8 +132,8 @@
         }
 
         .logout-btn:hover {
-            border-color: var(--border-strong);
-            color: var(--text-primary);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         /* ===== CAT MENU ===== */
@@ -174,7 +150,7 @@
             transition: background 0.2s;
         }
         .cat-menu-btn:hover,
-        .cat-menu-btn.active { background: var(--brand-light); }
+        .cat-menu-btn.active { background: rgba(78, 205, 196, 0.1); }
         .cat-menu-icon-svg { width: 36px; height: 36px; display: block; }
         @keyframes catMenuIn {
             from { opacity: 0; transform: translateY(-6px) scale(0.97); }
@@ -196,7 +172,7 @@
         .cat-menu-dropdown.open { display: block; animation: catMenuIn 0.18s ease; }
         .cat-menu-header-area {
             padding: 14px 16px 12px;
-            background: var(--brand-light);
+            background: linear-gradient(135deg, rgba(78,205,196,0.1) 0%, rgba(76,201,240,0.1) 100%);
         }
         .cat-menu-user-name { font-weight: 700; font-size: 0.9rem; color: #1a1a2e; }
         .cat-menu-user-role { font-size: 0.78rem; color: #6B7280; margin-top: 2px; }
@@ -227,7 +203,7 @@
             transition: background 0.15s;
             cursor: pointer;
         }
-        .cat-menu-header-link:hover { background: var(--brand-muted); opacity: 0.85; }
+        .cat-menu-header-link:hover { background: rgba(78, 205, 196, 0.1); }
 
         .mobile-menu-btn {
             display: none;
@@ -301,8 +277,8 @@
         .conv-item:hover { background: var(--gray-100); }
 
         .conv-item.active {
-            background: var(--brand-light);
-            border-left: 3px solid var(--brand);
+            background: linear-gradient(90deg, rgba(78,205,196,0.08), rgba(76,201,240,0.04));
+            border-left: 3px solid var(--primary);
         }
 
         .conv-avatar {
@@ -420,8 +396,8 @@
         }
 
         .candidate-chip:hover {
-            border-color: var(--brand);
-            background: var(--brand-light);
+            border-color: var(--primary);
+            background: rgba(78, 205, 196, 0.05);
         }
 
         .chip-dot {
@@ -494,7 +470,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--brand);
+            background: var(--primary);
             flex-shrink: 0;
         }
 
@@ -572,9 +548,9 @@
             max-width: 100%;
         }
 
-        /* Medical institution messages use brand teal */
+        /* Medical institution messages are teal */
         .message.own .msg-bubble {
-            background: var(--brand);
+            background: linear-gradient(135deg, #4ECDC4, #4CC9F0);
             color: var(--white);
             border-bottom-right-radius: 4px;
         }
@@ -601,7 +577,7 @@
         }
 
         .msg-receipt.read {
-            color: var(--brand);
+            color: var(--primary);
             font-weight: 600;
         }
 
@@ -675,9 +651,9 @@
         }
 
         .quick-reply-chip:hover {
-            border-color: var(--brand);
-            background: var(--brand-light);
-            color: var(--brand);
+            border-color: var(--primary);
+            background: rgba(78, 205, 196, 0.07);
+            color: var(--primary-dark, #3ab5ad);
         }
 
         .input-footer {
@@ -732,7 +708,7 @@
         }
 
         .message-input:focus {
-            border-color: var(--brand);
+            border-color: var(--primary);
             background: var(--white);
         }
 
@@ -743,19 +719,20 @@
             height: 44px;
             border-radius: 50%;
             border: none;
-            background: var(--action);
+            background: linear-gradient(135deg, #4ECDC4, #4CC9F0);
             color: var(--white);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
             font-size: 1rem;
         }
 
         .send-btn:hover:not(:disabled) {
-            background: var(--action-hover);
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(78, 205, 196, 0.45);
         }
 
         .send-btn:disabled {
@@ -799,19 +776,20 @@
         .scout-cta {
             margin-top: 1.5rem;
             padding: 0.75rem 1.5rem;
-            background: var(--action);
+            background: linear-gradient(135deg, #4ECDC4, #4CC9F0);
             color: var(--white);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-family: 'Noto Sans JP', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .scout-cta:hover {
-            background: var(--action-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(78, 205, 196, 0.4);
         }
 
         /* ===== MOBILE OVERLAY ===== */
@@ -853,7 +831,7 @@
         }
 
         a:focus-visible, button:focus-visible, textarea:focus-visible {
-            outline: 3px solid var(--brand);
+            outline: 3px solid var(--blue);
             outline-offset: 2px;
         }
     </style>
@@ -873,8 +851,14 @@
     <div class="cat-menu" id="catMenu">
         <button class="cat-menu-btn" id="catMenuBtn" aria-haspopup="true" aria-expanded="false" aria-label="メニューを開く">
             <svg class="cat-menu-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" aria-hidden="true">
+                <defs>
+                    <linearGradient id="catMenuGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#4ECDC4"/>
+                        <stop offset="100%" stop-color="#4CC9F0"/>
+                    </linearGradient>
+                </defs>
                 <path d="M 20 35 Q 29 35 32 28 L 32 20 L 29 8 L 23 16 Q 21.5 14.5 20 14.5 Q 18.5 14.5 17 16 L 11 8 L 8 20 L 8 28 Q 11 35 20 35 Z"
-                      stroke="#1A8A7A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+                      stroke="url(#catMenuGrad)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
             </svg>
         </button>
         <div class="cat-menu-dropdown" id="catMenuDropdown" role="menu">
@@ -927,15 +911,15 @@
         <div class="chat-area" id="chat-area">
             <div class="empty-chat" id="empty-state">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="opacity:0.35;margin-bottom:1.25rem;">
-                    <rect x="8" y="14" width="50" height="36" rx="8" fill="#1A8A7A"/>
+                    <rect x="8" y="14" width="50" height="36" rx="8" fill="#4ECDC4"/>
                     <rect x="14" y="20" width="38" height="4" rx="2" fill="white" opacity="0.7"/>
                     <rect x="14" y="28" width="28" height="4" rx="2" fill="white" opacity="0.5"/>
                     <rect x="14" y="36" width="20" height="4" rx="2" fill="white" opacity="0.35"/>
-                    <path d="M8 50 L16 44 L8 50Z" fill="#1A8A7A"/>
-                    <rect x="30" y="32" width="42" height="28" rx="7" fill="#1A8A7A"/>
+                    <path d="M8 50 L16 44 L8 50Z" fill="#4ECDC4"/>
+                    <rect x="30" y="32" width="42" height="28" rx="7" fill="#4CC9F0"/>
                     <rect x="36" y="38" width="30" height="3" rx="1.5" fill="white" opacity="0.7"/>
                     <rect x="36" y="44" width="22" height="3" rx="1.5" fill="white" opacity="0.5"/>
-                    <path d="M72 60 L64 54 L72 60Z" fill="#1A8A7A"/>
+                    <path d="M72 60 L64 54 L72 60Z" fill="#4CC9F0"/>
                 </svg>
                 <h3>医師とメッセージを始めましょう</h3>
                 <p>左のリストから医師を選んで<br>メッセージを送りましょう</p>
@@ -1068,7 +1052,7 @@ function renderSidebar() {
         item.setAttribute('tabindex', '0');
         item.setAttribute('aria-label', `${conv.other_user_name}との会話${unread > 0 ? `、未読${unread}件` : ''}`);
         item.innerHTML = `
-            <div class="conv-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#D94472')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
+            <div class="conv-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#FF6B9D')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
             <div class="conv-info">
                 <div class="conv-name">${escapeHtml(conv.other_user_name || '')}</div>
                 <div class="conv-sub">${conv.other_user_type === 'doctor' ? '医師' : '看護師'}</div>
@@ -1102,7 +1086,7 @@ function renderCandidatesBanner() {
         chip.className = 'candidate-chip';
         chip.setAttribute('aria-label', `${conv.other_user_name}との会話`);
         chip.innerHTML = `
-            <span class="chip-dot" style="background: ${escapeHtml(conv.other_user_avatar_color || '#D94472')}" aria-hidden="true"></span>
+            <span class="chip-dot" style="background: ${escapeHtml(conv.other_user_avatar_color || '#FF6B9D')}" aria-hidden="true"></span>
             <strong>${escapeHtml(conv.other_user_name || '')}</strong>・${conv.other_user_type === 'doctor' ? '医師' : '看護師'}
         `;
         chip.onclick = () => openConversation(conv.id);
@@ -1125,7 +1109,7 @@ async function openConversation(convId) {
     const chatArea = document.getElementById('chat-area');
     chatArea.innerHTML = `
         <div class="chat-header">
-            <div class="chat-header-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#D94472')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
+            <div class="chat-header-avatar" style="background: ${escapeHtml(conv.other_user_avatar_color || '#FF6B9D')}" aria-hidden="true">${escapeHtml(conv.other_user_avatar_initial || '?')}</div>
             <div class="chat-header-info">
                 <div class="chat-header-name">${escapeHtml(conv.other_user_name || '')}</div>
                 <div class="chat-header-sub">${conv.other_user_type === 'doctor' ? '医師' : '看護師'}</div>
@@ -1248,14 +1232,14 @@ function renderMessages(convId, isAppend) {
         }
 
         wrapper.innerHTML = `
-            ${!isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(msg.avatar_color || '#D94472')}" aria-hidden="true">${escapeHtml(msg.avatar_initial || msg.sender_name?.charAt(0) || '?')}</div>` : ''}
+            ${!isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(msg.avatar_color || '#FF6B9D')}" aria-hidden="true">${escapeHtml(msg.avatar_initial || msg.sender_name?.charAt(0) || '?')}</div>` : ''}
             <div class="msg-content">
                 ${!isOwn && !isGrouped ? `<span class="msg-sender">${escapeHtml(msg.sender_name || '')}</span>` : ''}
                 <div class="msg-bubble">${escapeHtml(msg.content || '').replace(/\n/g, '<br>')}</div>
                 <span class="msg-time">${formatTime(msg.created_at)}</span>
                 ${receiptHtml}
             </div>
-            ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#1A8A7A')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name?.charAt(0) || '?')}</div>` : ''}
+            ${isOwn ? `<div class="msg-avatar" style="background: ${escapeHtml(currentUser.avatarColor || '#4ECDC4')}" aria-hidden="true">${escapeHtml(currentUser.avatarInitial || currentUser.name?.charAt(0) || '?')}</div>` : ''}
         `;
         container.appendChild(wrapper);
     });
@@ -1339,7 +1323,7 @@ async function sendMessage() {
                 ...data.message,
                 sender_name:    currentUser.name,
                 avatar_initial: currentUser.avatarInitial || currentUser.name?.charAt(0),
-                avatar_color:   currentUser.avatarColor || '#1A8A7A',
+                avatar_color:   currentUser.avatarColor || '#4ECDC4',
             };
             if (!messagesByConvId[activeConvId]) messagesByConvId[activeConvId] = [];
             messagesByConvId[activeConvId].push(msg);
