@@ -13,33 +13,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Doctor brand */
-            --brand-doctor: #D94472;
-            --brand-doctor-light: #FDF0F4;
-            /* Medical brand */
-            --brand-medical: #1A8A7A;
-            --brand-medical-light: #EBF6F4;
-            /* Action */
-            --action: #1A1A2E;
-            --action-hover: #2D2D50;
-            /* State */
-            --error: #B91C1C;
-            --error-bg: #FEF2F2;
-            --success: #166D4F;
-            /* Text */
-            --text-primary: #1A1A2E;
-            --text-secondary: #4A5568;
-            /* Surface */
-            --dark: #1A1A2E;
-            --light: #F8F8FC;
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --purple: #A78BFA;
+            --blue: #4CC9F0;
+            --dark: #2D3142;
+            --light: #F8F9FA;
             --white: #FFFFFF;
-            --border: #E5E7EB;
+            --error: #EF4444;
+            --success: #10B981;
             --gray-400: #9CA3AF;
             --gray-500: #6B7280;
             --gray-200: #E5E7EB;
-            /* Legacy */
-            --primary: #D94472;
-            --secondary: #1A8A7A;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -54,8 +39,7 @@
         /* ===== LEFT PANEL ===== */
         .login-left {
             flex: 1;
-            background: #16161E;
-            border-right: 3px solid var(--brand-doctor);
+            background: linear-gradient(145deg, #FF6B9D 0%, #A78BFA 55%, #4CC9F0 100%);
             padding: 3rem 3.5rem;
             display: flex;
             flex-direction: column;
@@ -66,8 +50,29 @@
             min-height: 100vh;
         }
 
-        .login-left::before,
-        .login-left::after { display: none; }
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -80px;
+            width: 420px;
+            height: 420px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .login-left::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -60px;
+            width: 320px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 50%;
+            pointer-events: none;
+        }
 
         .left-logo {
             display: flex;
@@ -231,15 +236,15 @@
         }
 
         .login-tab[data-type="doctor"].active {
-            background: var(--brand-doctor);
+            background: linear-gradient(135deg, var(--primary), var(--purple));
             color: var(--white);
-            box-shadow: 0 2px 8px rgba(217, 68, 114, 0.25);
+            box-shadow: 0 4px 16px rgba(255, 107, 157, 0.35);
         }
 
         .login-tab[data-type="medical"].active {
-            background: var(--brand-medical);
+            background: linear-gradient(135deg, var(--secondary), var(--blue));
             color: var(--white);
-            box-shadow: 0 2px 8px rgba(26, 138, 122, 0.25);
+            box-shadow: 0 4px 16px rgba(78, 205, 196, 0.35);
         }
 
         /* ===== FORMS ===== */
@@ -282,13 +287,13 @@
         }
 
         .form-input:focus {
-            border-color: var(--brand-doctor);
-            box-shadow: 0 0 0 3px rgba(217, 68, 114, 0.10);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.12);
         }
 
         #medical-form .form-input:focus {
-            border-color: var(--brand-medical);
-            box-shadow: 0 0 0 3px rgba(26, 138, 122, 0.10);
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.12);
         }
 
         .form-input::placeholder { color: #C4C9D4; }
@@ -323,33 +328,35 @@
             width: 100%;
             padding: 1rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            background: var(--action);
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
             color: var(--white);
             font-family: 'Noto Sans JP', sans-serif;
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.3s ease;
             margin-top: 0.25rem;
             letter-spacing: 0.02em;
         }
 
         .submit-btn:hover:not(:disabled) {
-            background: var(--action-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
         }
 
         .submit-btn.medical {
-            background: var(--action);
+            background: linear-gradient(135deg, var(--secondary), var(--blue));
         }
 
         .submit-btn.medical:hover:not(:disabled) {
-            background: var(--action-hover);
+            box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
         }
 
         .submit-btn:disabled {
             opacity: 0.65;
             cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Error message */
@@ -431,7 +438,7 @@
         }
 
         .form-footer a {
-            color: var(--brand-doctor);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
@@ -439,7 +446,7 @@
         .form-footer a:hover { text-decoration: underline; }
 
         .form-footer .medical-link {
-            color: var(--brand-medical);
+            color: var(--secondary);
         }
 
         /* Mobile responsive */
