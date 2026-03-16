@@ -19,27 +19,37 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== Reset & Base ===== */
+    /* ─── Reset ──────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --navy:       #1A2E4A;
-      --navy-mid:   #243B55;
-      --blue:       #2563EB;
-      --blue-light: #3B82F6;
-      --blue-pale:  #EFF6FF;
-      --gray-dark:  #374151;
-      --gray:       #6B7280;
-      --gray-light: #F3F4F6;
-      --border:     #E5E7EB;
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --teal-pale:  #F0F9FF;
+      --gray-900:   #0F172A;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-300:   #CBD5E1;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
       --white:      #FFFFFF;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:  0 4px 20px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-lg:  0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      --radius:     8px;
+      --radius-lg:  14px;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Noto Sans JP', sans-serif;
-      color: var(--gray-dark);
+      color: var(--gray-700);
       background: var(--white);
       line-height: 1.8;
       font-size: 16px;
@@ -49,133 +59,132 @@
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
 
-    /* ===== Layout ===== */
     .container {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 28px;
     }
 
-    .section { padding: 96px 0; }
-    .section--alt { background: var(--gray-light); }
-
-    .section__label {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--blue);
-      margin-bottom: 12px;
-    }
-
-    .section__title {
-      font-size: clamp(22px, 3vw, 30px);
-      font-weight: 700;
-      color: var(--navy);
-      line-height: 1.5;
-      margin-bottom: 48px;
-    }
-
-    .section__title--center { text-align: center; }
-    .section__sub {
-      text-align: center;
-      color: var(--gray);
-      font-size: 15px;
-      margin-top: -36px;
-      margin-bottom: 56px;
-    }
-
-    /* ===== Buttons ===== */
+    /* ─── Buttons ─────────────────────────────────── */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       padding: 14px 32px;
       border-radius: 6px;
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: inherit;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s var(--ease), opacity 0.2s;
       white-space: nowrap;
     }
+    .btn:hover  { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
 
     .btn--primary {
-      background: var(--blue);
+      background: var(--teal);
       color: var(--white);
+      box-shadow: 0 4px 16px rgba(14,165,233,0.35);
     }
     .btn--primary:hover {
-      background: var(--blue-light);
-      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+      background: var(--teal-light);
+      box-shadow: 0 6px 24px rgba(14,165,233,0.45);
+    }
+
+    .btn--ghost-white {
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.45);
+      backdrop-filter: blur(4px);
+    }
+    .btn--ghost-white:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.75);
     }
 
     .btn--outline {
       background: transparent;
       color: var(--navy);
-      border: 1.5px solid var(--navy);
+      border: 1.5px solid var(--gray-300);
     }
-    .btn--outline:hover { background: var(--navy); color: var(--white); }
+    .btn--outline:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
 
     .btn--white {
       background: var(--white);
       color: var(--navy);
+      box-shadow: var(--shadow-md);
     }
-    .btn--white:hover { opacity: 0.9; }
+    .btn--white:hover { box-shadow: var(--shadow-lg); }
 
-    /* ===== Header ===== */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
+    /* ─── Header ──────────────────────────────────── */
+    #siteHeader {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 1000;
+      transition: background 0.35s, backdrop-filter 0.35s, box-shadow 0.35s;
+    }
+    #siteHeader.solid {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 var(--gray-200);
     }
 
     .header__inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
+      height: 68px;
     }
 
     .header__logo {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 22px;
+      gap: 9px;
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--navy);
+      letter-spacing: 0.06em;
+      color: var(--white);
+      transition: color 0.35s;
     }
+    #siteHeader.solid .header__logo { color: var(--navy); }
 
     .header__logo svg {
       width: 22px;
       height: 22px;
-      flex-shrink: 0;
+      transition: stroke 0.35s, fill 0.35s;
     }
 
-    nav {
+    .header__nav {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 36px;
     }
-
-    nav a {
+    .header__nav a {
       font-size: 14px;
       font-weight: 500;
-      color: var(--gray-dark);
+      color: rgba(255,255,255,0.8);
       transition: color 0.2s;
     }
-    nav a:hover { color: var(--blue); }
+    .header__nav a:hover { color: var(--white); }
+    #siteHeader.solid .header__nav a { color: var(--gray-700); }
+    #siteHeader.solid .header__nav a:hover { color: var(--teal); }
 
-    .header__cta { margin-left: 8px; }
+    .header__cta { margin-left: 8px; padding: 10px 22px; font-size: 14px; }
 
     .hamburger {
       display: none;
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      padding: 8px;
       background: none;
       border: none;
     }
@@ -183,324 +192,407 @@
       display: block;
       width: 24px;
       height: 2px;
-      background: var(--navy);
+      background: var(--white);
       border-radius: 2px;
-      transition: all 0.25s;
+      transition: background 0.35s, transform 0.25s;
     }
+    #siteHeader.solid .hamburger span { background: var(--navy); }
 
     .mobile-nav {
       display: none;
       flex-direction: column;
       background: var(--white);
-      border-top: 1px solid var(--border);
-      padding: 16px 24px 24px;
+      border-top: 1px solid var(--gray-200);
+      padding: 20px 28px 28px;
+      box-shadow: var(--shadow-md);
     }
-
     .mobile-nav a {
-      padding: 12px 0;
+      padding: 14px 0;
       font-size: 15px;
       font-weight: 500;
-      color: var(--gray-dark);
-      border-bottom: 1px solid var(--border);
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
     }
+    .mobile-nav .btn { margin-top: 24px; width: 100%; justify-content: center; }
 
-    .mobile-nav .btn {
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    /* ===== Hero ===== */
+    /* ─── Hero ────────────────────────────────────── */
     .hero {
-      padding: 80px 0 96px;
-      background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 60%, #1e4880 100%);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-top: 68px;
     }
 
-    .hero__inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
+    .hero__body {
+      flex: 1;
+      display: flex;
       align-items: center;
+      padding: 72px 0 220px;
     }
 
-    .hero__eyebrow {
-      display: inline-block;
+    .hero__content { max-width: 620px; }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--blue);
-      background: var(--blue-pale);
-      padding: 4px 12px;
-      border-radius: 4px;
-      margin-bottom: 20px;
+      letter-spacing: 0.12em;
+      color: var(--teal-light);
+      background: rgba(14,165,233,0.12);
+      border: 1px solid rgba(14,165,233,0.28);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero__badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.75); }
     }
 
     .hero__title {
-      font-size: clamp(26px, 3.5vw, 40px);
+      font-size: clamp(30px, 4.5vw, 54px);
       font-weight: 700;
-      color: var(--navy);
-      line-height: 1.5;
-      margin-bottom: 24px;
+      color: var(--white);
+      line-height: 1.42;
+      margin-bottom: 26px;
+      letter-spacing: -0.02em;
+    }
+    .hero__title em {
+      font-style: normal;
+      color: var(--teal-light);
     }
 
     .hero__sub {
       font-size: 16px;
-      color: var(--gray);
-      line-height: 1.9;
-      margin-bottom: 40px;
+      color: rgba(255,255,255,0.68);
+      line-height: 2;
+      margin-bottom: 44px;
+      max-width: 500px;
     }
 
     .hero__actions {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      margin-bottom: 44px;
     }
-
-    /* Hero Visual */
-    .hero__visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero__card-stack {
-      width: 100%;
-      max-width: 440px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: 10px;
-      padding: 20px 24px;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .stat-card__icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
-      background: var(--blue-pale);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .stat-card__icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--blue);
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .stat-card__label { font-size: 12px; color: var(--gray); margin-bottom: 2px; }
-    .stat-card__value { font-size: 15px; font-weight: 700; color: var(--navy); }
 
     .hero__trust {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-      font-size: 13px;
-      color: var(--gray);
+      flex-wrap: wrap;
+      gap: 20px;
     }
-
-    .hero__trust-dot {
-      width: 6px;
-      height: 6px;
+    .hero__trust-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+    .hero__trust-item::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
-      background: var(--blue);
+      background: var(--teal);
       flex-shrink: 0;
     }
 
-    /* ===== Problems ===== */
+    /* Wave Canvas */
+    #heroWave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ─── Section Commons ─────────────────────────── */
+    .section { padding: 100px 0; }
+    .section--alt   { background: var(--gray-50); }
+    .section--pale  { background: var(--teal-pale); }
+
+    .section__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 14px;
+    }
+    .section__tag::before {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--teal);
+      border-radius: 1px;
+    }
+    .section__tag--center {
+      display: flex;
+      justify-content: center;
+    }
+
+    .section__title {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      letter-spacing: -0.015em;
+    }
+    .section__title--center { text-align: center; }
+
+    .section__sub {
+      font-size: 15px;
+      color: var(--gray-500);
+      line-height: 1.8;
+      margin-bottom: 56px;
+    }
+    .section__sub--center { text-align: center; }
+
+    /* ─── Fade-up animation ──────────────────────── */
+    .fu {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .fu.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── Problem Cards ──────────────────────────── */
     .problems__grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
+      margin-top: 48px;
     }
-
     .problem-card {
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 28px 28px 28px 24px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 28px;
       display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      transition: box-shadow 0.2s;
+      gap: 18px;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s var(--ease);
     }
-    .problem-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-
-    .problem-card__check {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--blue-pale);
+    .problem-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(14,165,233,0.3);
+      transform: translateY(-2px);
+    }
+    .problem-card__icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--teal-pale);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
       margin-top: 2px;
     }
-    .problem-card__check svg {
-      width: 14px;
-      height: 14px;
-      stroke: var(--blue);
+    .problem-card__icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--teal);
       fill: none;
-      stroke-width: 2.5;
+      stroke-width: 2;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-
     .problem-card__title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--navy);
       margin-bottom: 6px;
+      line-height: 1.5;
     }
-    .problem-card__body { font-size: 14px; color: var(--gray); line-height: 1.75; }
+    .problem-card__body { font-size: 13px; color: var(--gray-500); line-height: 1.85; }
 
-    /* ===== Value ===== */
+    /* ─── Value Cards ────────────────────────────── */
     .value__grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
+      margin-top: 48px;
     }
-
     .value-card {
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 36px 28px;
-      text-align: center;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s var(--ease);
     }
-
+    .value-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .value-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .value-card:hover::after { transform: scaleX(1); }
     .value-card__num {
-      font-size: 36px;
+      font-size: 44px;
       font-weight: 700;
-      color: var(--blue);
+      color: var(--teal);
       line-height: 1;
-      margin-bottom: 16px;
-      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      letter-spacing: -0.03em;
+      opacity: 0.22;
     }
-
     .value-card__title {
       font-size: 16px;
       font-weight: 700;
       color: var(--navy);
       margin-bottom: 12px;
     }
+    .value-card__body { font-size: 14px; color: var(--gray-500); line-height: 1.85; }
 
-    .value-card__body { font-size: 14px; color: var(--gray); line-height: 1.8; }
-
-    /* ===== Reasons ===== */
+    /* ─── Reason Cards ───────────────────────────── */
     .reasons__grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
+      margin-top: 48px;
     }
-
     .reason-card {
       background: var(--white);
-      border-left: 3px solid var(--blue);
-      padding: 28px 28px 28px 24px;
-      border-radius: 0 8px 8px 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg);
+      padding: 28px 28px 28px 26px;
+      border-left: 3px solid var(--teal);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, transform 0.2s var(--ease);
     }
-
+    .reason-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateX(4px);
+    }
+    .reason-card__label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
     .reason-card__title {
       font-size: 16px;
       font-weight: 700;
       color: var(--navy);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
+    .reason-card__body { font-size: 14px; color: var(--gray-500); line-height: 1.85; }
 
-    .reason-card__body { font-size: 14px; color: var(--gray); line-height: 1.8; }
-
-    /* ===== Authority ===== */
-    .authority__inner {
-      max-width: 720px;
+    /* ─── Authority ──────────────────────────────── */
+    .authority-inner {
+      max-width: 760px;
       margin: 0 auto;
       text-align: center;
     }
-
-    .authority__body {
-      font-size: 15px;
-      color: var(--gray-dark);
-      line-height: 2;
-      margin-bottom: 48px;
+    .authority-quote {
+      font-size: 17px;
+      color: var(--gray-700);
+      line-height: 2.15;
+      margin-bottom: 56px;
+      position: relative;
+      padding: 0 32px;
     }
-
-    .authority__profile {
+    .authority-quote::before {
+      content: '\201C';
+      position: absolute;
+      top: -24px;
+      left: 0;
+      font-size: 88px;
+      font-family: Georgia, serif;
+      color: var(--teal);
+      opacity: 0.14;
+      line-height: 1;
+    }
+    .authority-profile {
       display: inline-flex;
       align-items: center;
       gap: 20px;
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px 32px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 24px 36px;
       text-align: left;
+      box-shadow: var(--shadow-sm);
     }
-
-    .authority__avatar {
-      width: 64px;
-      height: 64px;
+    .authority-avatar {
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: var(--blue-pale);
+      background: linear-gradient(135deg, var(--teal-pale), rgba(14,165,233,0.18));
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      border: 2px solid rgba(14,165,233,0.22);
     }
-
-    .authority__avatar svg {
-      width: 32px;
-      height: 32px;
-      stroke: var(--blue);
+    .authority-avatar svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--teal);
       fill: none;
-      stroke-width: 1.5;
+      stroke-width: 1.6;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-
-    .authority__name {
+    .authority-name {
       font-size: 16px;
       font-weight: 700;
       color: var(--navy);
       margin-bottom: 4px;
     }
+    .authority-role { font-size: 13px; color: var(--gray-500); }
 
-    .authority__role { font-size: 13px; color: var(--gray); }
-
-    /* ===== Flow ===== */
-    .flow__steps {
+    /* ─── Flow ───────────────────────────────────── */
+    .flow__track {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0;
-      position: relative;
+      margin-top: 60px;
     }
-
-    .flow__steps::before {
-      content: '';
+    .flow__line {
       position: absolute;
-      top: 36px;
-      left: 12.5%;
-      right: 12.5%;
-      height: 1px;
-      background: var(--border);
-      z-index: 0;
+      top: 35px;
+      left: calc(12.5% + 36px);
+      right: calc(12.5% + 36px);
+      height: 2px;
+      background: linear-gradient(90deg, rgba(14,165,233,0.4), rgba(56,189,248,0.4));
     }
-
     .flow-step {
       display: flex;
       flex-direction: column;
@@ -510,21 +602,32 @@
       position: relative;
       z-index: 1;
     }
-
-    .flow-step__circle {
+    .flow-step__bubble {
       width: 72px;
       height: 72px;
       border-radius: 50%;
-      background: var(--blue);
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(14,165,233,0.32);
+      transition: box-shadow 0.2s, transform 0.2s var(--ease);
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(37,99,235,0.2);
     }
-
-    .flow-step__circle svg {
+    .flow-step:hover .flow-step__bubble {
+      box-shadow: 0 10px 28px rgba(14,165,233,0.42);
+      transform: translateY(-3px);
+    }
+    .flow-step__bubble::before {
+      content: '';
+      position: absolute;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(14,165,233,0.2);
+    }
+    .flow-step__bubble svg {
       width: 28px;
       height: 28px;
       stroke: var(--white);
@@ -533,133 +636,174 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-
-    .flow-step__num {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--blue);
-      margin-bottom: 8px;
+    .flow-step__step {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--teal);
+      margin-bottom: 10px;
     }
-
     .flow-step__title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--navy);
       margin-bottom: 8px;
     }
+    .flow-step__body { font-size: 13px; color: var(--gray-500); line-height: 1.8; }
 
-    .flow-step__body { font-size: 13px; color: var(--gray); line-height: 1.75; }
-
-    /* ===== CTA Section ===== */
+    /* ─── CTA Section ────────────────────────────── */
     .cta-section {
-      background: var(--navy);
-      padding: 96px 0;
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 108px 0;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-
-    .cta-section__title {
-      font-size: clamp(22px, 3vw, 30px);
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light), var(--teal));
+    }
+    /* Subtle wave decoration on CTA */
+    .cta-section__wave {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .cta-section__inner { position: relative; z-index: 1; }
+    .cta-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--teal-light);
+      margin-bottom: 20px;
+    }
+    .cta-title {
+      font-size: clamp(24px, 3.5vw, 38px);
       font-weight: 700;
       color: var(--white);
-      margin-bottom: 16px;
       line-height: 1.5;
+      margin-bottom: 20px;
+      letter-spacing: -0.015em;
+    }
+    .cta-body {
+      font-size: 16px;
+      color: rgba(255,255,255,0.62);
+      line-height: 2;
+      margin-bottom: 48px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
     }
 
-    .cta-section__body {
-      font-size: 15px;
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 40px;
-      line-height: 1.9;
-    }
-
-    /* ===== Footer ===== */
+    /* ─── Footer ─────────────────────────────────── */
     footer {
       background: var(--navy-mid);
-      padding: 48px 0 32px;
+      padding: 60px 0 36px;
     }
-
-    .footer__inner {
+    .footer__top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 40px;
-      margin-bottom: 40px;
+      padding-bottom: 44px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-
     .footer__logo {
-      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 19px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       color: var(--white);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
-
-    .footer__tagline { font-size: 12px; color: rgba(255,255,255,0.5); }
-
+    .footer__logo svg { width: 20px; height: 20px; }
+    .footer__tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.75;
+      max-width: 300px;
+    }
     .footer__links {
       display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 14px;
     }
-
     .footer__links a {
       font-size: 13px;
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,0.52);
       transition: color 0.2s;
     }
     .footer__links a:hover { color: var(--white); }
-
     .footer__bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 24px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
+    .footer__copy { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco  { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco a { color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer__neco a:hover { color: var(--white); }
 
-    /* ===== Responsive ===== */
+    /* ─── Responsive ─────────────────────────────── */
     @media (max-width: 768px) {
-      .section { padding: 64px 0; }
+      .section { padding: 72px 0; }
 
-      nav, .header__cta { display: none; }
+      .header__nav, .header__cta { display: none; }
       .hamburger { display: flex; }
 
-      .hero { padding: 48px 0 64px; }
-      .hero__inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero__visual { display: none; }
+      .hero__body { padding: 52px 0 220px; }
       .hero__actions { flex-direction: column; }
       .hero__actions .btn { width: 100%; }
+      .hero__trust { gap: 14px; }
 
       .problems__grid { grid-template-columns: 1fr; }
-      .value__grid { grid-template-columns: 1fr; }
-      .reasons__grid { grid-template-columns: 1fr; }
+      .value__grid    { grid-template-columns: 1fr; }
+      .reasons__grid  { grid-template-columns: 1fr; }
 
-      .flow__steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
-      .flow__steps::before { display: none; }
+      .flow__track { grid-template-columns: repeat(2, 1fr); row-gap: 44px; }
+      .flow__line  { display: none; }
 
-      .footer__inner { flex-direction: column; }
-      .footer__links { gap: 20px; }
+      .footer__top   { flex-direction: column; }
+      .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 16px 24px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; }
 
-      .authority__profile { flex-direction: column; text-align: center; }
+      .authority-profile { flex-direction: column; text-align: center; }
+      .authority-quote   { padding: 0 4px; font-size: 15px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<header>
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="siteHeader">
   <div class="container">
     <div class="header__inner">
       <a href="/" class="header__logo">
-        <!-- 雫アイコン -->
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C12 2 5 10.5 5 15C5 18.866 8.13401 22 12 22C15.866 22 19 18.866 19 15C19 10.5 12 2 12 2Z" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                fill="rgba(56,189,248,0.18)"/>
         </svg>
         MITAS
       </a>
 
-      <nav>
+      <nav class="header__nav">
         <a href="#problems">課題</a>
         <a href="#reasons">選ばれる理由</a>
         <a href="#flow">ご利用の流れ</a>
@@ -669,7 +813,7 @@
       <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
       <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
 
-      <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -678,118 +822,94 @@
   <div class="mobile-nav" id="mobileNav">
     <a href="#problems" onclick="closeMobileNav()">課題</a>
     <a href="#reasons" onclick="closeMobileNav()">選ばれる理由</a>
-    <a href="#flow" onclick="closeMobileNav()">ご利用の流れ</a>
+    <a href="#flow"    onclick="closeMobileNav()">ご利用の流れ</a>
     <a href="#contact" onclick="closeMobileNav()">お問い合わせ</a>
-    <a href="#contact" class="btn btn--primary">まずは相談する</a>
+    <a href="#contact" class="btn btn--primary" onclick="closeMobileNav()">まずは相談する</a>
   </div>
 </header>
 
 
-<!-- ===== HERO ===== -->
+<!-- ══════════════ HERO ══════════════ -->
 <section class="hero">
-  <div class="container">
-    <div class="hero__inner">
-      <div class="hero__content">
-        <span class="hero__eyebrow">医療・介護事業者向け</span>
-        <h1 class="hero__title">
-          医療・介護事業者の<br>人材課題に、<br>現場理解のある支援を。
-        </h1>
-        <p class="hero__sub">
-          採用、配置、急な人員不足、定着の悩みまで。<br>
-          MITASは、医療・介護の現場特有の課題を踏まえて、<br>
-          必要な支援につなげます。
-        </p>
-        <div class="hero__actions">
-          <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
-          <a href="#contact" class="btn btn--primary">無料で相談する</a>
-          <a href="#value" class="btn btn--outline">サービスを見る</a>
-        </div>
+  <div class="container hero__body">
+    <div class="hero__content">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        医療・介護事業者向け
       </div>
-
-      <div class="hero__visual">
-        <div class="hero__card-stack">
-          <div class="stat-card">
-            <div class="stat-card__icon">
-              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div>
-              <div class="stat-card__label">人材課題の相談</div>
-              <div class="stat-card__value">採用・配置・定着を一括サポート</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">
-              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </div>
-            <div>
-              <div class="stat-card__label">現場理解</div>
-              <div class="stat-card__value">医療・介護特有の事情を踏まえた提案</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">
-              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <div>
-              <div class="stat-card__label">気軽に相談</div>
-              <div class="stat-card__value">売り込みなし。まず状況を聞かせてください</div>
-            </div>
-          </div>
-          <div class="hero__trust">
-            <span class="hero__trust-dot"></span>
-            医療・介護領域に特化した人材支援
-          </div>
-        </div>
+      <h1 class="hero__title">
+        人材課題に、<br>
+        <em>現場理解のある</em><br>
+        支援を。
+      </h1>
+      <p class="hero__sub">
+        採用、配置、急な人員不足、定着の悩みまで。<br>
+        医療・介護の現場特有の課題を踏まえて、<br>
+        必要な支援につなげます。
+      </p>
+      <div class="hero__actions">
+        <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
+        <a href="#contact" class="btn btn--primary">無料で相談する</a>
+        <a href="#value"   class="btn btn--ghost-white">サービスを見る</a>
+      </div>
+      <div class="hero__trust">
+        <span class="hero__trust-item">医療・介護領域に特化</span>
+        <span class="hero__trust-item">現場理解を踏まえた提案</span>
+        <span class="hero__trust-item">売り込みなし</span>
       </div>
     </div>
   </div>
+
+  <!-- 水面アニメーション -->
+  <canvas id="heroWave" aria-hidden="true"></canvas>
 </section>
 
 
-<!-- ===== PROBLEMS ===== -->
+<!-- ══════════════ PROBLEMS ══════════════ -->
 <section class="section section--alt" id="problems">
   <div class="container">
-    <div class="section__label">よくある課題</div>
+    <div class="section__tag">よくある課題</div>
     <h2 class="section__title">こんなお悩みはありませんか？</h2>
+    <p class="section__sub">医療・介護の現場では、一般業界とは異なる採用の難しさがあります。</p>
 
     <div class="problems__grid">
-      <div class="problem-card">
-        <div class="problem-card__check">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="problem-card fu">
+        <div class="problem-card__icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         </div>
         <div>
           <div class="problem-card__title">応募が来ない</div>
-          <div class="problem-card__body">求人を出しているのに応募が集まらない。どこで告知すればいいかもわからない。</div>
+          <p class="problem-card__body">求人を出しているのに応募が集まらない。どこで告知すればいいかもわからない。</p>
         </div>
       </div>
 
-      <div class="problem-card">
-        <div class="problem-card__check">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="problem-card fu">
+        <div class="problem-card__icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div>
           <div class="problem-card__title">採用しても定着しない</div>
-          <div class="problem-card__body">せっかく入ってもらっても、短期間で離職してしまう。職場環境や業務設計に課題があるかもしれない。</div>
+          <p class="problem-card__body">せっかく入ってもらっても短期離職が続く。職場環境や業務設計に課題があるかもしれない。</p>
         </div>
       </div>
 
-      <div class="problem-card">
-        <div class="problem-card__check">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="problem-card fu">
+        <div class="problem-card__icon">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <div>
           <div class="problem-card__title">急な欠員に対応できない</div>
-          <div class="problem-card__body">スタッフの急な退職・体調不良で現場が回らない。対応できる体制を作っておきたい。</div>
+          <p class="problem-card__body">スタッフの急な退職・体調不良で現場が回らない。対応できる体制を作っておきたい。</p>
         </div>
       </div>
 
-      <div class="problem-card">
-        <div class="problem-card__check">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="problem-card fu">
+        <div class="problem-card__icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <div>
           <div class="problem-card__title">現場に合う人材を見極めにくい</div>
-          <div class="problem-card__body">スキルや経験だけでなく、施設の雰囲気や患者さんへの向き合い方まで考えると、なかなか「この人」と思える方に出会えない。</div>
+          <p class="problem-card__body">スキルだけでなく、施設の雰囲気や患者さんへの向き合い方まで考えると、なかなか「この人」と思える方に出会えない。</p>
         </div>
       </div>
     </div>
@@ -797,53 +917,58 @@
 </section>
 
 
-<!-- ===== VALUE ===== -->
+<!-- ══════════════ VALUE ══════════════ -->
 <section class="section" id="value">
   <div class="container">
-    <div class="section__label">サービス概要</div>
+    <div class="section__tag">サービス概要</div>
     <h2 class="section__title">MITASができること</h2>
+    <p class="section__sub">人材課題の整理から支援の実行まで、一貫してサポートします。</p>
 
     <div class="value__grid">
-      <div class="value-card">
+      <div class="value-card fu">
         <div class="value-card__num">01</div>
         <div class="value-card__title">人材課題の整理</div>
         <p class="value-card__body">採用だけでなく、配置や運営上の課題も踏まえて整理します。「何が問題か」を一緒に言語化するところから始めます。</p>
       </div>
-      <div class="value-card">
+      <div class="value-card fu">
         <div class="value-card__num">02</div>
         <div class="value-card__title">現場理解を踏まえた支援</div>
-        <p class="value-card__body">医療・介護現場の特性を前提にした提案を行います。一般的な人材紹介にありがちな、現場感のないマッチングはしません。</p>
+        <p class="value-card__body">医療・介護現場の特性を前提にした提案を行います。現場感のないマッチングはしません。</p>
       </div>
-      <div class="value-card">
+      <div class="value-card fu">
         <div class="value-card__num">03</div>
         <div class="value-card__title">スムーズな相談導線</div>
-        <p class="value-card__body">必要なタイミングで、必要な支援につながる設計を大切にしています。まずは状況をお聞かせください。</p>
+        <p class="value-card__body">必要なタイミングで必要な支援につながる設計を大切にしています。まずは状況をお聞かせください。</p>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ===== REASONS ===== -->
+<!-- ══════════════ REASONS ══════════════ -->
 <section class="section section--alt" id="reasons">
   <div class="container">
-    <div class="section__label">選ばれる理由</div>
+    <div class="section__tag">選ばれる理由</div>
     <h2 class="section__title">MITASが選ばれる理由</h2>
 
     <div class="reasons__grid">
-      <div class="reason-card">
+      <div class="reason-card fu">
+        <div class="reason-card__label">REASON 01</div>
         <div class="reason-card__title">医療・介護領域に特化した視点</div>
-        <p class="reason-card__body">業界特有の採用難、シフト管理の複雑さ、スタッフの疲弊構造など、この領域ならではの課題を理解した上で支援します。</p>
+        <p class="reason-card__body">採用難、シフト管理の複雑さ、スタッフの疲弊構造など、この領域ならではの課題を理解した上で支援します。</p>
       </div>
-      <div class="reason-card">
+      <div class="reason-card fu">
+        <div class="reason-card__label">REASON 02</div>
         <div class="reason-card__title">現場起点で課題を捉える支援</div>
-        <p class="reason-card__body">数字やデータだけでなく、現場で起きていることを丁寧にヒアリングし、表面的でない課題の本質を一緒に探ります。</p>
+        <p class="reason-card__body">数字だけでなく、現場で起きていることを丁寧にヒアリングし、表面的でない課題の本質を一緒に探ります。</p>
       </div>
-      <div class="reason-card">
+      <div class="reason-card fu">
+        <div class="reason-card__label">REASON 03</div>
         <div class="reason-card__title">わかりやすく、相談しやすい設計</div>
         <p class="reason-card__body">複雑な料金体系や強引なセールスはありません。まずは課題をお話しいただくことから始めます。</p>
       </div>
-      <div class="reason-card">
+      <div class="reason-card fu">
+        <div class="reason-card__label">REASON 04</div>
         <div class="reason-card__title">売り込みではなく、課題整理から伴走</div>
         <p class="reason-card__body">サービスを押しつけることが目的ではなく、事業者の方が本当に必要な支援に辿り着けるよう、一緒に考えます。</p>
       </div>
@@ -852,14 +977,14 @@
 </section>
 
 
-<!-- ===== AUTHORITY ===== -->
+<!-- ══════════════ AUTHORITY ══════════════ -->
 <section class="section" id="authority">
   <div class="container">
-    <div class="authority__inner">
-      <div class="section__label" style="text-align:center;">私たちの考え方</div>
-      <h2 class="section__title section__title--center" style="margin-bottom:32px;">現場を理解した支援を目指して</h2>
+    <div class="section__tag section__tag--center">私たちの考え方</div>
+    <h2 class="section__title section__title--center" style="margin-bottom:52px;">現場を理解した支援を目指して</h2>
 
-      <p class="authority__body">
+    <div class="authority-inner">
+      <p class="authority-quote fu">
         MITASは、医療・介護の現場で起こる人材課題が、<br>
         単なる採用の問題ではなく、運営やケアの質にも直結するテーマであると考えています。<br><br>
         だからこそ、表面的な条件の一致だけでなく、<br>
@@ -869,13 +994,13 @@
       </p>
 
       <!-- TODO: 運営者情報を実際の内容に変更してください（名前・役職など） -->
-      <div class="authority__profile">
-        <div class="authority__avatar">
+      <div class="authority-profile fu">
+        <div class="authority-avatar">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div>
-          <div class="authority__name">代表者名（TODO）</div>
-          <div class="authority__role">MITAS 代表 ／ 医療・介護人材支援</div>
+          <div class="authority-name">代表者名（TODO）</div>
+          <div class="authority-role">MITAS 代表 ／ 医療・介護人材支援</div>
         </div>
       </div>
     </div>
@@ -883,46 +1008,48 @@
 </section>
 
 
-<!-- ===== FLOW ===== -->
+<!-- ══════════════ FLOW ══════════════ -->
 <section class="section section--alt" id="flow">
   <div class="container">
-    <div class="section__label" style="text-align:center;">ご利用の流れ</div>
+    <div class="section__tag section__tag--center">ご利用の流れ</div>
     <h2 class="section__title section__title--center">ご利用の流れ</h2>
-    <p class="section__sub">4つのステップでシンプルにご支援します</p>
+    <p class="section__sub section__sub--center">4つのステップでシンプルにご支援します</p>
 
-    <div class="flow__steps">
-      <div class="flow-step">
-        <div class="flow-step__circle">
+    <div class="flow__track">
+      <div class="flow__line" aria-hidden="true"></div>
+
+      <div class="flow-step fu">
+        <div class="flow-step__bubble">
           <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </div>
-        <div class="flow-step__num">STEP 01</div>
+        <div class="flow-step__step">STEP 01</div>
         <div class="flow-step__title">お問い合わせ</div>
-        <p class="flow-step__body">フォームから気軽にご連絡ください。まずは状況だけお知らせいただければ十分です。</p>
+        <p class="flow-step__body">フォームから気軽にご連絡ください。状況だけお知らせいただければ十分です。</p>
       </div>
 
-      <div class="flow-step">
-        <div class="flow-step__circle">
+      <div class="flow-step fu">
+        <div class="flow-step__bubble">
           <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
-        <div class="flow-step__num">STEP 02</div>
+        <div class="flow-step__step">STEP 02</div>
         <div class="flow-step__title">ヒアリング</div>
-        <p class="flow-step__body">現在の状況・課題・ご要望を丁寧にお聞きします。オンラインまたは電話で対応可能です。</p>
+        <p class="flow-step__body">現在の状況・課題をお聞きします。オンラインまたは電話で対応可能です。</p>
       </div>
 
-      <div class="flow-step">
-        <div class="flow-step__circle">
+      <div class="flow-step fu">
+        <div class="flow-step__bubble">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         </div>
-        <div class="flow-step__num">STEP 03</div>
+        <div class="flow-step__step">STEP 03</div>
         <div class="flow-step__title">ご提案</div>
         <p class="flow-step__body">課題の整理をもとに、状況に合った支援の方向性をご案内します。</p>
       </div>
 
-      <div class="flow-step">
-        <div class="flow-step__circle">
+      <div class="flow-step fu">
+        <div class="flow-step__bubble">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <div class="flow-step__num">STEP 04</div>
+        <div class="flow-step__step">STEP 04</div>
         <div class="flow-step__title">支援開始</div>
         <p class="flow-step__body">合意いただいた内容で支援を開始します。進捗に合わせて柔軟に対応します。</p>
       </div>
@@ -931,28 +1058,46 @@
 </section>
 
 
-<!-- ===== CTA ===== -->
+<!-- ══════════════ CTA ══════════════ -->
 <section class="cta-section" id="contact">
-  <div class="container">
-    <h2 class="cta-section__title">まずはお気軽にご相談ください</h2>
-    <p class="cta-section__body">
+  <svg class="cta-section__wave" viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z" fill="white"/>
+  </svg>
+  <div class="cta-section__inner container">
+    <p class="cta-kicker">CONTACT</p>
+    <h2 class="cta-title">まずはお気軽に<br>ご相談ください</h2>
+    <p class="cta-body">
       採用、配置、人員不足など、人材に関するお悩みをお聞かせください。<br>
       状況に応じて、必要な支援の方向性をご案内します。
     </p>
     <!-- TODO: href を実際の問い合わせフォームURL（Google Forms、Typeform 等）に変更してください -->
-    <a href="mailto:info@mitas.example.com" class="btn btn--white">お問い合わせはこちら</a>
+    <a href="mailto:info@mitas.example.com" class="btn btn--white">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      お問い合わせはこちら
+    </a>
+    <p class="cta-note">売り込みはありません。まずはお気軽に。</p>
   </div>
 </section>
 
 
-<!-- ===== FOOTER ===== -->
+<!-- ══════════════ FOOTER ══════════════ -->
 <footer>
   <div class="container">
-    <div class="footer__inner">
+    <div class="footer__top">
       <div>
-        <div class="footer__logo">MITAS</div>
-        <!-- TODO: キャッチコピーや事業者名を記載してください -->
-        <div class="footer__tagline">医療・介護事業者の人材課題に、現場理解のある支援を。</div>
+        <div class="footer__logo">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                  stroke="rgba(56,189,248,0.75)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  fill="rgba(14,165,233,0.1)"/>
+          </svg>
+          MITAS
+        </div>
+        <!-- TODO: 事業者名やキャッチコピーを記載してください -->
+        <p class="footer__tagline">医療・介護事業者の人材課題に、<br>現場理解のある支援を。</p>
       </div>
       <div class="footer__links">
         <a href="#contact">お問い合わせ</a>
@@ -962,54 +1107,116 @@
     </div>
     <div class="footer__bottom">
       <!-- TODO: 運営会社名・設立年を変更してください -->
-      &copy; 2025 MITAS. All rights reserved.
+      <span class="footer__copy">&copy; 2026 MITAS. All rights reserved.</span>
+      <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
     </div>
   </div>
 </footer>
 
 
 <script>
-  // Mobile Nav
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const mobileNav = document.getElementById('mobileNav');
+/* ── 水面ウェーブアニメーション ──────────────────────────────── */
+(function () {
+  const canvas = document.getElementById('heroWave');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, tick = 0, raf;
 
-  hamburgerBtn.addEventListener('click', () => {
-    const isOpen = mobileNav.style.display === 'flex';
-    mobileNav.style.display = isOpen ? 'none' : 'flex';
-  });
+  /*  各レイヤー：ヒーロー背景のネイビーから明るいティールへ段階的に遷移 */
+  const layers = [
+    { yr: 0.10, amp: 30, wl: 0.0050, sp: 0.38, r: 13,  g: 35,  b: 64,  a: 1.00 },
+    { yr: 0.24, amp: 26, wl: 0.0065, sp: 0.52, r: 20,  g: 55,  b: 100, a: 0.95 },
+    { yr: 0.38, amp: 22, wl: 0.0058, sp: 0.44, r: 14,  g: 90,  b: 160, a: 0.90 },
+    { yr: 0.50, amp: 19, wl: 0.0072, sp: 0.60, r: 14,  g: 140, b: 210, a: 0.85 },
+    { yr: 0.61, amp: 16, wl: 0.0068, sp: 0.48, r: 14,  g: 165, b: 233, a: 0.82 },
+    { yr: 0.71, amp: 12, wl: 0.0082, sp: 0.66, r: 56,  g: 189, b: 248, a: 0.80 },
+    { yr: 0.80, amp:  9, wl: 0.0078, sp: 0.54, r: 125, g: 211, b: 252, a: 0.82 },
+    { yr: 0.88, amp:  6, wl: 0.0095, sp: 0.72, r: 186, g: 230, b: 253, a: 0.88 },
+    { yr: 0.93, amp:  3, wl: 0.0105, sp: 0.60, r: 241, g: 249, b: 255, a: 0.94 },
+  ];
 
-  function closeMobileNav() {
-    mobileNav.style.display = 'none';
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
   }
 
-  // Smooth scroll with sticky header offset
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const target = document.querySelector(this.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - 72;
-      window.scrollTo({ top, behavior: 'smooth' });
-    });
+  function drawLayer(l) {
+    const baseY = l.yr * H;
+    ctx.beginPath();
+    for (let x = 0; x <= W; x += 3) {
+      const y = baseY
+        + Math.sin(x * l.wl + tick * l.sp) * l.amp
+        + Math.sin(x * l.wl * 1.618 + tick * l.sp * 0.79 + 2.1) * l.amp * 0.38;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W, H);
+    ctx.lineTo(0, H);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(${l.r},${l.g},${l.b},${l.a})`;
+    ctx.fill();
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    layers.forEach(drawLayer);
+    tick += 0.016;
+    raf = requestAnimationFrame(frame);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 80);
   });
 
-  // Fade-in on scroll
-  const observer = new IntersectionObserver((entries) => {
+  resize();
+  frame();
+}());
+
+/* ── ヘッダー スクロール制御 ────────────────────────────────── */
+(function () {
+  const h = document.getElementById('siteHeader');
+  const update = () => h.classList.toggle('solid', window.scrollY > 48);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}());
+
+/* ── モバイルナビ ────────────────────────────────────────────── */
+(function () {
+  const btn = document.getElementById('hamburgerBtn');
+  const nav = document.getElementById('mobileNav');
+  btn.addEventListener('click', () => {
+    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  });
+  window.closeMobileNav = () => { nav.style.display = 'none'; };
+}());
+
+/* ── スムーズスクロール（固定ヘッダー分オフセット） ─────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function (e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 76;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+
+/* ── スクロール フェードイン（段差アニメーション） ──────────── */
+(function () {
+  const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const siblings = Array.from(el.parentElement.querySelectorAll('.fu'));
+      const idx = siblings.indexOf(el);
+      setTimeout(() => el.classList.add('in'), idx * 90);
+      io.unobserve(el);
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.12 });
 
-  document.querySelectorAll('.problem-card, .value-card, .reason-card, .flow-step').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+}());
 </script>
 
 </body>

@@ -16,18 +16,13 @@ necoとの関係：neco（求職者向け）の姉妹サービス。バックエ
 ```
 /
 ├── index.html              # ランディングページ（医療機関向け）
-├── register.html           # 施設登録ページ
-├── dashboard.html          # 施設ダッシュボード（認証保護）
-├── faq.html                # よくある質問
 ├── terms.html              # 利用規約
 ├── privacy-policy.html     # プライバシーポリシー
 ├── 404.html                # カスタム404
 ├── sitemap.xml
 ├── robots.txt
 ├── netlify.toml            # Netlify設定
-└── netlify/
-    └── functions/
-        └── auth.js         # 認証API
+└── favicon.svg
 ```
 
 ---
@@ -48,23 +43,6 @@ necoとの関係：neco（求職者向け）の姉妹サービス。バックエ
 - **フォント**: Noto Sans JP
 
 necoとの差別化：necoはカジュアル・カラフル（ピンク系）、mitasはプロフェッショナル（ネイビー系）
-
----
-
-## API Routes
-
-| Method | Path | Function | Description |
-|--------|------|----------|-------------|
-| POST | `/api/auth/login` | `auth.js` | 施設ログイン |
-| GET | `/api/auth/me` | `auth.js` | トークン検証・プロフィール取得 |
-
----
-
-## Environment Variables (Netlify)
-
-| Variable | Purpose |
-|----------|---------|
-| `SESSION_SECRET` | 認証トークン署名用シークレット |
 
 ---
 
