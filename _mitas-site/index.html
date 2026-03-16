@@ -195,17 +195,23 @@
       height: 2px;
       background: var(--white);
       border-radius: 2px;
-      transition: background 0.35s, transform 0.25s;
+      transition: background 0.35s, transform 0.28s, opacity 0.2s;
     }
     #siteHeader.solid .hamburger span { background: var(--navy); }
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     .mobile-nav {
       display: none;
       flex-direction: column;
       background: var(--white);
       border-top: 1px solid var(--gray-200);
-      padding: 20px 28px 28px;
+      padding: 20px 20px 32px;
       box-shadow: var(--shadow-md);
+      max-height: calc(100vh - 68px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .mobile-nav a {
       padding: 14px 0;
@@ -1170,47 +1176,215 @@
     .footer__neco a { color: rgba(255,255,255,0.48); transition: color 0.2s; }
     .footer__neco a:hover { color: var(--white); }
 
-    /* ─── Responsive ─────────────────────────────── */
-    @media (max-width: 768px) {
-      .section { padding: 72px 0; }
+    /* ─── Contact Form ─────────────────────────────── */
+    .cta-form-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .cta-free-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(14,165,233,0.09);
+      border: 1px solid rgba(14,165,233,0.28);
+      color: #0284c7;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .contact-form {
+      display: grid;
+      gap: 18px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      letter-spacing: 0.02em;
+    }
+    .form-required {
+      display: inline-block;
+      background: var(--teal);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 4px;
+      vertical-align: middle;
+      letter-spacing: 0.04em;
+    }
+    .form-input {
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      border-radius: 8px;
+      color: var(--gray-900);
+      font-size: 15px;
+      font-family: inherit;
+      padding: 12px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-input::placeholder { color: var(--gray-300); }
+    .form-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.12);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+    .form-submit {
+      width: 100%;
+      justify-content: center;
+      font-size: 16px;
+      padding: 16px 32px;
+      margin-top: 6px;
+    }
+    .form-note {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: 12px;
+    }
 
+    /* ─── Responsive: タブレット以下 (≤ 1024px) ─── */
+    @media (max-width: 1024px) {
+      .usecases__grid { grid-template-columns: 1fr; }
+      .reasons__grid  { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ─── Responsive: モバイル (≤ 768px) ──────────── */
+    @media (max-width: 768px) {
+      /* レイアウト基礎 */
+      .container { padding: 0 16px; }
+      .section   { padding: 64px 0; }
+      .section__sub { margin-bottom: 40px; }
+
+      /* ヘッダー・ナビ */
       .header__nav, .header__cta { display: none; }
       .hamburger { display: flex; }
 
-      .hero__body { padding: 52px 0 220px; }
-      .hero__brand { font-size: clamp(38px, 12vw, 72px); }
+      /* ヒーロー */
+      .hero__body {
+        padding: 48px 0 200px;
+      }
+      .hero__brand  { font-size: clamp(38px, 12vw, 72px); }
+      .hero__sub    { font-size: 15px; }
       .hero__actions { flex-direction: column; }
       .hero__actions .btn { width: 100%; }
-      .hero__trust { gap: 14px; }
+      .hero__trust  {
+        flex-wrap: wrap;
+        gap: 8px 10px;
+      }
+      .hero__trust-item { font-size: 12px; }
       .hero__ornament {
-        right: 24px;
+        right: 12px;
         top: auto;
-        bottom: 110px;
-        width: 180px;
-        height: 250px;
-        opacity: 0.7;
+        bottom: 90px;
+        width: 160px;
+        height: 220px;
+        opacity: 0.5;
       }
 
-      .stats-strip__grid { grid-template-columns: 1fr; gap: 32px; }
+      /* Stats */
+      .stats-strip { padding: 36px 0; }
+      .stats-strip__grid { grid-template-columns: 1fr; gap: 28px; }
       .stat-item + .stat-item::before { display: none; }
 
-      .problems__grid { grid-template-columns: 1fr; }
+      /* カード */
+      .problems__grid { grid-template-columns: 1fr; gap: 14px; }
+      .problem-card   { padding: 20px; gap: 14px; }
       .value__grid    { grid-template-columns: 1fr; }
+      .value-card     { padding: 24px 20px; }
       .usecases__grid { grid-template-columns: 1fr; }
       .reasons__grid  { grid-template-columns: 1fr; }
 
-      .flow__track { grid-template-columns: repeat(2, 1fr); row-gap: 44px; }
+      /* フロー */
+      .flow__track { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
       .flow__line  { display: none; }
 
-      .footer__top   { flex-direction: column; }
-      .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 16px 24px; }
+      /* Authority */
+      .authority-quote         { padding: 0 4px; font-size: 15px; line-height: 2; }
+      .authority-quote::before { font-size: 52px; top: -10px; }
+      .authority-profile       { flex-direction: column; text-align: center; padding: 20px 24px; }
+
+      /* FAQ */
+      .faq-item summary { gap: 10px; }
+      .faq-item__answer { padding-left: 24px; font-size: 14px; }
+
+      /* フォーム */
+      .form-row   { grid-template-columns: 1fr; }
+      .form-input { font-size: 16px; } /* iOS Safari自動ズーム防止 */
+      .cta-form-wrap { text-align: left; }
+
+      /* フッター */
+      .footer__top    { flex-direction: column; }
+      .footer__links  { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 14px 20px; }
       .footer__bottom { flex-direction: column; align-items: flex-start; }
 
-      .authority-profile { flex-direction: column; text-align: center; }
-      .authority-quote   { padding: 0 4px; font-size: 15px; }
-      .section-water__drop { right: 14%; }
+      /* 装飾 */
+      .section-water__drop   { right: 14%; }
       .section-water__ripple { right: calc(14% - 46px); }
-      .faq-item__answer { padding-left: 26px; }
+    }
+
+    /* ─── Responsive: 小型スマートフォン (≤ 480px) ── */
+    @media (max-width: 480px) {
+      .section { padding: 56px 0; }
+
+      /* ヒーロー */
+      .hero__body {
+        padding: 40px 0 185px;
+      }
+      .hero__ornament {
+        right: 8px;
+        bottom: 70px;
+        width: 130px;
+        height: 180px;
+        opacity: 0.38;
+      }
+      .hero__title { font-size: clamp(26px, 8vw, 38px); }
+      .hero__sub   { font-size: 14px; line-height: 1.9; }
+
+      /* フロー: 縦1列 + 横並びレイアウト */
+      .flow__track           { grid-template-columns: 1fr; row-gap: 24px; }
+      .flow-step             { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; padding: 0; }
+      .flow-step__bubble     { width: 52px; height: 52px; margin-bottom: 0; flex-shrink: 0; }
+      .flow-step__bubble::before { display: none; }
+      .flow-step__body       { font-size: 13px; }
+
+      /* FAQ */
+      .faq-item summary  { padding: 18px 0; }
+      .faq-item__q-text  { font-size: 14px; }
+
+      /* CTA フォーム */
+      .cta-section { padding: 56px 0; }
+      .cta-form-wrap { margin-top: 0; }
+      .form-submit  { font-size: 15px; padding: 15px 24px; }
+
+      /* 統計 */
+      .stat-item__text   { font-size: 14px; }
+
+      /* フッター */
+      .footer__links { gap: 12px 16px; }
+      .footer__logo  { font-size: 17px; }
     }
   </style>
 </head>
@@ -1238,7 +1412,6 @@
         <a href="#contact">お問い合わせ</a>
       </nav>
 
-      <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
       <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
 
       <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
@@ -1286,8 +1459,9 @@
         <a href="#value"   class="btn btn--ghost-white">サービスを見る</a>
       </div>
       <div class="hero__trust">
+        <span class="hero__trust-item">初回相談 無料</span>
+        <span class="hero__trust-item">首都圏対応</span>
         <span class="hero__trust-item">施設基準・加算への影響を踏まえた要件整理</span>
-        <span class="hero__trust-item">急な局面にも対応</span>
         <span class="hero__trust-item">売り込みなし</span>
       </div>
     </div>
@@ -1686,6 +1860,24 @@
         </summary>
         <p class="faq-item__answer">売り込みは行いません。状況をお聞きした上で、対応可能な支援の方向性をご案内します。ご判断はお客様のペースで問題ありません。相談だけでも歓迎です。</p>
       </details>
+
+      <details class="faq-item fu">
+        <summary>
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">費用はかかりますか？</span>
+          <span class="faq-item__icon">+</span>
+        </summary>
+        <p class="faq-item__answer">初回のご相談は無料です。その後の支援内容・費用については、状況と必要な対応をお聞きした上でご案内します。まずはお気軽にご相談ください。</p>
+      </details>
+
+      <details class="faq-item fu">
+        <summary>
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">どの地域に対応していますか？</span>
+          <span class="faq-item__icon">+</span>
+        </summary>
+        <p class="faq-item__answer">現在は首都圏（東京・神奈川・埼玉・千葉）を主な対応エリアとしています。エリア外のご相談については、まずお問い合わせいただき、状況に応じてご案内します。</p>
+      </details>
     </div>
 
     <div class="faq__more">
@@ -1714,15 +1906,64 @@
       急な欠員、人員要件の整理、充足のご相談まで。<br>
       まずは現在の状況をお聞かせいただくところから始めます。
     </p>
-    <!-- TODO: href を実際の問い合わせフォームURL（Google Forms、Typeform 等）に変更してください -->
-    <a href="mailto:info@mitas.example.com" class="btn btn--white">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-        <polyline points="22,6 12,13 2,6"/>
-      </svg>
-      まずは状況を相談する
-    </a>
-    <p class="cta-note">売り込みはありません。相談だけでも歓迎です。</p>
+
+    <div class="cta-form-wrap">
+      <span class="cta-free-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        初回相談 無料
+      </span>
+
+      <form name="contact" method="POST" data-netlify="true" action="/thanks.html" class="contact-form">
+        <input type="hidden" name="form-name" value="contact" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="facility">施設名・事業所名 <span class="form-required">必須</span></label>
+            <input class="form-input" type="text" id="facility" name="facility" required placeholder="〇〇病院　〇〇訪問看護ステーション">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-name">ご担当者名 <span class="form-required">必須</span></label>
+            <input class="form-input" type="text" id="contact-name" name="name" required placeholder="山田 太郎">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="phone">電話番号 <span class="form-required">必須</span></label>
+            <input class="form-input" type="tel" id="phone" name="phone" required placeholder="03-0000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">メールアドレス <span class="form-required">必須</span></label>
+            <input class="form-input" type="email" id="email" name="email" required placeholder="info@example.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="urgency">緊急度（任意）</label>
+          <select class="form-input" id="urgency" name="urgency">
+            <option value="">選択してください</option>
+            <option value="急ぎ（1週間以内）">急ぎ（1週間以内）</option>
+            <option value="2〜4週間以内">2〜4週間以内</option>
+            <option value="1か月以上の余裕あり">1か月以上の余裕あり</option>
+            <option value="まず状況整理だけしたい">まず状況整理だけしたい</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">ご相談内容（任意）</label>
+          <textarea class="form-input form-textarea" id="message" name="message" placeholder="現在の状況、気になっていること、どんなことでもお気軽にどうぞ。"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary form-submit">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          相談を送る（無料）
+        </button>
+        <p class="form-note">売り込みはありません。相談だけでも歓迎です。お返事は営業日2日以内を目安にします。</p>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -1831,10 +2072,30 @@
 (function () {
   const btn = document.getElementById('hamburgerBtn');
   const nav = document.getElementById('mobileNav');
+
+  function openNav() {
+    nav.style.display = 'flex';
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNav() {
+    nav.style.display = 'none';
+    btn.classList.remove('active');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
   btn.addEventListener('click', () => {
-    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    nav.style.display === 'flex' ? closeNav() : openNav();
   });
-  window.closeMobileNav = () => { nav.style.display = 'none'; };
+
+  window.closeMobileNav = closeNav;
+
+  // リサイズでデスクトップ幅になったら閉じる
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) closeNav();
+  });
 }());
 
 /* ── スムーズスクロール（固定ヘッダー分オフセット） ─────────── */
