@@ -1,853 +1,1003 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mitas - 医療機関の人材要件マッチングプラットフォーム</title>
-    <meta name="description" content="Mitasは医療機関向けの人材要件マッチングプラットフォームです。必要な医師・看護師の要件を登録するだけで、最適な人材をご紹介します。">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mitas.necofindjob.com/">
-    <!-- OGP -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Mitas - 医療機関の人材要件マッチングプラットフォーム">
-    <meta property="og:description" content="必要な人材要件を登録するだけ。医師・看護師のマッチングをシンプルに。">
-    <meta property="og:url" content="https://mitas.necofindjob.com/">
-    <meta property="og:site_name" content="Mitas">
-    <meta property="og:locale" content="ja_JP">
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Mitas - 医療機関の人材要件マッチングプラットフォーム">
-    <meta name="twitter:description" content="必要な人材要件を登録するだけ。医師・看護師のマッチングをシンプルに。">
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #1B3A6B;
-            --navy-light: #2A5298;
-            --teal: #0EA5E9;
-            --teal-light: #38BDF8;
-            --gray: #64748B;
-            --gray-light: #F1F5F9;
-            --white: #FFFFFF;
-            --dark: #0F172A;
-            --border: #E2E8F0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            color: var(--dark);
-            background: var(--white);
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        /* Header */
-        header {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--navy);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .logo span {
-            color: var(--teal);
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        nav a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        nav a:hover { color: var(--navy); }
-
-        .btn-nav {
-            background: var(--navy);
-            color: var(--white) !important;
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-weight: 600 !important;
-            transition: background 0.2s !important;
-        }
-
-        .btn-nav:hover { background: var(--navy-light) !important; }
-
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1e4d8c 100%);
-            color: var(--white);
-            padding: 80px 24px;
-            overflow: hidden;
-        }
-
-        .hero-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(14, 165, 233, 0.2);
-            border: 1px solid rgba(14, 165, 233, 0.5);
-            color: var(--teal-light);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            letter-spacing: 0.05em;
-        }
-
-        .hero-badge::before {
-            content: '';
-            width: 7px;
-            height: 7px;
-            background: var(--teal);
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .hero h1 {
-            font-size: clamp(26px, 3.5vw, 44px);
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
-
-        .hero h1 em {
-            font-style: normal;
-            color: var(--teal-light);
-        }
-
-        .hero-lead {
-            font-size: clamp(14px, 1.5vw, 16px);
-            opacity: 0.8;
-            margin-bottom: 36px;
-            line-height: 1.8;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-        }
-
-        .hero-trust {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            opacity: 0.75;
-        }
-
-        .trust-item::before {
-            content: '✓';
-            color: var(--teal-light);
-            font-weight: 700;
-        }
-
-        /* Hero visual card */
-        .hero-visual {
-            position: relative;
-        }
-
-        .hero-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .hero-card-avatar {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--teal), #60a5fa);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .hero-card-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .hero-card-sub {
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
-            margin-top: 2px;
-        }
-
-        .hero-card-status {
-            margin-left: auto;
-            background: rgba(14, 165, 233, 0.25);
-            color: var(--teal-light);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .hero-card-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            font-size: 13px;
-        }
-
-        .hero-card-row:last-child { border-bottom: none; }
-
-        .hero-card-row .label {
-            color: rgba(255,255,255,0.5);
-        }
-
-        .hero-card-row .value {
-            color: var(--white);
-            font-weight: 600;
-        }
-
-        .hero-card-row .value.teal {
-            color: var(--teal-light);
-        }
-
-        .hero-card-footer {
-            margin-top: 20px;
-            background: var(--teal);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .hero-float-badge {
-            position: absolute;
-            bottom: -16px;
-            right: -12px;
-            background: var(--white);
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        }
-
-        .hero-float-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(14, 165, 233, 0.15);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .hero-float-text {
-            font-size: 12px;
-            color: var(--dark);
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .hero-float-text span {
-            display: block;
-            color: var(--gray);
-            font-weight: 400;
-            font-size: 11px;
-        }
-
-        @media (max-width: 860px) {
-            .hero-inner {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            .hero-visual { display: none; }
-        }
-
-        .btn-primary {
-            background: var(--teal);
-            color: var(--white);
-            padding: 16px 36px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.1s;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            background: var(--teal-light);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--white);
-            padding: 15px 36px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid rgba(255,255,255,0.5);
-            transition: border-color 0.2s, background 0.2s;
-            display: inline-block;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Stats bar */
-        .stats-bar {
-            background: var(--gray-light);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 32px 24px;
-        }
-
-        .stats-inner {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 64px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .stat-num span { color: var(--teal); }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        /* Section */
-        section {
-            padding: 80px 24px;
-        }
-
-        .section-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            color: var(--teal);
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-size: clamp(22px, 3.5vw, 34px);
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1.3;
-            margin-bottom: 16px;
-        }
-
-        .section-sub {
-            font-size: 16px;
-            color: var(--gray);
-            max-width: 560px;
-            margin-bottom: 56px;
-        }
-
-        /* Problem section */
-        .problem {
-            background: var(--gray-light);
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        .problem-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 28px;
-        }
-
-        .problem-icon {
-            font-size: 32px;
-            margin-bottom: 16px;
-        }
-
-        .problem-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-
-        .problem-card p {
-            font-size: 14px;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* How it works */
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 32px;
-            margin-top: 48px;
-            position: relative;
-        }
-
-        .step {
-            text-align: center;
-            padding: 0 16px;
-        }
-
-        .step-num {
-            width: 48px;
-            height: 48px;
-            background: var(--navy);
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0 auto 20px;
-        }
-
-        .step h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-
-        .step p {
-            font-size: 14px;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* Features */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 28px;
-            margin-top: 48px;
-        }
-
-        .feature-card {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            transition: box-shadow 0.2s;
-        }
-
-        .feature-card:hover {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(14, 165, 233, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 10px;
-        }
-
-        .feature-card p {
-            font-size: 14px;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-            color: var(--white);
-            text-align: center;
-            padding: 80px 24px;
-        }
-
-        .cta-section h2 {
-            font-size: clamp(22px, 3.5vw, 34px);
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .cta-section p {
-            font-size: 16px;
-            opacity: 0.85;
-            margin-bottom: 40px;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: rgba(255,255,255,0.6);
-            padding: 48px 24px;
-        }
-
-        .footer-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-
-        .footer-logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--white);
-            text-decoration: none;
-        }
-
-        .footer-logo span { color: var(--teal); }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-size: 13px;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover { color: var(--white); }
-
-        .footer-copy {
-            font-size: 12px;
-            color: rgba(255,255,255,0.35);
-            width: 100%;
-            text-align: center;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            nav a:not(.btn-nav) { display: none; }
-            .stats-inner { gap: 32px; }
-            .footer-inner { justify-content: center; text-align: center; }
-            .footer-links { justify-content: center; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MITAS｜医療・介護事業者の人材課題に、現場理解のある支援を</title>
+  <meta name="description" content="MITASは、医療・介護事業者の人材課題（採用・配置・急な欠員・定着）に、現場理解を踏まえた支援を提供します。まずはお気軽にご相談ください。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mitas.necofindjob.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MITAS｜医療・介護事業者の人材課題に、現場理解のある支援を">
+  <meta property="og:description" content="採用、配置、急な人員不足、定着の悩みまで。MITASは、医療・介護の現場特有の課題を踏まえて、必要な支援につなげます。">
+  <meta property="og:url" content="https://mitas.necofindjob.com/">
+  <meta property="og:site_name" content="MITAS">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:       #1A2E4A;
+      --navy-mid:   #243B55;
+      --blue:       #2563EB;
+      --blue-light: #3B82F6;
+      --blue-pale:  #EFF6FF;
+      --gray-dark:  #374151;
+      --gray:       #6B7280;
+      --gray-light: #F3F4F6;
+      --border:     #E5E7EB;
+      --white:      #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--gray-dark);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== Layout ===== */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { padding: 96px 0; }
+    .section--alt { background: var(--gray-light); }
+
+    .section__label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    .section__title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 48px;
+    }
+
+    .section__title--center { text-align: center; }
+    .section__sub {
+      text-align: center;
+      color: var(--gray);
+      font-size: 15px;
+      margin-top: -36px;
+      margin-bottom: 56px;
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn--primary {
+      background: var(--blue);
+      color: var(--white);
+    }
+    .btn--primary:hover {
+      background: var(--blue-light);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    }
+
+    .btn--outline {
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--navy);
+    }
+    .btn--outline:hover { background: var(--navy); color: var(--white); }
+
+    .btn--white {
+      background: var(--white);
+      color: var(--navy);
+    }
+    .btn--white:hover { opacity: 0.9; }
+
+    /* ===== Header ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .header__logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-dark);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--blue); }
+
+    .header__cta { margin-left: 8px; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--navy);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px 24px;
+    }
+
+    .mobile-nav a {
+      padding: 12px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-dark);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-nav .btn {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      padding: 80px 0 96px;
+      background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    }
+
+    .hero__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero__eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      background: var(--blue-pale);
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .hero__title {
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .hero__sub {
+      font-size: 16px;
+      color: var(--gray);
+      line-height: 1.9;
+      margin-bottom: 40px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero Visual */
+    .hero__visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero__card-stack {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 20px 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-card__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-card__icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .stat-card__label { font-size: 12px; color: var(--gray); margin-bottom: 2px; }
+    .stat-card__value { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+    .hero__trust {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .hero__trust-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* ===== Problems ===== */
+    .problems__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .problem-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 28px 28px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: box-shadow 0.2s;
+    }
+    .problem-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+
+    .problem-card__check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .problem-card__check svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .problem-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .problem-card__body { font-size: 14px; color: var(--gray); line-height: 1.75; }
+
+    /* ===== Value ===== */
+    .value__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .value-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 28px;
+      text-align: center;
+    }
+
+    .value-card__num {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .value-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+
+    .value-card__body { font-size: 14px; color: var(--gray); line-height: 1.8; }
+
+    /* ===== Reasons ===== */
+    .reasons__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .reason-card {
+      background: var(--white);
+      border-left: 3px solid var(--blue);
+      padding: 28px 28px 28px 24px;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .reason-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .reason-card__body { font-size: 14px; color: var(--gray); line-height: 1.8; }
+
+    /* ===== Authority ===== */
+    .authority__inner {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .authority__body {
+      font-size: 15px;
+      color: var(--gray-dark);
+      line-height: 2;
+      margin-bottom: 48px;
+    }
+
+    .authority__profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 32px;
+      text-align: left;
+    }
+
+    .authority__avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .authority__avatar svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .authority__name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .authority__role { font-size: 13px; color: var(--gray); }
+
+    /* ===== Flow ===== */
+    .flow__steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .flow__steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 1px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .flow-step__circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+    }
+
+    .flow-step__circle svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .flow-step__num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .flow-step__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .flow-step__body { font-size: 13px; color: var(--gray); line-height: 1.75; }
+
+    /* ===== CTA Section ===== */
+    .cta-section {
+      background: var(--navy);
+      padding: 96px 0;
+      text-align: center;
+    }
+
+    .cta-section__title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .cta-section__body {
+      font-size: 15px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 40px;
+      line-height: 1.9;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--navy-mid);
+      padding: 48px 0 32px;
+    }
+
+    .footer__inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer__logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .footer__tagline { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+    .footer__links {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer__links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      transition: color 0.2s;
+    }
+    .footer__links a:hover { color: var(--white); }
+
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+
+      nav, .header__cta { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { padding: 48px 0 64px; }
+      .hero__inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero__visual { display: none; }
+      .hero__actions { flex-direction: column; }
+      .hero__actions .btn { width: 100%; }
+
+      .problems__grid { grid-template-columns: 1fr; }
+      .value__grid { grid-template-columns: 1fr; }
+      .reasons__grid { grid-template-columns: 1fr; }
+
+      .flow__steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+      .flow__steps::before { display: none; }
+
+      .footer__inner { flex-direction: column; }
+      .footer__links { gap: 20px; }
+
+      .authority__profile { flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="header-inner">
-            <a href="/" class="logo">mi<span>tas</span></a>
-            <nav>
-                <a href="#how-it-works">使い方</a>
-                <a href="#features">特徴</a>
-                <a href="/faq.html">よくある質問</a>
-                <a href="/register.html" class="btn-nav">無料で始める</a>
-            </nav>
-        </div>
-    </header>
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="container">
+    <div class="header__inner">
+      <a href="/" class="header__logo">MITAS</a>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-inner">
-            <!-- Left: Copy -->
-            <div class="hero-text">
-                <div class="hero-badge">医療機関向け 人材要件マッチング</div>
-                <h1>採用の悩みを、<br><em>プロに丸投げしよう。</em></h1>
-                <p class="hero-lead">在宅医療施設・クリニックの院長・採用担当者へ。<br>必要な医師・看護師の要件をMitasに登録するだけ。専任コンシェルジュが、要件定義から採用後フォローまで一貫して伴走します。</p>
-                <div class="hero-cta">
-                    <a href="/register.html" class="btn-primary">無料で施設登録する →</a>
-                    <a href="#how-it-works" class="btn-outline">使い方を見る</a>
-                </div>
-                <div class="hero-trust">
-                    <div class="trust-item">初期費用0円</div>
-                    <div class="trust-item">完全成功報酬型</div>
-                    <div class="trust-item">平均14日でご提案</div>
-                </div>
-            </div>
+      <nav>
+        <a href="#problems">課題</a>
+        <a href="#reasons">選ばれる理由</a>
+        <a href="#flow">ご利用の流れ</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
 
-            <!-- Right: Visual card -->
-            <div class="hero-visual">
-                <div class="hero-card">
-                    <div class="hero-card-header">
-                        <div class="hero-card-avatar">🏥</div>
-                        <div>
-                            <div class="hero-card-title">○○在宅クリニック</div>
-                            <div class="hero-card-sub">東京都 世田谷区</div>
-                        </div>
-                        <div class="hero-card-status">マッチング中</div>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="label">募集職種</span>
-                        <span class="value">訪問看護師</span>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="label">経験</span>
-                        <span class="value">在宅医療2年以上</span>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="label">勤務形態</span>
-                        <span class="value">常勤 / パート可</span>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="label">マッチング状況</span>
-                        <span class="value teal">候補者 3名 提案済み</span>
-                    </div>
-                    <div class="hero-card-footer">コンシェルジュが面談を調整中です ✓</div>
-                </div>
-                <div class="hero-float-badge">
-                    <div class="hero-float-icon">⚡</div>
-                    <div class="hero-float-text">
-                        登録から24時間以内
-                        <span>コンシェルジュがご連絡</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
+      <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
 
-    <!-- Stats -->
-    <div class="stats-bar">
-        <div class="stats-inner">
-            <div class="stat-item">
-                <div class="stat-num">98<span>%</span></div>
-                <div class="stat-label">施設満足度</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-num">14<span>日</span></div>
-                <div class="stat-label">平均マッチング期間</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-num">0<span>円</span></div>
-                <div class="stat-label">初期費用・月額費用</div>
-            </div>
-        </div>
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </div>
 
-    <!-- Problem -->
-    <section class="problem">
-        <div class="section-inner">
-            <div class="section-label">PROBLEM</div>
-            <h2 class="section-title">こんなお悩みはありませんか？</h2>
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-icon">⏰</div>
-                    <h3>採用に時間がかかりすぎる</h3>
-                    <p>求人票の作成・掲載・応募者の選考と、採用業務だけで月に何十時間も費やしてしまう。</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">🔍</div>
-                    <h3>要件に合う人材が見つからない</h3>
-                    <p>在宅医療経験のある医師・看護師はそもそも求人サイトに登録していないことが多い。</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon">💸</div>
-                    <h3>採用コストが読めない</h3>
-                    <p>複数の求人媒体に掲載費を払っても成果が出ず、費用だけがかさんでしまう。</p>
-                </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#problems" onclick="closeMobileNav()">課題</a>
+    <a href="#reasons" onclick="closeMobileNav()">選ばれる理由</a>
+    <a href="#flow" onclick="closeMobileNav()">ご利用の流れ</a>
+    <a href="#contact" onclick="closeMobileNav()">お問い合わせ</a>
+    <a href="#contact" class="btn btn--primary">まずは相談する</a>
+  </div>
+</header>
+
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__inner">
+      <div class="hero__content">
+        <span class="hero__eyebrow">医療・介護事業者向け</span>
+        <h1 class="hero__title">
+          医療・介護事業者の<br>人材課題に、<br>現場理解のある支援を。
+        </h1>
+        <p class="hero__sub">
+          採用、配置、急な人員不足、定着の悩みまで。<br>
+          MITASは、医療・介護の現場特有の課題を踏まえて、<br>
+          必要な支援につなげます。
+        </p>
+        <div class="hero__actions">
+          <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
+          <a href="#contact" class="btn btn--primary">無料で相談する</a>
+          <a href="#value" class="btn btn--outline">サービスを見る</a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__card-stack">
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- How it works -->
-    <section id="how-it-works">
-        <div class="section-inner">
-            <div class="section-label">HOW IT WORKS</div>
-            <h2 class="section-title">3ステップで完結</h2>
-            <p class="section-sub">煩雑な採用業務はすべてMitasにお任せください。</p>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <h3>施設情報・要件を登録</h3>
-                    <p>施設の情報と、必要な人材の要件（職種・経験・勤務形態など）をフォームに入力するだけ。5分で完了します。</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <h3>コンシェルジュがマッチング</h3>
-                    <p>専任コンシェルジュが要件を精査し、ネットワーク内から最適な候補者をご提案。非公開求人にも対応。</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <h3>面談・採用へ</h3>
-                    <p>候補者との面談設定から採用後のフォローまで一貫サポート。採用が決まったときだけご請求。</p>
-                </div>
+            <div>
+              <div class="stat-card__label">人材課題の相談</div>
+              <div class="stat-card__value">採用・配置・定着を一括サポート</div>
             </div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section id="features" style="background: var(--gray-light);">
-        <div class="section-inner">
-            <div class="section-label">FEATURES</div>
-            <h2 class="section-title">Mitasが選ばれる理由</h2>
-            <p class="section-sub">医療機関の採用を知り尽くしたチームが、あなたの施設に最適な人材をご紹介します。</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏥</div>
-                    <h3>在宅医療特化のネットワーク</h3>
-                    <p>在宅医療経験者に特化した独自ネットワークを保有。一般の求人サイトでは出会えない人材へアクセスできます。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>専任コンシェルジュ制</h3>
-                    <p>担当者が施設の文化・雰囲気を深く理解した上でご提案。スキルだけでなく、カルチャーフィットも重視します。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✅</div>
-                    <h3>完全成功報酬型</h3>
-                    <p>掲載費・月額費用は一切なし。採用が決まった時点でのみ費用が発生します。採用リスクを最小化できます。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <h3>要件定義サポート</h3>
-                    <p>「どんな人材が必要か」から一緒に考えます。採用要件の整理・明確化もコンシェルジュが伴走します。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>非公開・守秘徹底</h3>
-                    <p>採用情報の取り扱いは厳重に管理。求人の公開範囲や候補者への情報開示タイミングも施設側でコントロール可能。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>採用状況をダッシュボードで管理</h3>
-                    <p>候補者の進捗状況・面談スケジュール・採用結果をリアルタイムで確認。採用業務を可視化します。</p>
-                </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section">
-        <h2>まずは無料で、要件をご相談ください。</h2>
-        <p>登録後、専任コンシェルジュが24時間以内にご連絡いたします。</p>
-        <a href="/register.html" class="btn-primary">無料で施設登録する →</a>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-inner">
-            <a href="/" class="footer-logo">mi<span>tas</span></a>
-            <div class="footer-links">
-                <a href="/terms.html">利用規約</a>
-                <a href="/privacy-policy.html">プライバシーポリシー</a>
-                <a href="/faq.html">よくある質問</a>
-                <a href="https://necofindjob.com" target="_blank" rel="noopener">求職者の方はneco</a>
+            <div>
+              <div class="stat-card__label">現場理解</div>
+              <div class="stat-card__value">医療・介護特有の事情を踏まえた提案</div>
             </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <div class="stat-card__label">気軽に相談</div>
+              <div class="stat-card__value">売り込みなし。まず状況を聞かせてください</div>
+            </div>
+          </div>
+          <div class="hero__trust">
+            <span class="hero__trust-dot"></span>
+            医療・介護領域に特化した人材支援
+          </div>
         </div>
-        <div class="footer-inner">
-            <p class="footer-copy">© 2026 Mitas. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== PROBLEMS ===== -->
+<section class="section section--alt" id="problems">
+  <div class="container">
+    <div class="section__label">よくある課題</div>
+    <h2 class="section__title">こんなお悩みはありませんか？</h2>
+
+    <div class="problems__grid">
+      <div class="problem-card">
+        <div class="problem-card__check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-    </footer>
+        <div>
+          <div class="problem-card__title">応募が来ない</div>
+          <div class="problem-card__body">求人を出しているのに応募が集まらない。どこで告知すればいいかもわからない。</div>
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-card__check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="problem-card__title">採用しても定着しない</div>
+          <div class="problem-card__body">せっかく入ってもらっても、短期間で離職してしまう。職場環境や業務設計に課題があるかもしれない。</div>
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-card__check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="problem-card__title">急な欠員に対応できない</div>
+          <div class="problem-card__body">スタッフの急な退職・体調不良で現場が回らない。対応できる体制を作っておきたい。</div>
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="problem-card__check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="problem-card__title">現場に合う人材を見極めにくい</div>
+          <div class="problem-card__body">スキルや経験だけでなく、施設の雰囲気や患者さんへの向き合い方まで考えると、なかなか「この人」と思える方に出会えない。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== VALUE ===== -->
+<section class="section" id="value">
+  <div class="container">
+    <div class="section__label">サービス概要</div>
+    <h2 class="section__title">MITASができること</h2>
+
+    <div class="value__grid">
+      <div class="value-card">
+        <div class="value-card__num">01</div>
+        <div class="value-card__title">人材課題の整理</div>
+        <p class="value-card__body">採用だけでなく、配置や運営上の課題も踏まえて整理します。「何が問題か」を一緒に言語化するところから始めます。</p>
+      </div>
+      <div class="value-card">
+        <div class="value-card__num">02</div>
+        <div class="value-card__title">現場理解を踏まえた支援</div>
+        <p class="value-card__body">医療・介護現場の特性を前提にした提案を行います。一般的な人材紹介にありがちな、現場感のないマッチングはしません。</p>
+      </div>
+      <div class="value-card">
+        <div class="value-card__num">03</div>
+        <div class="value-card__title">スムーズな相談導線</div>
+        <p class="value-card__body">必要なタイミングで、必要な支援につながる設計を大切にしています。まずは状況をお聞かせください。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== REASONS ===== -->
+<section class="section section--alt" id="reasons">
+  <div class="container">
+    <div class="section__label">選ばれる理由</div>
+    <h2 class="section__title">MITASが選ばれる理由</h2>
+
+    <div class="reasons__grid">
+      <div class="reason-card">
+        <div class="reason-card__title">医療・介護領域に特化した視点</div>
+        <p class="reason-card__body">業界特有の採用難、シフト管理の複雑さ、スタッフの疲弊構造など、この領域ならではの課題を理解した上で支援します。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-card__title">現場起点で課題を捉える支援</div>
+        <p class="reason-card__body">数字やデータだけでなく、現場で起きていることを丁寧にヒアリングし、表面的でない課題の本質を一緒に探ります。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-card__title">わかりやすく、相談しやすい設計</div>
+        <p class="reason-card__body">複雑な料金体系や強引なセールスはありません。まずは課題をお話しいただくことから始めます。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-card__title">売り込みではなく、課題整理から伴走</div>
+        <p class="reason-card__body">サービスを押しつけることが目的ではなく、事業者の方が本当に必要な支援に辿り着けるよう、一緒に考えます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== AUTHORITY ===== -->
+<section class="section" id="authority">
+  <div class="container">
+    <div class="authority__inner">
+      <div class="section__label" style="text-align:center;">私たちの考え方</div>
+      <h2 class="section__title section__title--center" style="margin-bottom:32px;">現場を理解した支援を目指して</h2>
+
+      <p class="authority__body">
+        MITASは、医療・介護の現場で起こる人材課題が、<br>
+        単なる採用の問題ではなく、運営やケアの質にも直結するテーマであると考えています。<br><br>
+        だからこそ、表面的な条件の一致だけでなく、<br>
+        現場理解を踏まえた支援を大切にしています。<br><br>
+        「ちょっと相談してみようかな」と思ったときに、<br>
+        気軽に声をかけていただける存在でありたいと考えています。
+      </p>
+
+      <!-- TODO: 運営者情報を実際の内容に変更してください（名前・役職など） -->
+      <div class="authority__profile">
+        <div class="authority__avatar">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <div class="authority__name">代表者名（TODO）</div>
+          <div class="authority__role">MITAS 代表 ／ 医療・介護人材支援</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== FLOW ===== -->
+<section class="section section--alt" id="flow">
+  <div class="container">
+    <div class="section__label" style="text-align:center;">ご利用の流れ</div>
+    <h2 class="section__title section__title--center">ご利用の流れ</h2>
+    <p class="section__sub">4つのステップでシンプルにご支援します</p>
+
+    <div class="flow__steps">
+      <div class="flow-step">
+        <div class="flow-step__circle">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="flow-step__num">STEP 01</div>
+        <div class="flow-step__title">お問い合わせ</div>
+        <p class="flow-step__body">フォームから気軽にご連絡ください。まずは状況だけお知らせいただければ十分です。</p>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step__circle">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="flow-step__num">STEP 02</div>
+        <div class="flow-step__title">ヒアリング</div>
+        <p class="flow-step__body">現在の状況・課題・ご要望を丁寧にお聞きします。オンラインまたは電話で対応可能です。</p>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step__circle">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="flow-step__num">STEP 03</div>
+        <div class="flow-step__title">ご提案</div>
+        <p class="flow-step__body">課題の整理をもとに、状況に合った支援の方向性をご案内します。</p>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step__circle">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="flow-step__num">STEP 04</div>
+        <div class="flow-step__title">支援開始</div>
+        <p class="flow-step__body">合意いただいた内容で支援を開始します。進捗に合わせて柔軟に対応します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== CTA ===== -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <h2 class="cta-section__title">まずはお気軽にご相談ください</h2>
+    <p class="cta-section__body">
+      採用、配置、人員不足など、人材に関するお悩みをお聞かせください。<br>
+      状況に応じて、必要な支援の方向性をご案内します。
+    </p>
+    <!-- TODO: href を実際の問い合わせフォームURL（Google Forms、Typeform 等）に変更してください -->
+    <a href="mailto:info@mitas.example.com" class="btn btn--white">お問い合わせはこちら</a>
+  </div>
+</section>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer__inner">
+      <div>
+        <div class="footer__logo">MITAS</div>
+        <!-- TODO: キャッチコピーや事業者名を記載してください -->
+        <div class="footer__tagline">医療・介護事業者の人材課題に、現場理解のある支援を。</div>
+      </div>
+      <div class="footer__links">
+        <!-- TODO: 会社情報ページのURLを設定してください -->
+        <a href="#">会社情報</a>
+        <a href="#contact">お問い合わせ</a>
+        <a href="/privacy-policy.html">プライバシーポリシー</a>
+        <a href="/terms.html">利用規約</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <!-- TODO: 運営会社名・設立年を変更してください -->
+      &copy; 2025 MITAS. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Mobile Nav
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+
+  hamburgerBtn.addEventListener('click', () => {
+    const isOpen = mobileNav.style.display === 'flex';
+    mobileNav.style.display = isOpen ? 'none' : 'flex';
+  });
+
+  function closeMobileNav() {
+    mobileNav.style.display = 'none';
+  }
+
+  // Smooth scroll with sticky header offset
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      const top = target.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.problem-card, .value-card, .reason-card, .flow-step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
 
 </body>
 </html>
