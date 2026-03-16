@@ -1146,6 +1146,95 @@
     .footer__neco a { color: rgba(255,255,255,0.48); transition: color 0.2s; }
     .footer__neco a:hover { color: var(--white); }
 
+    /* ─── Contact Form ─────────────────────────────── */
+    .cta-form-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .cta-free-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(14,165,233,0.09);
+      border: 1px solid rgba(14,165,233,0.28);
+      color: #0284c7;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .contact-form {
+      display: grid;
+      gap: 18px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      letter-spacing: 0.02em;
+    }
+    .form-required {
+      display: inline-block;
+      background: var(--teal);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 4px;
+      vertical-align: middle;
+      letter-spacing: 0.04em;
+    }
+    .form-input {
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      border-radius: 8px;
+      color: var(--gray-900);
+      font-size: 15px;
+      font-family: inherit;
+      padding: 12px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-input::placeholder { color: var(--gray-300); }
+    .form-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.12);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+    .form-submit {
+      width: 100%;
+      justify-content: center;
+      font-size: 16px;
+      padding: 16px 32px;
+      margin-top: 6px;
+    }
+    .form-note {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: 12px;
+    }
+
     /* ─── Responsive ─────────────────────────────── */
     @media (max-width: 768px) {
       .section { padding: 72px 0; }
@@ -1187,6 +1276,7 @@
       .section-water__drop { right: 14%; }
       .section-water__ripple { right: calc(14% - 46px); }
       .faq-item__answer { padding-left: 26px; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1214,7 +1304,6 @@
         <a href="#contact">お問い合わせ</a>
       </nav>
 
-      <!-- TODO: href を実際の問い合わせフォームURLに変更してください -->
       <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
 
       <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
@@ -1261,8 +1350,9 @@
         <a href="#value"   class="btn btn--ghost-white">サービスを見る</a>
       </div>
       <div class="hero__trust">
+        <span class="hero__trust-item">初回相談 無料</span>
+        <span class="hero__trust-item">首都圏対応</span>
         <span class="hero__trust-item">施設基準・加算への影響を踏まえた要件整理</span>
-        <span class="hero__trust-item">急な局面にも対応</span>
         <span class="hero__trust-item">売り込みなし</span>
       </div>
     </div>
@@ -1522,14 +1612,14 @@
         一緒に動きます。
       </p>
 
-      <!-- TODO: 運営者情報を実際の内容に変更してください（名前・役職など） -->
+      <!-- ↓ 運営者の実名・役職・写真URLに変更してください -->
       <div class="authority-profile fu">
         <div class="authority-avatar">
           <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div>
-          <div class="authority-name">代表者名（TODO）</div>
-          <div class="authority-role">MITAS 代表 ／ 医療・介護人材要件充足支援</div>
+          <div class="authority-name">MITAS 運営チーム</div>
+          <div class="authority-role">医療・介護 人員要件充足支援</div>
         </div>
       </div>
     </div>
@@ -1662,6 +1752,24 @@
         </summary>
         <p class="faq-item__answer">売り込みは行いません。状況をお聞きした上で、対応可能な支援の方向性をご案内します。ご判断はお客様のペースで問題ありません。相談だけでも歓迎です。</p>
       </details>
+
+      <details class="faq-item fu">
+        <summary>
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">費用はかかりますか？</span>
+          <span class="faq-item__icon">+</span>
+        </summary>
+        <p class="faq-item__answer">初回のご相談は無料です。その後の支援内容・費用については、状況と必要な対応をお聞きした上でご案内します。まずはお気軽にご相談ください。</p>
+      </details>
+
+      <details class="faq-item fu">
+        <summary>
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">どの地域に対応していますか？</span>
+          <span class="faq-item__icon">+</span>
+        </summary>
+        <p class="faq-item__answer">現在は首都圏（東京・神奈川・埼玉・千葉）を主な対応エリアとしています。エリア外のご相談については、まずお問い合わせいただき、状況に応じてご案内します。</p>
+      </details>
     </div>
 
     <div class="faq__more">
@@ -1690,15 +1798,64 @@
       急な欠員、人員要件の整理、充足のご相談まで。<br>
       まずは現在の状況をお聞かせいただくところから始めます。
     </p>
-    <!-- TODO: href を実際の問い合わせフォームURL（Google Forms、Typeform 等）に変更してください -->
-    <a href="mailto:info@mitas.example.com" class="btn btn--white">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-        <polyline points="22,6 12,13 2,6"/>
-      </svg>
-      まずは状況を相談する
-    </a>
-    <p class="cta-note">売り込みはありません。相談だけでも歓迎です。</p>
+
+    <div class="cta-form-wrap">
+      <span class="cta-free-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        初回相談 無料
+      </span>
+
+      <form name="contact" method="POST" data-netlify="true" action="/thanks.html" class="contact-form">
+        <input type="hidden" name="form-name" value="contact" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="facility">施設名・事業所名 <span class="form-required">必須</span></label>
+            <input class="form-input" type="text" id="facility" name="facility" required placeholder="〇〇病院　〇〇訪問看護ステーション">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-name">ご担当者名 <span class="form-required">必須</span></label>
+            <input class="form-input" type="text" id="contact-name" name="name" required placeholder="山田 太郎">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="phone">電話番号 <span class="form-required">必須</span></label>
+            <input class="form-input" type="tel" id="phone" name="phone" required placeholder="03-0000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">メールアドレス <span class="form-required">必須</span></label>
+            <input class="form-input" type="email" id="email" name="email" required placeholder="info@example.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="urgency">緊急度（任意）</label>
+          <select class="form-input" id="urgency" name="urgency">
+            <option value="">選択してください</option>
+            <option value="急ぎ（1週間以内）">急ぎ（1週間以内）</option>
+            <option value="2〜4週間以内">2〜4週間以内</option>
+            <option value="1か月以上の余裕あり">1か月以上の余裕あり</option>
+            <option value="まず状況整理だけしたい">まず状況整理だけしたい</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">ご相談内容（任意）</label>
+          <textarea class="form-input form-textarea" id="message" name="message" placeholder="現在の状況、気になっていること、どんなことでもお気軽にどうぞ。"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary form-submit">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          相談を送る（無料）
+        </button>
+        <p class="form-note">売り込みはありません。相談だけでも歓迎です。お返事は営業日2日以内を目安にします。</p>
+      </form>
+    </div>
   </div>
 </section>
 
