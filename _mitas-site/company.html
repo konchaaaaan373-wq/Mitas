@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会社概要 | MITAS</title>
+  <meta name="description" content="MITASの会社概要・理念・サービス内容についてご紹介します。医療・介護事業者の人材課題に、現場理解のある支援を提供します。">
+  <link rel="canonical" href="https://mitas.necofindjob.com/company.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="会社概要 | MITAS">
+  <meta property="og:description" content="MITASの会社概要・理念・サービス内容についてご紹介します。">
+  <meta property="og:url" content="https://mitas.necofindjob.com/company.html">
+  <meta property="og:site_name" content="MITAS">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Base ─────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --teal-pale:  #F0F9FF;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
+      --white:      #FFFFFF;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md:  0 4px 20px rgba(0,0,0,0.08);
+      --radius:     8px;
+      --radius-lg:  14px;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--gray-700);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ─── Header ──────────────────────── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--navy);
+    }
+
+    .header__logo svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .header__nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      transition: color 0.2s;
+    }
+
+    .header__nav a:hover { color: var(--teal); }
+
+    .header__nav a.active { color: var(--navy); font-weight: 600; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s var(--ease);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn--primary {
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(14,165,233,0.3);
+    }
+    .btn--primary:hover { background: var(--teal-light); box-shadow: 0 6px 20px rgba(14,165,233,0.4); }
+
+    .btn--white {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: var(--shadow-md);
+    }
+    .btn--white:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      padding: 20px 28px 28px;
+    }
+    .mobile-nav a {
+      padding: 14px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .mobile-nav .btn { margin-top: 20px; width: 100%; justify-content: center; }
+
+    /* ─── Page Hero ───────────────────── */
+    .page-hero {
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 72px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    }
+
+    .page-hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--teal-light);
+      margin-bottom: 16px;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .page-hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ─── Sections ────────────────────── */
+    .section { padding: 88px 0; }
+    .section--alt { background: var(--gray-50); }
+
+    .section__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--teal);
+      margin-bottom: 14px;
+    }
+    .section__tag::before {
+      content: '';
+      display: block;
+      width: 16px; height: 2px;
+      background: var(--teal);
+      border-radius: 1px;
+    }
+
+    .section__title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 40px;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+    }
+
+    /* ─── Fade-up ─────────────────────── */
+    .fu {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    }
+    .fu.in { opacity: 1; transform: none; }
+
+    /* ─── Philosophy ──────────────────── */
+    .philosophy-quote {
+      font-size: 18px;
+      color: var(--gray-700);
+      line-height: 2.15;
+      max-width: 760px;
+      margin: 0 auto 64px;
+      text-align: center;
+      position: relative;
+      padding: 0 24px;
+    }
+    .philosophy-quote::before {
+      content: '\201C';
+      position: absolute;
+      top: -28px;
+      left: 12px;
+      font-size: 96px;
+      font-family: Georgia, serif;
+      color: var(--teal);
+      opacity: 0.12;
+      line-height: 1;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pillar {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s var(--ease);
+    }
+    .pillar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    }
+    .pillar:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+
+    .pillar__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--teal-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .pillar__icon svg {
+      width: 26px; height: 26px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .pillar__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .pillar__body {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.85;
+    }
+
+    /* ─── Company Overview Table ─────── */
+    .overview-wrap { max-width: 760px; margin: 0 auto; }
+
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .overview-table tr {
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .overview-table tr:first-child { border-top: 1px solid var(--gray-200); }
+
+    .overview-table th {
+      width: 180px;
+      padding: 20px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      text-align: left;
+      vertical-align: top;
+      background: var(--gray-50);
+      white-space: nowrap;
+    }
+
+    .overview-table td {
+      padding: 20px 24px;
+      font-size: 15px;
+      color: var(--gray-700);
+      vertical-align: top;
+      line-height: 1.8;
+    }
+
+    .overview-table td a {
+      color: var(--teal);
+    }
+
+    .todo-tag {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--gray-500);
+      background: var(--gray-100);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ─── Service Features ────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      transition: box-shadow 0.2s, transform 0.2s var(--ease), border-color 0.2s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(14,165,233,0.3);
+      transform: translateY(-2px);
+    }
+
+    .feature-card__num {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--teal);
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-card__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .feature-card__body {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.85;
+    }
+
+    /* ─── Message ─────────────────────── */
+    .message-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .message-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .message-card__text {
+      font-size: 16px;
+      color: var(--gray-700);
+      line-height: 2.15;
+      margin-bottom: 36px;
+    }
+
+    .message-card__author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .author-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-pale), rgba(14,165,233,0.18));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid rgba(14,165,233,0.2);
+    }
+
+    .author-avatar svg {
+      width: 26px; height: 26px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .author-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .author-role { font-size: 13px; color: var(--gray-500); }
+
+    /* ─── CTA Section ─────────────────── */
+    .cta-section {
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 88px 0;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    }
+
+    .cta-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--teal-light);
+      margin-bottom: 20px;
+    }
+
+    .cta-title {
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .cta-body {
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.9;
+      margin-bottom: 44px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
+    }
+
+    /* ─── Footer ──────────────────────── */
+    footer {
+      background: var(--navy-mid);
+      padding: 56px 0 36px;
+    }
+
+    .footer__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      padding-bottom: 40px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .footer__logo svg { width: 20px; height: 20px; }
+
+    .footer__tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.75;
+    }
+
+    .footer__links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .footer__links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.52);
+      transition: color 0.2s;
+    }
+    .footer__links a:hover { color: var(--white); }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer__copy { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco  { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco a { color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer__neco a:hover { color: var(--white); }
+
+    /* ─── Responsive ──────────────────── */
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+      .header__nav, .header__cta { display: none; }
+      .hamburger { display: flex; }
+
+      .pillars { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+
+      .overview-table th { width: 120px; padding: 16px; }
+      .overview-table td { padding: 16px; }
+
+      .message-card { padding: 28px; }
+
+      .footer__top { flex-direction: column; }
+      .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 14px 20px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; }
+
+      .philosophy-quote { font-size: 15px; padding: 0 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="container">
+    <div class="header__inner">
+      <a href="/" class="header__logo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                fill="rgba(14,165,233,0.12)"/>
+        </svg>
+        MITAS
+      </a>
+      <nav class="header__nav">
+        <a href="/">トップ</a>
+        <a href="/#problems">課題</a>
+        <a href="/#reasons">選ばれる理由</a>
+        <a href="/#flow">ご利用の流れ</a>
+        <a href="/company.html" class="active">会社概要</a>
+      </nav>
+      <a href="/#contact" class="btn btn--primary header__cta">まずは相談する</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="/" onclick="closeMobileNav()">トップ</a>
+    <a href="/#problems" onclick="closeMobileNav()">課題</a>
+    <a href="/#reasons" onclick="closeMobileNav()">選ばれる理由</a>
+    <a href="/#flow" onclick="closeMobileNav()">ご利用の流れ</a>
+    <a href="/company.html" onclick="closeMobileNav()">会社概要</a>
+    <a href="/#contact" class="btn btn--primary" onclick="closeMobileNav()">まずは相談する</a>
+  </div>
+</header>
+
+
+<!-- ══════════ PAGE HERO ══════════ -->
+<div class="page-hero">
+  <p class="page-hero__tag">ABOUT US</p>
+  <h1>会社概要</h1>
+  <p>MITASが目指すこと、私たちの考え方をご紹介します。</p>
+</div>
+
+
+<!-- ══════════ PHILOSOPHY ══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__tag">理念</div>
+    <h2 class="section__title">MITASが目指すもの</h2>
+
+    <p class="philosophy-quote fu">
+      医療・介護の現場で起こる人材課題は、<br>
+      単なる「採用の問題」ではありません。<br>
+      運営の安定、スタッフの定着、そして患者・利用者へのケアの質にまで<br>
+      深く関わるテーマです。<br><br>
+      私たちは、現場の声に耳を傾け、<br>
+      表面的な条件のマッチングではなく、<br>
+      「本当に必要な支援」を一緒に考え続けることを大切にしています。
+    </p>
+
+    <div class="pillars">
+      <div class="pillar fu">
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="pillar__title">現場理解</div>
+        <p class="pillar__body">医療・介護業界に特有の採用難、シフトの複雑さ、職員の疲弊構造を深く理解した上で支援します。</p>
+      </div>
+      <div class="pillar fu">
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="pillar__title">対話を大切にする支援</div>
+        <p class="pillar__body">数字だけで判断するのではなく、現場のリアルを丁寧にヒアリングし、課題の本質を一緒に探ります。</p>
+      </div>
+      <div class="pillar fu">
+        <div class="pillar__icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="pillar__title">誠実な伴走</div>
+        <p class="pillar__body">サービスを押しつけることなく、事業者の方が本当に必要な支援に辿り着けるよう、共に歩みます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ COMPANY OVERVIEW ══════════ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__tag">会社概要</div>
+    <h2 class="section__title">会社情報</h2>
+
+    <div class="overview-wrap">
+      <table class="overview-table fu">
+        <tr>
+          <th>サービス名</th>
+          <td>MITAS（ミタス）</td>
+        </tr>
+        <tr>
+          <th>事業内容</th>
+          <td>医療・介護事業者向け人材支援サービス（採用・配置・定着に関するコンサルティング・マッチング）</td>
+        </tr>
+        <tr>
+          <th>設立</th>
+          <td><!-- TODO：実際の設立年を記載 -->設立年度<span class="todo-tag">要更新</span></td>
+        </tr>
+        <tr>
+          <th>代表者</th>
+          <td><!-- TODO：代表者名を記載 -->代表者名<span class="todo-tag">要更新</span></td>
+        </tr>
+        <tr>
+          <th>所在地</th>
+          <td><!-- TODO：住所を記載 -->所在地<span class="todo-tag">要更新</span></td>
+        </tr>
+        <tr>
+          <th>お問い合わせ</th>
+          <td>
+            <!-- TODO：実際の問い合わせ先に変更 -->
+            問い合わせフォームまたは担当コンシェルジュへ<span class="todo-tag">要更新</span>
+          </td>
+        </tr>
+        <tr>
+          <th>関連サービス</th>
+          <td>
+            <a href="https://necofindjob.com" target="_blank" rel="noopener">neco（necofindjob.com）</a>
+            ── 医師・看護師向け求人マッチングサービス
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ SERVICE FEATURES ══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__tag">サービス</div>
+    <h2 class="section__title">MITASが提供する支援</h2>
+
+    <div class="features-grid">
+      <div class="feature-card fu">
+        <div class="feature-card__num">01</div>
+        <div class="feature-card__title">人材課題の整理・言語化</div>
+        <p class="feature-card__body">「採用がうまくいかない」「定着しない」という課題を、現場の実情を踏まえて丁寧に整理します。何が本質的な問題かを一緒に見つけるところから始めます。</p>
+      </div>
+      <div class="feature-card fu">
+        <div class="feature-card__num">02</div>
+        <div class="feature-card__title">現場理解を踏まえた支援提案</div>
+        <p class="feature-card__body">一般的な人材紹介とは異なり、医療・介護現場の特性・文化・チーム構成を考慮した上で、状況に合った支援の方向性をご提案します。</p>
+      </div>
+      <div class="feature-card fu">
+        <div class="feature-card__num">03</div>
+        <div class="feature-card__title">採用後の定着・フォロー</div>
+        <p class="feature-card__body">採用して終わりではありません。入職後のフォローや定着支援についても、必要に応じてご相談に応じます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ MESSAGE ══════════ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__tag">代表メッセージ</div>
+    <h2 class="section__title">代表より</h2>
+
+    <div class="message-wrap">
+      <div class="message-card fu">
+        <p class="message-card__text">
+          医療・介護の現場で働く方々と、その現場を支える施設・事業者の方々。<br>
+          そのどちらも、毎日懸命に向き合い続けていることを、私たちは深く知っています。<br><br>
+          人材が集まらない、定着しない、急な欠員が出る——<br>
+          こうした課題は、決してその施設の「努力が足りない」のではなく、<br>
+          業界全体の構造的な難しさに起因していることがほとんどです。<br><br>
+          MITASは、そうした現場の声に寄り添い、<br>
+          「相談してよかった」と思っていただける存在でありたいと考えています。<br>
+          売り込みではなく、まず状況を聞かせてください。
+        </p>
+        <div class="message-card__author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <!-- TODO：代表者名・役職を記載 -->
+            <div class="author-name">代表者名<span class="todo-tag">要更新</span></div>
+            <div class="author-role">MITAS 代表 ／ 医療・介護人材支援</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <p class="cta-kicker">CONTACT</p>
+    <h2 class="cta-title">まずはお気軽にご相談ください</h2>
+    <p class="cta-body">
+      採用、配置、人員不足など、人材に関するお悩みをお聞かせください。<br>
+      状況に応じて、必要な支援の方向性をご案内します。
+    </p>
+    <!-- TODO：href を実際の問い合わせフォームURLに変更してください -->
+    <a href="mailto:info@mitas.example.com" class="btn btn--white">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      お問い合わせはこちら
+    </a>
+    <p class="cta-note">売り込みはありません。まずはお気軽に。</p>
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <div class="footer__logo">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                  stroke="rgba(56,189,248,0.75)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  fill="rgba(14,165,233,0.1)"/>
+          </svg>
+          MITAS
+        </div>
+        <p class="footer__tagline">医療・介護事業者の人材課題に、<br>現場理解のある支援を。</p>
+      </div>
+      <div class="footer__links">
+        <a href="/">トップページ</a>
+        <a href="/company.html">会社概要</a>
+        <a href="/faq.html">よくある質問</a>
+        <a href="/guide.html">ご利用ガイド</a>
+        <a href="/privacy-policy.html">プライバシーポリシー</a>
+        <a href="/terms.html">利用規約</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <!-- TODO：運営会社名・設立年を変更してください -->
+      <span class="footer__copy">&copy; 2026 MITAS. All rights reserved.</span>
+      <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+  const btn = document.getElementById('hamburgerBtn');
+  const nav = document.getElementById('mobileNav');
+  btn.addEventListener('click', () => {
+    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  });
+  window.closeMobileNav = () => { nav.style.display = 'none'; };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const siblings = Array.from(el.parentElement.querySelectorAll('.fu'));
+      const idx = siblings.indexOf(el);
+      setTimeout(() => el.classList.add('in'), idx * 90);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+}());
+</script>
+
+</body>
+</html>
