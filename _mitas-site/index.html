@@ -28,6 +28,7 @@
       --navy-mid:   #243B5E;
       --teal:       #0EA5E9;
       --teal-light: #38BDF8;
+      --teal-soft:  #7DD3FC;
       --teal-pale:  #F0F9FF;
       --gray-900:   #0F172A;
       --gray-700:   #334155;
@@ -225,15 +226,44 @@
       overflow: hidden;
       padding-top: 68px;
     }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(125,211,252,0.16), transparent 34%),
+        radial-gradient(circle at 84% 18%, rgba(14,165,233,0.10), transparent 26%);
+      pointer-events: none;
+    }
 
     .hero__body {
       flex: 1;
       display: flex;
       align-items: center;
       padding: 72px 0 220px;
+      position: relative;
+      z-index: 1;
     }
 
     .hero__content { max-width: 620px; }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: rgba(255,255,255,0.78);
+      text-transform: uppercase;
+    }
+    .hero__eyebrow::before {
+      content: '';
+      width: 26px;
+      height: 1px;
+      background: rgba(125,211,252,0.72);
+    }
 
     .hero__badge {
       display: inline-flex;
@@ -259,6 +289,19 @@
     @keyframes breathe {
       0%, 100% { opacity: 1; transform: scale(1); }
       50%       { opacity: 0.4; transform: scale(0.75); }
+    }
+
+    .hero__brand {
+      display: block;
+      font-size: clamp(64px, 16vw, 190px);
+      line-height: 0.88;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.08);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      text-shadow: 0 0 36px rgba(56,189,248,0.12);
+      user-select: none;
     }
 
     .hero__title {
@@ -312,6 +355,79 @@
       flex-shrink: 0;
     }
 
+    .hero__ornament {
+      position: absolute;
+      right: max(28px, calc((100vw - 1080px) / 2 + 28px));
+      top: 132px;
+      width: min(32vw, 360px);
+      height: 420px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.94;
+    }
+    .hero__droplet {
+      position: absolute;
+      left: 54%;
+      top: 0;
+      width: 18px;
+      height: 30px;
+      border-radius: 50% 50% 60% 60%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(125,211,252,0.28));
+      box-shadow: 0 0 24px rgba(125,211,252,0.34);
+      filter: blur(0.2px);
+      transform-origin: center bottom;
+      animation: heroDrop 4.6s ease-in-out infinite;
+    }
+    .hero__droplet::before {
+      content: '';
+      position: absolute;
+      inset: 4px 4px 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.58);
+      filter: blur(1px);
+    }
+    .hero__droplet::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+      background: inherit;
+      border-radius: 50% 50% 0 50%;
+      transform: rotate(45deg);
+    }
+    .hero__ripple,
+    .hero__ripple::before,
+    .hero__ripple::after {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      width: 170px;
+      height: 40px;
+      border: 1px solid rgba(125,211,252,0.42);
+      border-radius: 50%;
+      transform: translateX(-50%) scale(0.68);
+      opacity: 0;
+      content: '';
+      animation: heroRipple 4.6s ease-out infinite;
+    }
+    .hero__ripple::before { animation-delay: 0.18s; }
+    .hero__ripple::after { animation-delay: 0.36s; }
+
+    @keyframes heroDrop {
+      0%, 16% { transform: translate(-50%, 0) scale(0.72); opacity: 0; }
+      28% { transform: translate(-50%, 24px) scale(1); opacity: 1; }
+      54% { transform: translate(-50%, 228px) scale(0.9, 1.08); opacity: 1; }
+      60% { transform: translate(-50%, 250px) scale(1.18, 0.68); opacity: 0.72; }
+      70%, 100% { transform: translate(-50%, 262px) scale(0.35); opacity: 0; }
+    }
+    @keyframes heroRipple {
+      0%, 54% { opacity: 0; transform: translateX(-50%) scale(0.52); }
+      60% { opacity: 0.56; transform: translateX(-50%) scale(0.72); }
+      100% { opacity: 0; transform: translateX(-50%) scale(1.28); }
+    }
+
     /* Wave Canvas */
     #heroWave {
       position: absolute;
@@ -324,9 +440,121 @@
     }
 
     /* ─── Section Commons ─────────────────────────── */
-    .section { padding: 100px 0; }
-    .section--alt   { background: var(--gray-50); }
-    .section--pale  { background: var(--teal-pale); }
+    .section,
+    .cta-section {
+      position: relative;
+      padding: 100px 0;
+      background: var(--white);
+      overflow: hidden;
+    }
+    .section--alt,
+    .section--pale { background: var(--white); }
+
+    .section-water {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 120px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .section-water--top {
+      inset: 0 0 auto 0;
+    }
+    .section-water__drop {
+      position: absolute;
+      top: 8px;
+      right: 18%;
+      width: 12px;
+      height: 20px;
+      border-radius: 50% 50% 60% 60%;
+      background: linear-gradient(180deg, rgba(56,189,248,0.36), rgba(14,165,233,0.08));
+      box-shadow: 0 0 16px rgba(14,165,233,0.12);
+      animation: sectionDrop 6.8s ease-in-out infinite;
+    }
+    .section-water__drop::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50% 50% 0 50%;
+      background: inherit;
+      transform: rotate(45deg);
+    }
+    .section-water__ripple {
+      position: absolute;
+      right: calc(18% - 46px);
+      bottom: 18px;
+      width: 112px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(56,189,248,0.22);
+      animation: sectionRipple 6.8s ease-out infinite;
+      opacity: 0;
+    }
+    .section-water__ripple::before,
+    .section-water__ripple::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: inherit;
+      animation: inherit;
+      animation-delay: 0.18s;
+    }
+    .section-water__ripple::after { animation-delay: 0.36s; }
+    .section-water__line {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: min(78vw, 860px);
+      height: 56px;
+      transform: translateX(-50%);
+      opacity: 0.72;
+    }
+    .section-water__line svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .section-water__line path {
+      fill: none;
+      stroke: rgba(56,189,248,0.18);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+    }
+    .section-water--top .section-water__drop {
+      top: 24px;
+    }
+    .section-water--top .section-water__ripple {
+      top: 78px;
+      bottom: auto;
+    }
+    .section-water--top .section-water__line {
+      top: 0;
+      bottom: auto;
+      transform: translateX(-50%) scaleY(-1);
+    }
+    .section > .container,
+    .cta-section > .container,
+    .cta-section__inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes sectionDrop {
+      0%, 14% { transform: translateY(0) scale(0.7); opacity: 0; }
+      24% { transform: translateY(10px) scale(1); opacity: 0.85; }
+      50% { transform: translateY(52px) scale(0.92, 1.06); opacity: 0.72; }
+      58% { transform: translateY(66px) scale(1.18, 0.72); opacity: 0.3; }
+      68%, 100% { transform: translateY(70px) scale(0.3); opacity: 0; }
+    }
+    @keyframes sectionRipple {
+      0%, 50% { transform: scale(0.58); opacity: 0; }
+      58% { transform: scale(0.8); opacity: 0.48; }
+      100% { transform: scale(1.32); opacity: 0; }
+    }
 
     .section__tag {
       display: inline-flex;
@@ -653,46 +881,48 @@
 
     /* ─── CTA Section ────────────────────────────── */
     .cta-section {
-      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
       padding: 108px 0;
       text-align: center;
-      position: relative;
-      overflow: hidden;
+      border-top: 1px solid rgba(14,165,233,0.08);
+      border-bottom: 1px solid rgba(14,165,233,0.08);
     }
     .cta-section::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--teal), var(--teal-light), var(--teal));
+      inset: 0;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(14,165,233,0.05), transparent 26%),
+        radial-gradient(circle at 88% 72%, rgba(56,189,248,0.08), transparent 28%);
+      pointer-events: none;
     }
     /* Subtle wave decoration on CTA */
     .cta-section__wave {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       height: 80px;
-      opacity: 0.08;
+      opacity: 0.58;
       pointer-events: none;
+      transform: scaleY(-1);
     }
     .cta-section__inner { position: relative; z-index: 1; }
     .cta-kicker {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.18em;
-      color: var(--teal-light);
+      color: var(--teal);
       margin-bottom: 20px;
     }
     .cta-title {
       font-size: clamp(24px, 3.5vw, 38px);
       font-weight: 700;
-      color: var(--white);
+      color: var(--navy);
       line-height: 1.5;
       margin-bottom: 20px;
       letter-spacing: -0.015em;
     }
     .cta-body {
       font-size: 16px;
-      color: rgba(255,255,255,0.62);
+      color: var(--gray-500);
       line-height: 2;
       margin-bottom: 48px;
       max-width: 520px;
@@ -702,7 +932,7 @@
     .cta-note {
       margin-top: 20px;
       font-size: 13px;
-      color: rgba(255,255,255,0.38);
+      color: var(--gray-500);
     }
 
     /* ─── Footer ─────────────────────────────────── */
@@ -768,9 +998,18 @@
       .hamburger { display: flex; }
 
       .hero__body { padding: 52px 0 220px; }
+      .hero__brand { font-size: clamp(52px, 22vw, 120px); }
       .hero__actions { flex-direction: column; }
       .hero__actions .btn { width: 100%; }
       .hero__trust { gap: 14px; }
+      .hero__ornament {
+        right: 24px;
+        top: auto;
+        bottom: 110px;
+        width: 180px;
+        height: 250px;
+        opacity: 0.7;
+      }
 
       .problems__grid { grid-template-columns: 1fr; }
       .value__grid    { grid-template-columns: 1fr; }
@@ -785,6 +1024,8 @@
 
       .authority-profile { flex-direction: column; text-align: center; }
       .authority-quote   { padding: 0 4px; font-size: 15px; }
+      .section-water__drop { right: 14%; }
+      .section-water__ripple { right: calc(14% - 46px); }
     }
   </style>
 </head>
@@ -833,10 +1074,12 @@
 <section class="hero">
   <div class="container hero__body">
     <div class="hero__content">
+      <div class="hero__eyebrow">MITAS</div>
       <div class="hero__badge">
         <span class="hero__badge-dot"></span>
         医療・介護事業者向け
       </div>
+      <span class="hero__brand" aria-hidden="true">MITAS</span>
       <h1 class="hero__title">
         人材課題に、<br>
         <em>現場理解のある</em><br>
@@ -860,6 +1103,11 @@
     </div>
   </div>
 
+  <div class="hero__ornament" aria-hidden="true">
+    <div class="hero__droplet"></div>
+    <div class="hero__ripple"></div>
+  </div>
+
   <!-- 水面アニメーション -->
   <canvas id="heroWave" aria-hidden="true"></canvas>
 </section>
@@ -867,6 +1115,13 @@
 
 <!-- ══════════════ PROBLEMS ══════════════ -->
 <section class="section section--alt" id="problems">
+  <div class="section-water" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,48 C120,34 220,62 336,48 C468,32 558,66 682,50 C820,32 942,66 1060,50 C1118,42 1162,40 1200,48"/></svg>
+    </div>
+  </div>
   <div class="container">
     <div class="section__tag">よくある課題</div>
     <h2 class="section__title">こんなお悩みはありませんか？</h2>
@@ -919,6 +1174,13 @@
 
 <!-- ══════════════ VALUE ══════════════ -->
 <section class="section" id="value">
+  <div class="section-water section-water--top" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,48 C126,28 226,64 340,48 C470,30 562,62 686,46 C826,30 948,64 1064,48 C1116,40 1160,38 1200,48"/></svg>
+    </div>
+  </div>
   <div class="container">
     <div class="section__tag">サービス概要</div>
     <h2 class="section__title">MITASができること</h2>
@@ -947,6 +1209,13 @@
 
 <!-- ══════════════ REASONS ══════════════ -->
 <section class="section section--alt" id="reasons">
+  <div class="section-water" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,50 C140,36 236,62 354,48 C472,34 582,60 704,46 C836,32 952,64 1072,48 C1124,40 1166,40 1200,50"/></svg>
+    </div>
+  </div>
   <div class="container">
     <div class="section__tag">選ばれる理由</div>
     <h2 class="section__title">MITASが選ばれる理由</h2>
@@ -979,6 +1248,13 @@
 
 <!-- ══════════════ AUTHORITY ══════════════ -->
 <section class="section" id="authority">
+  <div class="section-water section-water--top" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,46 C132,34 242,62 360,46 C474,30 594,60 720,46 C850,32 966,64 1080,48 C1130,42 1168,40 1200,46"/></svg>
+    </div>
+  </div>
   <div class="container">
     <div class="section__tag section__tag--center">私たちの考え方</div>
     <h2 class="section__title section__title--center" style="margin-bottom:52px;">現場を理解した支援を目指して</h2>
@@ -1010,6 +1286,13 @@
 
 <!-- ══════════════ FLOW ══════════════ -->
 <section class="section section--alt" id="flow">
+  <div class="section-water" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,48 C112,36 214,62 326,48 C452,32 574,66 698,50 C836,32 944,62 1068,48 C1120,42 1160,40 1200,48"/></svg>
+    </div>
+  </div>
   <div class="container">
     <div class="section__tag section__tag--center">ご利用の流れ</div>
     <h2 class="section__title section__title--center">ご利用の流れ</h2>
@@ -1061,8 +1344,15 @@
 <!-- ══════════════ CTA ══════════════ -->
 <section class="cta-section" id="contact">
   <svg class="cta-section__wave" viewBox="0 0 1440 80" preserveAspectRatio="none">
-    <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z" fill="white"/>
+    <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z" fill="rgba(56,189,248,0.12)"/>
   </svg>
+  <div class="section-water" aria-hidden="true">
+    <div class="section-water__drop"></div>
+    <div class="section-water__ripple"></div>
+    <div class="section-water__line">
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,50 C132,38 234,62 346,50 C468,36 584,64 702,48 C832,34 948,64 1070,50 C1126,42 1168,40 1200,50"/></svg>
+    </div>
+  </div>
   <div class="cta-section__inner container">
     <p class="cta-kicker">CONTACT</p>
     <h2 class="cta-title">まずはお気軽に<br>ご相談ください</h2>
