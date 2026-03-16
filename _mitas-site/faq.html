@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>よくある質問 | MITAS</title>
+  <meta name="description" content="MITASのよくある質問（FAQ）。サービス内容・費用・マッチング・ご利用の流れについてまとめています。">
+  <link rel="canonical" href="https://mitas.necofindjob.com/faq.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="よくある質問 | MITAS">
+  <meta property="og:description" content="MITASのよくある質問。サービス内容・費用・マッチングについてご確認いただけます。">
+  <meta property="og:url" content="https://mitas.necofindjob.com/faq.html">
+  <meta property="og:site_name" content="MITAS">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Base ─────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --teal-pale:  #F0F9FF;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
+      --white:      #FFFFFF;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md:  0 4px 20px rgba(0,0,0,0.08);
+      --radius:     8px;
+      --radius-lg:  14px;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--gray-700);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ─── Header ──────────────────────── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .header__logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--navy);
+    }
+    .header__logo svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .header__nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      transition: color 0.2s;
+    }
+    .header__nav a:hover { color: var(--teal); }
+    .header__nav a.active { color: var(--navy); font-weight: 600; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s var(--ease);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--primary {
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(14,165,233,0.3);
+    }
+    .btn--primary:hover { background: var(--teal-light); }
+
+    .btn--white {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: var(--shadow-md);
+    }
+    .btn--white:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      padding: 20px 28px 28px;
+    }
+    .mobile-nav a {
+      padding: 14px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .mobile-nav .btn { margin-top: 20px; width: 100%; justify-content: center; }
+
+    /* ─── Page Hero ───────────────────── */
+    .page-hero {
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 72px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    }
+    .page-hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--teal-light);
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+    .page-hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ─── FAQ Layout ──────────────────── */
+    .faq-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 28px 100px;
+    }
+
+    /* ─── Category Tabs ───────────────── */
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+
+    .category-tab {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-500);
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .category-tab:hover,
+    .category-tab.active {
+      background: var(--teal-pale);
+      color: var(--teal);
+      border-color: rgba(14,165,233,0.3);
+    }
+
+    /* ─── FAQ Group ───────────────────── */
+    .faq-group { margin-bottom: 56px; }
+
+    .faq-group__label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--teal);
+      margin-bottom: 20px;
+    }
+    .faq-group__label::before {
+      content: '';
+      display: block;
+      width: 16px; height: 2px;
+      background: var(--teal);
+    }
+
+    .faq-group__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ─── FAQ Accordion (details/summary) */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    details.faq-item {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    details.faq-item[open] {
+      border-color: rgba(14,165,233,0.35);
+      box-shadow: 0 4px 16px rgba(14,165,233,0.08);
+    }
+
+    summary.faq-item__q {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px 24px;
+      cursor: pointer;
+      list-style: none;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.6;
+      transition: background 0.15s;
+    }
+    summary.faq-item__q:hover { background: var(--gray-50); }
+    summary.faq-item__q::-webkit-details-marker { display: none; }
+
+    .faq-item__q-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--teal);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .faq-item__q-text { flex: 1; }
+
+    .faq-item__q-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      color: var(--gray-500);
+      transition: transform 0.2s;
+    }
+    details[open] .faq-item__q-icon { transform: rotate(45deg); color: var(--teal); }
+
+    .faq-item__a {
+      padding: 0 24px 20px 62px;
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.9;
+    }
+
+    .faq-item__a p + p { margin-top: 12px; }
+
+    .faq-item__a a {
+      color: var(--teal);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ─── CTA Inline ──────────────────── */
+    .faq-cta {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px;
+      text-align: center;
+      margin-top: 64px;
+    }
+
+    .faq-cta p:first-child {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .faq-cta p:nth-child(2) {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    /* ─── CTA Section ─────────────────── */
+    .cta-section {
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 88px 0;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    }
+
+    .cta-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: var(--teal-light); margin-bottom: 20px; }
+    .cta-title  { font-size: clamp(22px, 3vw, 34px); font-weight: 700; color: var(--white); line-height: 1.5; margin-bottom: 18px; letter-spacing: -0.01em; }
+    .cta-body   { font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.9; margin-bottom: 44px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-note   { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.38); }
+
+    /* ─── Footer ──────────────────────── */
+    footer { background: var(--navy-mid); padding: 56px 0 36px; }
+
+    .footer__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      padding-bottom: 40px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .footer__logo svg { width: 20px; height: 20px; }
+    .footer__tagline { font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.75; }
+    .footer__links { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .footer__links a { font-size: 13px; color: rgba(255,255,255,0.52); transition: color 0.2s; }
+    .footer__links a:hover { color: var(--white); }
+    .footer__bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .footer__copy { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco { font-size: 12px; color: rgba(255,255,255,0.28); }
+    .footer__neco a { color: rgba(255,255,255,0.48); transition: color 0.2s; }
+    .footer__neco a:hover { color: var(--white); }
+
+    /* ─── Responsive ──────────────────── */
+    @media (max-width: 768px) {
+      .header__nav, .header__cta { display: none; }
+      .hamburger { display: flex; }
+      .faq-wrap { padding: 56px 20px 80px; }
+      .faq-item__a { padding-left: 24px; }
+      .faq-cta { padding: 28px 20px; }
+      .footer__top { flex-direction: column; }
+      .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 14px 20px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="container">
+    <div class="header__inner">
+      <a href="/" class="header__logo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                fill="rgba(14,165,233,0.12)"/>
+        </svg>
+        MITAS
+      </a>
+      <nav class="header__nav">
+        <a href="/">トップ</a>
+        <a href="/#problems">課題</a>
+        <a href="/#reasons">選ばれる理由</a>
+        <a href="/#flow">ご利用の流れ</a>
+        <a href="/faq.html" class="active">よくある質問</a>
+      </nav>
+      <a href="/#contact" class="btn btn--primary header__cta">まずは相談する</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="/" onclick="closeMobileNav()">トップ</a>
+    <a href="/#problems" onclick="closeMobileNav()">課題</a>
+    <a href="/#reasons" onclick="closeMobileNav()">選ばれる理由</a>
+    <a href="/#flow" onclick="closeMobileNav()">ご利用の流れ</a>
+    <a href="/faq.html" onclick="closeMobileNav()">よくある質問</a>
+    <a href="/#contact" class="btn btn--primary" onclick="closeMobileNav()">まずは相談する</a>
+  </div>
+</header>
+
+
+<!-- ══════════ PAGE HERO ══════════ -->
+<div class="page-hero">
+  <p class="page-hero__tag">FAQ</p>
+  <h1>よくある質問</h1>
+  <p>人員要件充足支援に関するご質問をまとめています。</p>
+</div>
+
+
+<!-- ══════════ FAQ CONTENT ══════════ -->
+<div class="faq-wrap">
+
+  <!-- Category: サービスについて -->
+  <div class="faq-group">
+    <div class="faq-group__label">SERVICE</div>
+    <h2 class="faq-group__title">サービスについて</h2>
+
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">MITASとはどのようなサービスですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>MITASは、医療機関・介護事業所の急な欠員に対し、施設基準・加算・稼働に影響しうる人員要件を整理し、要件を満たす人材充足を支援するサービスです。</p>
+          <p>「採用支援」ではなく、「施設基準・加算・稼働を守るための人員要件充足支援」として設計されています。急な欠員で採用活動を待つ余裕がない局面、必要な要件が整理できていない状況からでもご相談いただけます。</p>
+          <p>「まず状況を整理したい」という段階からお気軽にご相談ください。売り込みは一切行いません。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">どのような施設・事業者が対象ですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>主に施設基準・加算・稼働に関わる人員要件が課題となっている医療機関・介護事業所が対象です。規模を問わずご相談いただけます。</p>
+          <p>主な対象：病院・医療法人（急性期・療養・精神など）、訪問看護ステーション、クリニック・診療所、介護施設・グループホーム、通所・訪問介護事業所 など。</p>
+          <p>運営責任者・事務長・看護部長・管理者など、運営上の意思決定を担う方からのご相談を多くいただいています。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">どのような職種に対応していますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>看護師・薬剤師を中心に、理学療法士・作業療法士・言語聴覚士、介護士・ケアマネジャーなど、施設基準・加算に関わる主要な職種に対応しています。</p>
+          <p>特に施設基準上の人員配置や加算の算定体制に関わる職種のご相談に対応しています。対象職種や対応可否については、まずご相談ください。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">対応エリアはどこですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>オンライン・電話でのヒアリングを基本としており、全国の施設様からご相談いただいています。まずはお気軽にお問い合わせください。</p>
+        </div>
+      </details>
+
+    </div>
+  </div><!-- /faq-group -->
+
+
+  <!-- Category: 費用について -->
+  <div class="faq-group">
+    <div class="faq-group__label">PRICING</div>
+    <h2 class="faq-group__title">費用・料金について</h2>
+
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">相談・登録に費用はかかりますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>お問い合わせ・ヒアリング・ご提案までは完全無料です。費用が発生するのは、採用が成立した場合のみの成功報酬型となっています。</p>
+          <p>「まず話を聞いてみたい」という段階でも、安心してご相談ください。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">成功報酬の金額はどのくらいですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>成功報酬の金額は、職種・雇用形態・採用年収等によって異なります。個別のお見積もりについては、ヒアリング後に担当コンシェルジュよりご案内します。</p>
+          <p>事前に概算だけでも確認したい場合は、その旨をお問い合わせ時にお伝えください。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">採用に至らなかった場合も費用はかかりますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>採用が成立しない限り、費用は一切発生しません。ヒアリング・提案・候補者の選考過程など、採用成立前のすべてのプロセスは無料でご利用いただけます。</p>
+        </div>
+      </details>
+
+    </div>
+  </div><!-- /faq-group -->
+
+
+  <!-- Category: 要件充足・マッチング -->
+  <div class="faq-group">
+    <div class="faq-group__label">REQUIREMENTS</div>
+    <h2 class="faq-group__title">要件整理・充足支援について</h2>
+
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">施設基準や加算要件の確認も一緒に相談できますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>制度上の基準に関する法的な判断はお伝えできませんが、一般的な人員配置基準の考え方を踏まえた要件整理のサポートを行います。</p>
+          <p>「看護配置基準のラインが心配」「薬剤師の体制が薄くなっている」「常勤換算要件を維持できるか不安」といった状況から、必要な要件を一緒に整理します。詳細な制度確認が必要な場合は、所管行政機関等へのご確認をお勧めします。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">要件整理だけの相談もできますか？採用が前提でないとダメですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>要件整理だけのご相談も歓迎します。「今すぐ採用できるかわからない」「まず何が必要かを整理したい」という段階からお気軽にご相談ください。</p>
+          <p>採用ありきで話を進めることはしません。まず状況を整理した上で、対応可能な選択肢をご案内します。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">単発・短期・中長期のいずれも対応できますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>状況に応じて、単発・短期・中長期での対応を検討します。まずは現在の状況と必要な期間・条件をお聞かせください。</p>
+          <p>常勤採用だけでなく、非常勤・スポットなど、実態に即した対応の検討も可能です。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">複数の職種・ポジションを同時に依頼できますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>はい、可能です。複数の職種・雇用形態に対応しています。優先度や緊急度をお伝えいただければ、それに合わせてご支援します。</p>
+          <p>「看護師とリハビリ職を同時に探している」「薬剤師は急ぎだが介護士は中長期で構わない」など、状況に応じた対応が可能です。</p>
+        </div>
+      </details>
+
+    </div>
+  </div><!-- /faq-group -->
+
+
+  <!-- Category: ご利用の流れ -->
+  <div class="faq-group">
+    <div class="faq-group__label">HOW IT WORKS</div>
+    <h2 class="faq-group__title">ご相談の流れについて</h2>
+
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">まず何から始めればいいですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>お問い合わせフォームから、現在の状況をざっくりお知らせいただくだけで大丈夫です。「採用に困っている」「相談できる先を探している」それだけで十分です。</p>
+          <p>詳細なお悩みや要件は、その後のヒアリングでゆっくりお聞きします。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">ヒアリングはどのような形で行いますか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>オンライン（Zoom・Teamsなど）または電話にて、30〜60分程度を目安にお話を伺います。施設のご状況やご要件を確認した上で、次のステップをご提案します。</p>
+          <p>ご都合の良い日時・方法をお知らせください。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">契約書などの書面は必要ですか？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>採用が成立し、成功報酬が発生する際には、別途ご契約をお願いしています。ご相談・ヒアリング・候補者のご紹介の段階では、書類・押印等は必要ありません。</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span class="faq-item__q-badge">Q</span>
+          <span class="faq-item__q-text">解決できない場合や、サービスが合わないと感じた場合は？</span>
+          <span class="faq-item__q-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="faq-item__a">
+          <p>MITASで対応が難しい場合でも、課題整理のヒアリングをもとに、他の適切なサービスや専門機関をご案内できることがあります。「合わなかった」で終わらず、次の一手を一緒に考えます。</p>
+        </div>
+      </details>
+
+    </div>
+  </div><!-- /faq-group -->
+
+
+  <!-- Inline CTA -->
+  <div class="faq-cta">
+    <p>施設基準・加算・稼働が揺らぐ前に、まずご相談を</p>
+    <p>急な欠員、人員要件の整理、充足のご相談まで。<br>売り込みはしません。まずは現在の状況をお聞かせください。</p>
+    <!-- TODO：href を実際の問い合わせフォームURLに変更してください -->
+    <a href="/#contact" class="btn btn--primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      お問い合わせはこちら
+    </a>
+  </div>
+
+</div><!-- /faq-wrap -->
+
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta-section">
+  <div class="container">
+    <p class="cta-kicker">CONTACT</p>
+    <h2 class="cta-title">施設基準・加算・稼働への影響が<br>出る前に、ご相談ください</h2>
+    <p class="cta-body">
+      急な欠員、人員要件の整理、充足のご相談まで。<br>
+      まずは現在の状況をお聞かせいただくところから始めます。
+    </p>
+    <!-- TODO：href を実際の問い合わせフォームURLに変更してください -->
+    <a href="mailto:info@mitas.example.com" class="btn btn--white">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      お問い合わせはこちら
+    </a>
+    <p class="cta-note">売り込みはありません。まずはお気軽に。</p>
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <div class="footer__logo">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                  stroke="rgba(56,189,248,0.75)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  fill="rgba(14,165,233,0.1)"/>
+          </svg>
+          MITAS
+        </div>
+        <p class="footer__tagline">施設基準・加算・稼働を守るための<br>人員要件充足支援。</p>
+      </div>
+      <div class="footer__links">
+        <a href="/">トップページ</a>
+        <a href="/company.html">会社概要</a>
+        <a href="/faq.html">よくある質問</a>
+        <a href="/guide.html">ご利用ガイド</a>
+        <a href="/privacy-policy.html">プライバシーポリシー</a>
+        <a href="/terms.html">利用規約</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copy">&copy; 2026 MITAS. All rights reserved.</span>
+      <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+  const btn = document.getElementById('hamburgerBtn');
+  const nav = document.getElementById('mobileNav');
+  btn.addEventListener('click', () => {
+    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  });
+  window.closeMobileNav = () => { nav.style.display = 'none'; };
+}());
+</script>
+
+</body>
+</html>
