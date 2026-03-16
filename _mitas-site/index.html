@@ -247,6 +247,24 @@
 
     .hero__content { max-width: 640px; }
 
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: rgba(255,255,255,0.78);
+      text-transform: uppercase;
+    }
+    .hero__eyebrow::before {
+      content: '';
+      width: 26px;
+      height: 1px;
+      background: rgba(125,211,252,0.72);
+    }
+
     .hero__badge {
       display: inline-flex;
       align-items: center;
@@ -282,6 +300,8 @@
       color: rgba(255,255,255,0.88);
       margin-bottom: 16px;
       text-transform: uppercase;
+      text-shadow: 0 0 36px rgba(56,189,248,0.12);
+      user-select: none;
     }
 
     .hero__title {
@@ -1240,11 +1260,12 @@
 <section class="hero">
   <div class="container hero__body">
     <div class="hero__content">
-      <span class="hero__brand">MITAS</span>
+      <div class="hero__eyebrow">MITAS</div>
       <div class="hero__badge">
         <span class="hero__badge-dot"></span>
         病院・訪問看護・介護事業所の人員要件充足支援
       </div>
+      <span class="hero__brand">MITAS</span>
       <h1 class="hero__title">
         急な欠員で、<br>
         <em>施設基準・加算・稼働</em>が<br>

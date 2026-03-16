@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>会社概要 | MITAS</title>
-  <meta name="description" content="MITASの会社概要・理念・サービス内容についてご紹介します。医療・介護事業者の人材課題に、現場理解のある支援を提供します。">
+  <title>会社概要 | 株式会社Neco</title>
+  <meta name="description" content="株式会社Necoの会社概要、企業理念、代表メッセージ、事業の特徴、沿革をご紹介します。医療従事者の専門性を適切に評価し、より良い医療の未来を創造します。">
   <link rel="canonical" href="https://mitas.necofindjob.com/company.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="会社概要 | MITAS">
-  <meta property="og:description" content="MITASの会社概要・理念・サービス内容についてご紹介します。">
+  <meta property="og:title" content="会社概要 | 株式会社Neco">
+  <meta property="og:description" content="株式会社Necoの会社概要、企業理念、代表メッセージ、事業の特徴、沿革をご紹介します。">
   <meta property="og:url" content="https://mitas.necofindjob.com/company.html">
   <meta property="og:site_name" content="MITAS">
   <meta property="og:locale" content="ja_JP">
@@ -364,6 +364,15 @@
       color: var(--teal);
     }
 
+    .overview-table ul {
+      margin: 0;
+      padding-left: 1.2em;
+    }
+
+    .overview-table li + li {
+      margin-top: 6px;
+    }
+
     .todo-tag {
       display: inline-block;
       font-size: 11px;
@@ -378,7 +387,7 @@
     /* ─── Service Features ────────────── */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 24px;
     }
 
@@ -415,6 +424,39 @@
     .feature-card__body {
       font-size: 14px;
       color: var(--gray-500);
+      line-height: 1.85;
+    }
+
+    /* ─── History ─────────────────────── */
+    .history-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .history-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 24px;
+      align-items: start;
+      padding: 24px 28px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .history-item__date {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 0.04em;
+    }
+
+    .history-item__body {
+      font-size: 15px;
+      color: var(--gray-700);
       line-height: 1.85;
     }
 
@@ -596,6 +638,11 @@
       .overview-table td { padding: 16px; }
 
       .message-card { padding: 28px; }
+      .history-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 22px 20px;
+      }
 
       .footer__top { flex-direction: column; }
       .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 14px 20px; }
@@ -647,47 +694,43 @@
 <div class="page-hero">
   <p class="page-hero__tag">ABOUT US</p>
   <h1>会社概要</h1>
-  <p>MITASが目指すこと、私たちの考え方をご紹介します。</p>
+  <p>MITASを運営する株式会社Necoの理念と事業についてご紹介します。</p>
 </div>
 
 
 <!-- ══════════ PHILOSOPHY ══════════ -->
 <section class="section">
   <div class="container">
-    <div class="section__tag">理念</div>
-    <h2 class="section__title">MITASが目指すもの</h2>
+    <div class="section__tag">企業理念</div>
+    <h2 class="section__title">医療の未来を、キャリアの力から支える</h2>
 
     <p class="philosophy-quote fu">
-      医療・介護の現場で起こる人材課題は、<br>
-      単なる「採用の問題」ではありません。<br>
-      運営の安定、スタッフの定着、そして患者・利用者へのケアの質にまで<br>
-      深く関わるテーマです。<br><br>
-      私たちは、現場の声に耳を傾け、<br>
-      表面的な条件のマッチングではなく、<br>
-      「本当に必要な支援」を一緒に考え続けることを大切にしています。
+      医療従事者一人ひとりの専門性を適切に評価し、<br>
+      最適なキャリアの実現を通じて、<br>
+      より良い医療の未来を創造します。
     </p>
 
     <div class="pillars">
       <div class="pillar fu">
         <div class="pillar__icon">
-          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/><path d="M9.5 12.5l1.8 1.8 3.7-4.3"/></svg>
         </div>
-        <div class="pillar__title">現場理解</div>
-        <p class="pillar__body">医療・介護業界に特有の採用難、シフトの複雑さ、職員の疲弊構造を深く理解した上で支援します。</p>
+        <div class="pillar__title">専門性の適切な評価</div>
+        <p class="pillar__body">医療従事者一人ひとりが持つ経験、スキル、志向を丁寧に捉え、表面的ではない評価につなげます。</p>
       </div>
       <div class="pillar fu">
         <div class="pillar__icon">
-          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M3 12h7V5l11 7-11 7v-7H3z"/></svg>
         </div>
-        <div class="pillar__title">対話を大切にする支援</div>
-        <p class="pillar__body">数字だけで判断するのではなく、現場のリアルを丁寧にヒアリングし、課題の本質を一緒に探ります。</p>
+        <div class="pillar__title">最適なキャリアの実現</div>
+        <p class="pillar__body">単なる転職支援ではなく、医療従事者が誇りを持って働き続けられるキャリア形成を支えます。</p>
       </div>
       <div class="pillar fu">
         <div class="pillar__icon">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M2 12h4l2 7 4-14 2 7h8"/></svg>
         </div>
-        <div class="pillar__title">誠実な伴走</div>
-        <p class="pillar__body">サービスを押しつけることなく、事業者の方が本当に必要な支援に辿り着けるよう、共に歩みます。</p>
+        <div class="pillar__title">より良い医療の未来</div>
+        <p class="pillar__body">人と職場の最適な出会いを積み重ねることで、医療現場の質と持続可能性の向上に貢献します。</p>
       </div>
     </div>
   </div>
@@ -703,30 +746,57 @@
     <div class="overview-wrap">
       <table class="overview-table fu">
         <tr>
-          <th>サービス名</th>
-          <td>MITAS（ミタス）</td>
+          <th>商号</th>
+          <td>株式会社Neco</td>
         </tr>
         <tr>
-          <th>事業内容</th>
-          <td>医療・介護事業者向け人材支援サービス（採用・配置・定着に関するコンサルティング・マッチング）</td>
+          <th>商号（フリガナ）</th>
+          <td>カブシキガイシャネコ</td>
         </tr>
         <tr>
           <th>設立</th>
-          <td><!-- TODO：実際の設立年を記載 -->設立年度<span class="todo-tag">要更新</span></td>
+          <td>2025年7月9日</td>
         </tr>
         <tr>
           <th>代表者</th>
-          <td><!-- TODO：代表者名を記載 -->代表者名<span class="todo-tag">要更新</span></td>
+          <td>代表取締役 近藤 壯一朗</td>
         </tr>
         <tr>
-          <th>所在地</th>
-          <td><!-- TODO：住所を記載 -->所在地<span class="todo-tag">要更新</span></td>
+          <th>資本金</th>
+          <td>5,500,000円</td>
+        </tr>
+        <tr>
+          <th>法人番号</th>
+          <td>5010001256635</td>
+        </tr>
+        <tr>
+          <th>本社所在地</th>
+          <td>
+            〒160-0023<br>
+            東京都新宿区西新宿一丁目20-3 西新宿髙木ビル7階S-04
+          </td>
+        </tr>
+        <tr>
+          <th>事業内容</th>
+          <td>
+            <ul>
+              <li>有料職業紹介事業（医療系人材紹介）</li>
+              <li>AI技術を活用した医療マッチングシステムの開発・運営</li>
+              <li>訪問看護ステーションの経営支援</li>
+              <li>医療機関向けコンサルティング事業</li>
+              <li>医療従事者向けキャリア支援サービス</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th>許認可</th>
+          <td>有料職業紹介事業許可番号：13-ユ-319230（令和8年3月1日）</td>
         </tr>
         <tr>
           <th>お問い合わせ</th>
           <td>
-            <!-- TODO：実際の問い合わせ先に変更 -->
-            問い合わせフォームまたは担当コンシェルジュへ<span class="todo-tag">要更新</span>
+            Email: <a href="mailto:neco.oncall@gmail.com">neco.oncall@gmail.com</a><br>
+            LINEでもご相談いただけます
           </td>
         </tr>
         <tr>
@@ -745,24 +815,29 @@
 <!-- ══════════ SERVICE FEATURES ══════════ -->
 <section class="section">
   <div class="container">
-    <div class="section__tag">サービス</div>
-    <h2 class="section__title">MITASが提供する支援</h2>
+    <div class="section__tag">事業の特徴</div>
+    <h2 class="section__title">AIと現場理解を掛け合わせた医療人材支援</h2>
 
     <div class="features-grid">
       <div class="feature-card fu">
         <div class="feature-card__num">01</div>
-        <div class="feature-card__title">人材課題の整理・言語化</div>
-        <p class="feature-card__body">「採用がうまくいかない」「定着しない」という課題を、現場の実情を踏まえて丁寧に整理します。何が本質的な問題かを一緒に見つけるところから始めます。</p>
+        <div class="feature-card__title">AIを活用した次世代型マッチング</div>
+        <p class="feature-card__body">Necoは、従来の人材紹介サービスとは一線を画す、AI技術を活用した次世代型の医療人材マッチングプラットフォームです。</p>
       </div>
       <div class="feature-card fu">
         <div class="feature-card__num">02</div>
-        <div class="feature-card__title">現場理解を踏まえた支援提案</div>
-        <p class="feature-card__body">一般的な人材紹介とは異なり、医療・介護現場の特性・文化・チーム構成を考慮した上で、状況に合った支援の方向性をご提案します。</p>
+        <div class="feature-card__title">関東4都県の在宅医療ネットワーク</div>
+        <p class="feature-card__body">現在は東京都・千葉県・埼玉県・神奈川県の関東4都県を対象に、在宅医療・訪問看護分野に特化した独自の医師・看護師ネットワークを構築しています。</p>
       </div>
       <div class="feature-card fu">
         <div class="feature-card__num">03</div>
-        <div class="feature-card__title">採用後の定着・フォロー</div>
-        <p class="feature-card__body">採用して終わりではありません。入職後のフォローや定着支援についても、必要に応じてご相談に応じます。</p>
+        <div class="feature-card__title">専門性の定量評価とAIコンシェルジュ</div>
+        <p class="feature-card__body">医師・看護師一人ひとりの専門性を定量的に評価し、単なる求人情報の提供ではなく、AIコンシェルジュによる最適なキャリアマッチングを実現します。</p>
+      </div>
+      <div class="feature-card fu">
+        <div class="feature-card__num">04</div>
+        <div class="feature-card__title">訪問看護の実務支援まで一貫</div>
+        <p class="feature-card__body">訪問看護ステーションの経営支援実績を活かし、質の高い求人情報とサポート体制を提供します。訪問看護が初めての方にも、就職段階から手技獲得まで一貫して支援します。</p>
       </div>
     </div>
   </div>
@@ -778,25 +853,44 @@
     <div class="message-wrap">
       <div class="message-card fu">
         <p class="message-card__text">
-          医療・介護の現場で働く方々と、その現場を支える施設・事業者の方々。<br>
-          そのどちらも、毎日懸命に向き合い続けていることを、私たちは深く知っています。<br><br>
-          人材が集まらない、定着しない、急な欠員が出る——<br>
-          こうした課題は、決してその施設の「努力が足りない」のではなく、<br>
-          業界全体の構造的な難しさに起因していることがほとんどです。<br><br>
-          MITASは、そうした現場の声に寄り添い、<br>
-          「相談してよかった」と思っていただける存在でありたいと考えています。<br>
-          売り込みではなく、まず状況を聞かせてください。
+          日本は今、世界に類を見ないスピードで超高齢社会へと突入しています。医療・介護の需要が増大する一方で、現場を支える医療従事者の不足は深刻さを増すばかりです。<br><br>
+          この構造的な課題に対し、私たちはAIを始めとした技術革新によって新たな解を提示できると確信しています。一人ひとりの医療従事者が持つ専門性を正しく評価し、最適な職場と出会える仕組みを創ること。それが、医療の質を根本から変える第一歩だと考えます。<br><br>
+          Necoは、単なるマッチングサービスではありません。テクノロジーの力で医療従事者のキャリアに寄り添い、ひいては日本の医療の未来を支えるインフラとなることを目指しています。<br><br>
+          私たちは、すべての医療従事者が誇りを持って働ける社会の実現に向け、挑戦を続けてまいります。
         </p>
         <div class="message-card__author">
           <div class="author-avatar">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
           <div>
-            <!-- TODO：代表者名・役職を記載 -->
-            <div class="author-name">代表者名<span class="todo-tag">要更新</span></div>
-            <div class="author-role">MITAS 代表 ／ 医療・介護人材支援</div>
+            <div class="author-name">近藤 壯一朗</div>
+            <div class="author-role">代表取締役</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ HISTORY ══════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__tag">沿革</div>
+    <h2 class="section__title">これまでの歩み</h2>
+
+    <div class="history-list">
+      <div class="history-item fu">
+        <div class="history-item__date">2025年7月</div>
+        <div class="history-item__body">株式会社Neco設立</div>
+      </div>
+      <div class="history-item fu">
+        <div class="history-item__date">2025年8月</div>
+        <div class="history-item__body">訪問看護ステーション向けアウトソーシングサービス（オンコール代行・web制作）を開始</div>
+      </div>
+      <div class="history-item fu">
+        <div class="history-item__date">2026年3月1日</div>
+        <div class="history-item__body">有料職業紹介事業許可取得、医療人材向けAIマッチングシステムリリース</div>
       </div>
     </div>
   </div>
@@ -812,15 +906,14 @@
       採用、配置、人員不足など、人材に関するお悩みをお聞かせください。<br>
       状況に応じて、必要な支援の方向性をご案内します。
     </p>
-    <!-- TODO：href を実際の問い合わせフォームURLに変更してください -->
-    <a href="mailto:info@mitas.example.com" class="btn btn--white">
+    <a href="mailto:neco.oncall@gmail.com" class="btn btn--white">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
         <polyline points="22,6 12,13 2,6"/>
       </svg>
       お問い合わせはこちら
     </a>
-    <p class="cta-note">売り込みはありません。まずはお気軽に。</p>
+    <p class="cta-note">Email: neco.oncall@gmail.com</p>
   </div>
 </section>
 
@@ -850,8 +943,7 @@
       </div>
     </div>
     <div class="footer__bottom">
-      <!-- TODO：運営会社名・設立年を変更してください -->
-      <span class="footer__copy">&copy; 2026 MITAS. All rights reserved.</span>
+      <span class="footer__copy">&copy; 2026 Neco. All rights reserved.</span>
       <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
     </div>
   </div>
