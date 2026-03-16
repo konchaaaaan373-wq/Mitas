@@ -112,12 +112,23 @@
         .hero {
             background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #1e4d8c 100%);
             color: var(--white);
-            padding: 100px 24px 80px;
-            text-align: center;
+            padding: 80px 24px;
+            overflow: hidden;
+        }
+
+        .hero-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
         }
 
         .hero-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             background: rgba(14, 165, 233, 0.2);
             border: 1px solid rgba(14, 165, 233, 0.5);
             color: var(--teal-light);
@@ -129,11 +140,20 @@
             letter-spacing: 0.05em;
         }
 
+        .hero-badge::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
         .hero h1 {
-            font-size: clamp(28px, 5vw, 48px);
+            font-size: clamp(26px, 3.5vw, 44px);
             font-weight: 700;
             line-height: 1.3;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             letter-spacing: -0.5px;
         }
 
@@ -142,18 +162,176 @@
             color: var(--teal-light);
         }
 
-        .hero p {
-            font-size: clamp(15px, 2vw, 18px);
-            opacity: 0.85;
-            max-width: 600px;
-            margin: 0 auto 40px;
+        .hero-lead {
+            font-size: clamp(14px, 1.5vw, 16px);
+            opacity: 0.8;
+            margin-bottom: 36px;
+            line-height: 1.8;
         }
 
         .hero-cta {
             display: flex;
             gap: 16px;
-            justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            opacity: 0.75;
+        }
+
+        .trust-item::before {
+            content: '✓';
+            color: var(--teal-light);
+            font-weight: 700;
+        }
+
+        /* Hero visual card */
+        .hero-visual {
+            position: relative;
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-card-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--teal), #60a5fa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .hero-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .hero-card-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+        }
+
+        .hero-card-status {
+            margin-left: auto;
+            background: rgba(14, 165, 233, 0.25);
+            color: var(--teal-light);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .hero-card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 13px;
+        }
+
+        .hero-card-row:last-child { border-bottom: none; }
+
+        .hero-card-row .label {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .hero-card-row .value {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .hero-card-row .value.teal {
+            color: var(--teal-light);
+        }
+
+        .hero-card-footer {
+            margin-top: 20px;
+            background: var(--teal);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .hero-float-badge {
+            position: absolute;
+            bottom: -16px;
+            right: -12px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .hero-float-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(14, 165, 233, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .hero-float-text {
+            font-size: 12px;
+            color: var(--dark);
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .hero-float-text span {
+            display: block;
+            color: var(--gray);
+            font-weight: 400;
+            font-size: 11px;
+        }
+
+        @media (max-width: 860px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .hero-visual { display: none; }
         }
 
         .btn-primary {
@@ -481,12 +659,60 @@
 
     <!-- Hero -->
     <section class="hero">
-        <div class="hero-badge">医療機関向け 人材要件マッチング</div>
-        <h1>必要な人材要件を登録するだけ。<br><em>最適なマッチングを、シンプルに。</em></h1>
-        <p>採用に時間をかけすぎていませんか？Mitasは医療機関が必要とする医師・看護師の要件を登録するだけで、経験豊富なコンシェルジュが最適な候補者をご紹介します。</p>
-        <div class="hero-cta">
-            <a href="/register.html" class="btn-primary">無料で施設登録する</a>
-            <a href="#how-it-works" class="btn-outline">使い方を見る</a>
+        <div class="hero-inner">
+            <!-- Left: Copy -->
+            <div class="hero-text">
+                <div class="hero-badge">医療機関向け 人材要件マッチング</div>
+                <h1>採用の悩みを、<br><em>プロに丸投げしよう。</em></h1>
+                <p class="hero-lead">在宅医療施設・クリニックの院長・採用担当者へ。<br>必要な医師・看護師の要件をMitasに登録するだけ。専任コンシェルジュが、要件定義から採用後フォローまで一貫して伴走します。</p>
+                <div class="hero-cta">
+                    <a href="/register.html" class="btn-primary">無料で施設登録する →</a>
+                    <a href="#how-it-works" class="btn-outline">使い方を見る</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item">初期費用0円</div>
+                    <div class="trust-item">完全成功報酬型</div>
+                    <div class="trust-item">平均14日でご提案</div>
+                </div>
+            </div>
+
+            <!-- Right: Visual card -->
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <div class="hero-card-avatar">🏥</div>
+                        <div>
+                            <div class="hero-card-title">○○在宅クリニック</div>
+                            <div class="hero-card-sub">東京都 世田谷区</div>
+                        </div>
+                        <div class="hero-card-status">マッチング中</div>
+                    </div>
+                    <div class="hero-card-row">
+                        <span class="label">募集職種</span>
+                        <span class="value">訪問看護師</span>
+                    </div>
+                    <div class="hero-card-row">
+                        <span class="label">経験</span>
+                        <span class="value">在宅医療2年以上</span>
+                    </div>
+                    <div class="hero-card-row">
+                        <span class="label">勤務形態</span>
+                        <span class="value">常勤 / パート可</span>
+                    </div>
+                    <div class="hero-card-row">
+                        <span class="label">マッチング状況</span>
+                        <span class="value teal">候補者 3名 提案済み</span>
+                    </div>
+                    <div class="hero-card-footer">コンシェルジュが面談を調整中です ✓</div>
+                </div>
+                <div class="hero-float-badge">
+                    <div class="hero-float-icon">⚡</div>
+                    <div class="hero-float-text">
+                        登録から24時間以内
+                        <span>コンシェルジュがご連絡</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
