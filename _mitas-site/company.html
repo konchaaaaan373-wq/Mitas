@@ -585,6 +585,7 @@
 
     /* ─── Responsive ──────────────────── */
     @media (max-width: 768px) {
+      .container { padding: 0 16px; }
       .section { padding: 64px 0; }
       .header__nav, .header__cta { display: none; }
       .hamburger { display: flex; }
@@ -592,16 +593,24 @@
       .pillars { grid-template-columns: 1fr; }
       .features-grid { grid-template-columns: 1fr; }
 
-      .overview-table th { width: 120px; padding: 16px; }
-      .overview-table td { padding: 16px; }
+      .overview-table th { width: 100px; padding: 14px 10px; font-size: 13px; white-space: normal; }
+      .overview-table td { padding: 14px 10px; font-size: 14px; }
 
-      .message-card { padding: 28px; }
+      .message-card { padding: 24px; }
+      .message-card__text { font-size: 15px; }
 
       .footer__top { flex-direction: column; }
       .footer__links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 14px 20px; }
       .footer__bottom { flex-direction: column; align-items: flex-start; }
 
       .philosophy-quote { font-size: 15px; padding: 0 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 52px 0; }
+      .overview-table th { width: 90px; padding: 12px 8px; font-size: 12px; }
+      .overview-table td { padding: 12px 8px; font-size: 13px; }
+      .message-card { padding: 20px; }
     }
   </style>
 </head>
@@ -707,26 +716,31 @@
           <td>MITAS（ミタス）</td>
         </tr>
         <tr>
-          <th>事業内容</th>
-          <td>医療・介護事業者向け人材支援サービス（採用・配置・定着に関するコンサルティング・マッチング）</td>
+          <th>運営会社</th>
+          <td>株式会社Neco</td>
         </tr>
         <tr>
-          <th>設立</th>
-          <td><!-- TODO：実際の設立年を記載 -->設立年度<span class="todo-tag">要更新</span></td>
+          <th>事業内容</th>
+          <td>医療・介護事業者向け人材支援サービス（採用・配置・定着に関するコンサルティング・マッチング）<br>有料職業紹介事業</td>
+        </tr>
+        <tr>
+          <th>有料職業紹介<br>事業許可番号</th>
+          <td>13-ユ-319230<br><span style="font-size: 13px; color: var(--gray-500);">許可年月日：令和8年3月1日　有効期限：2029年2月28日</span><br>
+          <a href="/license.html" style="font-size: 13px; color: var(--teal);">認可情報・運営規程の詳細はこちら →</a></td>
         </tr>
         <tr>
           <th>代表者</th>
-          <td><!-- TODO：代表者名を記載 -->代表者名<span class="todo-tag">要更新</span></td>
+          <td>代表取締役　近藤 壯一朗</td>
         </tr>
         <tr>
           <th>所在地</th>
-          <td><!-- TODO：住所を記載 -->所在地<span class="todo-tag">要更新</span></td>
+          <td>〒160-0023<br>東京都新宿区西新宿一丁目20-3<br>西新宿髙木ビル7階S-04</td>
         </tr>
         <tr>
           <th>お問い合わせ</th>
           <td>
-            <!-- TODO：実際の問い合わせ先に変更 -->
-            問い合わせフォームまたは担当コンシェルジュへ<span class="todo-tag">要更新</span>
+            <a href="mailto:neco.oncall@gmail.com">neco.oncall@gmail.com</a><br>
+            <span style="font-size: 13px; color: var(--gray-500);">受付時間：平日 9:00〜18:00</span>
           </td>
         </tr>
         <tr>
@@ -792,9 +806,8 @@
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
           <div>
-            <!-- TODO：代表者名・役職を記載 -->
-            <div class="author-name">代表者名<span class="todo-tag">要更新</span></div>
-            <div class="author-role">MITAS 代表 ／ 医療・介護人材支援</div>
+            <div class="author-name">近藤 壯一朗</div>
+            <div class="author-role">株式会社Neco 代表取締役 ／ MITAS</div>
           </div>
         </div>
       </div>
@@ -845,13 +858,13 @@
         <a href="/company.html">会社概要</a>
         <a href="/faq.html">よくある質問</a>
         <a href="/guide.html">ご利用ガイド</a>
+        <a href="/license.html">認可情報・運営規程</a>
         <a href="/privacy-policy.html">プライバシーポリシー</a>
         <a href="/terms.html">利用規約</a>
       </div>
     </div>
     <div class="footer__bottom">
-      <!-- TODO：運営会社名・設立年を変更してください -->
-      <span class="footer__copy">&copy; 2026 MITAS. All rights reserved.</span>
+      <span class="footer__copy">&copy; 2026 株式会社Neco（MITAS）. All rights reserved.</span>
       <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
     </div>
   </div>
