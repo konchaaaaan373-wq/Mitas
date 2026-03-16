@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /neco-medical-jobs*
-
-Sitemap: https://necofindjob.com/sitemap.xml
