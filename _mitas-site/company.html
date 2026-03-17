@@ -627,6 +627,7 @@
 
     /* ─── Responsive ──────────────────── */
     @media (max-width: 768px) {
+      .container { padding: 0 16px; }
       .section { padding: 64px 0; }
       .header__nav, .header__cta { display: none; }
       .hamburger { display: flex; }
@@ -634,10 +635,11 @@
       .pillars { grid-template-columns: 1fr; }
       .features-grid { grid-template-columns: 1fr; }
 
-      .overview-table th { width: 120px; padding: 16px; }
-      .overview-table td { padding: 16px; }
+      .overview-table th { width: 100px; padding: 14px 10px; font-size: 13px; white-space: normal; }
+      .overview-table td { padding: 14px 10px; font-size: 14px; }
 
-      .message-card { padding: 28px; }
+      .message-card { padding: 24px; }
+      .message-card__text { font-size: 15px; }
       .history-item {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -649,6 +651,13 @@
       .footer__bottom { flex-direction: column; align-items: flex-start; }
 
       .philosophy-quote { font-size: 15px; padding: 0 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 52px 0; }
+      .overview-table th { width: 90px; padding: 12px 8px; font-size: 12px; }
+      .overview-table td { padding: 12px 8px; font-size: 13px; }
+      .message-card { padding: 20px; }
     }
   </style>
 </head>
@@ -790,12 +799,14 @@
         </tr>
         <tr>
           <th>許認可</th>
-          <td>有料職業紹介事業許可番号：13-ユ-319230（令和8年3月1日）</td>
+          <td>有料職業紹介事業許可番号：13-ユ-319230（令和8年3月1日）<br>
+          <a href="/license.html" style="font-size: 13px; color: var(--teal);">認可情報・運営規程の詳細はこちら →</a></td>
         </tr>
         <tr>
           <th>お問い合わせ</th>
           <td>
-            Email: <a href="mailto:neco.oncall@gmail.com">neco.oncall@gmail.com</a><br>
+            <a href="mailto:neco.oncall@gmail.com">neco.oncall@gmail.com</a><br>
+            <span style="font-size: 13px; color: var(--gray-500);">受付時間：平日 9:00〜18:00</span><br>
             LINEでもご相談いただけます
           </td>
         </tr>
@@ -864,7 +875,7 @@
           </div>
           <div>
             <div class="author-name">近藤 壯一朗</div>
-            <div class="author-role">代表取締役</div>
+            <div class="author-role">株式会社Neco 代表取締役</div>
           </div>
         </div>
       </div>
@@ -938,12 +949,13 @@
         <a href="/company.html">会社概要</a>
         <a href="/faq.html">よくある質問</a>
         <a href="/guide.html">ご利用ガイド</a>
+        <a href="/license.html">認可情報・運営規程</a>
         <a href="/privacy-policy.html">プライバシーポリシー</a>
         <a href="/terms.html">利用規約</a>
       </div>
     </div>
     <div class="footer__bottom">
-      <span class="footer__copy">&copy; 2026 Neco. All rights reserved.</span>
+      <span class="footer__copy">&copy; 2026 株式会社Neco（MITAS）. All rights reserved.</span>
       <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
     </div>
   </div>
