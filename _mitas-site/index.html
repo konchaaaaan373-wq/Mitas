@@ -253,6 +253,24 @@
 
     .hero__content { max-width: 640px; }
 
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      color: rgba(255,255,255,0.78);
+      text-transform: uppercase;
+    }
+    .hero__eyebrow::before {
+      content: '';
+      width: 26px;
+      height: 1px;
+      background: rgba(125,211,252,0.72);
+    }
+
     .hero__badge {
       display: inline-flex;
       align-items: center;
@@ -288,6 +306,8 @@
       color: rgba(255,255,255,0.88);
       margin-bottom: 16px;
       text-transform: uppercase;
+      text-shadow: 0 0 36px rgba(56,189,248,0.12);
+      user-select: none;
     }
 
     .hero__title {
@@ -890,6 +910,10 @@
       margin-bottom: 4px;
     }
     .authority-role { font-size: 13px; color: var(--gray-500); }
+    .authority-role a {
+      color: var(--teal);
+      font-weight: 600;
+    }
 
     /* ─── Flow ───────────────────────────────────── */
     .flow__track {
@@ -1413,11 +1437,12 @@
 <section class="hero">
   <div class="container hero__body">
     <div class="hero__content">
-      <span class="hero__brand">MITAS</span>
+      <div class="hero__eyebrow">MITAS</div>
       <div class="hero__badge">
         <span class="hero__badge-dot"></span>
         病院・訪問看護・介護事業所の人員要件充足支援
       </div>
+      <span class="hero__brand">MITAS</span>
       <h1 class="hero__title">
         急な欠員で、<br>
         <em>施設基準・加算・稼働</em>が<br>
@@ -1696,14 +1721,13 @@
         一緒に動きます。
       </p>
 
-      <!-- ↓ 運営者の実名・役職・写真URLに変更してください -->
       <div class="authority-profile fu">
         <div class="authority-avatar">
-          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>
         </div>
         <div>
-          <div class="authority-name">MITAS 運営チーム</div>
-          <div class="authority-role">医療・介護 人員要件充足支援</div>
+          <div class="authority-name">運営会社：株式会社Neco</div>
+          <div class="authority-role">サービス詳細は <a href="/company.html">会社概要</a> ・ <a href="/guide.html">ご利用ガイド</a> ・ <a href="/faq.html">よくある質問</a> をご確認いただけます。</div>
         </div>
       </div>
     </div>
