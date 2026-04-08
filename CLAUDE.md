@@ -41,3 +41,57 @@
 3. originへプッシュする
 4. `gh pr create` でPR作成し、URLをユーザーに返す
 5. PRリンクを必ず提示して終了する（ユーザーの操作は"Merge"のみ）
+
+---
+
+## ハーネスエンジニアリング運用ルール
+
+### 概要
+3つのサブエージェント（Planner / Generator / Evaluator）が連携し、自律的にアプリ開発を進めるシステム。
+
+### サブエージェント構成
+
+| エージェント | ファイル | 役割 |
+|---|---|---|
+| Planner | `.claude/agents/planner.md` | 要件整理 → 仕様書・スプリント計画の作成 |
+| Generator | `.claude/agents/generator.md` | 仕様書に基づくコード実装（1タスク1機能） |
+| Evaluator | `.claude/agents/evaluator.md` | テスト・レビュー、不合格時はフィードバック |
+
+### 開発フロー
+
+```
+[ユーザーの要件]
+      ↓
+  Planner（計画）
+      ↓ 仕様書 + スプリント計画
+  Generator（実装）
+      ↓ 実装完了報告
+  Evaluator（検証）
+      ↓
+  合格 → 次タスクへ / 不合格 → Generator へ差し戻し
+```
+
+### 運用ルール
+
+1. **開始**: ユーザーが要件を伝えたら、まずPlannerが仕様書を作成する
+2. **仕様書の保存先**: `docs/specs/` 配下にMarkdownファイルとして保存する
+3. **実装単位**: 1タスク = 1機能。Generatorは仕様書のタスクを順番に実装する
+4. **品質ゲート**: Evaluatorの合格なしに次のタスクへ進まない
+5. **リトライ上限**: 同一タスクの修正ループは最大3回。超過時はユーザーに相談する
+6. **コミット**: 各タスク完了時にコミット。メッセージは変更内容を明確に記述する
+7. **エスカレーション**: 仕様の曖昧さや技術的判断が必要な場合はユーザーに確認する
+
+### Playwright MCP連携（オプション）
+
+Evaluatorにブラウザテスト機能を追加する場合:
+- Playwright MCPサーバーをClaude Codeに追加する
+- Evaluatorがブラウザ操作（画面表示、クリック、フォーム入力）を自動で検証する
+- 設定方法: `claude mcp add playwright -- npx @anthropic-ai/mcp-playwright`
+
+### 自律実行モード
+
+完全自律でループを回す場合:
+```bash
+claude --dangerously-skip-permissions
+```
+※ このフラグを使用すると、ツール実行の都度確認なしに自動実行されます
