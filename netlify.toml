@@ -143,6 +143,12 @@
   to = "/.netlify/functions/hospital-cases"
   status = 200
 
+# 病院候補者一覧 API
+[[redirects]]
+  from = "/api/hospital/candidates"
+  to = "/.netlify/functions/hospital-candidates"
+  status = 200
+
 # Protected pages – redirect to login if accessed directly (handled client-side too)
 # These are informational; the actual auth check is done in JavaScript.
 [[redirects]]
