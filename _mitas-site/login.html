@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン｜MITAS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --teal-soft:  #7DD3FC;
+      --teal-pale:  #F0F9FF;
+      --gray-900:   #0F172A;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-400:   #94A3B8;
+      --gray-300:   #CBD5E1;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
+      --white:      #FFFFFF;
+      --error:      #DC2626;
+      --error-pale: #FEF2F2;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:  0 4px 20px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-lg:  0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      --radius:     6px;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--gray-700);
+      background: var(--gray-50);
+      line-height: 1.7;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Layout ──────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* ─── Brand Panel (left) ──────────────────────── */
+    .brand-panel {
+      position: relative;
+      background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 55%, #1e4880 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 56px 60px;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(125,211,252,0.14), transparent 38%),
+        radial-gradient(circle at 85% 75%, rgba(14,165,233,0.10), transparent 32%);
+      pointer-events: none;
+    }
+
+    /* 格子パターン */
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .brand-panel__logo {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      color: var(--white);
+    }
+
+    .brand-panel__logo svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .brand-panel__body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-panel__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.30em;
+      color: rgba(125,211,252,0.82);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .brand-panel__eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: rgba(125,211,252,0.60);
+    }
+
+    .brand-panel__heading {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--white);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-panel__lead {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.68);
+      max-width: 320px;
+    }
+
+    /* 装飾ライン */
+    .brand-panel__divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      margin: 28px 0;
+    }
+
+    /* 統計バッジ */
+    .brand-panel__stats {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(14,165,233,0.15);
+      border: 1px solid rgba(14,165,233,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-item__icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--teal-soft);
+    }
+
+    .stat-item__text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.70);
+      line-height: 1.5;
+    }
+
+    .stat-item__text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .brand-panel__footer {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── Form Panel (right) ─────────────────────── */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      background: var(--white);
+    }
+
+    .form-inner {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* ページタイトル */
+    .form-panel__title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--navy-deep);
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .form-panel__subtitle {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-bottom: 40px;
+      letter-spacing: 0.02em;
+    }
+
+    /* 区切り */
+    .form-divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin-bottom: 36px;
+    }
+
+    /* フォームグループ */
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+    }
+
+    .form-label .required {
+      color: var(--teal);
+      margin-left: 4px;
+      font-size: 11px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .form-input::placeholder { color: var(--gray-400); }
+
+    .form-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.10);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
+      background: var(--error-pale);
+    }
+
+    /* パスワードフィールドのラッパー */
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper .form-input {
+      padding-right: 44px;
+    }
+
+    .input-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: var(--gray-400);
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+    .input-toggle:hover { color: var(--navy); }
+    .input-toggle svg { width: 18px; height: 18px; }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .form-error-msg {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 5px;
+      display: none;
+    }
+    .form-error-msg.visible { display: block; }
+
+    /* オプション行 */
+    .form-row-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-700);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--teal);
+      cursor: pointer;
+    }
+
+    .link-text {
+      font-size: 13px;
+      color: var(--teal);
+      font-weight: 500;
+      transition: opacity 0.2s;
+      border-bottom: 1px solid transparent;
+    }
+    .link-text:hover {
+      opacity: 0.75;
+      border-bottom-color: var(--teal);
+    }
+
+    /* 送信ボタン */
+    .btn-submit {
+      width: 100%;
+      padding: 13px 24px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s var(--ease);
+      margin-bottom: 20px;
+    }
+    .btn-submit:hover {
+      background: var(--navy-mid);
+      box-shadow: 0 4px 16px rgba(27,58,107,0.28);
+      transform: translateY(-1px);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* エラーバナー */
+    .error-banner {
+      background: var(--error-pale);
+      border: 1px solid rgba(220,38,38,0.25);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--error);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .error-banner.visible { display: flex; }
+    .error-banner svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* 区切り線テキスト */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .or-divider span {
+      font-size: 12px;
+      color: var(--gray-400);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    /* 登録リンク */
+    .register-link {
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .register-link a {
+      color: var(--teal);
+      font-weight: 500;
+      border-bottom: 1px solid transparent;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .register-link a:hover {
+      opacity: 0.75;
+      border-bottom-color: var(--teal);
+    }
+
+    /* フッター */
+    .form-panel__footer {
+      margin-top: 48px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--gray-400);
+      letter-spacing: 0.04em;
+      line-height: 2;
+    }
+    .form-panel__footer a {
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--gray-300);
+      transition: color 0.2s;
+    }
+    .form-panel__footer a:hover { color: var(--teal); }
+
+    /* ─── Responsive ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        padding: 40px 28px 44px;
+        min-height: auto;
+      }
+
+      .brand-panel__stats { display: none; }
+
+      .brand-panel__heading {
+        font-size: 22px;
+      }
+
+      .form-panel {
+        padding: 48px 24px;
+      }
+    }
+
+    /* ─── Loading State ───────────────────────────── */
+    .btn-submit.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .btn-submit .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+    }
+    .btn-submit.loading .spinner { display: inline-block; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* フェードイン */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .form-inner {
+      animation: fadeUp 0.4s var(--ease) both;
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ─── 左：ブランドパネル ─────────────────────── -->
+  <div class="brand-panel">
+    <div class="brand-panel__logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      MITAS
+    </div>
+
+    <div class="brand-panel__body">
+      <div class="brand-panel__eyebrow">Medical Staffing Platform</div>
+      <h1 class="brand-panel__heading">医療機関の<br>人員要件を、<br>確実に満たす。</h1>
+      <div class="brand-panel__divider"></div>
+      <p class="brand-panel__lead">施設基準・加算・稼働に影響しうる急な欠員に対し、要件を整理し、適切な人材充足を支援します。</p>
+
+      <div class="brand-panel__stats">
+        <div class="stat-item">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div class="stat-item__text">
+            <strong>施設基準リスクの早期把握</strong>
+            欠員が基準に与える影響を即座に整理
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="stat-item__text">
+            <strong>要件適合人材のマッチング</strong>
+            職種・専門性・資格要件に基づく精度の高い充足
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-item__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="stat-item__text">
+            <strong>案件・進捗の一元管理</strong>
+            問い合わせから成約まで、全工程を管理
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-panel__footer">
+      &copy; 2025 MITAS / Neco Inc. All rights reserved.
+    </div>
+  </div>
+
+  <!-- ─── 右：フォームパネル ──────────────────────── -->
+  <div class="form-panel">
+    <div class="form-inner">
+
+      <h2 class="form-panel__title">ログイン</h2>
+      <p class="form-panel__subtitle">MITASの管理画面にアクセスします</p>
+      <div class="form-divider"></div>
+
+      <!-- エラーバナー -->
+      <div class="error-banner" id="errorBanner" role="alert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="errorBannerText">メールアドレスまたはパスワードが正しくありません。</span>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <!-- メールアドレス -->
+        <div class="form-group">
+          <label class="form-label" for="email">
+            メールアドレス<span class="required">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="example@hospital.jp"
+            autocomplete="email"
+            inputmode="email"
+          >
+          <span class="form-error-msg" id="emailError">有効なメールアドレスを入力してください。</span>
+        </div>
+
+        <!-- パスワード -->
+        <div class="form-group">
+          <label class="form-label" for="password">
+            パスワード<span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="8文字以上"
+              autocomplete="current-password"
+            >
+            <button type="button" class="input-toggle" id="passwordToggle" aria-label="パスワードを表示">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <span class="form-error-msg" id="passwordError">パスワードを入力してください。</span>
+        </div>
+
+        <!-- ログイン維持・パスワード忘れ -->
+        <div class="form-row-option">
+          <label class="checkbox-label">
+            <input type="checkbox" name="rememberMe" id="rememberMe">
+            ログイン状態を保持する
+          </label>
+          <a href="#" class="link-text">パスワードを忘れた方</a>
+        </div>
+
+        <!-- 送信ボタン -->
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="spinner" id="spinner"></span>
+          ログイン
+        </button>
+      </form>
+
+      <div class="or-divider"><span>または</span></div>
+
+      <div class="register-link">
+        医療機関の新規登録は
+        <a href="/register.html">こちら</a>
+      </div>
+
+      <div class="form-panel__footer">
+        <a href="/terms.html">利用規約</a>
+        &ensp;&middot;&ensp;
+        <a href="/privacy-policy.html">プライバシーポリシー</a>
+        &ensp;&middot;&ensp;
+        <a href="/index.html">サービス概要</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* パスワード表示トグル */
+  const passwordInput = document.getElementById('password');
+  const passwordToggle = document.getElementById('passwordToggle');
+  const eyeIcon = document.getElementById('eyeIcon');
+
+  passwordToggle.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    /* アイコン切り替え */
+    eyeIcon.innerHTML = isPassword
+      ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+      : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  });
+
+  /* バリデーション & フォーム送信 */
+  const loginForm = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const errorBanner = document.getElementById('errorBanner');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function validateEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  }
+
+  function clearErrors() {
+    [emailInput, passwordInput].forEach(el => el.classList.remove('error'));
+    emailError.classList.remove('visible');
+    passwordError.classList.remove('visible');
+    errorBanner.classList.remove('visible');
+  }
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    let valid = true;
+
+    if (!validateEmail(emailInput.value.trim())) {
+      emailInput.classList.add('error');
+      emailError.classList.add('visible');
+      valid = false;
+    }
+
+    if (passwordInput.value.length < 1) {
+      passwordInput.classList.add('error');
+      passwordError.classList.add('visible');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    /* ローディング表示 */
+    submitBtn.classList.add('loading');
+    submitBtn.textContent = '';
+    const sp = document.createElement('span');
+    sp.className = 'spinner';
+    sp.style.display = 'inline-block';
+    submitBtn.prepend(sp);
+    submitBtn.append('ログイン中...');
+
+    /* TODO: 実際の認証 API 呼び出しに置き換える */
+    await new Promise(r => setTimeout(r, 1200));
+
+    /* 仮エラー表示（実装時は API レスポンスで分岐） */
+    submitBtn.classList.remove('loading');
+    submitBtn.innerHTML = 'ログイン';
+    errorBanner.classList.add('visible');
+  });
+
+  /* リアルタイムバリデーション（離脱後） */
+  emailInput.addEventListener('blur', () => {
+    if (emailInput.value && !validateEmail(emailInput.value.trim())) {
+      emailInput.classList.add('error');
+      emailError.classList.add('visible');
+    } else {
+      emailInput.classList.remove('error');
+      emailError.classList.remove('visible');
+    }
+  });
+
+  emailInput.addEventListener('input', () => {
+    if (emailInput.classList.contains('error') && validateEmail(emailInput.value.trim())) {
+      emailInput.classList.remove('error');
+      emailError.classList.remove('visible');
+    }
+  });
+</script>
+</body>
+</html>
