@@ -358,12 +358,165 @@
     }
     .page-section.active { display: block; }
 
+    /* ─── KPIグリッド ────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-top: 3px solid var(--navy);
+      padding: 18px 20px 16px;
+    }
+    .kpi-card--teal  { border-top-color: var(--teal); }
+    .kpi-card--green { border-top-color: var(--green); }
+    .kpi-card--amber { border-top-color: var(--amber); }
+    .kpi-card--red   { border-top-color: var(--red); }
+
+    .kpi-card__label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-500);
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .kpi-card__value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+    .kpi-card__value em {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      font-style: normal;
+      margin-left: 2px;
+    }
+    .kpi-card__sub {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+    .kpi-card__sub .up   { color: var(--green);  font-weight: 600; }
+    .kpi-card__sub .down { color: var(--red);    font-weight: 600; }
+    .kpi-card__sub .warn { color: var(--amber);  font-weight: 600; }
+    .kpi-card__sub .info { color: var(--teal);   font-weight: 600; }
+
+    /* ─── セクションカード ──────────────────────── */
+    .section {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+    }
+    .section + .section { margin-top: 18px; }
+
+    .section__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .section__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+    .section__action {
+      font-size: 12px;
+      color: var(--teal);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .section__action:hover { text-decoration: underline; }
+
+    /* ─── データテーブル ──────────────────────────── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .data-table thead th {
+      background: var(--gray-50);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-500);
+      letter-spacing: 0.04em;
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    .data-table thead th:first-child { padding-left: 18px; }
+    .data-table thead th:last-child  { padding-right: 18px; }
+    .data-table tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+      vertical-align: middle;
+    }
+    .data-table tbody td:first-child { padding-left: 18px; }
+    .data-table tbody td:last-child  { padding-right: 18px; }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover { background: var(--gray-50); }
+
+    .td-primary   { font-weight: 600; color: var(--navy); }
+    .td-secondary { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+    .td-mono      { font-family: 'Courier New', monospace; font-size: 11px; color: var(--gray-400); }
+
+    /* ─── バッジ ──────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 2px;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .badge--blue   { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    .badge--purple { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+    .badge--amber  { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+    .badge--orange { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; }
+    .badge--green  { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .badge--gray   { background: var(--gray-100); color: var(--gray-500); border: 1px solid var(--gray-200); }
+    .badge--red    { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+
+    /* ─── アクティビティ行のドット ─────────────────── */
+    .act-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .act-dot--blue   { background: var(--teal); }
+    .act-dot--green  { background: var(--green); }
+    .act-dot--amber  { background: var(--amber); }
+    .act-dot--red    { background: var(--red); }
+    .act-dot--gray   { background: var(--gray-300); }
+
+    .act-cell {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+    .act-cell__dot { margin-top: 4px; }
+
     /* ─── レスポンシブ ──────────────────────────── */
+    @media (max-width: 1100px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 768px) {
       :root { --sidebar-w: 0px; }
       .sidebar { transform: translateX(-220px); transition: transform 0.2s; }
       .sidebar.open { transform: translateX(0); --sidebar-w: 224px; }
       .topbar { left: 0; padding-left: 16px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -463,7 +616,55 @@
   <!-- メインコンテンツ（各セクションをここに追加していく） -->
   <main class="main" id="mainContent" style="display:none;">
 
-    <!-- STEP2以降で各セクションを追加 -->
+    <!-- ─── ダッシュボード概要 ─────────────────── -->
+    <section class="page-section" id="s-overview">
+
+      <!-- KPIカード -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <p class="kpi-card__label">在籍スタッフ数</p>
+          <p class="kpi-card__value">142<em>名</em></p>
+          <p class="kpi-card__sub"><span class="up">+3</span> 先月比</p>
+        </div>
+        <div class="kpi-card kpi-card--green">
+          <p class="kpi-card__label">今月の充足率</p>
+          <p class="kpi-card__value">78<em>%</em></p>
+          <p class="kpi-card__sub">目標 <span class="info">85%</span> まで残り7pt</p>
+        </div>
+        <div class="kpi-card kpi-card--amber">
+          <p class="kpi-card__label">未対応求人</p>
+          <p class="kpi-card__value">5<em>件</em></p>
+          <p class="kpi-card__sub"><span class="warn">2件</span> 期限30日以内</p>
+        </div>
+        <div class="kpi-card kpi-card--red">
+          <p class="kpi-card__label">アラート件数</p>
+          <p class="kpi-card__value">3<em>件</em></p>
+          <p class="kpi-card__sub"><span class="down">要確認</span> MITAS担当より</p>
+        </div>
+      </div>
+
+      <!-- 最近のアクティビティ -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">最近のアクティビティ</span>
+          <a class="section__action" data-section="cases" href="#">案件一覧を見る</a>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:28px;"></th>
+              <th>内容</th>
+              <th>案件ID</th>
+              <th>担当者</th>
+              <th>種別</th>
+              <th>日時</th>
+            </tr>
+          </thead>
+          <tbody id="activityTbody"></tbody>
+        </table>
+      </div>
+
+    </section>
 
   </main>
 
@@ -506,6 +707,9 @@
       // ローディング解除
       document.getElementById('loadingOverlay').style.display = 'none';
       document.getElementById('mainContent').style.display   = 'block';
+
+      // 各セクションの初期描画
+      renderActivity();
 
       // 初期セクション表示
       showSection('overview');
@@ -559,6 +763,34 @@
       sessionStorage.clear();
       location.href = '/login.html';
     });
+
+    /* ─── アクティビティデータ ──────────────────── */
+    const ACTIVITIES = [
+      { type:'blue',  text:'SC-2026-008 に新しい候補者が提案されました',  caseId:'SC-2026-008', owner:'近藤', tag:'新規提案',  tagClass:'blue',   time:'2時間前'    },
+      { type:'green', text:'SC-2026-005 薬剤師ポジションで内定承諾',       caseId:'SC-2026-005', owner:'近藤', tag:'内定承諾',  tagClass:'green',  time:'昨日 15:32' },
+      { type:'amber', text:'SC-2026-002 精神科医師案件 期限まで10日',      caseId:'SC-2026-002', owner:'近藤', tag:'期限警告',  tagClass:'amber',  time:'昨日 09:00' },
+      { type:'blue',  text:'SC-2026-007 候補者との面談日程を調整中',       caseId:'SC-2026-007', owner:'近藤', tag:'面談調整',  tagClass:'blue',   time:'2日前'      },
+      { type:'red',   text:'SC-2026-004 理学療法士候補1名が辞退',          caseId:'SC-2026-004', owner:'近藤', tag:'辞退',      tagClass:'red',    time:'3日前'      },
+      { type:'gray',  text:'SC-2026-003 ケアマネ要件ヒアリング完了',       caseId:'SC-2026-003', owner:'近藤', tag:'要件確定',  tagClass:'gray',   time:'4日前'      },
+      { type:'green', text:'SC-2026-006 医療事務 候補者3名エントリー',     caseId:'SC-2026-006', owner:'近藤', tag:'候補追加',  tagClass:'green',  time:'5日前'      },
+    ];
+
+    function renderActivity() {
+      const tbody = document.getElementById('activityTbody');
+      if (!tbody) return;
+      tbody.innerHTML = ACTIVITIES.map(a => `
+        <tr>
+          <td style="text-align:center;">
+            <span class="act-dot act-dot--${a.type}"></span>
+          </td>
+          <td>${a.text}</td>
+          <td><span class="td-mono">${a.caseId}</span></td>
+          <td>${a.owner}</td>
+          <td><span class="badge badge--${a.tagClass}">${a.tag}</span></td>
+          <td style="color:var(--gray-400);white-space:nowrap;">${a.time}</td>
+        </tr>
+      `).join('');
+    }
 
     /* ─── 新規依頼ボタン（STEP3で実装） ────────────── */
     document.getElementById('btnNewRequest').addEventListener('click', () => {
