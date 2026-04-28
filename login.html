@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン | MITAS 医療機関ポータル</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --gray-900:   #0F172A;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-300:   #CBD5E1;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
+      --white:      #FFFFFF;
+      --red:        #DC2626;
+      --red-bg:     #FEF2F2;
+    }
+
+    html { height: 100%; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #EEF2F7;
+      color: var(--gray-700);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ヘッダーバー */
+    .site-header {
+      background: var(--navy-deep);
+      color: var(--white);
+      padding: 0 24px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .site-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .site-header__logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+    .site-header__divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.25);
+    }
+    .site-header__subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.02em;
+    }
+    .site-header__badge {
+      font-size: 11px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      padding: 2px 8px;
+      border-radius: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    /* メインコンテンツ */
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .login-heading {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-heading__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .login-heading__sub {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .login-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-top: 3px solid var(--navy);
+      padding: 36px 40px 32px;
+    }
+
+    /* エラーバナー */
+    .error-banner {
+      display: none;
+      background: var(--red-bg);
+      border: 1px solid #FECACA;
+      border-left: 4px solid var(--red);
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--red);
+    }
+    .error-banner.show { display: block; }
+
+    /* フォーム */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .form-label .required {
+      color: var(--red);
+      margin-left: 4px;
+      font-weight: 400;
+    }
+    .form-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 3px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+    }
+    .form-input.error {
+      border-color: var(--red);
+    }
+    .form-input::placeholder { color: var(--gray-300); }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* パスワード欄 */
+    .password-wrapper {
+      position: relative;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-500);
+      padding: 4px;
+      font-size: 13px;
+      line-height: 1;
+    }
+    .password-toggle:hover { color: var(--gray-700); }
+
+    /* ログインボタン */
+    .btn-login {
+      width: 100%;
+      height: 46px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 3px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 8px;
+      position: relative;
+    }
+    .btn-login:hover:not(:disabled) { background: var(--navy-deep); }
+    .btn-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .btn-login .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .btn-login.loading .spinner { display: block; }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .login-card__footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-100);
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    .login-card__footer a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+    .login-card__footer a:hover { text-decoration: underline; }
+
+    /* セキュリティ注意書き */
+    .security-notice {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      font-size: 11px;
+      color: var(--gray-500);
+      line-height: 1.7;
+    }
+    .security-notice__title {
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    /* フッター */
+    .site-footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      text-align: center;
+      padding: 14px;
+      flex-shrink: 0;
+    }
+    .site-footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+    }
+    .site-footer a:hover { color: rgba(255,255,255,0.8); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="site-header__brand">
+      <span class="site-header__logo">MITAS</span>
+      <div class="site-header__divider"></div>
+      <span class="site-header__subtitle">医療機関 管理者ポータル</span>
+    </div>
+    <span class="site-header__badge">SECURE</span>
+  </header>
+
+  <main class="main">
+    <div class="login-wrapper">
+
+      <div class="login-heading">
+        <p class="login-heading__title">ログイン</p>
+        <p class="login-heading__sub">MITAS 管理者アカウントでログインしてください</p>
+      </div>
+
+      <div class="login-card">
+        <div class="error-banner" id="errorBanner" role="alert"></div>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="orgId">
+              組織ID
+              <span class="required">*</span>
+            </label>
+            <input
+              class="form-input"
+              type="text"
+              id="orgId"
+              name="org_id"
+              autocomplete="username"
+              autocapitalize="none"
+              spellcheck="false"
+              placeholder="例: HOSP-001"
+              required
+            >
+            <p class="form-hint">MITASより発行された組織IDを入力してください</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">
+              パスワード
+              <span class="required">*</span>
+            </label>
+            <div class="password-wrapper">
+              <input
+                class="form-input"
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="パスワード"
+                required
+              >
+              <button type="button" class="password-toggle" id="pwToggle" aria-label="パスワードを表示">
+                表示
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login" id="loginBtn">
+            ログイン
+            <span class="spinner"></span>
+          </button>
+        </form>
+
+        <div class="login-card__footer">
+          パスワードを忘れた方は <a href="mailto:neco.oncall@gmail.com">担当者へお問い合わせ</a> ください
+        </div>
+      </div>
+
+      <div class="security-notice">
+        <p class="security-notice__title">セキュリティに関するご注意</p>
+        <p>このページは MITAS のご利用医療機関・施設向けの管理者専用ページです。権限のない方のアクセスは禁止されています。セッションは一定時間操作がない場合、自動的に終了します。</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2025 Neco Inc. &nbsp;|&nbsp;
+    <a href="/privacy-policy.html">プライバシーポリシー</a>
+    &nbsp;|&nbsp;
+    <a href="/terms.html">利用規約</a>
+  </footer>
+
+  <script>
+    // パスワード表示切り替え
+    const pwInput = document.getElementById('password');
+    const pwToggle = document.getElementById('pwToggle');
+    pwToggle.addEventListener('click', () => {
+      const show = pwInput.type === 'password';
+      pwInput.type = show ? 'text' : 'password';
+      pwToggle.textContent = show ? '隠す' : '表示';
+    });
+
+    // ログインフォーム送信
+    const form = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorBanner = document.getElementById('errorBanner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.classList.remove('show');
+
+      const orgId = document.getElementById('orgId').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!orgId || !password) {
+        showError('組織IDとパスワードを入力してください。');
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.classList.add('loading');
+
+      try {
+        const res = await fetch('/api/hospital/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ org_id: orgId, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.error || 'ログインに失敗しました。しばらく後にお試しください。');
+          return;
+        }
+
+        // トークン保存
+        sessionStorage.setItem('mitas_token', data.token);
+        sessionStorage.setItem('mitas_org', JSON.stringify(data.organization));
+
+        // ダッシュボードへ遷移
+        window.location.href = '/dashboard.html';
+
+      } catch {
+        showError('通信エラーが発生しました。ネットワーク接続を確認してください。');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.classList.remove('loading');
+      }
+    });
+
+    function showError(msg) {
+      errorBanner.textContent = msg;
+      errorBanner.classList.add('show');
+    }
+
+    // 既にログイン済みならダッシュボードへ
+    (function checkExistingSession() {
+      const token = sessionStorage.getItem('mitas_token');
+      if (!token) return;
+      try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return;
+        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        if (payload.exp && payload.exp > Math.floor(Date.now() / 1000)) {
+          window.location.href = '/dashboard.html';
+        }
+      } catch { /* 無効なトークンは無視 */ }
+    })();
+  </script>
+</body>
+</html>

@@ -131,6 +131,12 @@
   to = "/.netlify/functions/admin-stats"
   status = 200
 
+# 病院ログイン API
+[[redirects]]
+  from = "/api/hospital/login"
+  to = "/.netlify/functions/hospital-login"
+  status = 200
+
 # Protected pages – redirect to login if accessed directly (handled client-side too)
 # These are informational; the actual auth check is done in JavaScript.
 [[redirects]]
@@ -141,4 +147,9 @@
 [[redirects]]
   from = "/medical-dashboard.html"
   to = "/medical-dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/login.html"
+  to = "/login.html"
   status = 200
