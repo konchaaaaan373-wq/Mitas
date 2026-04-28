@@ -960,6 +960,14 @@
     }
 
   </style>
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase 接続情報（本番環境では実際の値に変更してください） -->
+  <script>
+    window.__SUPABASE_URL__      = 'https://YOUR_PROJECT.supabase.co';
+    window.__SUPABASE_ANON_KEY__ = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
+  <script src="/hospital-login.js"></script>
 </head>
 <body>
 
@@ -1371,35 +1379,48 @@
   </div>
 
   <script>
-    /* ─── 認証確認（セッション検証） ─────────────── */
-    (function checkAuth() {
-      const token = sessionStorage.getItem('mitas_token');
-      if (!token) { location.href = '/login.html'; return; }
-      try {
-        const parts = token.split('.');
-        if (parts.length !== 3) throw new Error();
-        const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
-        const payload = JSON.parse(atob(pad(parts[1].replace(/-/g,'+').replace(/_/g,'/'))));
-        if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-          sessionStorage.clear(); location.href = '/login.html'; return;
-        }
-        initApp(payload);
-      } catch {
-        sessionStorage.clear(); location.href = '/login.html';
+    /* ─── 認証確認（Supabase セッション検証） ───────── */
+    (async function checkAuth() {
+      // hospital-login.js のロードを待つ
+      await new Promise(resolve => {
+        if (typeof getSession === 'function') { resolve(); return; }
+        const s = document.querySelector('script[src="/hospital-login.js"]');
+        s ? s.addEventListener('load', resolve) : resolve();
+      });
+
+      let session = null;
+      try { session = await getSession(); } catch { /* Supabase未設定時はスキップ */ }
+
+      if (!session) {
+        // 開発時フォールバック：sessionStorage の旧トークンを許容
+        const token = sessionStorage.getItem('mitas_token');
+        if (!token) { location.href = '/login.html'; return; }
+        try {
+          const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
+          const payload = JSON.parse(atob(pad(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))));
+          if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+            sessionStorage.clear(); location.href = '/login.html'; return;
+          }
+          initApp({ email: payload.name || '管理者', sub: payload.sub });
+        } catch { sessionStorage.clear(); location.href = '/login.html'; }
+        return;
       }
+
+      initApp({ email: session.user.email, sub: session.user.id });
     })();
 
     /* ─── アプリ初期化 ─────────────────────────── */
     function initApp(payload) {
       const org   = JSON.parse(sessionStorage.getItem('mitas_org') || '{}');
-      const name  = org.name || payload.name || '組織名未設定';
+      const email = payload.email || '';
+      const name  = org.name || email.split('@')[0] || '管理者';
       const orgId = org.id   || payload.sub  || '-';
 
       // サイドバー・ヘッダーに組織情報をセット
-      document.getElementById('sidebarOrgName').textContent = name;
+      document.getElementById('sidebarOrgName').textContent = org.name || name;
       document.getElementById('sidebarOrgId').textContent   = orgId;
-      document.getElementById('userName').textContent = name.length > 10 ? name.slice(0, 10) + '…' : name;
-      const initials = name.replace(/[\s　]/g, '').slice(0, 2);
+      document.getElementById('userName').textContent       = name.length > 12 ? name.slice(0, 12) + '…' : name;
+      const initials = (org.name || name).replace(/[\s　@]/g, '').slice(0, 2) || '管';
       document.getElementById('userAvatar').textContent = initials;
 
       // 日付
@@ -1460,10 +1481,14 @@
     document.addEventListener('click', () => userDropdown.classList.remove('open'));
 
     /* ─── ログアウト ─────────────────────────────── */
-    document.getElementById('logoutBtn').addEventListener('click', e => {
+    document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault();
       sessionStorage.clear();
-      location.href = '/login.html';
+      if (typeof hospitalLogout === 'function') {
+        await hospitalLogout();   // Supabase signOut + リダイレクト
+      } else {
+        location.href = '/login.html';
+      }
     });
 
     /* ─── アクティビティデータ ──────────────────── */
@@ -1693,10 +1718,16 @@
     }
 
     /* ─── 設定 ──────────────────────────────────── */
-    function initSettings() {
+    async function initSettings() {
       const org = JSON.parse(sessionStorage.getItem('mitas_org') || '{}');
-      document.getElementById('setOrgId').value   = org.id   || '-';
-      document.getElementById('setOrgName').value = org.name || '-';
+      let email = '';
+      try {
+        const session = typeof getSession === 'function' ? await getSession() : null;
+        if (session) email = session.user.email || '';
+      } catch { /* Supabase未設定時はスキップ */ }
+      document.getElementById('setOrgId').value   = org.id   || document.getElementById('sidebarOrgId').textContent  || '-';
+      document.getElementById('setOrgName').value = org.name || document.getElementById('sidebarOrgName').textContent || '-';
+      if (email) document.getElementById('setEmail').value = email;
     }
     function saveSettings() {
       const s = document.getElementById('saveSuccess');
