@@ -9,6 +9,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase 接続情報（本番環境では実際の値に変更してください） -->
+  <script>
+    window.__SUPABASE_URL__      = 'https://YOUR_PROJECT.supabase.co';
+    window.__SUPABASE_ANON_KEY__ = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -308,22 +315,22 @@
 
         <form id="loginForm" novalidate>
           <div class="form-group">
-            <label class="form-label" for="orgId">
-              組織ID
+            <label class="form-label" for="email">
+              メールアドレス
               <span class="required">*</span>
             </label>
             <input
               class="form-input"
-              type="text"
-              id="orgId"
-              name="org_id"
+              type="email"
+              id="email"
+              name="email"
               autocomplete="username"
               autocapitalize="none"
               spellcheck="false"
-              placeholder="例: HOSP-001"
+              placeholder="例: admin@hospital.jp"
               required
             >
-            <p class="form-hint">MITASより発行された組織IDを入力してください</p>
+            <p class="form-hint">MITASより発行されたメールアドレスを入力してください</p>
           </div>
 
           <div class="form-group">
@@ -383,20 +390,24 @@
       pwToggle.textContent = show ? '隠す' : '表示';
     });
 
-    // ログインフォーム送信
-    const form = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
+    // hospital-login.js をロード
+    const script = document.createElement('script');
+    script.src = '/hospital-login.js';
+    document.head.appendChild(script);
+
+    const form       = document.getElementById('loginForm');
+    const loginBtn   = document.getElementById('loginBtn');
     const errorBanner = document.getElementById('errorBanner');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorBanner.classList.remove('show');
 
-      const orgId = document.getElementById('orgId').value.trim();
+      const email    = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
-      if (!orgId || !password) {
-        showError('組織IDとパスワードを入力してください。');
+      if (!email || !password) {
+        showError('メールアドレスとパスワードを入力してください。');
         return;
       }
 
@@ -404,28 +415,9 @@
       loginBtn.classList.add('loading');
 
       try {
-        const res = await fetch('/api/hospital/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ org_id: orgId, password })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          showError(data.error || 'ログインに失敗しました。しばらく後にお試しください。');
-          return;
-        }
-
-        // トークン保存
-        sessionStorage.setItem('mitas_token', data.token);
-        sessionStorage.setItem('mitas_org', JSON.stringify(data.organization));
-
-        // ダッシュボードへ遷移
-        window.location.href = '/dashboard.html';
-
-      } catch {
-        showError('通信エラーが発生しました。ネットワーク接続を確認してください。');
+        await hospitalLogin(email, password);  // 成功時は内部でリダイレクト
+      } catch (err) {
+        showError(err.message);
       } finally {
         loginBtn.disabled = false;
         loginBtn.classList.remove('loading');
@@ -437,18 +429,12 @@
       errorBanner.classList.add('show');
     }
 
-    // 既にログイン済みならダッシュボードへ
-    (function checkExistingSession() {
-      const token = sessionStorage.getItem('mitas_token');
-      if (!token) return;
-      try {
-        const parts = token.split('.');
-        if (parts.length !== 3) return;
-        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-        if (payload.exp && payload.exp > Math.floor(Date.now() / 1000)) {
-          window.location.href = '/dashboard.html';
-        }
-      } catch { /* 無効なトークンは無視 */ }
+    // 既にセッションがあればダッシュボードへ
+    (async function checkSession() {
+      // hospital-login.js のロードを待つ
+      await new Promise(r => script.addEventListener('load', r));
+      const session = await getSession();
+      if (session) location.href = '/dashboard.html';
     })();
   </script>
 </body>

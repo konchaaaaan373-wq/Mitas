@@ -13,24 +13,29 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --navy:       #1B3A6B;
-      --navy-deep:  #0D2340;
-      --navy-mid:   #243B5E;
-      --navy-light: #2E4F82;
-      --teal:       #0EA5E9;
-      --teal-dark:  #0284C7;
-      --gray-900:   #0F172A;
-      --gray-700:   #334155;
-      --gray-600:   #475569;
-      --gray-500:   #64748B;
-      --gray-400:   #94A3B8;
-      --gray-300:   #CBD5E1;
-      --gray-200:   #E2E8F0;
-      --gray-100:   #F1F5F9;
-      --gray-50:    #F8FAFC;
-      --white:      #FFFFFF;
-      --sidebar-w:  220px;
-      --topbar-h:   56px;
+      --navy:        #1B3A6B;
+      --navy-deep:   #0D2340;
+      --navy-mid:    #243B5E;
+      --navy-light:  #2E4F82;
+      --teal:        #0EA5E9;
+      --teal-dark:   #0284C7;
+      --green:       #10B981;
+      --amber:       #F59E0B;
+      --red:         #EF4444;
+      --red-dark:    #DC2626;
+      --gray-900:    #0F172A;
+      --gray-700:    #334155;
+      --gray-600:    #475569;
+      --gray-500:    #64748B;
+      --gray-400:    #94A3B8;
+      --gray-300:    #CBD5E1;
+      --gray-200:    #E2E8F0;
+      --gray-100:    #F1F5F9;
+      --gray-50:     #F8FAFC;
+      --white:       #FFFFFF;
+      --bg:          #EEF2F7;
+      --sidebar-w:   224px;
+      --topbar-h:    56px;
     }
 
     html, body { height: 100%; }
@@ -38,12 +43,34 @@
     body {
       font-family: 'Noto Sans JP', sans-serif;
       color: var(--gray-700);
-      background: #EEF2F7;
+      background: var(--bg);
       font-size: 13px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
+
+    /* ─── ローディング ─────────────────────────── */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+    }
+    #loadingOverlay .spin {
+      width: 28px; height: 28px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--navy);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    #loadingOverlay p { font-size: 13px; color: var(--gray-500); }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ─── サイドバー ──────────────────────────── */
     .sidebar {
@@ -54,14 +81,16 @@
       display: flex;
       flex-direction: column;
       z-index: 100;
+      overflow: hidden;
     }
 
     .sidebar__brand {
       height: var(--topbar-h);
       display: flex;
       align-items: center;
+      gap: 10px;
       padding: 0 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       flex-shrink: 0;
     }
     .sidebar__logo {
@@ -70,91 +99,105 @@
       color: var(--white);
       letter-spacing: 0.12em;
     }
+    .sidebar__logo-sep {
+      width: 1px; height: 16px;
+      background: rgba(255,255,255,0.18);
+    }
     .sidebar__logo-sub {
       font-size: 10px;
-      color: rgba(255,255,255,0.45);
-      margin-left: 8px;
+      color: rgba(255,255,255,0.4);
       letter-spacing: 0.04em;
-      line-height: 1;
-      padding-top: 2px;
+      line-height: 1.3;
     }
 
     .sidebar__nav {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 0;
+      padding: 10px 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
     }
     .sidebar__nav::-webkit-scrollbar { width: 4px; }
-    .sidebar__nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-    .nav-section {
-      margin-bottom: 4px;
+    .sidebar__nav::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
     }
-    .nav-section__label {
+
+    .nav-group {
+      margin-bottom: 2px;
+    }
+    .nav-group__label {
       font-size: 10px;
       font-weight: 600;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.12em;
-      padding: 12px 20px 4px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      padding: 14px 20px 5px;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 20px;
-      cursor: pointer;
-      color: rgba(255,255,255,0.65);
+      padding: 9px 20px 9px 18px;
+      border-left: 3px solid transparent;
+      color: rgba(255,255,255,0.6);
       font-size: 13px;
       font-weight: 500;
-      transition: background 0.12s, color 0.12s;
-      border-left: 3px solid transparent;
       text-decoration: none;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      user-select: none;
     }
     .nav-item:hover {
-      background: rgba(255,255,255,0.06);
-      color: var(--white);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.9);
     }
     .nav-item.active {
-      background: rgba(14, 165, 233, 0.12);
+      background: rgba(14,165,233,0.14);
       color: var(--white);
       border-left-color: var(--teal);
     }
     .nav-item__icon {
-      width: 18px;
+      width: 17px;
       text-align: center;
-      font-size: 15px;
+      font-size: 14px;
       flex-shrink: 0;
+      opacity: 0.7;
     }
+    .nav-item.active .nav-item__icon { opacity: 1; }
+    .nav-item__label { flex: 1; }
     .nav-item__badge {
-      margin-left: auto;
       background: var(--teal);
       color: var(--white);
       font-size: 10px;
       font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 10px;
-      line-height: 16px;
+      min-width: 18px;
+      height: 18px;
+      line-height: 18px;
+      text-align: center;
+      border-radius: 9px;
+      padding: 0 5px;
     }
 
     .sidebar__footer {
-      padding: 14px 20px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255,255,255,0.07);
       flex-shrink: 0;
     }
-    .sidebar__org-name {
+    .sidebar__org {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.75);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
     .sidebar__org-id {
-      font-size: 11px;
-      color: rgba(255,255,255,0.35);
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      font-family: 'Courier New', monospace;
     }
 
     /* ─── トップバー ──────────────────────────── */
@@ -169,84 +212,96 @@
       display: flex;
       align-items: center;
       padding: 0 24px;
+      gap: 14px;
       z-index: 90;
-      gap: 16px;
     }
 
-    .topbar__breadcrumb {
-      flex: 1;
-    }
+    .topbar__title-area { flex: 1; min-width: 0; }
     .topbar__page-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--navy);
-      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .topbar__page-sub {
       font-size: 11px;
       color: var(--gray-400);
+      margin-top: 1px;
     }
 
     .topbar__actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
-    .topbar__date {
-      font-size: 12px;
-      color: var(--gray-500);
-    }
-
-    .topbar__notification {
-      position: relative;
-      width: 34px;
+    /* 新規依頼ボタン */
+    .btn-new-request {
       height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 0 16px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .btn-new-request:hover { background: var(--navy-deep); }
+
+    /* 通知ベル */
+    .topbar__bell {
+      position: relative;
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
       border: 1px solid var(--gray-200);
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
       color: var(--gray-500);
-      font-size: 16px;
+      font-size: 15px;
       transition: background 0.12s;
     }
-    .topbar__notification:hover { background: var(--gray-50); }
-    .topbar__notification .dot {
+    .topbar__bell:hover { background: var(--gray-50); }
+    .topbar__bell .dot {
       position: absolute;
-      top: 6px; right: 6px;
-      width: 7px; height: 7px;
-      background: #EF4444;
+      top: 7px; right: 7px;
+      width: 6px; height: 6px;
+      background: var(--red);
       border-radius: 50%;
-      border: 1px solid var(--white);
+      border: 1.5px solid var(--white);
     }
 
+    /* ユーザーメニュー */
     .topbar__user {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 12px;
+      padding: 5px 12px;
       border: 1px solid var(--gray-200);
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
       transition: background 0.12s;
       position: relative;
     }
     .topbar__user:hover { background: var(--gray-50); }
-    .topbar__user-avatar {
-      width: 26px;
-      height: 26px;
+    .topbar__avatar {
+      width: 26px; height: 26px;
       background: var(--navy);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
       font-weight: 700;
       color: var(--white);
       flex-shrink: 0;
     }
+    .topbar__user-info { line-height: 1.2; }
     .topbar__user-name {
       font-size: 12px;
       font-weight: 600;
@@ -257,7 +312,7 @@
       color: var(--gray-400);
     }
     .topbar__caret {
-      font-size: 10px;
+      font-size: 9px;
       color: var(--gray-400);
       margin-left: 2px;
     }
@@ -273,98 +328,97 @@
       min-width: 160px;
       z-index: 200;
     }
-    .user-dropdown.show { display: block; }
-    .user-dropdown__item {
+    .user-dropdown.open { display: block; }
+    .user-dropdown a {
       display: block;
-      padding: 10px 16px;
-      font-size: 13px;
+      padding: 9px 16px;
+      font-size: 12px;
       color: var(--gray-700);
-      cursor: pointer;
       text-decoration: none;
       transition: background 0.1s;
     }
-    .user-dropdown__item:hover { background: var(--gray-50); }
-    .user-dropdown__item.danger { color: #DC2626; }
-    .user-dropdown__sep {
-      height: 1px;
-      background: var(--gray-100);
+    .user-dropdown a:hover { background: var(--gray-50); }
+    .user-dropdown a.danger { color: var(--red-dark); }
+    .user-dropdown hr {
+      border: none;
+      border-top: 1px solid var(--gray-100);
     }
 
-    /* ─── メインコンテンツ ─────────────────────── */
+    /* ─── メインエリア ─────────────────────────── */
     .main {
       margin-left: var(--sidebar-w);
       padding-top: var(--topbar-h);
       min-height: 100vh;
     }
 
-    .content {
+    /* ─── ページセクション共通 ──────────────────── */
+    .page-section {
       padding: 24px;
+      display: none;
     }
+    .page-section.active { display: block; }
 
-    /* ─── KPIカード ─────────────────────────────── */
+    /* ─── KPIグリッド ────────────────────────────── */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .kpi-card {
       background: var(--white);
       border: 1px solid var(--gray-200);
       border-top: 3px solid var(--navy);
-      padding: 18px 20px;
+      padding: 18px 20px 16px;
     }
     .kpi-card--teal  { border-top-color: var(--teal); }
-    .kpi-card--warn  { border-top-color: #F59E0B; }
-    .kpi-card--green { border-top-color: #10B981; }
+    .kpi-card--green { border-top-color: var(--green); }
+    .kpi-card--amber { border-top-color: var(--amber); }
+    .kpi-card--red   { border-top-color: var(--red); }
 
     .kpi-card__label {
       font-size: 11px;
-      color: var(--gray-500);
       font-weight: 600;
+      color: var(--gray-500);
       letter-spacing: 0.04em;
       margin-bottom: 10px;
     }
     .kpi-card__value {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
       color: var(--navy);
       line-height: 1;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
-    .kpi-card__value span {
+    .kpi-card__value em {
       font-size: 14px;
       font-weight: 500;
       color: var(--gray-500);
+      font-style: normal;
       margin-left: 2px;
     }
     .kpi-card__sub {
       font-size: 11px;
       color: var(--gray-400);
     }
-    .kpi-card__sub .up   { color: #10B981; font-weight: 600; }
-    .kpi-card__sub .down { color: #EF4444; font-weight: 600; }
-    .kpi-card__sub .new  { color: var(--teal); font-weight: 600; }
+    .kpi-card__sub .up   { color: var(--green);  font-weight: 600; }
+    .kpi-card__sub .down { color: var(--red);    font-weight: 600; }
+    .kpi-card__sub .warn { color: var(--amber);  font-weight: 600; }
+    .kpi-card__sub .info { color: var(--teal);   font-weight: 600; }
 
-    /* ─── グリッドレイアウト ───────────────────── */
-    .grid-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 18px;
-      align-items: start;
-    }
-
-    /* ─── セクション共通 ─────────────────────────── */
+    /* ─── セクションカード ──────────────────────── */
     .section {
       background: var(--white);
       border: 1px solid var(--gray-200);
     }
+    .section + .section { margin-top: 18px; }
+
     .section__header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
+      padding: 13px 18px;
       border-bottom: 1px solid var(--gray-100);
     }
     .section__title {
@@ -373,21 +427,21 @@
       color: var(--navy);
       letter-spacing: 0.02em;
     }
-    .section__link {
+    .section__action {
       font-size: 12px;
       color: var(--teal);
       text-decoration: none;
       cursor: pointer;
     }
-    .section__link:hover { text-decoration: underline; }
+    .section__action:hover { text-decoration: underline; }
 
-    /* ─── テーブル ──────────────────────────────── */
+    /* ─── データテーブル ──────────────────────────── */
     .data-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
     }
-    .data-table th {
+    .data-table thead th {
       background: var(--gray-50);
       font-size: 11px;
       font-weight: 600;
@@ -398,234 +452,71 @@
       border-bottom: 1px solid var(--gray-200);
       white-space: nowrap;
     }
-    .data-table th:first-child { padding-left: 18px; }
-    .data-table th:last-child  { padding-right: 18px; }
-    .data-table td {
+    .data-table thead th:first-child { padding-left: 18px; }
+    .data-table thead th:last-child  { padding-right: 18px; }
+    .data-table tbody td {
       padding: 11px 14px;
       border-bottom: 1px solid var(--gray-100);
       color: var(--gray-700);
       vertical-align: middle;
     }
-    .data-table td:first-child { padding-left: 18px; }
-    .data-table td:last-child  { padding-right: 18px; }
-    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody td:first-child { padding-left: 18px; }
+    .data-table tbody td:last-child  { padding-right: 18px; }
+    .data-table tbody tr:last-child td { border-bottom: none; }
     .data-table tbody tr:hover { background: var(--gray-50); }
 
-    .case-id {
-      font-family: 'Courier New', monospace;
-      font-size: 11px;
-      color: var(--gray-400);
-    }
-    .case-title {
-      font-weight: 600;
-      color: var(--navy);
-      font-size: 12px;
-    }
-    .case-org {
-      font-size: 11px;
-      color: var(--gray-500);
-      margin-top: 1px;
-    }
+    .td-primary   { font-weight: 600; color: var(--navy); }
+    .td-secondary { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+    .td-mono      { font-family: 'Courier New', monospace; font-size: 11px; color: var(--gray-400); }
 
-    /* ステータスバッジ */
+    /* ─── バッジ ──────────────────────────────────── */
     .badge {
       display: inline-block;
       font-size: 10px;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 2px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       white-space: nowrap;
     }
-    .badge--intake       { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
-    .badge--scoping      { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
-    .badge--sourcing     { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
-    .badge--interviewing { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; }
-    .badge--offer        { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
-    .badge--placed       { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
-    .badge--on-hold      { background: var(--gray-100); color: var(--gray-500); border: 1px solid var(--gray-200); }
-    .badge--closed-lost  { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+    .badge--blue   { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+    .badge--purple { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+    .badge--amber  { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+    .badge--orange { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; }
+    .badge--green  { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .badge--gray   { background: var(--gray-100); color: var(--gray-500); border: 1px solid var(--gray-200); }
+    .badge--red    { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
 
-    .priority-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .priority-badge::before {
-      content: '';
-      display: block;
-      width: 7px;
-      height: 7px;
+    /* ─── アクティビティ行のドット ─────────────────── */
+    .act-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
-    .priority-badge--critical::before { background: #DC2626; }
-    .priority-badge--urgent::before   { background: #EA580C; }
-    .priority-badge--high::before     { background: #D97706; }
-    .priority-badge--medium::before   { background: #0EA5E9; }
-    .priority-badge--low::before      { background: #94A3B8; }
-    .priority-badge--critical { color: #DC2626; }
-    .priority-badge--urgent   { color: #EA580C; }
-    .priority-badge--high     { color: #D97706; }
-    .priority-badge--medium   { color: #0EA5E9; }
-    .priority-badge--low      { color: #94A3B8; }
+    .act-dot--blue   { background: var(--teal); }
+    .act-dot--green  { background: var(--green); }
+    .act-dot--amber  { background: var(--amber); }
+    .act-dot--red    { background: var(--red); }
+    .act-dot--gray   { background: var(--gray-300); }
 
-    .deadline {
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .deadline.overdue { color: #DC2626; font-weight: 600; }
-    .deadline.soon    { color: #D97706; font-weight: 600; }
-
-    .table-action {
-      font-size: 11px;
-      color: var(--teal);
-      cursor: pointer;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .table-action:hover { text-decoration: underline; }
-
-    /* ─── サイドパネル ───────────────────────────── */
-    .side-panels {
+    .act-cell {
       display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    /* タスクリスト */
-    .task-list {
-      padding: 0;
-    }
-    .task-item {
-      display: flex;
-      gap: 10px;
-      padding: 11px 18px;
-      border-bottom: 1px solid var(--gray-100);
       align-items: flex-start;
+      gap: 9px;
     }
-    .task-item:last-child { border-bottom: none; }
-    .task-check {
-      width: 16px;
-      height: 16px;
-      border: 1.5px solid var(--gray-300);
-      border-radius: 3px;
-      flex-shrink: 0;
-      margin-top: 1px;
-      cursor: pointer;
-      transition: all 0.12s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .task-check:hover { border-color: var(--teal); }
-    .task-check.done {
-      background: var(--teal);
-      border-color: var(--teal);
-      color: var(--white);
-      font-size: 10px;
-    }
-    .task-text {
-      flex: 1;
-    }
-    .task-title {
-      font-size: 12px;
-      color: var(--gray-700);
-      line-height: 1.5;
-    }
-    .task-title.done {
-      text-decoration: line-through;
-      color: var(--gray-400);
-    }
-    .task-meta {
-      font-size: 10px;
-      color: var(--gray-400);
-      margin-top: 2px;
-    }
-    .task-meta .due-urgent { color: #DC2626; font-weight: 600; }
-
-    /* アクティビティフィード */
-    .activity-feed {
-      padding: 4px 0;
-    }
-    .activity-item {
-      display: flex;
-      gap: 10px;
-      padding: 10px 18px;
-    }
-    .activity-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gray-300);
-      flex-shrink: 0;
-      margin-top: 4px;
-    }
-    .activity-dot--blue  { background: var(--teal); }
-    .activity-dot--green { background: #10B981; }
-    .activity-dot--warn  { background: #F59E0B; }
-    .activity-dot--red   { background: #EF4444; }
-    .activity-text {
-      flex: 1;
-      font-size: 12px;
-      color: var(--gray-700);
-      line-height: 1.5;
-    }
-    .activity-time {
-      font-size: 10px;
-      color: var(--gray-400);
-      margin-top: 2px;
-    }
-
-    /* ─── 空状態 ─────────────────────────────────── */
-    .empty-state {
-      padding: 32px;
-      text-align: center;
-      color: var(--gray-400);
-      font-size: 12px;
-    }
-
-    /* ─── ローディングオーバーレイ ─────────────────── */
-    #loadingOverlay {
-      position: fixed;
-      inset: 0;
-      background: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      flex-direction: column;
-      gap: 12px;
-    }
-    #loadingOverlay .spinner {
-      width: 28px;
-      height: 28px;
-      border: 3px solid var(--gray-200);
-      border-top-color: var(--navy);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    #loadingOverlay p {
-      font-size: 13px;
-      color: var(--gray-500);
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .act-cell__dot { margin-top: 4px; }
 
     /* ─── レスポンシブ ──────────────────────────── */
     @media (max-width: 1100px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .grid-layout { grid-template-columns: 1fr; }
-      .side-panels { flex-direction: row; }
-      .side-panels .section { flex: 1; }
     }
-    @media (max-width: 700px) {
+    @media (max-width: 768px) {
       :root { --sidebar-w: 0px; }
-      .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
-      .sidebar.open { transform: translateX(0); }
+      .sidebar { transform: translateX(-220px); transition: transform 0.2s; }
+      .sidebar.open { transform: translateX(0); --sidebar-w: 224px; }
       .topbar { left: 0; padding-left: 16px; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .side-panels { flex-direction: column; }
     }
   </style>
 </head>
@@ -633,7 +524,7 @@
 
   <!-- ローディング -->
   <div id="loadingOverlay">
-    <div class="spinner"></div>
+    <div class="spin"></div>
     <p>認証を確認中...</p>
   </div>
 
@@ -641,393 +532,269 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar__brand">
       <span class="sidebar__logo">MITAS</span>
-      <span class="sidebar__logo-sub">管理者ポータル</span>
+      <div class="sidebar__logo-sep"></div>
+      <span class="sidebar__logo-sub">管理者<br>ポータル</span>
     </div>
 
-    <nav class="sidebar__nav">
-      <div class="nav-section">
-        <p class="nav-section__label">メニュー</p>
-        <a class="nav-item active" data-section="dashboard" href="#">
+    <nav class="sidebar__nav" id="sidebarNav">
+      <div class="nav-group">
+        <p class="nav-group__label">メニュー</p>
+
+        <a class="nav-item active" data-section="overview" href="#">
           <span class="nav-item__icon">&#9632;</span>
-          ダッシュボード
+          <span class="nav-item__label">ダッシュボード</span>
         </a>
+
         <a class="nav-item" data-section="cases" href="#">
           <span class="nav-item__icon">&#9654;</span>
-          案件管理
-          <span class="nav-item__badge" id="caseBadge">8</span>
+          <span class="nav-item__label">案件管理</span>
+          <span class="nav-item__badge" id="badge-cases">8</span>
         </a>
-        <a class="nav-item" data-section="requirements" href="#">
-          <span class="nav-item__icon">&#9675;</span>
-          要件管理
-        </a>
+
         <a class="nav-item" data-section="candidates" href="#">
           <span class="nav-item__icon">&#9670;</span>
-          候補者確認
-          <span class="nav-item__badge" id="candBadge">3</span>
+          <span class="nav-item__label">候補者確認</span>
+          <span class="nav-item__badge" id="badge-candidates">3</span>
         </a>
-      </div>
-      <div class="nav-section">
-        <p class="nav-section__label">管理</p>
-        <a class="nav-item" data-section="inquiries" href="#">
-          <span class="nav-item__icon">&#9707;</span>
-          問い合わせ
-        </a>
+
         <a class="nav-item" data-section="tasks" href="#">
           <span class="nav-item__icon">&#9744;</span>
-          タスク
+          <span class="nav-item__label">タスク</span>
         </a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-group__label">管理</p>
+
+        <a class="nav-item" data-section="inquiries" href="#">
+          <span class="nav-item__icon">&#9993;</span>
+          <span class="nav-item__label">問い合わせ</span>
+        </a>
+
         <a class="nav-item" data-section="settings" href="#">
           <span class="nav-item__icon">&#9881;</span>
-          設定
+          <span class="nav-item__label">設定</span>
         </a>
       </div>
     </nav>
 
     <div class="sidebar__footer">
-      <p class="sidebar__org-name" id="sidebarOrgName">-</p>
-      <p class="sidebar__org-id"  id="sidebarOrgId">-</p>
+      <p class="sidebar__org"    id="sidebarOrgName">-</p>
+      <p class="sidebar__org-id" id="sidebarOrgId">-</p>
     </div>
   </aside>
 
   <!-- トップバー -->
   <header class="topbar">
-    <div class="topbar__breadcrumb">
+    <div class="topbar__title-area">
       <p class="topbar__page-title" id="pageTitle">ダッシュボード</p>
-      <p class="topbar__page-sub" id="pageDate">-</p>
+      <p class="topbar__page-sub"   id="pageDate">-</p>
     </div>
     <div class="topbar__actions">
-      <div class="topbar__notification">
+      <button class="btn-new-request" id="btnNewRequest">+ 新規依頼</button>
+      <div class="topbar__bell" title="通知">
         &#9993;
         <span class="dot"></span>
       </div>
       <div class="topbar__user" id="userMenu">
-        <div class="topbar__user-avatar" id="userAvatar">-</div>
-        <div>
+        <div class="topbar__avatar" id="userAvatar">-</div>
+        <div class="topbar__user-info">
           <p class="topbar__user-name" id="userName">-</p>
           <p class="topbar__user-role">管理者</p>
         </div>
         <span class="topbar__caret">&#9660;</span>
         <div class="user-dropdown" id="userDropdown">
-          <a class="user-dropdown__item" href="#">アカウント設定</a>
-          <a class="user-dropdown__item" href="#">お問い合わせ</a>
-          <div class="user-dropdown__sep"></div>
-          <a class="user-dropdown__item danger" id="logoutBtn" href="#">ログアウト</a>
+          <a href="#" data-section="settings">アカウント設定</a>
+          <a href="mailto:neco.oncall@gmail.com">担当者に問い合わせ</a>
+          <hr>
+          <a href="#" id="logoutBtn" class="danger">ログアウト</a>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- メインコンテンツ -->
-  <main class="main">
-    <div class="content" id="mainContent" style="display:none;">
+  <!-- メインコンテンツ（各セクションをここに追加していく） -->
+  <main class="main" id="mainContent" style="display:none;">
+
+    <!-- ─── ダッシュボード概要 ─────────────────── -->
+    <section class="page-section" id="s-overview">
 
       <!-- KPIカード -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <p class="kpi-card__label">進行中の案件</p>
-          <p class="kpi-card__value">8<span>件</span></p>
-          <p class="kpi-card__sub"><span class="up">+2</span> 先月比</p>
-        </div>
-        <div class="kpi-card kpi-card--teal">
-          <p class="kpi-card__label">候補者選考中</p>
-          <p class="kpi-card__value">14<span>名</span></p>
-          <p class="kpi-card__sub"><span class="new">3名</span> 新規提案あり</p>
-        </div>
-        <div class="kpi-card kpi-card--warn">
-          <p class="kpi-card__label">期限が近い案件</p>
-          <p class="kpi-card__value">3<span>件</span></p>
-          <p class="kpi-card__sub"><span class="down">2件</span> 30日以内</p>
+          <p class="kpi-card__label">在籍スタッフ数</p>
+          <p class="kpi-card__value">142<em>名</em></p>
+          <p class="kpi-card__sub"><span class="up">+3</span> 先月比</p>
         </div>
         <div class="kpi-card kpi-card--green">
-          <p class="kpi-card__label">今月の充足</p>
-          <p class="kpi-card__value">2<span>件</span></p>
-          <p class="kpi-card__sub">累計 <span class="up">18件</span></p>
+          <p class="kpi-card__label">今月の充足率</p>
+          <p class="kpi-card__value">78<em>%</em></p>
+          <p class="kpi-card__sub">目標 <span class="info">85%</span> まで残り7pt</p>
+        </div>
+        <div class="kpi-card kpi-card--amber">
+          <p class="kpi-card__label">未対応求人</p>
+          <p class="kpi-card__value">5<em>件</em></p>
+          <p class="kpi-card__sub"><span class="warn">2件</span> 期限30日以内</p>
+        </div>
+        <div class="kpi-card kpi-card--red">
+          <p class="kpi-card__label">アラート件数</p>
+          <p class="kpi-card__value">3<em>件</em></p>
+          <p class="kpi-card__sub"><span class="down">要確認</span> MITAS担当より</p>
         </div>
       </div>
 
-      <!-- メイングリッド -->
-      <div class="grid-layout">
-
-        <!-- 左: 案件パイプライン -->
-        <div>
-          <!-- 案件一覧 -->
-          <div class="section" style="margin-bottom: 18px;">
-            <div class="section__header">
-              <span class="section__title">案件パイプライン</span>
-              <a class="section__link" data-section="cases" href="#">全件表示</a>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>案件</th>
-                  <th>職種</th>
-                  <th>ステータス</th>
-                  <th>優先度</th>
-                  <th>期限</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="caseTableBody"></tbody>
-            </table>
-          </div>
-
-          <!-- 候補者確認テーブル -->
-          <div class="section">
-            <div class="section__header">
-              <span class="section__title">新着候補者提案 <span style="font-weight:400;color:#0EA5E9;font-size:11px;">3名</span></span>
-              <a class="section__link" href="#">確認する</a>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>氏名</th>
-                  <th>職種</th>
-                  <th>経験年数</th>
-                  <th>対応案件</th>
-                  <th>提案日</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="candTableBody"></tbody>
-            </table>
-          </div>
+      <!-- 最近のアクティビティ -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">最近のアクティビティ</span>
+          <a class="section__action" data-section="cases" href="#">案件一覧を見る</a>
         </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:28px;"></th>
+              <th>内容</th>
+              <th>案件ID</th>
+              <th>担当者</th>
+              <th>種別</th>
+              <th>日時</th>
+            </tr>
+          </thead>
+          <tbody id="activityTbody"></tbody>
+        </table>
+      </div>
 
-        <!-- 右: サイドパネル -->
-        <div class="side-panels">
-          <!-- タスク -->
-          <div class="section">
-            <div class="section__header">
-              <span class="section__title">本日のタスク</span>
-              <a class="section__link" href="#">追加</a>
-            </div>
-            <div class="task-list" id="taskList"></div>
-          </div>
+    </section>
 
-          <!-- アクティビティ -->
-          <div class="section">
-            <div class="section__header">
-              <span class="section__title">最近のアクティビティ</span>
-            </div>
-            <div class="activity-feed" id="activityFeed"></div>
-          </div>
-        </div>
-
-      </div><!-- /grid-layout -->
-    </div><!-- /content -->
   </main>
 
   <script>
-    /* ─── 認証確認 ───────────────────────────── */
+    /* ─── 認証確認（セッション検証） ─────────────── */
     (function checkAuth() {
       const token = sessionStorage.getItem('mitas_token');
-      if (!token) {
-        window.location.href = '/login.html';
-        return;
-      }
+      if (!token) { location.href = '/login.html'; return; }
       try {
         const parts = token.split('.');
         if (parts.length !== 3) throw new Error();
         const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
         const payload = JSON.parse(atob(pad(parts[1].replace(/-/g,'+').replace(/_/g,'/'))));
         if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-          sessionStorage.clear();
-          window.location.href = '/login.html';
-          return;
+          sessionStorage.clear(); location.href = '/login.html'; return;
         }
-        initDashboard(payload);
+        initApp(payload);
       } catch {
-        sessionStorage.clear();
-        window.location.href = '/login.html';
+        sessionStorage.clear(); location.href = '/login.html';
       }
     })();
 
-    function initDashboard(payload) {
-      // 組織情報を表示
-      const orgData = JSON.parse(sessionStorage.getItem('mitas_org') || '{}');
-      const orgName = orgData.name || payload.name || '組織名未設定';
-      const orgId   = orgData.id   || payload.sub  || '-';
+    /* ─── アプリ初期化 ─────────────────────────── */
+    function initApp(payload) {
+      const org   = JSON.parse(sessionStorage.getItem('mitas_org') || '{}');
+      const name  = org.name || payload.name || '組織名未設定';
+      const orgId = org.id   || payload.sub  || '-';
 
-      document.getElementById('sidebarOrgName').textContent = orgName;
+      // サイドバー・ヘッダーに組織情報をセット
+      document.getElementById('sidebarOrgName').textContent = name;
       document.getElementById('sidebarOrgId').textContent   = orgId;
-      document.getElementById('userName').textContent = orgName.length > 10 ? orgName.slice(0, 10) + '…' : orgName;
-
-      const initials = orgName.replace(/[^ぁ-んァ-ヶ一-龯a-zA-Z]/g, '').slice(0, 2) || orgName.slice(0, 2);
+      document.getElementById('userName').textContent = name.length > 10 ? name.slice(0, 10) + '…' : name;
+      const initials = name.replace(/[\s　]/g, '').slice(0, 2);
       document.getElementById('userAvatar').textContent = initials;
 
-      // 日付表示
-      const now = new Date();
-      const fmt = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-      document.getElementById('pageDate').textContent = fmt.format(now);
-
-      // モックデータを描画
-      renderCases();
-      renderCandidates();
-      renderTasks();
-      renderActivity();
+      // 日付
+      const fmt = new Intl.DateTimeFormat('ja-JP', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+      document.getElementById('pageDate').textContent = fmt.format(new Date());
 
       // ローディング解除
       document.getElementById('loadingOverlay').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('mainContent').style.display   = 'block';
+
+      // 各セクションの初期描画
+      renderActivity();
+
+      // 初期セクション表示
+      showSection('overview');
     }
 
-    /* ─── モックデータ ───────────────────────── */
-    const CASES = [
-      { id:'SC-2026-008', title:'内科系医師 緊急補充',         org:'さくら病院 本院',         profession:'医師（内科）',   status:'sourcing',     priority:'urgent',   deadline:'2026-05-15' },
-      { id:'SC-2026-007', title:'訪問看護師 複数名採用',       org:'ひまわり訪問看護ステーション', profession:'看護師',        status:'interviewing', priority:'high',     deadline:'2026-05-31' },
-      { id:'SC-2026-006', title:'医療事務員 正職員',           org:'さくら病院 分院',         profession:'医療事務',       status:'sourcing',     priority:'medium',   deadline:'2026-06-30' },
-      { id:'SC-2026-005', title:'薬剤師 パート募集',           org:'さくら調剤薬局',          profession:'薬剤師',         status:'offer',        priority:'medium',   deadline:'2026-06-15' },
-      { id:'SC-2026-004', title:'理学療法士 増員',             org:'リハビリテーション病院',   profession:'理学療法士',     status:'interviewing', priority:'high',     deadline:'2026-05-20' },
-      { id:'SC-2026-003', title:'ケアマネジャー 専任',         org:'みらい介護センター',      profession:'ケアマネジャー', status:'scoping',      priority:'medium',   deadline:'2026-07-01' },
-      { id:'SC-2026-002', title:'精神科専門医 非常勤',         org:'こころのクリニック',      profession:'医師（精神科）', status:'sourcing',     priority:'critical', deadline:'2026-05-10' },
-      { id:'SC-2026-001', title:'介護福祉士 夜勤対応可',       org:'しおかぜ特養',           profession:'介護福祉士',     status:'intake',       priority:'low',      deadline:'2026-08-01' },
-    ];
-
-    const CANDIDATES = [
-      { name:'田中 真理（非表示）', profession:'看護師', exp:'8年', caseId:'SC-2026-007', proposedAt:'4月25日', stage:'新規提案' },
-      { name:'山本 健太郎（非表示）', profession:'医師（内科）', exp:'12年', caseId:'SC-2026-008', proposedAt:'4月24日', stage:'新規提案' },
-      { name:'鈴木 彩（非表示）', profession:'医師（精神科）', exp:'6年', caseId:'SC-2026-002', proposedAt:'4月23日', stage:'新規提案' },
-    ];
-
-    const TASKS = [
-      { id:1, title:'SC-2026-008: 候補者2名の詳細プロフィール確認', due:'本日中', done:false },
-      { id:2, title:'SC-2026-007: 面談日程候補を提示', due:'本日中', done:false },
-      { id:3, title:'SC-2026-002: 勤務条件の確認書類を返送', due:'明日まで', done:false },
-      { id:4, title:'SC-2026-005: 内定承諾書の受領確認', due:'4/29', done:true },
-    ];
-
-    const ACTIVITIES = [
-      { type:'blue',  text:'SC-2026-008 に新しい候補者が提案されました（山本様）',   time:'2時間前' },
-      { type:'green', text:'SC-2026-005 薬剤師ポジションで内定承諾を確認しました', time:'昨日 15:32' },
-      { type:'warn',  text:'SC-2026-002 精神科医師案件の期限が10日以内です',       time:'昨日 09:00' },
-      { type:'blue',  text:'SC-2026-007 候補者との面談日程を調整中です',          time:'2日前' },
-      { type:'red',   text:'SC-2026-004 理学療法士候補1名が辞退しました',          time:'3日前' },
-    ];
-
-    const STATUS_LABELS = {
-      intake: '受付',   scoping: '要件整理', sourcing: '候補者選定',
-      interviewing: '面談中', offer: '内定提案', placed: '充足済',
-      on_hold: '保留中', closed_lost: '見送り'
-    };
-    const STATUS_CLASS = {
-      intake: 'intake', scoping: 'scoping', sourcing: 'sourcing',
-      interviewing: 'interviewing', offer: 'offer', placed: 'placed',
-      on_hold: 'on-hold', closed_lost: 'closed-lost'
-    };
-    const PRIORITY_LABELS = {
-      critical: '最緊急', urgent: '緊急', high: '高', medium: '中', low: '低'
+    /* ─── セクション切り替え ─────────────────────── */
+    const SECTION_TITLES = {
+      overview:   'ダッシュボード',
+      cases:      '案件管理',
+      candidates: '候補者確認',
+      tasks:      'タスク',
+      inquiries:  '問い合わせ',
+      settings:   '設定',
     };
 
-    function deadlineClass(iso) {
-      const d = new Date(iso);
-      const now = new Date();
-      const diff = (d - now) / 86400000;
-      if (diff < 0) return 'overdue';
-      if (diff <= 14) return 'soon';
-      return '';
-    }
-    function fmtDate(iso) {
-      const [y, m, d] = iso.split('-');
-      return `${m}/${d}`;
+    function showSection(id) {
+      // セクション表示
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('s-' + id);
+      if (target) target.classList.add('active');
+
+      // ナビのアクティブ状態
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const navItem = document.querySelector(`.nav-item[data-section="${id}"]`);
+      if (navItem) navItem.classList.add('active');
+
+      // タイトル更新
+      document.getElementById('pageTitle').textContent = SECTION_TITLES[id] || id;
     }
 
-    function renderCases() {
-      const tbody = document.getElementById('caseTableBody');
-      tbody.innerHTML = CASES.map(c => `
-        <tr>
-          <td>
-            <span class="case-id">${c.id}</span><br>
-            <span class="case-title">${c.title}</span>
-            <div class="case-org">${c.org}</div>
-          </td>
-          <td>${c.profession}</td>
-          <td><span class="badge badge--${STATUS_CLASS[c.status]}">${STATUS_LABELS[c.status]}</span></td>
-          <td><span class="priority-badge priority-badge--${c.priority}">${PRIORITY_LABELS[c.priority]}</span></td>
-          <td><span class="deadline ${deadlineClass(c.deadline)}">${fmtDate(c.deadline)}</span></td>
-          <td><a class="table-action" href="#">詳細</a></td>
-        </tr>
-      `).join('');
-    }
-
-    function renderCandidates() {
-      const tbody = document.getElementById('candTableBody');
-      tbody.innerHTML = CANDIDATES.map(c => `
-        <tr>
-          <td style="font-weight:600;color:var(--navy)">${c.name}</td>
-          <td>${c.profession}</td>
-          <td>${c.exp}</td>
-          <td><span class="case-id">${c.caseId}</span></td>
-          <td style="color:var(--gray-500)">${c.proposedAt}</td>
-          <td>
-            <a class="table-action" href="#" style="margin-right:8px;">詳細確認</a>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function renderTasks() {
-      const el = document.getElementById('taskList');
-      el.innerHTML = TASKS.map(t => `
-        <div class="task-item">
-          <div class="task-check ${t.done ? 'done' : ''}" onclick="toggleTask(${t.id}, this)">
-            ${t.done ? '&#10003;' : ''}
-          </div>
-          <div class="task-text">
-            <p class="task-title ${t.done ? 'done' : ''}">${t.title}</p>
-            <p class="task-meta ${t.due === '本日中' && !t.done ? 'due-urgent' : ''}">${t.due}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function toggleTask(id, el) {
-      const task = TASKS.find(t => t.id === id);
-      if (!task) return;
-      task.done = !task.done;
-      renderTasks();
-    }
-
-    function renderActivity() {
-      const el = document.getElementById('activityFeed');
-      el.innerHTML = ACTIVITIES.map(a => `
-        <div class="activity-item">
-          <div class="activity-dot activity-dot--${a.type}"></div>
-          <div class="activity-text">
-            <p>${a.text}</p>
-            <p class="activity-time">${a.time}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    /* ─── ナビゲーション ─────────────────────── */
-    document.querySelectorAll('.nav-item, .section__link').forEach(el => {
-      el.addEventListener('click', e => {
-        e.preventDefault();
-        const sec = el.dataset.section;
-        if (!sec) return;
-        // 現状はダッシュボードのみ実装。他セクションは今後実装
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        const navItem = document.querySelector(`.nav-item[data-section="${sec}"]`);
-        if (navItem) navItem.classList.add('active');
-        document.getElementById('pageTitle').textContent = el.textContent.trim().replace(/\d+$/, '').trim();
-      });
+    /* ─── ナビゲーションイベント ─────────────────── */
+    document.getElementById('sidebarNav').addEventListener('click', e => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      e.preventDefault();
+      showSection(item.dataset.section);
     });
 
-    /* ─── ユーザーメニュー ───────────────────── */
+    /* ─── ユーザーメニュー ───────────────────────── */
     const userMenu     = document.getElementById('userMenu');
     const userDropdown = document.getElementById('userDropdown');
     userMenu.addEventListener('click', e => {
       e.stopPropagation();
-      userDropdown.classList.toggle('show');
+      userDropdown.classList.toggle('open');
     });
-    document.addEventListener('click', () => userDropdown.classList.remove('show'));
+    document.addEventListener('click', () => userDropdown.classList.remove('open'));
 
-    /* ─── ログアウト ─────────────────────────── */
+    /* ─── ログアウト ─────────────────────────────── */
     document.getElementById('logoutBtn').addEventListener('click', e => {
       e.preventDefault();
       sessionStorage.clear();
-      window.location.href = '/login.html';
+      location.href = '/login.html';
+    });
+
+    /* ─── アクティビティデータ ──────────────────── */
+    const ACTIVITIES = [
+      { type:'blue',  text:'SC-2026-008 に新しい候補者が提案されました',  caseId:'SC-2026-008', owner:'近藤', tag:'新規提案',  tagClass:'blue',   time:'2時間前'    },
+      { type:'green', text:'SC-2026-005 薬剤師ポジションで内定承諾',       caseId:'SC-2026-005', owner:'近藤', tag:'内定承諾',  tagClass:'green',  time:'昨日 15:32' },
+      { type:'amber', text:'SC-2026-002 精神科医師案件 期限まで10日',      caseId:'SC-2026-002', owner:'近藤', tag:'期限警告',  tagClass:'amber',  time:'昨日 09:00' },
+      { type:'blue',  text:'SC-2026-007 候補者との面談日程を調整中',       caseId:'SC-2026-007', owner:'近藤', tag:'面談調整',  tagClass:'blue',   time:'2日前'      },
+      { type:'red',   text:'SC-2026-004 理学療法士候補1名が辞退',          caseId:'SC-2026-004', owner:'近藤', tag:'辞退',      tagClass:'red',    time:'3日前'      },
+      { type:'gray',  text:'SC-2026-003 ケアマネ要件ヒアリング完了',       caseId:'SC-2026-003', owner:'近藤', tag:'要件確定',  tagClass:'gray',   time:'4日前'      },
+      { type:'green', text:'SC-2026-006 医療事務 候補者3名エントリー',     caseId:'SC-2026-006', owner:'近藤', tag:'候補追加',  tagClass:'green',  time:'5日前'      },
+    ];
+
+    function renderActivity() {
+      const tbody = document.getElementById('activityTbody');
+      if (!tbody) return;
+      tbody.innerHTML = ACTIVITIES.map(a => `
+        <tr>
+          <td style="text-align:center;">
+            <span class="act-dot act-dot--${a.type}"></span>
+          </td>
+          <td>${a.text}</td>
+          <td><span class="td-mono">${a.caseId}</span></td>
+          <td>${a.owner}</td>
+          <td><span class="badge badge--${a.tagClass}">${a.tag}</span></td>
+          <td style="color:var(--gray-400);white-space:nowrap;">${a.time}</td>
+        </tr>
+      `).join('');
+    }
+
+    /* ─── 新規依頼ボタン（STEP3で実装） ────────────── */
+    document.getElementById('btnNewRequest').addEventListener('click', () => {
+      // STEP3でモーダルを開く処理を追加
     });
   </script>
 </body>
