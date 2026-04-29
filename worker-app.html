@@ -528,7 +528,7 @@
     }
     .list-card--past { opacity: 0.78; }
 
-    /* ─── プレースホルダー（Profile タブ等）─── */
+    /* ─── プレースホルダー（未実装ビュー） ─── */
     .placeholder-view {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -545,6 +545,354 @@
     .placeholder-view__sub {
       font-size: 12px;
       color: var(--gray-500);
+    }
+
+    /* ─── Profile タブ ─── */
+    .profile-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .avatar {
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.05em;
+    }
+    .profile-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      line-height: 1.3;
+    }
+    .profile-prof {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .info-grid__item { min-width: 0; }
+    .info-grid__label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .info-grid__value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+      overflow-wrap: anywhere;
+    }
+
+    /* オファー受付トグル */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+    .toggle-row__label-wrap { min-width: 0; }
+    .toggle-row__title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    .toggle-row__sub {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 28px;
+      flex: 0 0 auto;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch__slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--gray-300);
+      border-radius: 999px;
+      transition: background 0.15s ease;
+    }
+    .switch__slider::before {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 22px; height: 22px;
+      background: var(--white);
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease;
+    }
+    .switch input:checked + .switch__slider { background: var(--green); }
+    .switch input:checked + .switch__slider::before { transform: translateX(20px); }
+    .switch input:disabled + .switch__slider { opacity: 0.5; cursor: not-allowed; }
+
+    /* セクションカード（資格・空き枠） */
+    .section-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .section-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .section-card__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      letter-spacing: 0.04em;
+    }
+    .section-card__add {
+      background: var(--teal-pale);
+      color: var(--teal);
+      border: none;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .section-card__add:active { background: #DBEAFE; }
+    .section-card__list { padding: 4px 0; }
+    .section-card__empty {
+      padding: 28px 18px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    /* 資格行 */
+    .credential-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--gray-100);
+      align-items: start;
+    }
+    .credential-item:last-child { border-bottom: none; }
+    .credential-item__name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    .credential-item__meta {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    .badge--pending  { background: var(--gray-100); color: var(--gray-700); }
+    .badge--verified { background: var(--green-pale); color: var(--green-deep); }
+    .badge--rejected { background: var(--red-pale); color: var(--red); }
+    .badge--expired  { background: var(--amber-pale); color: var(--amber); }
+
+    /* 空き枠行 */
+    .availability-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .availability-item:last-child { border-bottom: none; }
+    .availability-item__main { flex: 1; min-width: 0; }
+    .availability-item__title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    .availability-item__time {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+    .icon-btn {
+      width: 32px; height: 32px;
+      border: none;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .icon-btn:hover { background: var(--red-pale); color: var(--red); }
+    .icon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* モーダル */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 300;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-backdrop--open { display: flex; }
+    @media (min-width: 600px) {
+      .modal-backdrop { align-items: center; }
+    }
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 520px;
+      border-radius: 18px 18px 0 0;
+      padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    @media (min-width: 600px) {
+      .modal { border-radius: 18px; max-height: 84vh; }
+    }
+    .modal__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .modal__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-deep);
+    }
+    .modal__close {
+      background: var(--gray-100);
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      color: var(--gray-500);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .form-row { margin-bottom: 12px; }
+    .form-row__label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .form-input,
+    .form-select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--gray-900);
+    }
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.16);
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .modal__actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .btn {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-700);
+    }
+    .btn--primary {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .btn--primary:active { background: var(--navy-deep); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .radio-group {
+      display: flex;
+      gap: 8px;
+    }
+    .radio-tile {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-700);
+      background: var(--white);
+    }
+    .radio-tile input { display: none; }
+    .radio-tile--checked {
+      background: var(--teal-pale);
+      border-color: var(--teal);
+      color: var(--teal);
     }
 
     /* ─── 大画面では幅制限 ─── */
@@ -619,22 +967,96 @@
     </div>
   </section>
 
-  <!-- ─── Profile ビュー（v0.3 で実装予定） ─── -->
+  <!-- ─── Profile ビュー ─── -->
   <section id="view-profile" class="view" aria-labelledby="head-profile">
     <div class="page-head">
       <div class="page-head__eyebrow">Profile</div>
       <h1 class="page-head__title" id="head-profile">プロフィール</h1>
+      <p class="page-head__sub">基本情報・資格・勤務可能時間</p>
     </div>
-    <div class="placeholder-view">
-      <div class="placeholder-view__title">準備中</div>
-      <div class="placeholder-view__sub">資格情報・空き枠の編集機能は次回アップデートで追加します。</div>
+
+    <!-- スケルトン -->
+    <div id="profileSkeleton">
+      <div class="skeleton" style="height:120px; border-radius:16px; margin-bottom:14px;"></div>
+      <div class="skeleton" style="height:64px; border-radius:16px; margin-bottom:14px;"></div>
+      <div class="skeleton" style="height:200px; border-radius:16px; margin-bottom:14px;"></div>
     </div>
+
+    <div id="profileRoot" hidden></div>
   </section>
 
 </main>
 
 <!-- ═════ トースト ═════ -->
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- ═════ 空き枠追加モーダル ═════ -->
+<div id="availabilityModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="availabilityModalTitle">
+  <div class="modal">
+    <div class="modal__head">
+      <div class="modal__title" id="availabilityModalTitle">勤務可能枠を追加</div>
+      <button type="button" class="modal__close" id="modalCloseBtn" aria-label="閉じる">×</button>
+    </div>
+    <form id="availabilityForm">
+      <div class="form-row">
+        <div class="form-row__label">繰り返し</div>
+        <div class="radio-group" id="recurringGroup">
+          <label class="radio-tile radio-tile--checked">
+            <input type="radio" name="isRecurring" value="true" checked>毎週繰り返し
+          </label>
+          <label class="radio-tile">
+            <input type="radio" name="isRecurring" value="false">特定日のみ
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row" id="dayOfWeekRow">
+        <div class="form-row__label">曜日</div>
+        <select class="form-select" id="dayOfWeek">
+          <option value="1">月曜日</option>
+          <option value="2">火曜日</option>
+          <option value="3">水曜日</option>
+          <option value="4">木曜日</option>
+          <option value="5">金曜日</option>
+          <option value="6">土曜日</option>
+          <option value="0">日曜日</option>
+        </select>
+      </div>
+
+      <div class="form-row" id="specificDateRow" hidden>
+        <div class="form-row__label">日付</div>
+        <input type="date" class="form-input" id="specificDate">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-row">
+          <div class="form-row__label">開始時刻</div>
+          <input type="time" class="form-input" id="startTime" value="09:00">
+        </div>
+        <div class="form-row">
+          <div class="form-row__label">終了時刻</div>
+          <input type="time" class="form-input" id="endTime" value="18:00">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-row__label">シフト種別</div>
+        <select class="form-select" id="shiftType">
+          <option value="regular_shift">通常シフト</option>
+          <option value="on_call">オンコール</option>
+          <option value="night_duty">夜勤</option>
+          <option value="spot">スポット</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn" id="modalCancelBtn">キャンセル</button>
+        <button type="submit" class="btn btn--primary" id="modalSaveBtn">追加する</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- ═════ ボトムナビ ═════ -->
 <nav class="bottom-nav" aria-label="メインナビゲーション">
@@ -683,6 +1105,12 @@
   // 現在のタブ
   let currentTab = 'today';
 
+  // Profile 関連の状態
+  let profileLoaded = false;
+  let workerProfile = null;
+  let workerCredentials = [];
+  let workerAvailability = [];
+
   // ─── 起動 ───
   document.addEventListener('DOMContentLoaded', init);
 
@@ -719,6 +1147,13 @@
       });
     });
 
+    // Profile タブを有効化（disabled が外れる）
+    const profileBtn = document.querySelector('.bottom-nav__item[data-tab="profile"]');
+    if (profileBtn) { profileBtn.disabled = false; profileBtn.removeAttribute('title'); }
+
+    // モーダルのイベントを一度だけ初期化
+    setupAvailabilityModalOnce();
+
     // GPS 取得（許可された場合のみ。失敗してもボタンは動作）
     requestGps();
 
@@ -740,6 +1175,9 @@
     });
     // 上部にスクロール
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Profile タブは初回のみロード
+    if (tab === 'profile' && !profileLoaded) loadProfile();
   }
 
   // ─── ログアウト ───
@@ -950,6 +1388,290 @@
     return '更新しました';
   }
 
+  // ─── Profile タブ ───
+  async function loadProfile() {
+    showProfileSkeleton(true);
+    try {
+      const [profile, credentials, availability] = await Promise.all([
+        pgFetch('/worker_profiles?select=*&limit=1'),
+        pgFetch('/worker_credentials?select=*&order=expiry_date.asc.nullslast'),
+        pgFetch('/worker_availability?select=*&order=is_recurring.desc,day_of_week.asc,specific_date.asc,start_time.asc'),
+      ]);
+      // RLS で本人レコードのみ返る前提（worker_profiles は user_id で UNIQUE）
+      workerProfile = Array.isArray(profile) ? profile[0] || null : profile;
+      workerCredentials = Array.isArray(credentials) ? credentials : [];
+      workerAvailability = Array.isArray(availability) ? availability : [];
+      profileLoaded = true;
+      renderProfile();
+    } catch (e) {
+      console.error(e);
+      showToast('プロフィールの取得に失敗しました', 'error');
+      renderProfile();
+    } finally {
+      showProfileSkeleton(false);
+    }
+  }
+
+  function renderProfile() {
+    const root = document.getElementById('profileRoot');
+    if (!workerProfile) {
+      root.innerHTML = `<div class="empty"><div class="empty__title">プロフィール情報が登録されていません</div>
+        <div class="empty__sub">Neco の担当者にお問い合わせください。</div></div>`;
+      root.hidden = false;
+      return;
+    }
+    const p = workerProfile;
+    const initials = (p.full_name || '?').trim().slice(0, 1);
+    root.innerHTML = `
+      ${renderProfileCard(p, initials)}
+      ${renderOfferToggle(p)}
+      ${renderCredentialsCard(workerCredentials)}
+      ${renderAvailabilityCard(workerAvailability)}
+    `;
+    root.hidden = false;
+
+    // イベントバインド
+    const toggle = document.getElementById('offerToggle');
+    if (toggle) toggle.addEventListener('change', onOfferToggle);
+
+    document.getElementById('addAvailabilityBtn')?.addEventListener('click', openAvailabilityModal);
+    document.querySelectorAll('[data-availability-delete]').forEach(btn => {
+      btn.addEventListener('click', () => deleteAvailability(btn.dataset.availabilityDelete));
+    });
+  }
+
+  function renderProfileCard(p, initials) {
+    const items = [
+      ['職種', professionLabel(p.profession_type)],
+      ['専門', p.primary_specialty || '-'],
+      ['経験年数', p.years_experience != null ? `${p.years_experience} 年` : '-'],
+      ['居住地', [p.current_prefecture, p.current_city].filter(Boolean).join(' ') || '-'],
+      ['希望勤務地', (p.desired_prefectures || []).join('、') || '-'],
+      ['通勤可能距離', p.work_radius_km != null ? `${p.work_radius_km} km` : '-'],
+    ];
+    return `
+      <div class="profile-card">
+        <div class="profile-head">
+          <div class="avatar">${escapeHtml(initials)}</div>
+          <div>
+            <div class="profile-name">${escapeHtml(p.full_name || '-')}</div>
+            <div class="profile-prof">${escapeHtml(professionLabel(p.profession_type))}${p.primary_specialty ? ' / ' + escapeHtml(p.primary_specialty) : ''}</div>
+          </div>
+        </div>
+        <div class="info-grid">
+          ${items.map(([label, val]) => `
+            <div class="info-grid__item">
+              <div class="info-grid__label">${escapeHtml(label)}</div>
+              <div class="info-grid__value">${escapeHtml(String(val))}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  function renderOfferToggle(p) {
+    const checked = p.is_available_for_offers ? 'checked' : '';
+    return `
+      <div class="toggle-row">
+        <div class="toggle-row__label-wrap">
+          <div class="toggle-row__title">新しいオファーを受け取る</div>
+          <div class="toggle-row__sub">${p.is_available_for_offers ? 'オファー受付中' : '受付停止中（既存アサインには影響しません）'}</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="offerToggle" ${checked}>
+          <span class="switch__slider"></span>
+        </label>
+      </div>`;
+  }
+
+  function renderCredentialsCard(list) {
+    return `
+      <div class="section-card">
+        <div class="section-card__head">
+          <div class="section-card__title">資格・免許</div>
+        </div>
+        <div class="section-card__list">
+          ${!list.length
+            ? `<div class="section-card__empty">登録された資格情報はありません</div>`
+            : list.map(c => `
+              <div class="credential-item">
+                <div>
+                  <div class="credential-item__name">${escapeHtml(c.credential_name || c.credential_type || '-')}</div>
+                  <div class="credential-item__meta">
+                    ${c.issuer ? escapeHtml(c.issuer) + ' / ' : ''}${c.credential_number ? '番号: ' + escapeHtml(c.credential_number) : ''}
+                    ${c.expiry_date ? ' / 有効期限: ' + escapeHtml(formatDateYmd(c.expiry_date)) : ''}
+                  </div>
+                </div>
+                <span class="badge badge--${c.status}">${credentialStatusLabel(c.status)}</span>
+              </div>
+            `).join('')}
+        </div>
+      </div>`;
+  }
+
+  function renderAvailabilityCard(list) {
+    return `
+      <div class="section-card">
+        <div class="section-card__head">
+          <div class="section-card__title">勤務可能枠</div>
+          <button type="button" class="section-card__add" id="addAvailabilityBtn">＋ 追加</button>
+        </div>
+        <div class="section-card__list">
+          ${!list.length
+            ? `<div class="section-card__empty">登録された勤務可能枠はありません</div>`
+            : list.map(a => `
+              <div class="availability-item">
+                <div class="availability-item__main">
+                  <div class="availability-item__title">${escapeHtml(availabilityTitle(a))}</div>
+                  <div class="availability-item__time">${escapeHtml(formatTimeRange(a.start_time, a.end_time))} / ${escapeHtml(shiftTypeLabel(a.shift_type))}</div>
+                </div>
+                <button type="button" class="icon-btn" data-availability-delete="${escapeHtml(a.id)}" aria-label="削除">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                </button>
+              </div>
+            `).join('')}
+        </div>
+      </div>`;
+  }
+
+  // ─── オファー受付トグル ───
+  async function onOfferToggle(ev) {
+    const next = ev.target.checked;
+    ev.target.disabled = true;
+    try {
+      const updated = await pgFetch(`/worker_profiles?id=eq.${workerProfile.id}`, {
+        method: 'PATCH',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({ is_available_for_offers: next }),
+      });
+      if (Array.isArray(updated) && updated[0]) workerProfile = updated[0];
+      else workerProfile = { ...workerProfile, is_available_for_offers: next };
+      // 再描画でサブテキストを更新
+      renderProfile();
+      showToast(next ? 'オファー受付を開始しました' : 'オファー受付を停止しました', 'success');
+    } catch (e) {
+      console.error(e);
+      showToast('更新に失敗しました', 'error');
+      ev.target.checked = !next;
+      ev.target.disabled = false;
+    }
+  }
+
+  // ─── 空き枠モーダル ───
+  function openAvailabilityModal() {
+    const modal = document.getElementById('availabilityModal');
+    modal.classList.add('modal-backdrop--open');
+  }
+  function closeAvailabilityModal() {
+    document.getElementById('availabilityModal').classList.remove('modal-backdrop--open');
+  }
+
+  function setupAvailabilityModalOnce() {
+    const modal = document.getElementById('availabilityModal');
+    if (modal.dataset.bound === '1') return;
+    modal.dataset.bound = '1';
+
+    document.getElementById('modalCloseBtn').addEventListener('click', closeAvailabilityModal);
+    document.getElementById('modalCancelBtn').addEventListener('click', closeAvailabilityModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeAvailabilityModal(); });
+
+    // ラジオボタン切替
+    modal.querySelectorAll('input[name="isRecurring"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const isRec = radio.value === 'true';
+        document.getElementById('dayOfWeekRow').hidden = !isRec;
+        document.getElementById('specificDateRow').hidden = isRec;
+        modal.querySelectorAll('.radio-tile').forEach(t => {
+          const inp = t.querySelector('input');
+          t.classList.toggle('radio-tile--checked', inp.checked);
+        });
+      });
+    });
+
+    document.getElementById('availabilityForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveAvailability();
+    });
+  }
+
+  async function saveAvailability() {
+    const isRecurring = document.querySelector('input[name="isRecurring"]:checked').value === 'true';
+    const dayOfWeek = parseInt(document.getElementById('dayOfWeek').value, 10);
+    const specificDate = document.getElementById('specificDate').value || null;
+    const startTime = document.getElementById('startTime').value;
+    const endTime = document.getElementById('endTime').value;
+    const shiftType = document.getElementById('shiftType').value;
+
+    if (!startTime || !endTime || endTime <= startTime) {
+      showToast('終了時刻は開始時刻より後に設定してください', 'error');
+      return;
+    }
+    if (!isRecurring && !specificDate) {
+      showToast('日付を選択してください', 'error');
+      return;
+    }
+
+    const body = {
+      worker_id: workerProfile.id,
+      is_recurring: isRecurring,
+      day_of_week: isRecurring ? dayOfWeek : null,
+      specific_date: isRecurring ? null : specificDate,
+      start_time: startTime,
+      end_time: endTime,
+      shift_type: shiftType,
+      is_blocked: false,
+    };
+
+    const saveBtn = document.getElementById('modalSaveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = '保存中…';
+    try {
+      const created = await pgFetch('/worker_availability', {
+        method: 'POST',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify(body),
+      });
+      const newRow = Array.isArray(created) ? created[0] : created;
+      if (newRow) workerAvailability.push(newRow);
+      // ソートし直して再描画
+      workerAvailability.sort(availabilitySortFn);
+      renderProfile();
+      closeAvailabilityModal();
+      showToast('勤務可能枠を追加しました', 'success');
+    } catch (e) {
+      console.error(e);
+      showToast(e.message || '追加に失敗しました', 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '追加する';
+    }
+  }
+
+  async function deleteAvailability(id) {
+    if (!id) return;
+    if (!confirm('この勤務可能枠を削除しますか？')) return;
+    try {
+      await pgFetch(`/worker_availability?id=eq.${id}`, { method: 'DELETE' });
+      workerAvailability = workerAvailability.filter(a => a.id !== id);
+      renderProfile();
+      showToast('削除しました', 'success');
+    } catch (e) {
+      console.error(e);
+      showToast('削除に失敗しました', 'error');
+    }
+  }
+
+  function availabilitySortFn(a, b) {
+    if (a.is_recurring !== b.is_recurring) return a.is_recurring ? -1 : 1;
+    if (a.is_recurring) return (a.day_of_week ?? 0) - (b.day_of_week ?? 0);
+    return new Date(a.specific_date) - new Date(b.specific_date);
+  }
+
+  function showProfileSkeleton(on) {
+    document.getElementById('profileSkeleton').hidden = !on;
+    if (on) document.getElementById('profileRoot').hidden = true;
+  }
+
   // ─── Schedule タブ描画 ───
   function renderSchedule(list) {
     const root = document.getElementById('scheduleRoot');
@@ -1034,6 +1756,28 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </button>`;
+  }
+
+  // ─── PostgREST 直接アクセス（worker_profiles/credentials/availability 等）───
+  async function pgFetch(path, init = {}) {
+    if (isMockMode) return mockPgResponse(path, init);
+    const headers = {
+      'Content-Type': 'application/json',
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${currentToken}`,
+      ...(init.headers || {}),
+    };
+    const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { ...init, headers });
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { /* noop */ }
+    if (!res.ok) {
+      const msg = (json && (json.message || json.error)) || `HTTP ${res.status}`;
+      const err = new Error(msg);
+      err.status = res.status;
+      throw err;
+    }
+    return json;
   }
 
   // ─── API 呼び出し（モックモードでは固定値を返す）───
@@ -1161,6 +1905,111 @@
     return {};
   }
 
+  // ─── PostgREST 用モック ───
+  const mockPg = {
+    profile: {
+      id: '00000000-0000-0000-0000-0000000000a1',
+      user_id: 'mock-user',
+      full_name: '佐藤 美咲',
+      full_name_kana: 'サトウ ミサキ',
+      email: 'mock@example.com',
+      phone: '090-1234-5678',
+      profession_type: 'rn',
+      primary_specialty: 'ICU',
+      sub_specialties: ['救急', '小児'],
+      years_experience: 8,
+      current_prefecture: '東京都',
+      current_city: '世田谷区',
+      desired_prefectures: ['東京都', '神奈川県'],
+      work_radius_km: 15,
+      is_available_for_offers: true,
+      onboarding_status: 'approved',
+    },
+    credentials: [
+      {
+        id: '00000000-0000-0000-0000-0000000000c1',
+        credential_type: 'license',
+        credential_name: '看護師免許',
+        issuer: '厚生労働省',
+        credential_number: '第123456号',
+        issued_date: '2018-03-31',
+        expiry_date: null,
+        status: 'verified',
+      },
+      {
+        id: '00000000-0000-0000-0000-0000000000c2',
+        credential_type: 'certification',
+        credential_name: 'BLSプロバイダー',
+        issuer: 'AHA',
+        issued_date: '2024-06-12',
+        expiry_date: '2026-06-12',
+        status: 'verified',
+      },
+      {
+        id: '00000000-0000-0000-0000-0000000000c3',
+        credential_type: 'certification',
+        credential_name: '認定看護師（救急看護）',
+        issuer: '日本看護協会',
+        expiry_date: '2026-12-31',
+        status: 'pending',
+      },
+    ],
+    availability: [
+      {
+        id: '00000000-0000-0000-0000-0000000000d1',
+        is_recurring: true,
+        day_of_week: 2,
+        specific_date: null,
+        start_time: '09:00:00',
+        end_time: '18:00:00',
+        shift_type: 'regular_shift',
+        is_blocked: false,
+      },
+      {
+        id: '00000000-0000-0000-0000-0000000000d2',
+        is_recurring: true,
+        day_of_week: 5,
+        specific_date: null,
+        start_time: '21:00:00',
+        end_time: '23:30:00',
+        shift_type: 'night_duty',
+        is_blocked: false,
+      },
+    ],
+  };
+
+  async function mockPgResponse(path, init = {}) {
+    await new Promise(r => setTimeout(r, 200));
+    const method = (init.method || 'GET').toUpperCase();
+
+    if (path.startsWith('/worker_profiles')) {
+      if (method === 'GET') return [mockPg.profile];
+      if (method === 'PATCH') {
+        const body = init.body ? JSON.parse(init.body) : {};
+        Object.assign(mockPg.profile, body);
+        return [mockPg.profile];
+      }
+    }
+    if (path.startsWith('/worker_credentials')) {
+      if (method === 'GET') return mockPg.credentials;
+    }
+    if (path.startsWith('/worker_availability')) {
+      if (method === 'GET') return mockPg.availability;
+      if (method === 'POST') {
+        const body = init.body ? JSON.parse(init.body) : {};
+        const row = { id: 'mock-' + Date.now(), ...body };
+        mockPg.availability.push(row);
+        return [row];
+      }
+      if (method === 'DELETE') {
+        const m = path.match(/id=eq\.([^&]+)/);
+        if (m) mockPg.availability = mockPg.availability.filter(a => a.id !== m[1]);
+        return null;
+      }
+    }
+    return [];
+  }
+
   // ─── UI ヘルパー ───
   function showSkeleton(on) {
     document.getElementById('skeleton').hidden = !on;
@@ -1228,6 +2077,34 @@
       st: '言語聴覚士', ph: '薬剤師', ce: '臨床工学技士',
       ca: '看護助手', other: 'その他',
     })[p] || p || '-';
+  }
+  function credentialStatusLabel(s) {
+    return ({ pending: '審査中', verified: '認証済', rejected: '却下', expired: '期限切れ' })[s] || s || '-';
+  }
+  function shiftTypeLabel(s) {
+    return ({
+      regular_shift: '通常シフト',
+      on_call: 'オンコール',
+      night_duty: '夜勤',
+      spot: 'スポット',
+      other: 'その他',
+    })[s] || s || '-';
+  }
+  function availabilityTitle(a) {
+    if (a.is_recurring) {
+      const wd = ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'][a.day_of_week ?? 0];
+      return `毎週 ${wd}`;
+    }
+    return a.specific_date ? formatDateYmd(a.specific_date) : '日付未設定';
+  }
+  function formatTimeRange(s, e) {
+    return `${(s || '').slice(0,5)} 〜 ${(e || '').slice(0,5)}`;
+  }
+  function formatDateYmd(s) {
+    if (!s) return '-';
+    const d = new Date(s);
+    if (isNaN(d)) return s;
+    return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
   }
 
   // ─── アイコン（インラインSVG）───
