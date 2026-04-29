@@ -37,3 +37,33 @@ async function hospitalLogout() {
   await db.auth.signOut()
   location.href = '/login.html'
 }
+
+/**
+ * パスワードリセットメールを送信する
+ * forgot-password.html から呼び出す
+ */
+async function resetPassword(email) {
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: `${location.origin}/reset-password.html`,
+  })
+  if (error) throw new Error(toJa(error.message))
+}
+
+/**
+ * セッション監視：有効期限切れ・ログアウト時に login.html へ遷移
+ * dashboard.html の initApp() 内から一度だけ呼び出す
+ */
+function watchSession() {
+  db.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') return
+    if (event === 'USER_UPDATED') return
+    // SIGNED_IN 以外のイベントで session が null になった場合はログアウト
+  })
+  // 定期的にセッションを確認（30分ごと）
+  setInterval(async () => {
+    const { data, error } = await db.auth.getSession()
+    if (error || !data.session) {
+      location.href = '/login.html'
+    }
+  }, 30 * 60 * 1000)
+}

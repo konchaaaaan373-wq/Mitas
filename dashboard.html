@@ -959,6 +959,206 @@
       .cand-grid { grid-template-columns: 1fr; }
     }
 
+    /* ─── トースト通知 ──────────────────────────── */
+    #toastContainer {
+      position: fixed;
+      top: 70px; right: 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      z-index: 9000;
+      pointer-events: none;
+    }
+    .toast {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--teal);
+      padding: 12px 16px;
+      min-width: 280px; max-width: 380px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      pointer-events: auto;
+      animation: toastIn 0.25s ease;
+    }
+    .toast.toast--success { border-left-color: var(--green); }
+    .toast.toast--error   { border-left-color: var(--red); }
+    .toast.toast--warning { border-left-color: var(--amber); }
+    .toast__msg  { flex: 1; font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+    .toast__close {
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400); font-size: 14px; line-height: 1; padding: 0;
+    }
+    .toast__close:hover { color: var(--gray-700); }
+    .toast.removing { animation: toastOut 0.2s ease forwards; }
+    @keyframes toastIn  { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
+    @keyframes toastOut { from { opacity:1; transform: translateX(0); } to { opacity:0; transform: translateX(20px); } }
+
+    /* ─── 案件詳細スライドパネル ─────────────────── */
+    .case-panel-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3); z-index: 300;
+    }
+    .case-panel-overlay.open { display: block; }
+    .case-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 500px; max-width: 95vw;
+      background: var(--white);
+      border-left: 1px solid var(--gray-200);
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+      z-index: 301;
+      overflow: hidden;
+    }
+    .case-panel.open { transform: translateX(0); }
+    .case-panel__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--navy-deep);
+      flex-shrink: 0;
+    }
+    .case-panel__id    { font-family: 'Courier New', monospace; font-size: 12px; color: rgba(255,255,255,0.5); }
+    .case-panel__close {
+      background: rgba(255,255,255,0.1); border: none; color: var(--white);
+      width: 28px; height: 28px; cursor: pointer; border-radius: 3px;
+      font-size: 14px; transition: background 0.1s;
+    }
+    .case-panel__close:hover { background: rgba(255,255,255,0.2); }
+    .case-panel__body  { flex: 1; overflow-y: auto; padding: 20px; }
+    .case-panel__title {
+      font-size: 18px; font-weight: 700; color: var(--navy);
+      margin-bottom: 10px; line-height: 1.4;
+    }
+    .case-panel__badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+    .cp-section { margin-bottom: 20px; }
+    .cp-section__label {
+      font-size: 10px; font-weight: 700; color: var(--gray-400);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 8px; border-bottom: 1px solid var(--gray-100); padding-bottom: 4px;
+    }
+    .cp-row {
+      display: flex; justify-content: space-between;
+      padding: 6px 0; border-bottom: 1px solid var(--gray-50);
+      font-size: 13px;
+    }
+    .cp-row:last-child { border-bottom: none; }
+    .cp-row__key   { color: var(--gray-500); font-weight: 500; }
+    .cp-row__val   { color: var(--gray-900); font-weight: 600; text-align: right; }
+    .cp-pipeline {
+      display: flex; gap: 4px; margin-top: 6px;
+    }
+    .cp-stage {
+      flex: 1; text-align: center; padding: 8px 4px;
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      font-size: 10px; line-height: 1.4;
+    }
+    .cp-stage__num  { font-size: 18px; font-weight: 700; color: var(--navy); display: block; }
+    .cp-stage__lbl  { color: var(--gray-500); }
+    .cp-stage.active { background: #EFF6FF; border-color: #BFDBFE; }
+    .case-panel__footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--gray-100);
+      display: flex; gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn-contact {
+      flex: 1; height: 38px;
+      background: var(--teal); color: var(--white); border: none;
+      border-radius: 3px; font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.12s;
+    }
+    .btn-contact:hover { background: var(--teal-dark); }
+    .btn-secondary {
+      height: 38px; padding: 0 16px;
+      background: var(--white); color: var(--gray-600);
+      border: 1px solid var(--gray-300); border-radius: 3px;
+      font-family: 'Noto Sans JP', sans-serif; font-size: 13px;
+      cursor: pointer; transition: background 0.12s;
+    }
+    .btn-secondary:hover { background: var(--gray-50); }
+
+    /* ─── モバイル: ハンバーガー ────────────────── */
+    .topbar__hamburger {
+      display: none;
+      width: 34px; height: 34px;
+      flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+      border: 1px solid var(--gray-200); border-radius: 3px; cursor: pointer; background: none;
+    }
+    .topbar__hamburger span {
+      display: block; width: 16px; height: 2px;
+      background: var(--gray-600); border-radius: 1px;
+    }
+    .sidebar-mask {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3); z-index: 99;
+    }
+    .sidebar-mask.show { display: block; }
+    @media (max-width: 768px) {
+      .topbar__hamburger { display: flex; }
+      .sidebar { width: 224px; transform: translateX(-100%); transition: transform 0.2s; z-index: 100; }
+      .sidebar.open { transform: translateX(0); }
+      .topbar { left: 0; }
+      .main  { margin-left: 0; }
+    }
+
+    /* ─── テーブル行クリック可能 ─────────────────── */
+    .data-table tbody tr.clickable { cursor: pointer; }
+    .data-table tbody tr.clickable:hover td { background: #EFF6FF; }
+
+    /* ─── ソート可能ヘッダー ──────────────────────── */
+    .data-table thead th.sortable {
+      cursor: pointer; user-select: none;
+    }
+    .data-table thead th.sortable:hover { background: var(--gray-100); }
+    .sort-icon {
+      display: inline-block; margin-left: 4px;
+      font-size: 9px; color: var(--gray-300);
+      vertical-align: middle;
+    }
+    .data-table thead th.sort-asc  .sort-icon,
+    .data-table thead th.sort-desc .sort-icon { color: var(--navy); }
+    .data-table thead th.sort-asc  .sort-icon::after { content: '▲'; }
+    .data-table thead th.sort-desc .sort-icon::after { content: '▼'; }
+    .data-table thead th:not(.sort-asc):not(.sort-desc) .sort-icon::after { content: '▲▼'; }
+
+    /* ─── 候補者詳細パネル ───────────────────────── */
+    .cand-panel-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3); z-index: 300;
+    }
+    .cand-panel-overlay.open { display: block; }
+    .cand-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 460px; max-width: 95vw;
+      background: var(--white);
+      border-left: 1px solid var(--gray-200);
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+      z-index: 301; overflow: hidden;
+    }
+    .cand-panel.open { transform: translateX(0); }
+    .cand-panel__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      background: #1B3A6B;
+      flex-shrink: 0;
+    }
+    .cand-panel__num  { font-family: 'Courier New', monospace; font-size: 12px; color: rgba(255,255,255,0.5); }
+    .cand-panel__close {
+      background: rgba(255,255,255,0.1); border: none; color: var(--white);
+      width: 28px; height: 28px; cursor: pointer; border-radius: 3px;
+      font-size: 14px; transition: background 0.1s;
+    }
+    .cand-panel__close:hover { background: rgba(255,255,255,0.2); }
+    .cand-panel__body  { flex: 1; overflow-y: auto; padding: 20px; }
+    .cand-panel__prof  { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .cand-panel__exp   { font-size: 13px; color: var(--gray-600); margin-bottom: 14px; }
+    .cand-panel__footer {
+      padding: 14px 20px; border-top: 1px solid var(--gray-100);
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+
   </style>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1034,7 +1234,16 @@
   </aside>
 
   <!-- トップバー -->
+  <!-- トースト通知コンテナ -->
+  <div id="toastContainer"></div>
+
+  <!-- サイドバーマスク（モバイル用） -->
+  <div class="sidebar-mask" id="sidebarMask"></div>
+
   <header class="topbar">
+    <button class="topbar__hamburger" id="hamburgerBtn" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
     <div class="topbar__title-area">
       <p class="topbar__page-title" id="pageTitle">ダッシュボード</p>
       <p class="topbar__page-sub"   id="pageDate">-</p>
@@ -1068,27 +1277,27 @@
     <!-- ─── ダッシュボード概要 ─────────────────── -->
     <section class="page-section" id="s-overview">
 
-      <!-- KPIカード -->
+      <!-- KPIカード（CASES データから動的算出） -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <p class="kpi-card__label">在籍スタッフ数</p>
-          <p class="kpi-card__value">142<em>名</em></p>
-          <p class="kpi-card__sub"><span class="up">+3</span> 先月比</p>
+          <p class="kpi-card__label">進行中案件</p>
+          <p class="kpi-card__value" id="kpiActive">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiActiveSub"></p>
         </div>
-        <div class="kpi-card kpi-card--green">
-          <p class="kpi-card__label">今月の充足率</p>
-          <p class="kpi-card__value">78<em>%</em></p>
-          <p class="kpi-card__sub">目標 <span class="info">85%</span> まで残り7pt</p>
+        <div class="kpi-card kpi-card--teal">
+          <p class="kpi-card__label">確認待ち候補者</p>
+          <p class="kpi-card__value" id="kpiPending">-<em>名</em></p>
+          <p class="kpi-card__sub" id="kpiPendingSub"></p>
         </div>
         <div class="kpi-card kpi-card--amber">
-          <p class="kpi-card__label">未対応求人</p>
-          <p class="kpi-card__value">5<em>件</em></p>
-          <p class="kpi-card__sub"><span class="warn">2件</span> 期限30日以内</p>
+          <p class="kpi-card__label">期限14日以内</p>
+          <p class="kpi-card__value" id="kpiSoon">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiSoonSub"></p>
         </div>
         <div class="kpi-card kpi-card--red">
-          <p class="kpi-card__label">アラート件数</p>
-          <p class="kpi-card__value">3<em>件</em></p>
-          <p class="kpi-card__sub"><span class="down">要確認</span> MITAS担当より</p>
+          <p class="kpi-card__label">緊急・最緊急</p>
+          <p class="kpi-card__value" id="kpiUrgent">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiUrgentSub"></p>
         </div>
       </div>
 
@@ -1154,16 +1363,17 @@
         <div class="section__header">
           <span class="section__title">案件一覧 <span id="casesCount" style="font-weight:400;color:var(--gray-400);font-size:11px;"></span></span>
         </div>
-        <table class="data-table">
+        <table class="data-table" id="casesTable">
           <thead>
             <tr>
-              <th>案件</th>
+              <th class="sortable" data-sort="title">案件<span class="sort-icon"></span></th>
               <th>職種</th>
-              <th>ステータス</th>
-              <th>優先度</th>
+              <th class="sortable" data-sort="status">ステータス<span class="sort-icon"></span></th>
+              <th class="sortable sort-desc" data-sort="priority">優先度<span class="sort-icon"></span></th>
               <th>人数</th>
-              <th>期限</th>
-              <th>MITAS担当</th>
+              <th class="sortable" data-sort="deadline">期限<span class="sort-icon"></span></th>
+              <th>マッチ</th>
+              <th>担当</th>
             </tr>
           </thead>
           <tbody id="casesTbody"></tbody>
@@ -1302,6 +1512,36 @@
 
   </main>
 
+  <!-- ─── 案件詳細スライドパネル ──────────────────── -->
+  <div class="case-panel-overlay" id="casePanelOverlay" onclick="closeCasePanel()"></div>
+  <aside class="case-panel" id="casePanel" role="dialog" aria-modal="true" aria-label="案件詳細">
+    <div class="case-panel__header">
+      <span class="case-panel__id" id="cpCaseId">-</span>
+      <button class="case-panel__close" onclick="closeCasePanel()" aria-label="閉じる">&#10005;</button>
+    </div>
+    <div class="case-panel__body" id="cpBody">
+      <!-- renderCasePanel() で描画 -->
+    </div>
+    <div class="case-panel__footer">
+      <button class="btn-contact" onclick="contactMitas()">MITAS担当者に連絡する</button>
+      <button class="btn-secondary" onclick="closeCasePanel()">閉じる</button>
+    </div>
+  </aside>
+
+  <!-- ─── 候補者詳細スライドパネル ──────────────────── -->
+  <div class="cand-panel-overlay" id="candPanelOverlay" onclick="closeCandPanel()"></div>
+  <aside class="cand-panel" id="candPanel" role="dialog" aria-modal="true" aria-label="候補者詳細">
+    <div class="cand-panel__header">
+      <span class="cand-panel__num" id="cpCandNum">-</span>
+      <button class="cand-panel__close" onclick="closeCandPanel()" aria-label="閉じる">&#10005;</button>
+    </div>
+    <div class="cand-panel__body" id="cpCandBody"></div>
+    <div class="cand-panel__footer">
+      <button class="btn-contact" id="cpCandAcceptBtn" onclick="acceptFromPanel()">面談を希望する</button>
+      <button class="btn-secondary" onclick="closeCandPanel()">閉じる</button>
+    </div>
+  </aside>
+
   <!-- ─── 新規依頼モーダル ────────────────────────── -->
   <div class="modal-overlay" id="requestModal">
     <div class="modal-box">
@@ -1433,6 +1673,7 @@
 
       // 各セクションの初期描画
       renderActivity();
+      renderKPIs();
 
       // 初期セクション表示
       showSection('overview');
@@ -1521,14 +1762,14 @@
 
     /* ─── モックデータ ──────────────────────────── */
     const CASES = [
-      { id:'SC-2026-008', title:'内科系医師 緊急補充',       facility:'さくら病院 本院',             profession:'physician',    profLabel:'医師（内科）',   status:'sourcing',     priority:'urgent',   headcount:1, deadline:'2026-05-15', owner:'近藤' },
-      { id:'SC-2026-007', title:'訪問看護師 複数名採用',     facility:'ひまわり訪問看護ステーション', profession:'nurse',        profLabel:'看護師',         status:'interviewing', priority:'high',     headcount:3, deadline:'2026-05-31', owner:'近藤' },
-      { id:'SC-2026-006', title:'医療事務員 正職員',         facility:'さくら病院 分院',             profession:'medical_clerk', profLabel:'医療事務',       status:'sourcing',     priority:'medium',   headcount:1, deadline:'2026-06-30', owner:'近藤' },
-      { id:'SC-2026-005', title:'薬剤師 パート募集',         facility:'さくら調剤薬局',             profession:'pharmacist',   profLabel:'薬剤師',         status:'offer',        priority:'medium',   headcount:1, deadline:'2026-06-15', owner:'近藤' },
-      { id:'SC-2026-004', title:'理学療法士 増員',           facility:'リハビリテーション病院',     profession:'therapist',    profLabel:'理学療法士',     status:'interviewing', priority:'high',     headcount:2, deadline:'2026-05-20', owner:'近藤' },
-      { id:'SC-2026-003', title:'ケアマネジャー 専任',       facility:'みらい介護センター',         profession:'care_manager', profLabel:'ケアマネジャー', status:'scoping',      priority:'medium',   headcount:1, deadline:'2026-07-01', owner:'近藤' },
-      { id:'SC-2026-002', title:'精神科専門医 非常勤',       facility:'こころのクリニック',         profession:'physician',    profLabel:'医師（精神科）', status:'sourcing',     priority:'critical', headcount:1, deadline:'2026-05-10', owner:'近藤' },
-      { id:'SC-2026-001', title:'介護福祉士 夜勤対応可',     facility:'しおかぜ特養',               profession:'care_worker',  profLabel:'介護福祉士',     status:'intake',       priority:'low',      headcount:2, deadline:'2026-08-01', owner:'近藤' },
+      { id:'SC-2026-008', title:'内科系医師 緊急補充',       facility:'さくら病院 本院',             profession:'physician',    profLabel:'医師（内科）',   status:'sourcing',     priority:'urgent',   headcount:1, deadline:'2026-05-15', created_at:'2026-04-01', owner:'近藤', match_total:2, match_interview:0, match_offer:0, note:'施設基準に影響するため至急対応が必要。週4以上・外来可能な医師を希望。' },
+      { id:'SC-2026-007', title:'訪問看護師 複数名採用',     facility:'ひまわり訪問看護ステーション', profession:'nurse',        profLabel:'看護師',         status:'interviewing', priority:'high',     headcount:3, deadline:'2026-05-31', created_at:'2026-03-20', owner:'近藤', match_total:5, match_interview:2, match_offer:0, note:'夜間対応可能な方優遇。車の運転必須。' },
+      { id:'SC-2026-006', title:'医療事務員 正職員',         facility:'さくら病院 分院',             profession:'medical_clerk', profLabel:'医療事務',       status:'sourcing',     priority:'medium',   headcount:1, deadline:'2026-06-30', created_at:'2026-03-15', owner:'近藤', match_total:3, match_interview:0, match_offer:0, note:'レセプト経験者歓迎。電子カルテはMEDIS-DC対応。' },
+      { id:'SC-2026-005', title:'薬剤師 パート募集',         facility:'さくら調剤薬局',             profession:'pharmacist',   profLabel:'薬剤師',         status:'offer',        priority:'medium',   headcount:1, deadline:'2026-06-15', created_at:'2026-03-10', owner:'近藤', match_total:2, match_interview:1, match_offer:1, note:'週2〜3日から可。在宅業務経験あれば優遇。' },
+      { id:'SC-2026-004', title:'理学療法士 増員',           facility:'リハビリテーション病院',     profession:'therapist',    profLabel:'理学療法士',     status:'interviewing', priority:'high',     headcount:2, deadline:'2026-05-20', created_at:'2026-03-05', owner:'近藤', match_total:4, match_interview:1, match_offer:0, note:'整形・神経リハビリいずれも歓迎。日勤のみ可。' },
+      { id:'SC-2026-003', title:'ケアマネジャー 専任',       facility:'みらい介護センター',         profession:'care_manager', profLabel:'ケアマネジャー', status:'scoping',      priority:'medium',   headcount:1, deadline:'2026-07-01', created_at:'2026-02-28', owner:'近藤', match_total:0, match_interview:0, match_offer:0, note:'' },
+      { id:'SC-2026-002', title:'精神科専門医 非常勤',       facility:'こころのクリニック',         profession:'physician',    profLabel:'医師（精神科）', status:'sourcing',     priority:'critical', headcount:1, deadline:'2026-05-10', created_at:'2026-02-20', owner:'近藤', match_total:1, match_interview:0, match_offer:0, note:'月4〜8回程度。精神科専門医資格必須。' },
+      { id:'SC-2026-001', title:'介護福祉士 夜勤対応可',     facility:'しおかぜ特養',               profession:'care_worker',  profLabel:'介護福祉士',     status:'intake',       priority:'low',      headcount:2, deadline:'2026-08-01', created_at:'2026-02-10', owner:'近藤', match_total:0, match_interview:0, match_offer:0, note:'夜勤2〜4回/月希望。介護福祉士資格必須。' },
     ];
 
     const CANDIDATES = {
@@ -1587,37 +1828,110 @@
       return diff < 0 ? 'overdue' : diff <= 14 ? 'soon' : '';
     }
 
-    /* ─── 案件管理 ──────────────────────────────── */
+    /* ─── KPI動的計算 ──────────────────────────── */
+    function renderKPIs() {
+      const activeCases   = CASES.filter(c => !['placed','cancelled'].includes(c.status));
+      const soonCases     = CASES.filter(c => deadlineCls(c.deadline) !== '' && !['placed','cancelled'].includes(c.status));
+      const overdueCases  = CASES.filter(c => deadlineCls(c.deadline) === 'overdue');
+      const urgentCases   = CASES.filter(c => ['critical','urgent'].includes(c.priority) && !['placed','cancelled'].includes(c.status));
+      const pendingCount  = CANDIDATES.pending.length;
+      const screeningCount= CANDIDATES.screening.length;
+
+      const PRIORITY_ORDER = { critical:0, urgent:1, high:2, medium:3, low:4 };
+      const topUrgent = [...urgentCases].sort((a,b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])[0];
+
+      document.getElementById('kpiActive').innerHTML   = `${activeCases.length}<em>件</em>`;
+      document.getElementById('kpiActiveSub').innerHTML= screeningCount
+        ? `<span class="info">${screeningCount}名</span> 選考中`
+        : '選考候補者を待機中';
+
+      document.getElementById('kpiPending').innerHTML   = `${pendingCount}<em>名</em>`;
+      document.getElementById('kpiPendingSub').innerHTML= pendingCount
+        ? `<span class="warn">${pendingCount}名</span> 要確認`
+        : '確認待ちなし';
+
+      document.getElementById('kpiSoon').innerHTML   = `${soonCases.length}<em>件</em>`;
+      document.getElementById('kpiSoonSub').innerHTML= overdueCases.length
+        ? `<span class="down">${overdueCases.length}件</span> 期限超過`
+        : soonCases.length ? '<span class="warn">期限接近</span> 要対応' : '期限に余裕あり';
+
+      document.getElementById('kpiUrgent').innerHTML   = `${urgentCases.length}<em>件</em>`;
+      document.getElementById('kpiUrgentSub').innerHTML= topUrgent
+        ? `<span class="down">${s(topUrgent.title.slice(0, 12))}…</span>`
+        : '緊急案件なし';
+    }
+
+    /* ─── 案件管理（ソート対応） ─────────────────── */
+    const PRIORITY_SORT = { critical:0, urgent:1, high:2, medium:3, low:4 };
+    const STATUS_SORT   = { intake:0, scoping:1, sourcing:2, interviewing:3, offer:4, placed:5, on_hold:6 };
+    let caseSortBy  = 'priority';
+    let caseSortDir = 1;  // 1=昇順, -1=降順
+
     function renderCases() {
       const status    = document.getElementById('filterStatus').value;
       const priority  = document.getElementById('filterPriority').value;
       const profession= document.getElementById('filterProfession').value;
       const search    = document.getElementById('filterSearch').value.toLowerCase();
 
-      const filtered = CASES.filter(c =>
+      let filtered = CASES.filter(c =>
         (!status     || c.status === status) &&
         (!priority   || c.priority === priority) &&
         (!profession || c.profession === profession) &&
         (!search     || c.title.toLowerCase().includes(search) || c.facility.toLowerCase().includes(search))
       );
 
+      // ソート
+      filtered = [...filtered].sort((a, b) => {
+        let va, vb;
+        if      (caseSortBy === 'priority') { va = PRIORITY_SORT[a.priority] ?? 9; vb = PRIORITY_SORT[b.priority] ?? 9; }
+        else if (caseSortBy === 'status')   { va = STATUS_SORT[a.status] ?? 9;     vb = STATUS_SORT[b.status] ?? 9; }
+        else if (caseSortBy === 'deadline') { va = a.deadline; vb = b.deadline; }
+        else if (caseSortBy === 'title')    { va = a.title;    vb = b.title; }
+        else return 0;
+        return va < vb ? -caseSortDir : va > vb ? caseSortDir : 0;
+      });
+
+      // ヘッダーのソートアイコン更新
+      document.querySelectorAll('#casesTable thead th[data-sort]').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === caseSortBy) {
+          th.classList.add(caseSortDir === 1 ? 'sort-asc' : 'sort-desc');
+        }
+      });
+
       document.getElementById('casesCount').textContent = `${filtered.length}件`;
-      document.getElementById('casesTbody').innerHTML = filtered.map(c => `
-        <tr>
+      const tbody = document.getElementById('casesTbody');
+      tbody.innerHTML = filtered.map(c => `
+        <tr class="clickable" data-caseid="${s(c.id)}" title="クリックで詳細を表示">
           <td>
-            <span class="td-mono">${c.id}</span>
-            <div class="td-primary" style="margin-top:2px;">${c.title}</div>
-            <div class="td-secondary">${c.facility}</div>
+            <span class="td-mono">${s(c.id)}</span>
+            <div class="td-primary" style="margin-top:2px;">${s(c.title)}</div>
+            <div class="td-secondary">${s(c.facility)}</div>
           </td>
-          <td>${c.profLabel}</td>
-          <td><span class="badge badge--${STATUS_CLS[c.status]}">${STATUS_LABEL[c.status]}</span></td>
-          <td><span class="priority-dot priority-dot--${c.priority}">${PRIORITY_LABEL[c.priority]}</span></td>
-          <td style="text-align:center;">${c.headcount}名</td>
-          <td><span class="deadline-cell ${deadlineCls(c.deadline)}">${fmtDeadline(c.deadline)}</span></td>
-          <td>${c.owner}</td>
+          <td>${s(c.profLabel)}</td>
+          <td><span class="badge badge--${s(STATUS_CLS[c.status])}">${s(STATUS_LABEL[c.status])}</span></td>
+          <td><span class="priority-dot priority-dot--${s(c.priority)}">${s(PRIORITY_LABEL[c.priority])}</span></td>
+          <td style="text-align:center;">${s(c.headcount)}名</td>
+          <td><span class="deadline-cell ${s(deadlineCls(c.deadline))}">${s(fmtDeadline(c.deadline))}</span></td>
+          <td style="text-align:center;color:var(--gray-500);">${c.match_total > 0 ? `<span style="font-weight:600;color:var(--navy);">${c.match_total}</span>` : '-'}</td>
+          <td>${s(c.owner)}</td>
         </tr>
-      `).join('') || '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--gray-400);">該当する案件がありません</td></tr>';
+      `).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--gray-400);">該当する案件がありません</td></tr>';
+
+      tbody.querySelectorAll('tr.clickable').forEach(row => {
+        row.addEventListener('click', () => openCasePanel(row.dataset.caseid));
+      });
     }
+
+    // ヘッダークリックでソート切り替え
+    document.getElementById('casesTable').addEventListener('click', e => {
+      const th = e.target.closest('th[data-sort]');
+      if (!th) return;
+      const key = th.dataset.sort;
+      if (caseSortBy === key) { caseSortDir = -caseSortDir; }
+      else { caseSortBy = key; caseSortDir = 1; }
+      renderCases();
+    });
 
     ['filterStatus','filterPriority','filterProfession','filterSearch'].forEach(id => {
       document.getElementById(id).addEventListener('input', renderCases);
@@ -1637,23 +1951,26 @@
     });
 
     function renderCandidates() {
-      const list = CANDIDATES[currentCandTab] || [];
-      const isPending = currentCandTab === 'pending';
+      const tab    = currentCandTab;
+      const list   = CANDIDATES[tab] || [];
+      const isPending = tab === 'pending';
       document.getElementById('candGrid').innerHTML = list.map((c, i) => `
-        <div class="cand-card">
+        <div class="cand-card" style="cursor:pointer;" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">
           <div class="cand-card__head">
-            <span class="cand-card__num">${c.num}</span>
-            <span class="cand-card__date">提案日: ${c.date}</span>
+            <span class="cand-card__num">${s(c.num)}</span>
+            <span class="cand-card__date">提案日: ${s(c.date)}</span>
           </div>
-          <p class="cand-card__prof">${c.prof}</p>
-          <p class="cand-card__detail">${c.detail}</p>
-          <div class="cand-card__case">対応案件: <span class="td-mono">${c.caseId}</span> ${c.caseTitle}</div>
-          <div class="cand-card__actions">
+          <p class="cand-card__prof">${s(c.prof)}</p>
+          <p class="cand-card__detail">${s(c.detail)}</p>
+          <div class="cand-card__case">
+            <span class="td-mono">${s(c.caseId)}</span> ${s(c.caseTitle)}
+          </div>
+          <div class="cand-card__actions" onclick="event.stopPropagation()">
             ${isPending ? `
-              <button class="btn-accept"  onclick="acceptCand(${i})">面談を希望する</button>
+              <button class="btn-accept"  onclick="acceptCand(${i});toast('面談希望を送信しました。','success')">面談を希望する</button>
               <button class="btn-decline" onclick="declineCand(${i})">見送り</button>
             ` : `
-              <button class="btn-detail">詳細を確認</button>
+              <button class="btn-detail" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">詳細を確認</button>
             `}
           </div>
         </div>
@@ -1734,16 +2051,41 @@
       s.classList.add('show');
       setTimeout(() => s.classList.remove('show'), 2500);
     }
-    function changePassword() {
+    async function changePassword() {
       const cur  = document.getElementById('pwCurrent').value;
       const nw   = document.getElementById('pwNew').value;
       const conf = document.getElementById('pwConfirm').value;
       const msg  = document.getElementById('pwSuccess');
-      if (!cur || !nw || !conf) { msg.textContent = '全て入力してください'; msg.style.color = 'var(--red)'; msg.classList.add('show'); return; }
-      if (nw !== conf)          { msg.textContent = '新しいパスワードが一致しません'; msg.style.color = 'var(--red)'; msg.classList.add('show'); return; }
-      if (nw.length < 8)        { msg.textContent = '8文字以上で設定してください'; msg.style.color = 'var(--red)'; msg.classList.add('show'); return; }
-      msg.textContent = 'パスワードを変更しました'; msg.style.color = 'var(--green)'; msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 3000);
+      const btn  = document.querySelector('[onclick="changePassword()"]');
+
+      const showMsg = (text, ok) => {
+        msg.textContent  = text;
+        msg.style.color  = ok ? 'var(--green)' : 'var(--red)';
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 3500);
+      };
+
+      if (!cur || !nw || !conf) { showMsg('全て入力してください', false); return; }
+      if (nw !== conf)          { showMsg('新しいパスワードが一致しません', false); return; }
+      if (nw.length < 8)        { showMsg('8文字以上で設定してください', false); return; }
+      if (nw === cur)           { showMsg('新しいパスワードは現在と異なるものを設定してください', false); return; }
+
+      btn.disabled = true;
+      try {
+        if (typeof db !== 'undefined') {
+          // Supabase でパスワード更新
+          const { error } = await db.auth.updateUser({ password: nw });
+          if (error) throw error;
+        }
+        showMsg('パスワードを変更しました', true);
+        document.getElementById('pwCurrent').value = '';
+        document.getElementById('pwNew').value     = '';
+        document.getElementById('pwConfirm').value = '';
+      } catch (err) {
+        showMsg(err.message || 'パスワードの変更に失敗しました', false);
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     /* ─── 新規依頼モーダル ──────────────────────── */
@@ -1758,7 +2100,7 @@
     function submitRequest() {
       const prof     = document.getElementById('reqProfession').value;
       const deadline = document.getElementById('reqDeadline').value;
-      if (!prof || !deadline) { alert('職種と充足期限は必須です'); return; }
+      if (!prof || !deadline) { toast('職種と充足期限を入力してください。', 'error'); return; }
       document.getElementById('requestFormWrap').style.display = 'none';
       document.getElementById('requestSent').classList.add('show');
     }
@@ -1769,9 +2111,171 @@
     /* ─── トップバー「新規依頼」ボタン ─────────────── */
     document.getElementById('btnNewRequest').addEventListener('click', openRequestModal);
 
+    /* ─── XSSサニタイズ ─────────────────────────── */
+    function s(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    /* ─── トースト通知 ──────────────────────────── */
+    function toast(msg, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`;
+      el.innerHTML = `<span class="toast__msg">${s(msg)}</span><button class="toast__close" aria-label="閉じる">&#10005;</button>`;
+      el.querySelector('.toast__close').onclick = () => removeToast(el);
+      container.appendChild(el);
+      setTimeout(() => removeToast(el), 4500);
+    }
+    function removeToast(el) {
+      if (!el.parentNode) return;
+      el.classList.add('removing');
+      setTimeout(() => el.remove(), 200);
+    }
+
+    /* ─── 候補者詳細スライドパネル ──────────────── */
+    let _currentCandIdx  = null;  // 現在表示中の候補者インデックス（pending タブ用）
+
+    function openCandPanel(num, tab) {
+      tab = tab || currentCandTab;
+      const list = CANDIDATES[tab] || [];
+      const idx  = list.findIndex(c => c.num === num);
+      if (idx < 0) return;
+      const c = list[idx];
+      _currentCandIdx = tab === 'pending' ? idx : null;
+
+      document.getElementById('cpCandNum').textContent  = c.num;
+      document.getElementById('cpCandBody').innerHTML   = buildCandPanelHtml(c, tab);
+      document.getElementById('cpCandAcceptBtn').style.display = tab === 'pending' ? '' : 'none';
+      document.getElementById('candPanelOverlay').classList.add('open');
+      document.getElementById('candPanel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCandPanel() {
+      document.getElementById('candPanelOverlay').classList.remove('open');
+      document.getElementById('candPanel').classList.remove('open');
+      document.body.style.overflow = '';
+      _currentCandIdx = null;
+    }
+    function acceptFromPanel() {
+      if (_currentCandIdx === null) return;
+      acceptCand(_currentCandIdx);
+      toast('面談希望を送信しました。MITAS担当者が日程を調整します。', 'success');
+      closeCandPanel();
+    }
+
+    const CAND_STATUS_LABEL = { pending:'確認待ち', screening:'選考中', done:'面談済' };
+    const CAND_STATUS_CLS   = { pending:'amber',    screening:'blue',   done:'green' };
+
+    function buildCandPanelHtml(c, tab) {
+      return `
+        <p class="cand-panel__prof">${s(c.prof)}</p>
+        <p class="cand-panel__exp">${s(c.detail)}</p>
+        <div class="case-panel__badges" style="margin-bottom:18px;">
+          <span class="badge badge--${CAND_STATUS_CLS[tab]}">${CAND_STATUS_LABEL[tab]}</span>
+        </div>
+        <div class="cp-section">
+          <p class="cp-section__label">候補者情報</p>
+          <div class="cp-row"><span class="cp-row__key">候補者番号</span><span class="cp-row__val" style="font-family:'Courier New',monospace;">${s(c.num)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">職種</span><span class="cp-row__val">${s(c.prof)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">経歴</span><span class="cp-row__val">${s(c.detail)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">提案日</span><span class="cp-row__val">${s(c.date)}</span></div>
+        </div>
+        <div class="cp-section">
+          <p class="cp-section__label">対応案件</p>
+          <div class="cp-row"><span class="cp-row__key">案件ID</span><span class="cp-row__val" style="font-family:'Courier New',monospace;">${s(c.caseId)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">案件名</span><span class="cp-row__val">${s(c.caseTitle)}</span></div>
+        </div>
+        <div class="cp-section" style="background:var(--gray-50);padding:12px;border:1px solid var(--gray-200);">
+          <p style="font-size:12px;color:var(--gray-500);line-height:1.7;">
+            この候補者の詳細プロフィールはMITAS担当者が管理しています。<br>
+            個人情報の取り扱いには十分ご注意ください。
+          </p>
+        </div>
+      `;
+    }
+
+    /* ─── 案件詳細スライドパネル ─────────────────── */
+    function openCasePanel(caseId) {
+      const c = CASES.find(x => x.id === caseId);
+      if (!c) return;
+      document.getElementById('cpCaseId').textContent = c.id;
+      document.getElementById('cpBody').innerHTML = buildCasePanelHtml(c);
+      document.getElementById('casePanelOverlay').classList.add('open');
+      document.getElementById('casePanel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCasePanel() {
+      document.getElementById('casePanelOverlay').classList.remove('open');
+      document.getElementById('casePanel').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeCasePanel(); closeCandPanel(); }
+    });
+
+    function buildCasePanelHtml(c) {
+      const dlCls = deadlineCls(c.deadline);
+      const dlLabel = dlCls === 'overdue' ? '期限超過' : dlCls === 'soon' ? '期限間近' : '';
+      return `
+        <p class="case-panel__title">${s(c.title)}</p>
+        <div class="case-panel__badges">
+          <span class="badge badge--${s(STATUS_CLS[c.status])}">${s(STATUS_LABEL[c.status])}</span>
+          <span class="priority-dot priority-dot--${s(c.priority)}">${s(PRIORITY_LABEL[c.priority])}</span>
+          ${dlLabel ? `<span class="badge badge--${dlCls === 'overdue' ? 'red' : 'amber'}">${dlLabel}</span>` : ''}
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">案件情報</p>
+          <div class="cp-row"><span class="cp-row__key">施設</span><span class="cp-row__val">${s(c.facility)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">職種</span><span class="cp-row__val">${s(c.profLabel)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">必要人数</span><span class="cp-row__val">${s(c.headcount)}名</span></div>
+          <div class="cp-row"><span class="cp-row__key">充足期限</span><span class="cp-row__val">${s(c.deadline)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">MITAS担当</span><span class="cp-row__val">${s(c.owner)}</span></div>
+          <div class="cp-row"><span class="cp-row__key">登録日</span><span class="cp-row__val">${s(c.created_at)}</span></div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">候補者パイプライン</p>
+          <div class="cp-pipeline">
+            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_total ?? 0)}</span><span class="cp-stage__lbl">提案</span></div>
+            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_interview ?? 0)}</span><span class="cp-stage__lbl">面談中</span></div>
+            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_offer ?? 0)}</span><span class="cp-stage__lbl">内定</span></div>
+            <div class="cp-stage ${c.status === 'placed' ? 'active' : ''}"><span class="cp-stage__num">${c.status === 'placed' ? c.headcount : 0}</span><span class="cp-stage__lbl">充足済</span></div>
+          </div>
+        </div>
+
+        ${c.note ? `<div class="cp-section">
+          <p class="cp-section__label">備考</p>
+          <p style="font-size:13px;color:var(--gray-700);line-height:1.7;">${s(c.note)}</p>
+        </div>` : ''}
+      `;
+    }
+
+    function contactMitas() {
+      const id = document.getElementById('cpCaseId').textContent;
+      toast(`${id} について、MITAS担当者に連絡リクエストを送りました。`, 'success');
+      closeCasePanel();
+    }
+
+    /* ─── モバイル: サイドバー開閉 ──────────────── */
+    const hamburger   = document.getElementById('hamburgerBtn');
+    const sidebar     = document.getElementById('sidebar');
+    const sidebarMask = document.getElementById('sidebarMask');
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarMask.classList.toggle('show');
+    });
+    sidebarMask.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarMask.classList.remove('show');
+    });
+
+    /* ─── セッション監視開始 ─────────────────────── */
+    if (typeof watchSession === 'function') watchSession();
+
     /* ─── セクション初期描画（initAppに追記） ─────── */
-    const _origInit = initApp;
-    // initApp が定義済みなので、追加描画だけ実行
     const _origShowSection = showSection;
     showSection = function(id) {
       _origShowSection(id);
@@ -1780,6 +2284,9 @@
       if (id === 'tasks')      renderTasks();
       if (id === 'inquiries')  renderInquiries();
       if (id === 'settings')   initSettings();
+      // モバイル時はセクション切り替えでサイドバーを閉じる
+      sidebar.classList.remove('open');
+      sidebarMask.classList.remove('show');
     };
   </script>
 </body>

@@ -15,7 +15,7 @@
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     # Content-Security-Policy – restricts sources for scripts, styles, etc.
     # Adjust as needed if you add third-party integrations.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.netlify.app https://*.googleapis.com https://scdn.line-apps.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.netlify.app https://*.googleapis.com https://scdn.line-apps.com https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.supabase.co; upgrade-insecure-requests;"
 
 [[headers]]
   for = "/*.html"
@@ -141,6 +141,12 @@
 [[redirects]]
   from = "/api/hospital/cases"
   to = "/.netlify/functions/hospital-cases"
+  status = 200
+
+# 病院候補者一覧 API
+[[redirects]]
+  from = "/api/hospital/candidates"
+  to = "/.netlify/functions/hospital-candidates"
   status = 200
 
 # Protected pages – redirect to login if accessed directly (handled client-side too)
