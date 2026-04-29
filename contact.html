@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ | MITAS 医療機関ポータル</title>
+  <meta name="description" content="MITASへのお問い合わせフォーム。医療機関の人材ご相談、医療従事者のキャリア面談ご依頼、その他のお問い合わせを承ります。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="お問い合わせ | MITAS">
+  <meta property="og:description" content="医療機関の人材ご相談・医療従事者のキャリア面談ご依頼を承ります。初回相談は無料です。">
+  <meta property="og:site_name" content="MITAS">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="siteHeader">
+  <div class="container">
+    <div class="header__inner">
+      <a href="/service.html" class="header__logo">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                fill="rgba(56,189,248,0.18)"/>
+        </svg>
+        MITAS
+      </a>
+      <nav class="header__nav">
+        <a href="/service.html">サービスについて</a>
+        <a href="/hospitals.html">医療機関の方へ</a>
+        <a href="/professionals.html">医療従事者の方へ</a>
+        <a href="/contact.html" class="is-active">お問い合わせ</a>
+      </nav>
+      <a href="/login.html" class="btn btn--primary header__cta">ログイン</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="/service.html">サービスについて</a>
+    <a href="/hospitals.html">医療機関の方へ</a>
+    <a href="/professionals.html">医療従事者の方へ</a>
+    <a href="/contact.html" class="is-active">お問い合わせ</a>
+    <a href="/login.html" class="btn btn--primary">ログイン</a>
+  </div>
+</header>
+
+<!-- ══════════════ PAGE HERO ══════════════ -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="パンくずリスト">
+      <a href="/service.html">サービスについて</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">お問い合わせ</span>
+    </nav>
+    <div class="page-hero__eyebrow">CONTACT</div>
+    <h1 class="page-hero__title">
+      まずは<em>お気軽に</em>ご相談ください。
+    </h1>
+    <p class="page-hero__lead">
+      医療機関の人材ご相談、医療従事者のキャリア面談ご依頼、その他のお問い合わせを承ります。<br>
+      初回相談は無料です。営業日2日以内に担当者からご連絡いたします。
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ フォーム ══════════════ -->
+<section class="section section--gray">
+  <div class="container">
+    <div class="form-wrap">
+      <form
+        name="contact"
+        method="POST"
+        action="/thanks.html"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+        class="contact-form"
+      >
+        <!-- Netlify Forms 必須: フォーム名の hidden input -->
+        <input type="hidden" name="form-name" value="contact">
+        <!-- スパムボット用ハニーポット（人間には非表示） -->
+        <p style="display:none;">
+          <label>このフィールドは入力しないでください: <input name="bot-field"></label>
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="inquiry-type">お問い合わせ種別<span class="form-required">必須</span></label>
+          <select id="inquiry-type" name="inquiry_type" class="form-select" required>
+            <option value="">選択してください</option>
+            <option value="hospital">医療機関からの人材ご相談</option>
+            <option value="professional">医療従事者からのキャリア相談</option>
+            <option value="service">サービス内容のご質問</option>
+            <option value="press">取材・メディアからのお問い合わせ</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">お名前<span class="form-required">必須</span></label>
+            <input id="name" name="name" type="text" class="form-input" autocomplete="name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="organization">組織・施設名</label>
+            <input id="organization" name="organization" type="text" class="form-input" autocomplete="organization" placeholder="医療機関の方のみ">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="email">メールアドレス<span class="form-required">必須</span></label>
+            <input id="email" name="email" type="email" class="form-input" autocomplete="email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">電話番号</label>
+            <input id="phone" name="phone" type="tel" class="form-input" autocomplete="tel" placeholder="ハイフン不要">
+            <span class="form-help">日中ご連絡可能な番号</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="role">職種・お立場</label>
+          <input id="role" name="role" type="text" class="form-input" placeholder="例：院長 / 看護部長 / 医師（内科）/ 訪問看護師">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">ご相談内容<span class="form-required">必須</span></label>
+          <textarea id="message" name="message" class="form-input form-textarea" required placeholder="現在の状況・ご相談内容・ご希望などをお聞かせください。具体的でなくて構いません。"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary form-submit">この内容で送信する</button>
+
+        <p class="form-note">
+          送信前に <a href="https://mitas.necofindjob.com/privacy-policy.html" target="_blank" rel="noopener">プライバシーポリシー</a> をご確認ください。<br>
+          ご記入いただいた個人情報は、お問い合わせ対応の目的のみに利用します。
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ その他の連絡手段 ══════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="section__eyebrow">OTHER CHANNELS</span>
+      <h2 class="section__title">その他の連絡手段</h2>
+      <p class="section__sub">フォーム以外にも、目的に応じた窓口をご用意しています。</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3 class="feature-card__title">既にご契約のある医療機関</h3>
+        <p class="feature-card__desc">案件の登録・進行確認・候補者対応は、ポータルへログインしてご利用ください。担当者への連絡はポータル内のメッセージ機能からも可能です。</p>
+        <ul class="feature-card__list">
+          <li>ログインID／パスワードでアクセス</li>
+          <li>案件登録・候補者管理</li>
+          <li>担当者へのダイレクト連絡</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <h3 class="feature-card__title">お急ぎの欠員ご相談</h3>
+        <p class="feature-card__desc">緊急性の高い欠員の場合は、フォーム送信時に「お急ぎ」「期限○月○日」など具体的な期日をご記載ください。優先的にご連絡します。</p>
+        <ul class="feature-card__list">
+          <li>当日中の初回ヒアリング対応可</li>
+          <li>必要に応じて訪問対応</li>
+          <li>夜間・休日の緊急時相談可</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <h3 class="feature-card__title">取材・採用パートナー</h3>
+        <p class="feature-card__desc">メディアからの取材依頼、採用パートナー（紹介会社・士業事務所等）からの提携相談はフォームからご連絡ください。</p>
+        <ul class="feature-card__list">
+          <li>取材・原稿監修</li>
+          <li>採用パートナー提携</li>
+          <li>講演・登壇のご依頼</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <div class="footer__logo">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
+                  stroke="rgba(56,189,248,0.75)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  fill="rgba(14,165,233,0.1)"/>
+          </svg>
+          MITAS
+        </div>
+        <p class="footer__tagline">施設基準・加算・稼働を守るための<br>人員要件充足支援。</p>
+      </div>
+      <div class="footer__links">
+        <a href="/service.html">サービスについて</a>
+        <a href="/hospitals.html">医療機関の方へ</a>
+        <a href="/professionals.html">医療従事者の方へ</a>
+        <a href="/contact.html">お問い合わせ</a>
+        <a href="/login.html">ログイン</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copy">&copy; 2026 株式会社Neco（MITAS）. All rights reserved.</span>
+      <span class="footer__neco">求職者の方は <a href="https://necofindjob.com" target="_blank" rel="noopener">neco</a> へ</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const h = document.getElementById('siteHeader');
+    if (!h) return;
+    const onScroll = () => h.classList.toggle('solid', window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  (function () {
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('mobileNav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', () => {
+      const open = nav.style.display === 'flex';
+      nav.style.display = open ? 'none' : 'flex';
+      btn.classList.toggle('active', !open);
+    });
+    nav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        nav.style.display = 'none';
+        btn.classList.remove('active');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
