@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サービスについて | MITAS 医療人材マッチング</title>
+  <meta name="description" content="MITASは医療機関・介護事業所の人員充足を支援するマッチングサービスです。施設基準に影響しうる急な欠員に、迅速かつ的確な人材充足を提供します。">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy:      #1B3A6B;
+      --navy-deep: #0D2340;
+      --navy-mid:  #243B5E;
+      --teal:      #0EA5E9;
+      --teal-light:#38BDF8;
+      --teal-pale: #F0F9FF;
+      --gray-900:  #0F172A;
+      --gray-700:  #334155;
+      --gray-500:  #64748B;
+      --gray-300:  #CBD5E1;
+      --gray-200:  #E2E8F0;
+      --gray-100:  #F1F5F9;
+      --gray-50:   #F8FAFC;
+      --white:     #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--gray-700);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+    /* ─── Header ───────────────────────────────── */
+    #siteHeader {
+      position: fixed; inset: 0 0 auto 0; z-index: 1000;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    #siteHeader.solid {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--gray-200);
+    }
+    .header__inner {
+      display: flex; align-items: center;
+      justify-content: space-between; height: 68px;
+    }
+    .header__logo {
+      font-size: 20px; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--white);
+      transition: color 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    #siteHeader.solid .header__logo { color: var(--navy); }
+    .header__nav {
+      display: flex; align-items: center; gap: 24px;
+    }
+    .header__nav a {
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.8); transition: color 0.2s;
+    }
+    .header__nav a:hover { color: var(--white); }
+    #siteHeader.solid .header__nav a { color: var(--gray-700); }
+    #siteHeader.solid .header__nav a:hover { color: var(--teal); }
+    .header__nav a.active { color: var(--teal-light); font-weight: 600; }
+    #siteHeader.solid .header__nav a.active { color: var(--teal); }
+    .btn-login-header {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 36px; padding: 0 18px;
+      background: var(--teal); color: var(--white);
+      border-radius: 4px; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.04em; transition: background 0.2s;
+    }
+    .btn-login-header:hover { background: var(--teal-light); }
+    #siteHeader.solid .btn-login-header { background: var(--navy); }
+    #siteHeader.solid .btn-login-header:hover { background: var(--navy-deep); }
+    .hamburger {
+      display: none; flex-direction: column;
+      gap: 5px; cursor: pointer; padding: 8px;
+      background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: background 0.3s, transform 0.25s, opacity 0.2s;
+    }
+    #siteHeader.solid .hamburger span { background: var(--navy); }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-nav {
+      display: none; flex-direction: column;
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      padding: 16px 20px 28px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      padding: 13px 0; font-size: 15px; font-weight: 500;
+      color: var(--gray-700); border-bottom: 1px solid var(--gray-100);
+    }
+    .mobile-nav .btn-login-header {
+      margin-top: 20px; width: 100%; justify-content: center;
+      height: 44px; font-size: 14px;
+    }
+
+    /* ─── Buttons ──────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 13px 30px; border-radius: 5px;
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      cursor: pointer; border: none; letter-spacing: 0.02em;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s; white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn--primary { background: var(--teal); color: var(--white); box-shadow: 0 4px 16px rgba(14,165,233,0.3); }
+    .btn--primary:hover { background: var(--teal-light); }
+    .btn--navy { background: var(--navy); color: var(--white); }
+    .btn--navy:hover { background: var(--navy-deep); }
+    .btn--outline { background: transparent; color: var(--navy); border: 1.5px solid var(--gray-300); }
+    .btn--outline:hover { border-color: var(--teal); color: var(--teal); }
+    .btn--ghost { background: rgba(255,255,255,0.1); color: var(--white); border: 1.5px solid rgba(255,255,255,0.4); }
+    .btn--ghost:hover { background: rgba(255,255,255,0.18); }
+    .btn-sm { padding: 9px 20px; font-size: 13px; }
+
+    /* ─── Hero ─────────────────────────────────── */
+    .hero {
+      background: linear-gradient(150deg, var(--navy-deep) 0%, var(--navy) 55%, #1d4a80 100%);
+      padding: 148px 0 88px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(14,165,233,0.1), transparent 40%);
+      pointer-events: none;
+    }
+    .hero__label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.22em;
+      color: var(--teal-light); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero__title {
+      font-size: clamp(28px, 4vw, 46px); font-weight: 700;
+      color: var(--white); line-height: 1.45; margin-bottom: 20px;
+    }
+    .hero__title em { font-style: normal; color: var(--teal-light); }
+    .hero__sub { font-size: 16px; color: rgba(255,255,255,0.65); line-height: 2; max-width: 560px; }
+
+    /* ─── Section共通 ──────────────────────────── */
+    .section { padding: 80px 0; }
+    .section--gray { background: var(--gray-50); }
+    .section--navy { background: var(--navy-deep); }
+    .section__label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--teal); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section__title {
+      font-size: clamp(22px, 3vw, 32px); font-weight: 700;
+      color: var(--navy); line-height: 1.4; margin-bottom: 16px;
+    }
+    .section--navy .section__title { color: var(--white); }
+    .section__sub {
+      font-size: 15px; color: var(--gray-500); max-width: 540px;
+    }
+    .section--navy .section__sub { color: rgba(255,255,255,0.6); }
+    .section__head { margin-bottom: 52px; }
+
+    /* ─── Path Cards（医療機関/従事者選択） ──────── */
+    .path-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 48px;
+    }
+    .path-card {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: 10px; padding: 40px 36px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .path-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-3px); }
+    .path-card--accent { border-top: 4px solid var(--teal); }
+    .path-card--navy   { border-top: 4px solid var(--navy); }
+    .path-card__icon {
+      width: 52px; height: 52px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .path-card--accent .path-card__icon { background: var(--teal-pale); }
+    .path-card--navy   .path-card__icon { background: #EFF6FF; }
+    .path-card__label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .path-card--accent .path-card__label { color: var(--teal); }
+    .path-card--navy   .path-card__label { color: var(--navy); }
+    .path-card__title {
+      font-size: 20px; font-weight: 700; color: var(--navy);
+      margin-bottom: 14px; line-height: 1.4;
+    }
+    .path-card__desc { font-size: 14px; color: var(--gray-500); line-height: 1.9; flex: 1; margin-bottom: 28px; }
+    .path-card__link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+      transition: gap 0.2s;
+    }
+    .path-card--accent .path-card__link { color: var(--teal); }
+    .path-card--navy   .path-card__link { color: var(--navy); }
+    .path-card__link:hover { gap: 10px; }
+
+    /* ─── Flow Steps ────────────────────────────── */
+    .flow-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+      position: relative;
+    }
+    .flow-grid::before {
+      content: ''; position: absolute;
+      top: 32px; left: 60px; right: 60px; height: 1px;
+      background: var(--gray-200); z-index: 0;
+    }
+    .flow-step {
+      position: relative; z-index: 1; text-align: center; padding: 0 8px;
+    }
+    .flow-step__num {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--white); border: 2px solid var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 700; color: var(--teal);
+      margin: 0 auto 18px; box-shadow: 0 0 0 6px var(--teal-pale);
+    }
+    .flow-step__title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .flow-step__desc { font-size: 13px; color: var(--gray-500); line-height: 1.7; }
+
+    /* ─── Numbers ───────────────────────────────── */
+    .numbers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .number-item {
+      padding: 48px 36px; text-align: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .number-item__val {
+      font-size: clamp(42px, 5vw, 64px); font-weight: 700;
+      color: var(--white); line-height: 1; margin-bottom: 6px;
+    }
+    .number-item__val em {
+      font-size: 0.5em; font-style: normal;
+      color: var(--teal-light); margin-left: 2px; vertical-align: baseline;
+    }
+    .number-item__label { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; }
+
+    /* ─── CTA Banner ─────────────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--teal-pale) 0%, #E0F2FE 100%);
+      border: 1px solid #BAE6FD; border-radius: 12px;
+      padding: 52px 48px; text-align: center;
+    }
+    .cta-banner__title { font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .cta-banner__sub { font-size: 15px; color: var(--gray-500); margin-bottom: 32px; }
+    .cta-banner__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── Existing user strip ────────────────────── */
+    .login-strip {
+      background: var(--navy); padding: 20px 0;
+    }
+    .login-strip__inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .login-strip__text { font-size: 14px; color: rgba(255,255,255,0.75); }
+    .login-strip__text strong { color: var(--white); }
+    .btn-login-strip {
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 38px; padding: 0 20px;
+      background: var(--teal); color: var(--white);
+      border-radius: 4px; font-size: 13px; font-weight: 600;
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .btn-login-strip:hover { background: var(--teal-light); }
+
+    /* ─── Footer ─────────────────────────────────── */
+    .footer {
+      background: var(--navy-deep); color: rgba(255,255,255,0.45);
+      padding: 48px 0 28px;
+    }
+    .footer__inner {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 32px; margin-bottom: 36px;
+    }
+    .footer__brand { font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: 0.1em; }
+    .footer__brand-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+    .footer__links { display: flex; gap: 40px; flex-wrap: wrap; }
+    .footer__col-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 12px;
+    }
+    .footer__col a {
+      display: block; font-size: 13px; color: rgba(255,255,255,0.5);
+      margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer__col a:hover { color: rgba(255,255,255,0.85); }
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 20px; font-size: 12px; text-align: center;
+    }
+
+    /* ─── Responsive ─────────────────────────────── */
+    @media (max-width: 860px) {
+      .path-grid  { grid-template-columns: 1fr; }
+      .flow-grid  { grid-template-columns: 1fr 1fr; }
+      .flow-grid::before { display: none; }
+      .numbers-grid { grid-template-columns: 1fr; }
+      .header__nav { display: none; }
+      .hamburger   { display: flex; }
+      .cta-banner  { padding: 36px 24px; }
+      .footer__inner { flex-direction: column; }
+      .footer__links { gap: 24px; }
+      .login-strip__inner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 540px) {
+      .flow-grid { grid-template-columns: 1fr; }
+      .hero { padding: 120px 0 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Header ─────────────────────────────────────── -->
+  <header id="siteHeader">
+    <div class="container">
+      <div class="header__inner">
+        <a href="/service.html" class="header__logo">MITAS</a>
+        <nav class="header__nav">
+          <a href="/service.html" class="active">サービスについて</a>
+          <a href="/hospitals.html">医療機関の方へ</a>
+          <a href="/professionals.html">医療従事者の方へ</a>
+          <a href="/contact.html">お問い合わせ</a>
+          <a href="/login.html" class="btn-login-header">ログイン</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="/service.html">サービスについて</a>
+      <a href="/hospitals.html">医療機関の方へ</a>
+      <a href="/professionals.html">医療従事者の方へ</a>
+      <a href="/contact.html">お問い合わせ</a>
+      <a href="/login.html" class="btn-login-header">ログイン</a>
+    </nav>
+  </header>
+
+  <!-- ─── 既存ユーザー向けストリップ ─────────────────── -->
+  <div class="login-strip">
+    <div class="container">
+      <div class="login-strip__inner">
+        <p class="login-strip__text"><strong>既にMITASをご利用中の医療機関の方</strong> — 管理ポータルにログインして案件・候補者を確認できます。</p>
+        <a href="/login.html" class="btn-login-strip">管理ポータルにログイン &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Hero ─────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero__label">About MITAS</p>
+      <h1 class="hero__title">
+        採用を待つ余裕がない局面で、<br>
+        <em>必要な人材を、必要な要件で。</em>
+      </h1>
+      <p class="hero__sub">
+        MITASは医療機関・介護事業所の急な欠員に対し、施設基準・加算・稼働に影響しうる人員要件を整理し、
+        要件を満たす人材充足を支援するサービスです。
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── ご利用者別パス ─────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <p class="section__label">Who We Serve</p>
+        <h2 class="section__title">ご利用者別のサービス案内</h2>
+        <p class="section__sub">MITASは医療機関と医療従事者、双方を対象としたマッチングサービスです。</p>
+      </div>
+
+      <div class="path-grid">
+        <a href="/hospitals.html" class="path-card path-card--accent">
+          <div class="path-card__icon">&#127963;</div>
+          <p class="path-card__label">For Healthcare Facilities</p>
+          <h3 class="path-card__title">医療機関・介護事業所の方へ</h3>
+          <p class="path-card__desc">
+            病院・クリニック・訪問看護・介護施設の管理者・採用担当者向け。
+            急な欠員対応から計画採用まで、施設基準を意識した人材充足を支援します。
+            導入の流れ・対応職種・料金を詳しく説明します。
+          </p>
+          <span class="path-card__link">医療機関向けページへ &rarr;</span>
+        </a>
+
+        <a href="/professionals.html" class="path-card path-card--navy">
+          <div class="path-card__icon">&#128203;</div>
+          <p class="path-card__label">For Medical Professionals</p>
+          <h3 class="path-card__title">医療従事者・求職者の方へ</h3>
+          <p class="path-card__desc">
+            医師・看護師・薬剤師・療法士・介護職など、医療・介護の求職者向け。
+            MITAS を通じた求人紹介・キャリア支援のしくみと登録方法を説明します。
+          </p>
+          <span class="path-card__link">医療従事者向けページへ &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── サービスの流れ ─────────────────────────────── -->
+  <section class="section section--gray">
+    <div class="container">
+      <div class="section__head">
+        <p class="section__label">How It Works</p>
+        <h2 class="section__title">MITASのサービス概要</h2>
+      </div>
+      <div class="flow-grid">
+        <div class="flow-step">
+          <div class="flow-step__num">1</div>
+          <p class="flow-step__title">お問い合わせ</p>
+          <p class="flow-step__desc">フォームまたはお電話にてご相談ください。担当者が24時間以内にご連絡します。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__num">2</div>
+          <p class="flow-step__title">要件整理・案件化</p>
+          <p class="flow-step__desc">施設基準・加算要件を踏まえ、必要な人員要件を担当者とともに整理します。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__num">3</div>
+          <p class="flow-step__title">候補者提案</p>
+          <p class="flow-step__desc">要件に合致する候補者を厳選してご提案。ポータルから候補者を確認・承認できます。</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step__num">4</div>
+          <p class="flow-step__title">面談・充足</p>
+          <p class="flow-step__desc">面談日程の調整から入職後のフォローまで、担当者が一貫してサポートします。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Numbers ───────────────────────────────────── -->
+  <section class="section section--navy">
+    <div class="container">
+      <div class="numbers-grid">
+        <div class="number-item">
+          <p class="number-item__val">98<em>%</em></p>
+          <p class="number-item__label">充足率（2025年度実績）</p>
+        </div>
+        <div class="number-item">
+          <p class="number-item__val">14<em>日</em></p>
+          <p class="number-item__label">平均充足日数（緊急案件）</p>
+        </div>
+        <div class="number-item">
+          <p class="number-item__val">50<em>+</em></p>
+          <p class="number-item__label">対応施設数（累計）</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 class="cta-banner__title">まずはお気軽にご相談ください</h2>
+        <p class="cta-banner__sub">初期費用は一切かかりません。充足が決まった時点での成功報酬型です。</p>
+        <div class="cta-banner__actions">
+          <a href="/contact.html" class="btn btn--navy">お問い合わせ・資料請求</a>
+          <a href="/hospitals.html" class="btn btn--outline">医療機関向け詳細を見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div>
+          <p class="footer__brand">MITAS</p>
+          <p class="footer__brand-sub">医療人材マッチング | Neco Inc.</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <p class="footer__col-title">サービス</p>
+            <a href="/service.html">サービスについて</a>
+            <a href="/hospitals.html">医療機関の方へ</a>
+            <a href="/professionals.html">医療従事者の方へ</a>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">サポート</p>
+            <a href="/contact.html">お問い合わせ</a>
+            <a href="/faq.html">よくある質問</a>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">アカウント</p>
+            <a href="/login.html">管理ポータルログイン</a>
+            <a href="/forgot-password.html">パスワード再設定</a>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">法的情報</p>
+            <a href="/privacy-policy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        &copy; 2025 Neco Inc. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ヘッダーのスクロール検知
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => header.classList.toggle('solid', window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ハンバーガーメニュー
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
