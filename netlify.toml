@@ -220,6 +220,17 @@
   status = 200
 
 [[redirects]]
+  from = "/worker-app.html"
+  to = "/worker-app.html"
+  status = 200
+
+# /worker は worker-app.html へエイリアス
+[[redirects]]
+  from = "/worker"
+  to = "/worker-app.html"
+  status = 200
+
+[[redirects]]
   from = "/login.html"
   to = "/login.html"
   status = 200
