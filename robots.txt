@@ -1,0 +1,14 @@
+# MITAS ポータル robots.txt
+# 認証関連ページとダッシュボードは検索インデックスから除外
+
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /dashboard.html
+Disallow: /thanks.html
+Disallow: /api/
+Disallow: /.netlify/
+
+Sitemap: https://portal.mitas.necofindjob.com/sitemap.xml

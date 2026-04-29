@@ -17,6 +17,77 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css">
+
+  <!-- 構造化データ：Organization / WebPage / Breadcrumb / FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://portal.mitas.necofindjob.com/#organization",
+        "name": "株式会社Neco（MITAS）",
+        "url": "https://portal.mitas.necofindjob.com/",
+        "logo": "https://portal.mitas.necofindjob.com/favicon.svg"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://portal.mitas.necofindjob.com/professionals.html#webpage",
+        "url": "https://portal.mitas.necofindjob.com/professionals.html",
+        "name": "医療従事者の方へ",
+        "description": "経験・希望条件と医療機関の人員要件を丁寧にすり合わせる、要件マッチング型エージェント。医師・看護職を中心に、首都圏の常勤・非常勤・スポット案件をご紹介します。",
+        "inLanguage": "ja"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "サービスについて", "item": "https://portal.mitas.necofindjob.com/service.html" },
+          { "@type": "ListItem", "position": 2, "name": "医療従事者の方へ", "item": "https://portal.mitas.necofindjob.com/professionals.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "登録は無料ですか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、ご登録・面談・案件のご提案・条件交渉まで、医療従事者側の費用は一切かかりません。退会も自由です。" }
+          },
+          {
+            "@type": "Question",
+            "name": "すぐに転職するつもりはなくても相談できますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、歓迎します。半年〜1年先のキャリアを見据えた情報収集や、業界動向のご相談だけのご利用も可能です。即時の応募を急かすことはありません。" }
+          },
+          {
+            "@type": "Question",
+            "name": "個人情報や勤務先への問い合わせが心配です",
+            "acceptedAnswer": { "@type": "Answer", "text": "医療機関への情報共有は、ご本人の同意がない限り行いません。現職の勤務先に在籍確認等の問い合わせをすることはありません。" }
+          },
+          {
+            "@type": "Question",
+            "name": "非常勤やスポット勤務だけでも紹介してもらえますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、可能です。週数日勤務・スポット（単発勤務）・夜勤専従など、柔軟な働き方の案件もご紹介しています。" }
+          },
+          {
+            "@type": "Question",
+            "name": "ブランクがあっても大丈夫ですか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、ブランクの長さや復帰時期のご希望を伺ったうえで、無理のない案件をご提案します。復帰研修の有無や就業ペースも事前にすり合わせます。" }
+          },
+          {
+            "@type": "Question",
+            "name": "面談はオンラインでもできますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、初回面談はオンライン（Google Meet）で実施するケースが中心です。ご都合の良い時間帯に合わせて夜間・週末の面談もお受けしています。" }
+          },
+          {
+            "@type": "Question",
+            "name": "退職交渉の相談も可能ですか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、退職交渉の進め方・タイミング・伝え方についてもご相談いただけます。必要に応じて入職時期の調整もMITASが医療機関側と行います。" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -54,25 +125,35 @@
 </header>
 
 <!-- ══════════════ PAGE HERO ══════════════ -->
-<section class="page-hero">
+<section class="page-hero page-hero--with-media">
   <div class="container">
-    <nav class="breadcrumb" aria-label="パンくずリスト">
-      <a href="/service.html">サービスについて</a>
-      <span class="breadcrumb__sep">/</span>
-      <span class="breadcrumb__current">医療従事者の方へ</span>
-    </nav>
-    <div class="page-hero__eyebrow">FOR PROFESSIONALS</div>
-    <h1 class="page-hero__title">
-      経験を、<em>必要としている現場</em>で。<br>
-      要件マッチング型でつなぎます。
-    </h1>
-    <p class="page-hero__lead">
-      MITASは、求人票だけでは見えにくい医療機関側の事情・体制・期待をきちんとお伝えしたうえで、ご経験と働き方の希望に合った案件をご紹介するエージェントです。<br>
-      医師・看護職を中心に、首都圏の常勤・非常勤・スポット案件を扱っています。
-    </p>
-    <div class="page-hero__actions">
-      <a href="/contact.html" class="btn btn--primary">登録・ご相談はこちら</a>
-      <a href="/hospitals.html" class="btn btn--ghost-white">医療機関の方はこちら</a>
+    <div class="page-hero__inner">
+      <div class="page-hero__content">
+        <nav class="breadcrumb" aria-label="パンくずリスト">
+          <a href="/service.html">サービスについて</a>
+          <span class="breadcrumb__sep">/</span>
+          <span class="breadcrumb__current">医療従事者の方へ</span>
+        </nav>
+        <div class="page-hero__eyebrow">FOR PROFESSIONALS</div>
+        <h1 class="page-hero__title">
+          経験を、<em>必要としている現場</em>で。<br>
+          要件マッチング型でつなぎます。
+        </h1>
+        <p class="page-hero__lead">
+          MITASは、求人票だけでは見えにくい医療機関側の事情・体制・期待をきちんとお伝えしたうえで、ご経験と働き方の希望に合った案件をご紹介するエージェントです。<br>
+          医師・看護職を中心に、首都圏の常勤・非常勤・スポット案件を扱っています。
+        </p>
+        <div class="page-hero__actions">
+          <a href="/contact.html" class="btn btn--primary">登録・ご相談はこちら</a>
+          <a href="/hospitals.html" class="btn btn--ghost-white">医療機関の方はこちら</a>
+        </div>
+      </div>
+      <div class="page-hero__media" aria-hidden="true">
+        <picture>
+          <source srcset="/nurse.webp" type="image/webp">
+          <img src="/nurse.jpg" alt="" loading="lazy" decoding="async">
+        </picture>
+      </div>
     </div>
   </div>
 </section>

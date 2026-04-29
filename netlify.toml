@@ -74,6 +74,12 @@
   to = "/"
   status = 301
 
+# ルートアクセス時はサービストップを表示（リライト：URLは / のまま）
+[[redirects]]
+  from = "/"
+  to = "/service.html"
+  status = 200
+
 [[redirects]]
   from = "/api/line/webhook"
   to = "/.netlify/functions/line-webhook"
