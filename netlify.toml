@@ -155,6 +155,58 @@
   to = "/.netlify/functions/hospital-candidates"
   status = 200
 
+# ================================================================
+# v2 API – Phase 1 ワークフロー（4ロール対応）
+# 認証: Supabase Auth Bearer JWT
+# RLS: DB側で4ロール毎の閲覧範囲を強制
+# ================================================================
+
+# Staffing Requests v2
+[[redirects]]
+  from = "/api/v2/requests/*"
+  to = "/.netlify/functions/requests-v2/:splat"
+  status = 200
+[[redirects]]
+  from = "/api/v2/requests"
+  to = "/.netlify/functions/requests-v2"
+  status = 200
+
+# Proposals v2
+[[redirects]]
+  from = "/api/v2/proposals/*"
+  to = "/.netlify/functions/proposals-v2/:splat"
+  status = 200
+[[redirects]]
+  from = "/api/v2/proposals"
+  to = "/.netlify/functions/proposals-v2"
+  status = 200
+
+# Assignments v2
+[[redirects]]
+  from = "/api/v2/assignments/*"
+  to = "/.netlify/functions/assignments-v2/:splat"
+  status = 200
+[[redirects]]
+  from = "/api/v2/assignments"
+  to = "/.netlify/functions/assignments-v2"
+  status = 200
+
+# Invoices v2
+[[redirects]]
+  from = "/api/v2/invoices/*"
+  to = "/.netlify/functions/invoices-v2/:splat"
+  status = 200
+[[redirects]]
+  from = "/api/v2/invoices"
+  to = "/.netlify/functions/invoices-v2"
+  status = 200
+
+# Alliance Dashboard KPI
+[[redirects]]
+  from = "/api/v2/dashboard/kpi"
+  to = "/.netlify/functions/dashboard-kpi-v2"
+  status = 200
+
 # Protected pages – redirect to login if accessed directly (handled client-side too)
 # These are informational; the actual auth check is done in JavaScript.
 [[redirects]]
