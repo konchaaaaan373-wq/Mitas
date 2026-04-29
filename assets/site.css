@@ -296,6 +296,35 @@ body.has-light-header #siteHeader .hamburger span { background: var(--navy); }
   flex-wrap: wrap;
 }
 
+/* ページヒーローに右側ビジュアルを置くレイアウト */
+.page-hero--with-media .page-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 56px;
+  align-items: center;
+}
+.page-hero--with-media .page-hero__media {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.page-hero--with-media .page-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.page-hero--with-media .page-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(13,35,64,0.55) 100%);
+  pointer-events: none;
+}
+
 /* パンくず */
 .breadcrumb {
   display: flex;
@@ -817,6 +846,15 @@ body.has-light-header #siteHeader .hamburger span { background: var(--navy); }
   .page-hero__lead { font-size: 14.5px; line-height: 1.95; }
   .page-hero__actions { flex-direction: column; align-items: stretch; }
   .page-hero__actions .btn { width: 100%; }
+
+  /* モバイルではヒーロー右側ビジュアルを非表示にし縦積みに */
+  .page-hero--with-media .page-hero__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .page-hero--with-media .page-hero__media {
+    display: none;
+  }
 
   .feature-grid { grid-template-columns: 1fr; }
 

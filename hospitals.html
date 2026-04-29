@@ -17,6 +17,77 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css">
+
+  <!-- 構造化データ：Organization / WebPage / Breadcrumb / FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://portal.mitas.necofindjob.com/#organization",
+        "name": "株式会社Neco（MITAS）",
+        "url": "https://portal.mitas.necofindjob.com/",
+        "logo": "https://portal.mitas.necofindjob.com/favicon.svg"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://portal.mitas.necofindjob.com/hospitals.html#webpage",
+        "url": "https://portal.mitas.necofindjob.com/hospitals.html",
+        "name": "医療機関の方へ",
+        "description": "医療機関の急な欠員に対応する人員要件充足支援サービス。利用の流れ・対応職種・料金・FAQをご案内します。",
+        "inLanguage": "ja"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "サービスについて", "item": "https://portal.mitas.necofindjob.com/service.html" },
+          { "@type": "ListItem", "position": 2, "name": "医療機関の方へ", "item": "https://portal.mitas.necofindjob.com/hospitals.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "急ぎの欠員にも対応してもらえますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、可能な限り早期に候補者をご提案します。状況によっては当日中にご連絡し、初回ヒアリングを当日〜翌営業日に実施するケースもあります。ただし、要件と合致しない無理な紹介は行いません。" }
+          },
+          {
+            "@type": "Question",
+            "name": "対応エリアはどこですか",
+            "acceptedAnswer": { "@type": "Answer", "text": "首都圏（東京・神奈川・埼玉・千葉）を中心にご対応しています。一部、関東近県もご相談可能です。エリア外についてもまずはご連絡ください。" }
+          },
+          {
+            "@type": "Question",
+            "name": "常勤だけでなく非常勤やスポットも依頼できますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、常勤・非常勤・スポット（単発勤務）すべてに対応しています。非常勤・スポットの場合は時給ベースの料金体系となります。" }
+          },
+          {
+            "@type": "Question",
+            "name": "採用が決まらなかった場合に費用はかかりますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "かかりません。MITASは成功報酬型のため、ご契約に至らなかった場合の費用は一切発生しません。要件整理・候補者ご提案までは無料です。" }
+          },
+          {
+            "@type": "Question",
+            "name": "他の紹介会社と並行して使ってもよいですか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、問題ありません。MITASは囲い込みを行わず、医療機関にとって最良の充足ができれば結果オーライと考えています。" }
+          },
+          {
+            "@type": "Question",
+            "name": "体制変更や新規施設立ち上げの相談もできますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "はい、可能です。施設基準・加算要件を踏まえた人員設計のご相談から、必要な専門職の段階的な充足まで、伴走型でご支援します。" }
+          },
+          {
+            "@type": "Question",
+            "name": "個人情報・採用情報の取り扱いはどうなっていますか",
+            "acceptedAnswer": { "@type": "Answer", "text": "医療機関の採用情報・候補者の個人情報は、必要最小限の範囲でのみ共有します。プライバシーポリシーをご確認ください。守秘義務契約（NDA）の個別締結も承ります。" }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -54,24 +125,34 @@
 </header>
 
 <!-- ══════════════ PAGE HERO ══════════════ -->
-<section class="page-hero">
+<section class="page-hero page-hero--with-media">
   <div class="container">
-    <nav class="breadcrumb" aria-label="パンくずリスト">
-      <a href="/service.html">サービスについて</a>
-      <span class="breadcrumb__sep">/</span>
-      <span class="breadcrumb__current">医療機関の方へ</span>
-    </nav>
-    <div class="page-hero__eyebrow">FOR HOSPITALS</div>
-    <h1 class="page-hero__title">
-      急な欠員でも、<em>施設基準・加算・稼働</em>を守るために。
-    </h1>
-    <p class="page-hero__lead">
-      退職・休職・産休育休・体制変更。採用活動を待つ余裕のない局面で、必要な人員要件を一緒に整理し、要件を満たす医療従事者の充足を支援します。<br>
-      病院・訪問看護ステーション・介護事業所の運営責任者の方へ。
-    </p>
-    <div class="page-hero__actions">
-      <a href="/contact.html" class="btn btn--primary">まずは状況を相談する</a>
-      <a href="/login.html" class="btn btn--ghost-white">ご契約済みの方はログイン</a>
+    <div class="page-hero__inner">
+      <div class="page-hero__content">
+        <nav class="breadcrumb" aria-label="パンくずリスト">
+          <a href="/service.html">サービスについて</a>
+          <span class="breadcrumb__sep">/</span>
+          <span class="breadcrumb__current">医療機関の方へ</span>
+        </nav>
+        <div class="page-hero__eyebrow">FOR HOSPITALS</div>
+        <h1 class="page-hero__title">
+          急な欠員でも、<em>施設基準・加算・稼働</em>を守るために。
+        </h1>
+        <p class="page-hero__lead">
+          退職・休職・産休育休・体制変更。採用活動を待つ余裕のない局面で、必要な人員要件を一緒に整理し、要件を満たす医療従事者の充足を支援します。<br>
+          病院・訪問看護ステーション・介護事業所の運営責任者の方へ。
+        </p>
+        <div class="page-hero__actions">
+          <a href="/contact.html" class="btn btn--primary">まずは状況を相談する</a>
+          <a href="/login.html" class="btn btn--ghost-white">ご契約済みの方はログイン</a>
+        </div>
+      </div>
+      <div class="page-hero__media" aria-hidden="true">
+        <picture>
+          <source srcset="/assets/images/clinic.webp" type="image/webp">
+          <img src="/assets/images/clinic.jpg" alt="" loading="lazy" decoding="async">
+        </picture>
+      </div>
     </div>
   </div>
 </section>

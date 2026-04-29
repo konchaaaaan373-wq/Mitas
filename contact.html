@@ -17,6 +17,37 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css">
+
+  <!-- 構造化データ：Organization / ContactPage / Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://portal.mitas.necofindjob.com/#organization",
+        "name": "株式会社Neco（MITAS）",
+        "url": "https://portal.mitas.necofindjob.com/",
+        "logo": "https://portal.mitas.necofindjob.com/favicon.svg"
+      },
+      {
+        "@type": "ContactPage",
+        "@id": "https://portal.mitas.necofindjob.com/contact.html#webpage",
+        "url": "https://portal.mitas.necofindjob.com/contact.html",
+        "name": "お問い合わせ",
+        "description": "医療機関の人材ご相談、医療従事者のキャリア面談ご依頼、その他のお問い合わせを承ります。初回相談は無料です。",
+        "inLanguage": "ja"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "サービスについて", "item": "https://portal.mitas.necofindjob.com/service.html" },
+          { "@type": "ListItem", "position": 2, "name": "お問い合わせ", "item": "https://portal.mitas.necofindjob.com/contact.html" }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

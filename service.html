@@ -17,6 +17,41 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site.css">
+
+  <!-- 構造化データ：Organization / WebSite / WebPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://portal.mitas.necofindjob.com/#organization",
+        "name": "株式会社Neco（MITAS）",
+        "url": "https://portal.mitas.necofindjob.com/",
+        "logo": "https://portal.mitas.necofindjob.com/favicon.svg",
+        "description": "医療機関の急な欠員に対し、施設基準・加算・稼働を守るための人員要件充足支援サービス",
+        "sameAs": ["https://necofindjob.com", "https://mitas.necofindjob.com"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://portal.mitas.necofindjob.com/#website",
+        "name": "MITAS 医療機関ポータル",
+        "url": "https://portal.mitas.necofindjob.com/",
+        "publisher": { "@id": "https://portal.mitas.necofindjob.com/#organization" },
+        "inLanguage": "ja"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://portal.mitas.necofindjob.com/service.html#webpage",
+        "url": "https://portal.mitas.necofindjob.com/service.html",
+        "name": "サービスについて",
+        "description": "MITASは、医療機関の急な欠員に対し、施設基準・加算・稼働を守るための人員要件充足支援サービスです。",
+        "isPartOf": { "@id": "https://portal.mitas.necofindjob.com/#website" },
+        "inLanguage": "ja"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
