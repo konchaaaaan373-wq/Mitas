@@ -1714,27 +1714,29 @@
       </div>
     </section>
 
-    <!-- ─── 問い合わせ ──────────────────────────────── -->
+    <!-- ─── 問い合わせ（v2 リアル：未提出・受付の依頼） ──────────── -->
     <section class="page-section" id="s-inquiries">
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">問い合わせ履歴</span>
-          <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新規依頼</button>
+
+      <!-- 問い合わせ・受付（v2 リアルデータ・Phase F でメイン化） -->
+      <div class="v2-cases-card" id="v2InquiriesCard" aria-label="問い合わせ履歴">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">問い合わせ・受付中の依頼</span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2InquiriesFilter">
+              <option value="all">下書き＋受付</option>
+              <option value="draft">下書きのみ</option>
+              <option value="submitted">受付のみ</option>
+            </select>
+            <button class="v2-banner__refresh" id="v2InquiriesRefreshBtn" type="button">更新</button>
+            <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新規依頼</button>
+          </div>
         </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>受付番号</th>
-              <th>内容</th>
-              <th>職種</th>
-              <th>ステータス</th>
-              <th>対応案件</th>
-              <th>受付日</th>
-            </tr>
-          </thead>
-          <tbody id="inquiriesTbody"></tbody>
-        </table>
+        <div class="v2-cases-table-wrap" id="v2InquiriesBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2InquiriesMsg">読み込み中…</div>
       </div>
+
     </section>
 
     <!-- ─── 設定 ──────────────────────────────────── -->
@@ -2639,6 +2641,190 @@
       if (r) r.addEventListener('click', loadV2Activity);
     }
 
+    /* ─── v2 リアル問い合わせ・受付（Phase F） ─────────
+       /api/v2/requests から status in [draft, submitted] の依頼を取得し、
+       問い合わせセクションに表示。draft 状態の依頼は「提出する」ボタンで
+       PATCH /api/v2/requests/:id { status:'submitted' } を送信できる。 */
+    const v2InqState = { rows: [], filter: 'all', loaded: false };
+
+    async function loadV2Inquiries() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2InquiriesBody');
+      const msgEl = $('v2InquiriesMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2InquiriesRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないため問い合わせを取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        // requests-v2 は status フィルターを1値だけ受けるため、draft と submitted を
+        // 1リクエストでまとめて取りたい場合は status を渡さず、クライアント側で絞る。
+        const res = await fetch('/api/v2/requests?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        const all = Array.isArray(data.requests) ? data.requests : [];
+        v2InqState.rows = all.filter(r => r.status === 'draft' || r.status === 'submitted');
+        v2InqState.loaded = true;
+        renderV2InquiriesTable();
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const draft = v2InqState.rows.filter(r => r.status === 'draft').length;
+        const submitted = v2InqState.rows.filter(r => r.status === 'submitted').length;
+        setMsg(`v2 API より取得：${ts} 時点 / 下書き ${draft}件 / 受付 ${submitted}件${data.source === 'mock' ? '（モック）' : ''}`);
+      } catch (e) {
+        console.error('v2 問い合わせ取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2InquiriesTable() {
+      const body = document.getElementById('v2InquiriesBody');
+      if (!body) return;
+      const f = v2InqState.filter;
+      const rows = (v2InqState.rows || []).filter(r => {
+        if (f === 'draft')     return r.status === 'draft';
+        if (f === 'submitted') return r.status === 'submitted';
+        return true;
+      }).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+
+      if (!rows.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当する問い合わせはありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${d.getFullYear()}/${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)}`;
+      };
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>受付番号</th>
+              <th>タイトル</th>
+              <th>職種</th>
+              <th class="num">人数</th>
+              <th>ステータス</th>
+              <th>受付日</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const isDraft = r.status === 'draft';
+              return `
+                <tr>
+                  <td><span class="v2-cases-table__num">${esc(r.request_number || '')}</span></td>
+                  <td><span class="v2-cases-table__title">${esc(r.title || '(タイトルなし)')}</span></td>
+                  <td>${esc(V2_PROFESSION_LABEL[r.profession_type] || r.profession_type || '—')}</td>
+                  <td class="num">${r.headcount || 1}</td>
+                  <td><span class="v2-cases-st v2-cases-st--${esc(r.status)}">${esc(V2_STATUS_LABEL[r.status] || r.status)}</span></td>
+                  <td>${esc(fmt(r.created_at))}</td>
+                  <td>
+                    ${isDraft
+                      ? `<button class="v2-banner__refresh v2-inq-submit" data-id="${esc(r.id)}" type="button" style="font-size:11px;padding:4px 10px;">提出する</button>`
+                      : '<span class="v2-act-meta">提出済み</span>'}
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      // 「提出する」ボタンのイベントバインド
+      body.querySelectorAll('.v2-inq-submit').forEach(btn => {
+        btn.addEventListener('click', () => submitV2Inquiry(btn.dataset.id, btn));
+      });
+    }
+
+    async function submitV2Inquiry(id, btn) {
+      if (!id) return;
+      const ok = window.confirm('この依頼を「受付」状態として正式に提出します。よろしいですか？');
+      if (!ok) return;
+      btn.disabled = true;
+      btn.textContent = '提出中…';
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        if (typeof toast === 'function') toast('セッションが見つかりません', 'error');
+        btn.disabled = false; btn.textContent = '提出する';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v2/requests/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'submitted' }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        if (typeof toast === 'function') toast('依頼を受付状態に提出しました', 'success');
+        // ローカル状態を更新して再描画
+        const idx = v2InqState.rows.findIndex(r => r.id === id);
+        if (idx >= 0) v2InqState.rows[idx] = { ...v2InqState.rows[idx], status: 'submitted' };
+        renderV2InquiriesTable();
+      } catch (e) {
+        console.error('問い合わせ提出失敗:', e);
+        if (typeof toast === 'function') toast(`提出に失敗しました：${e.message}`, 'error');
+        btn.disabled = false; btn.textContent = '提出する';
+      }
+    }
+
+    function bindV2InquiriesControls() {
+      if (bindV2InquiriesControls._bound) return;
+      bindV2InquiriesControls._bound = true;
+      const f = document.getElementById('v2InquiriesFilter');
+      const r = document.getElementById('v2InquiriesRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2InqState.filter = f.value; renderV2InquiriesTable(); });
+      if (r) r.addEventListener('click', loadV2Inquiries);
+    }
+
     function getV2MockActivity() {
       const now = Date.now();
       const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
@@ -3011,7 +3197,10 @@
 
     /* ─── 問い合わせ ────────────────────────────── */
     function renderInquiries() {
-      document.getElementById('inquiriesTbody').innerHTML = INQUIRIES.map(q => `
+      // Phase F で inquiriesTbody を削除済み。要素が無ければ no-op
+      const _tbody = document.getElementById('inquiriesTbody');
+      if (!_tbody) return;
+      _tbody.innerHTML = INQUIRIES.map(q => `
         <tr>
           <td><span class="td-mono">${q.num}</span></td>
           <td class="td-primary">${q.content}</td>
@@ -3281,7 +3470,12 @@
         else                     renderV2ProposalsTable();
       }
       if (id === 'tasks')      renderTasks();
-      if (id === 'inquiries')  renderInquiries();
+      if (id === 'inquiries') {
+        // 問い合わせ・受付一覧（v2 リアル）：初回コントロールバインド＋初回ロード
+        bindV2InquiriesControls();
+        if (!v2InqState.loaded) loadV2Inquiries();
+        else                    renderV2InquiriesTable();
+      }
       if (id === 'settings')   initSettings();
       // モバイル時はセクション切り替えでサイドバーを閉じる
       sidebar.classList.remove('open');
