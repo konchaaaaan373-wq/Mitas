@@ -1656,13 +1656,10 @@
     <!-- ─── 案件管理 ──────────────────────────────── -->
     <section class="page-section" id="s-cases">
 
-      <!-- ═════ v2 リアル案件（Phase B：並行表示プレビュー） ═════ -->
-      <div class="v2-cases-card" id="v2CasesCard" aria-label="v2 リアル案件">
+      <!-- ═════ 案件一覧（v2 リアルデータ・Phase E-2 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2CasesCard" aria-label="案件一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">
-            v2 リアル案件
-            <span class="v2-banner__pill">PREVIEW</span>
-          </span>
+          <span class="v2-cases-card__title">案件一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2CasesFilter">
               <option value="open">未終端のみ</option>
@@ -1690,60 +1687,6 @@
           <div class="v2-cases-table__placeholder">読み込み中…</div>
         </div>
         <div class="v2-cases-card__msg" id="v2CasesMsg">読み込み中…</div>
-      </div>
-
-      <div class="filter-bar">
-        <select class="filter-select" id="filterStatus">
-          <option value="">ステータス：全て</option>
-          <option value="intake">受付</option>
-          <option value="scoping">要件整理</option>
-          <option value="sourcing">候補者選定</option>
-          <option value="interviewing">面談中</option>
-          <option value="offer">内定提案</option>
-          <option value="placed">充足済</option>
-          <option value="on_hold">保留中</option>
-        </select>
-        <select class="filter-select" id="filterPriority">
-          <option value="">優先度：全て</option>
-          <option value="critical">最緊急</option>
-          <option value="urgent">緊急</option>
-          <option value="high">高</option>
-          <option value="medium">中</option>
-          <option value="low">低</option>
-        </select>
-        <select class="filter-select" id="filterProfession">
-          <option value="">職種：全て</option>
-          <option value="physician">医師</option>
-          <option value="nurse">看護師</option>
-          <option value="pharmacist">薬剤師</option>
-          <option value="therapist">療法士</option>
-          <option value="care_worker">介護福祉士</option>
-          <option value="care_manager">ケアマネジャー</option>
-          <option value="medical_clerk">医療事務</option>
-        </select>
-        <input class="filter-input" type="text" id="filterSearch" placeholder="案件名・施設名で検索">
-        <div class="filter-bar__spacer"></div>
-        <button class="btn-primary" id="btnOpenRequest">+ 新規依頼</button>
-      </div>
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">案件一覧 <span id="casesCount" style="font-weight:400;color:var(--gray-400);font-size:11px;"></span></span>
-        </div>
-        <table class="data-table" id="casesTable">
-          <thead>
-            <tr>
-              <th class="sortable" data-sort="title">案件<span class="sort-icon"></span></th>
-              <th>職種</th>
-              <th class="sortable" data-sort="status">ステータス<span class="sort-icon"></span></th>
-              <th class="sortable sort-desc" data-sort="priority">優先度<span class="sort-icon"></span></th>
-              <th>人数</th>
-              <th class="sortable" data-sort="deadline">期限<span class="sort-icon"></span></th>
-              <th>マッチ</th>
-              <th>担当</th>
-            </tr>
-          </thead>
-          <tbody id="casesTbody"></tbody>
-        </table>
       </div>
     </section>
 
@@ -2989,20 +2932,27 @@
       });
     }
 
-    // ヘッダークリックでソート切り替え
-    document.getElementById('casesTable').addEventListener('click', e => {
-      const th = e.target.closest('th[data-sort]');
-      if (!th) return;
-      const key = th.dataset.sort;
-      if (caseSortBy === key) { caseSortDir = -caseSortDir; }
-      else { caseSortBy = key; caseSortDir = 1; }
-      renderCases();
-    });
+    // Phase E-2 で案件一覧の DOM を v2 に置き換え済み。
+    // 旧 CASES テーブル / フィルター / btnOpenRequest 要素は削除されたため、
+    // 関連リスナーは要素が存在する場合のみバインドする（後方互換）
+    const _casesTable = document.getElementById('casesTable');
+    if (_casesTable) {
+      _casesTable.addEventListener('click', e => {
+        const th = e.target.closest('th[data-sort]');
+        if (!th) return;
+        const key = th.dataset.sort;
+        if (caseSortBy === key) { caseSortDir = -caseSortDir; }
+        else { caseSortBy = key; caseSortDir = 1; }
+        renderCases();
+      });
+    }
 
     ['filterStatus','filterPriority','filterProfession','filterSearch'].forEach(id => {
-      document.getElementById(id).addEventListener('input', renderCases);
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', renderCases);
     });
-    document.getElementById('btnOpenRequest').addEventListener('click', openRequestModal);
+    const _btnOpenRequest = document.getElementById('btnOpenRequest');
+    if (_btnOpenRequest) _btnOpenRequest.addEventListener('click', openRequestModal);
 
     /* ─── 候補者確認 ────────────────────────────── */
     let currentCandTab = 'pending';
@@ -3346,8 +3296,7 @@
     showSection = function(id) {
       _origShowSection(id);
       if (id === 'cases') {
-        renderCases();
-        // v2 リアル案件（Phase B）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        // 案件一覧（v2 リアル）：初回コントロールバインド＋初回ロード／既ロードなら再描画
         bindV2CasesControls();
         if (!v2State.loaded) loadV2Cases();
         else                 renderV2CasesTable();
