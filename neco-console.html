@@ -1963,11 +1963,15 @@
                 <div style="font-size:11px; color: var(--gray-700); margin-top:6px; line-height:1.6;">
                   ワーカーメモ：${escapeHtml(a.worker_completion_note)}
                 </div>` : ''}
-              ${canConfirm ? `
-                <div style="margin-top: 8px; display:flex; gap:6px;">
+              <div style="margin-top: 8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                ${canConfirm ? `
                   <button class="action-btn action-btn--success v0-asgn-confirm" data-id="${escapeHtml(a.id)}" type="button"
                           style="font-size:11px; padding:6px 10px;">完了確定にする</button>
-                </div>` : ''}
+                ` : ''}
+                <button class="action-btn action-btn--ghost v0-asgn-toggle-logs" data-id="${escapeHtml(a.id)}" type="button"
+                        style="font-size:11px; padding:6px 10px;">タイムラインを見る</button>
+              </div>
+              <div class="v0-asgn-logs" id="wlogs-${escapeHtml(a.id)}" hidden></div>
             </div>
           `;
         }).join('')}
@@ -1977,6 +1981,82 @@
     container.querySelectorAll('.v0-asgn-confirm').forEach(btn => {
       btn.addEventListener('click', () => confirmAssignmentNeco(btn.dataset.id, btn));
     });
+    container.querySelectorAll('.v0-asgn-toggle-logs').forEach(btn => {
+      btn.addEventListener('click', () => toggleAssignmentLogs(btn.dataset.id, btn));
+    });
+  }
+
+  // ─── アサインの work_logs（タイムライン）展開 ───
+  const WORK_LOG_LABEL = {
+    check_in:    'チェックイン',
+    check_out:   'チェックアウト',
+    break_start: '休憩開始',
+    break_end:   '休憩終了',
+    note:        'メモ',
+    incident:    'インシデント',
+  };
+
+  async function toggleAssignmentLogs(assignmentId, btn) {
+    if (!assignmentId) return;
+    const box = document.getElementById('wlogs-' + assignmentId);
+    if (!box) return;
+
+    if (!box.hidden) {
+      box.hidden = true;
+      btn.textContent = 'タイムラインを見る';
+      return;
+    }
+
+    box.hidden = false;
+    btn.textContent = '閉じる';
+    box.innerHTML = '<div class="placeholder" style="padding: 8px;">読み込み中…</div>';
+
+    try {
+      const path = `/work_logs?assignment_id=eq.${encodeURIComponent(assignmentId)}`
+        + `&select=*&order=occurred_at.asc&limit=100`;
+      const rows = await pgFetch(path);
+      const logs = Array.isArray(rows) ? rows : [];
+
+      if (!logs.length) {
+        box.innerHTML = '<div class="placeholder" style="padding: 8px;">タイムラインはまだありません</div>';
+        return;
+      }
+
+      box.innerHTML = `
+        <div style="margin-top: 8px; display: grid; gap: 4px; padding: 8px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px;">
+          ${logs.map(l => {
+            const detail = l.detail || {};
+            const hasGps = detail.lat && detail.lng;
+            const note = detail.note || detail.message || '';
+            return `
+              <div style="display: grid; grid-template-columns: 90px 100px 1fr; gap: 8px; align-items: start; font-size: 11px; padding: 4px 0;">
+                <div style="color: var(--gray-500); font-variant-numeric: tabular-nums;">${escapeHtml(formatDateTime(l.occurred_at))}</div>
+                <div>
+                  <span class="badge ${logBadgeClass(l.log_type)}">${escapeHtml(WORK_LOG_LABEL[l.log_type] || l.log_type)}</span>
+                </div>
+                <div style="color: var(--gray-700); min-width: 0;">
+                  ${note ? `<div>${escapeHtml(note)}</div>` : ''}
+                  ${hasGps ? `<div style="color: var(--gray-500); font-size: 10px;">GPS: ${Number(detail.lat).toFixed(5)}, ${Number(detail.lng).toFixed(5)}</div>` : ''}
+                  ${!note && !hasGps ? '<span style="color: var(--gray-400);">—</span>' : ''}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } catch (e) {
+      console.error('work_logs 取得失敗:', e);
+      box.innerHTML = `<div class="placeholder" style="padding:8px; color:var(--red);">取得に失敗しました：${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  function logBadgeClass(type) {
+    if (type === 'check_in')    return 'badge--prop-worker_accepted';
+    if (type === 'check_out')   return 'badge--prop-proposed_to_facility';
+    if (type === 'break_start') return 'badge--low';
+    if (type === 'break_end')   return 'badge--low';
+    if (type === 'incident')    return 'badge--prop-worker_declined';
+    return 'badge--low';
   }
 
   // neco_admin がアサインを完了確定にする
@@ -2589,6 +2669,39 @@
       return getMockActivityFor(entityId);
     }
 
+    // タイムライン（GET work_logs）— v0.4
+    if (method === 'GET' && path.startsWith('/work_logs?')) {
+      const m = path.match(/assignment_id=eq\.([^&]+)/);
+      const aid = m ? decodeURIComponent(m[1]) : null;
+      return getMockWorkLogsFor(aid);
+    }
+
+    return [];
+  }
+
+  function getMockWorkLogsFor(assignmentId) {
+    if (!assignmentId) return [];
+    if (assignmentId === '00000000-0000-0000-0000-000000000401') {
+      // completion_reported のサンプル
+      const start = new Date(Date.now() + 5 * 86400000); start.setHours(9, 0, 0, 0);
+      const end   = new Date(start.getTime() + 8 * 3600000 + 30 * 60000);  // 8.5時間
+      return [
+        { id:'wl-1', assignment_id: assignmentId, log_type:'check_in',  occurred_at: start.toISOString(),                                          detail:{ lat: 35.6895, lng: 139.6917 } },
+        { id:'wl-2', assignment_id: assignmentId, log_type:'break_start', occurred_at: new Date(start.getTime() + 4 * 3600000).toISOString(),       detail:{} },
+        { id:'wl-3', assignment_id: assignmentId, log_type:'break_end',   occurred_at: new Date(start.getTime() + 4.5 * 3600000).toISOString(),     detail:{} },
+        { id:'wl-4', assignment_id: assignmentId, log_type:'note',        occurred_at: new Date(start.getTime() + 6 * 3600000).toISOString(),       detail:{ note: '患者対応で予定より30分超過' } },
+        { id:'wl-5', assignment_id: assignmentId, log_type:'check_out', occurred_at: end.toISOString(),                                          detail:{ lat: 35.6895, lng: 139.6917 } },
+      ];
+    }
+    if (assignmentId === '00000000-0000-0000-0000-000000000402') {
+      // completion_confirmed のサンプル
+      const start = new Date(Date.now() - 3 * 86400000); start.setHours(8, 0, 0, 0);
+      const end   = new Date(start.getTime() + 9 * 3600000);
+      return [
+        { id:'wl-1', assignment_id: assignmentId, log_type:'check_in',  occurred_at: start.toISOString(),                                          detail:{ lat: 35.5494, lng: 139.6488 } },
+        { id:'wl-2', assignment_id: assignmentId, log_type:'check_out', occurred_at: end.toISOString(),                                            detail:{ lat: 35.5494, lng: 139.6488 } },
+      ];
+    }
     return [];
   }
 
