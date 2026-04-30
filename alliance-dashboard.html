@@ -477,7 +477,8 @@
     if (supabase) {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
-        location.href = '/login.html';
+        // 元の画面に戻れるよう next パラメータを付与
+        location.href = '/login.html?next=' + encodeURIComponent(location.pathname);
         return;
       }
       token = data.session.access_token;

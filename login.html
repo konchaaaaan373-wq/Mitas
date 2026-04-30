@@ -399,6 +399,18 @@
     const loginBtn   = document.getElementById('loginBtn');
     const errorBanner = document.getElementById('errorBanner');
 
+    // ?next=/path で指定されたリダイレクト先を取得（Open Redirect 防止のため相対パスに限定）
+    function getNextPath() {
+      try {
+        const next = new URLSearchParams(location.search).get('next');
+        if (typeof next !== 'string' || !next) return '/dashboard.html';
+        if (/^https?:\/\//i.test(next)) return '/dashboard.html';
+        if (next.startsWith('//'))      return '/dashboard.html';
+        if (!next.startsWith('/'))      return '/dashboard.html';
+        return next;
+      } catch (_) { return '/dashboard.html'; }
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorBanner.classList.remove('show');
@@ -415,7 +427,8 @@
       loginBtn.classList.add('loading');
 
       try {
-        await hospitalLogin(email, password);  // 成功時は内部でリダイレクト
+        // 成功時は hospital-login.js が next（または /dashboard.html）へリダイレクト
+        await hospitalLogin(email, password, getNextPath());
       } catch (err) {
         showError(err.message);
       } finally {
@@ -429,12 +442,12 @@
       errorBanner.classList.add('show');
     }
 
-    // 既にセッションがあればダッシュボードへ
+    // 既にセッションがあれば next（または /dashboard.html）へ
     (async function checkSession() {
       // hospital-login.js のロードを待つ
       await new Promise(r => script.addEventListener('load', r));
       const session = await getSession();
-      if (session) location.href = '/dashboard.html';
+      if (session) location.href = getNextPath();
     })();
   </script>
 </body>
