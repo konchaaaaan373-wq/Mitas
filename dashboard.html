@@ -1314,6 +1314,64 @@
       color: var(--gray-500, #64748B);
     }
 
+    /* ─── キーボードショートカットヘルプ ─── */
+    .kb-help-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .kb-help-overlay[hidden] { display: none; }
+    .kb-help {
+      background: var(--white, #FFFFFF);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      overflow: auto;
+      box-shadow: 0 20px 50px rgba(15,23,42,0.25);
+    }
+    .kb-help__head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--gray-100, #F1F5F9);
+    }
+    .kb-help__title {
+      font-size: 14px; font-weight: 700; color: var(--navy-deep, #0D2340);
+      letter-spacing: 0.04em;
+    }
+    .kb-help__close {
+      background: transparent; border: none;
+      font-size: 22px; line-height: 1;
+      color: var(--gray-500, #64748B); cursor: pointer;
+      padding: 4px 8px;
+    }
+    .kb-help__close:hover { color: var(--navy-deep, #0D2340); }
+    .kb-help__list {
+      width: 100%; border-collapse: collapse;
+    }
+    .kb-help__list th {
+      text-align: left; padding: 10px 22px;
+      width: 110px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 12px; font-weight: 700;
+      color: var(--teal, #0EA5E9);
+      background: var(--gray-50, #F8FAFC);
+      border-bottom: 1px solid var(--gray-100, #F1F5F9);
+      vertical-align: top;
+    }
+    .kb-help__list td {
+      padding: 10px 22px;
+      font-size: 13px; color: var(--gray-700, #334155);
+      border-bottom: 1px solid var(--gray-100, #F1F5F9);
+    }
+    .kb-help__list tr:last-child th,
+    .kb-help__list tr:last-child td { border-bottom: none; }
+
     /* ─── v2 リアル案件テーブル（Phase B：並行表示） ─── */
     .v2-cases-card {
       background: #FFFFFF;
@@ -2003,6 +2061,29 @@
       <button class="btn-secondary" onclick="closeV2CasePanel()">閉じる</button>
     </div>
   </aside>
+
+  <!-- ─── キーボードショートカットヘルプ ───────── -->
+  <div class="kb-help-overlay" id="kbHelpOverlay" hidden>
+    <div class="kb-help" role="dialog" aria-labelledby="kbHelpTitle">
+      <div class="kb-help__head">
+        <span class="kb-help__title" id="kbHelpTitle">キーボードショートカット</span>
+        <button class="kb-help__close" id="kbHelpClose" aria-label="閉じる">&times;</button>
+      </div>
+      <table class="kb-help__list">
+        <tr><th>/</th>   <td>現在のセクションの検索にフォーカス</td></tr>
+        <tr><th>?</th>   <td>このヘルプを表示</td></tr>
+        <tr><th>Esc</th> <td>モーダル/ヘルプを閉じる</td></tr>
+        <tr><th>g o</th> <td>ダッシュボードへ移動</td></tr>
+        <tr><th>g c</th> <td>案件管理へ移動</td></tr>
+        <tr><th>g n</th> <td>候補者・提案へ移動</td></tr>
+        <tr><th>g a</th> <td>アサイン管理へ移動</td></tr>
+        <tr><th>g t</th> <td>タスクへ移動</td></tr>
+        <tr><th>g i</th> <td>問い合わせへ移動</td></tr>
+        <tr><th>g v</th> <td>請求へ移動</td></tr>
+        <tr><th>g s</th> <td>設定へ移動</td></tr>
+      </table>
+    </div>
+  </div>
 
   <!-- ─── 新規依頼モーダル ────────────────────────── -->
   <div class="modal-overlay" id="requestModal">
@@ -4093,6 +4174,91 @@
       sidebar.classList.remove('open');
       sidebarMask.classList.remove('show');
     };
+
+    /* ─── キーボードショートカット ──────────────
+       g → o/c/n/a/t/i/v/s でセクション切替
+       /  現在のセクションの検索/フィルタにフォーカス
+       ?  ヘルプを表示
+       Esc ヘルプを閉じる（既存のモーダル Esc とも共存） */
+    (function () {
+      const SECTION_KEYS = {
+        o: 'overview', c: 'cases', n: 'candidates', a: 'assignments',
+        t: 'tasks',    i: 'inquiries', v: 'invoices', s: 'settings',
+      };
+      let gMode = false;
+      let gTimer = null;
+
+      function isTyping() {
+        const el = document.activeElement;
+        if (!el) return false;
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return true;
+        return el.isContentEditable === true;
+      }
+
+      function focusFirstFilter() {
+        const sec = document.querySelector('.page-section.active');
+        if (!sec) return;
+        const input = sec.querySelector('input[type="text"], input[type="search"]');
+        if (input) { input.focus(); input.select(); }
+      }
+
+      function openHelp() {
+        const o = document.getElementById('kbHelpOverlay');
+        if (o) o.hidden = false;
+      }
+      function closeHelp() {
+        const o = document.getElementById('kbHelpOverlay');
+        if (o) o.hidden = true;
+      }
+
+      document.addEventListener('keydown', (e) => {
+        // ヘルプの Esc 閉じ
+        if (e.key === 'Escape') {
+          const o = document.getElementById('kbHelpOverlay');
+          if (o && !o.hidden) { closeHelp(); return; }
+        }
+        // 入力中はショートカット無効
+        if (isTyping()) return;
+        // 修飾キー押下時は無効
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+        // g モード
+        if (gMode) {
+          const key = e.key.toLowerCase();
+          gMode = false;
+          if (gTimer) { clearTimeout(gTimer); gTimer = null; }
+          const target = SECTION_KEYS[key];
+          if (target && typeof showSection === 'function') {
+            e.preventDefault();
+            showSection(target);
+          }
+          return;
+        }
+
+        if (e.key === 'g') {
+          gMode = true;
+          gTimer = setTimeout(() => { gMode = false; }, 1500);
+          return;
+        }
+        if (e.key === '/') {
+          e.preventDefault();
+          focusFirstFilter();
+          return;
+        }
+        if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+          e.preventDefault();
+          openHelp();
+          return;
+        }
+      });
+
+      const closeBtn = document.getElementById('kbHelpClose');
+      if (closeBtn) closeBtn.addEventListener('click', closeHelp);
+      const overlay = document.getElementById('kbHelpOverlay');
+      if (overlay) overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeHelp();
+      });
+    })();
   </script>
 </body>
 </html>
