@@ -1410,6 +1410,11 @@
     .v2-cases-table tr.v2-row-action:hover td {
       background: rgba(91,33,182,0.08);
     }
+    /* クリック可能な行（依頼詳細を開く） */
+    .v2-cases-table tr.v2-row-clickable { cursor: pointer; }
+    .v2-cases-table tr.v2-row-clickable:hover td {
+      background: rgba(14,165,233,0.05);
+    }
 
     /* ─── v2 リアルアクティビティ（Phase D） ─── */
     .v2-act-ent {
@@ -1814,8 +1819,20 @@
 
   </main>
 
-  <!-- ─── 案件詳細スライドパネル（v2 ベースで再設計予定） ──── -->
-  <!-- 旧 case-panel / cand-panel は CASES / CANDIDATES に依存していたため削除済み -->
+  <!-- ─── 案件詳細スライドパネル（v2 リアルデータ） ────────── -->
+  <div class="case-panel-overlay" id="v2CasePanelOverlay" onclick="closeV2CasePanel()"></div>
+  <aside class="case-panel" id="v2CasePanel" role="dialog" aria-modal="true" aria-label="依頼詳細">
+    <div class="case-panel__header">
+      <span class="case-panel__id" id="v2CpReqNum">—</span>
+      <button class="case-panel__close" onclick="closeV2CasePanel()" aria-label="閉じる">&#10005;</button>
+    </div>
+    <div class="case-panel__body" id="v2CpBody">
+      <!-- renderV2CasePanelBody() で描画 -->
+    </div>
+    <div class="case-panel__footer">
+      <button class="btn-secondary" onclick="closeV2CasePanel()">閉じる</button>
+    </div>
+  </aside>
 
   <!-- ─── 新規依頼モーダル ────────────────────────── -->
   <div class="modal-overlay" id="requestModal">
@@ -2219,7 +2236,7 @@
           </thead>
           <tbody>
             ${filtered.map(r => `
-              <tr>
+              <tr class="v2-row-clickable" data-id="${esc(r.id)}" title="クリックで詳細を表示">
                 <td><span class="v2-cases-table__num">${esc(r.request_number || '')}</span></td>
                 <td><span class="v2-cases-table__title">${esc(r.title || '(タイトルなし)')}</span></td>
                 <td>${esc(V2_PROFESSION_LABEL[r.profession_type] || r.profession_type || '—')}</td>
@@ -2233,6 +2250,11 @@
           </tbody>
         </table>
       `;
+
+      // 行クリックで詳細パネルを開く
+      body.querySelectorAll('tr.v2-row-clickable').forEach(row => {
+        row.addEventListener('click', () => openV2CasePanel(row.dataset.id));
+      });
     }
 
     /* ─── v2 案件テーブルのフィルター・ボタンを一度だけバインド ─── */
@@ -2255,6 +2277,138 @@
       }
       if (r) r.addEventListener('click', loadV2Cases);
     }
+
+    /* ─── v2 案件詳細パネル ──────────────────────
+       v2 案件テーブルの行をクリックすると、右からスライドインで
+       詳細を表示する。GET /api/v2/requests/:id で完全データを取得し、
+       一覧データに含まれない total_budget / required_skills /
+       preferred_skills / reviewed_at / accepted_at も表示できる。 */
+    async function openV2CasePanel(id) {
+      if (!id) return;
+      // 一覧から先に仮表示して即時開く
+      const fromList = (v2State.cases || []).find(r => r.id === id);
+      if (!fromList) return;
+      document.getElementById('v2CpReqNum').textContent = fromList.request_number || '—';
+      renderV2CasePanelBody(fromList, true);
+      document.getElementById('v2CasePanelOverlay').classList.add('open');
+      document.getElementById('v2CasePanel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // 詳細を取得して上書き
+      try {
+        let token = null;
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+        if (!token) return;
+        const res = await fetch(`/api/v2/requests/${encodeURIComponent(id)}`, {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const full = data.request || data;
+        if (document.getElementById('v2CasePanel').classList.contains('open')) {
+          renderV2CasePanelBody(full, false);
+        }
+      } catch (e) {
+        console.error('v2 案件詳細の取得に失敗:', e);
+      }
+    }
+
+    function closeV2CasePanel() {
+      document.getElementById('v2CasePanelOverlay').classList.remove('open');
+      document.getElementById('v2CasePanel').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderV2CasePanelBody(r, loading) {
+      const body = document.getElementById('v2CpBody');
+      if (!body) return;
+      const esc = (v) => String(v == null ? '' : v)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmtDt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        const m  = ('0'+(d.getMonth()+1)).slice(-2);
+        const dd = ('0'+d.getDate()).slice(-2);
+        const hh = ('0'+d.getHours()).slice(-2);
+        const mm = ('0'+d.getMinutes()).slice(-2);
+        return `${d.getFullYear()}/${m}/${dd} ${hh}:${mm}`;
+      };
+      const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
+      const chips = (arr, kind) => {
+        if (!Array.isArray(arr) || !arr.length) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
+        const cls = kind === 'required' ? 'badge--red' : 'badge--blue';
+        return arr.map(v => `<span class="badge ${cls}" style="margin-right:4px;">${esc(v)}</span>`).join('');
+      };
+
+      body.innerHTML = `
+        <p class="case-panel__title">${esc(r.title || '(タイトルなし)')}</p>
+        <div class="case-panel__badges">
+          <span class="v2-cases-st v2-cases-st--${esc(r.status)}">${esc(V2_STATUS_LABEL[r.status] || r.status)}</span>
+          <span class="v2-cases-pri v2-cases-pri--${esc(r.priority || 'medium')}">優先度：${esc(V2_PRIORITY_LABEL[r.priority] || r.priority || '—')}</span>
+          ${loading ? '<span class="badge badge--gray">読み込み中…</span>' : ''}
+        </div>
+
+        ${r.description ? `
+          <div class="cp-section">
+            <p class="cp-section__label">概要</p>
+            <p style="font-size:13px;color:var(--gray-700);line-height:1.7;white-space:pre-wrap;word-break:break-word;">${esc(r.description)}</p>
+          </div>` : ''}
+
+        <div class="cp-section">
+          <p class="cp-section__label">基本情報</p>
+          <div class="cp-row"><span class="cp-row__key">職種</span><span class="cp-row__val">${esc(V2_PROFESSION_LABEL[r.profession_type] || r.profession_type || '—')}</span></div>
+          <div class="cp-row"><span class="cp-row__key">専門・科</span><span class="cp-row__val">${esc(r.specialty || '—')}</span></div>
+          <div class="cp-row"><span class="cp-row__key">必要人数</span><span class="cp-row__val">${r.headcount || 1}名</span></div>
+          <div class="cp-row"><span class="cp-row__key">シフト種別</span><span class="cp-row__val">${esc(({on_call:'オンコール',night_duty:'夜勤',day_duty:'日勤',spot:'スポット',regular_shift:'通常シフト',long_term:'長期'})[r.shift_type] || r.shift_type || '—')}</span></div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">スケジュール</p>
+          <div class="cp-row"><span class="cp-row__key">開始</span><span class="cp-row__val">${esc(fmtDt(r.start_at))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">終了</span><span class="cp-row__val">${esc(fmtDt(r.end_at))}</span></div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">報酬</p>
+          <div class="cp-row"><span class="cp-row__key">時給（下限）</span><span class="cp-row__val">${esc(yen(r.hourly_rate_min))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">時給（上限）</span><span class="cp-row__val">${esc(yen(r.hourly_rate_max))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">総予算</span><span class="cp-row__val">${esc(yen(r.total_budget))}</span></div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">必須資格</p>
+          <div>${chips(r.required_licenses, 'required')}</div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">必須スキル</p>
+          <div>${chips(r.required_skills, 'required')}</div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">希望スキル</p>
+          <div>${chips(r.preferred_skills, 'preferred')}</div>
+        </div>
+
+        <div class="cp-section">
+          <p class="cp-section__label">タイムライン</p>
+          <div class="cp-row"><span class="cp-row__key">作成</span><span class="cp-row__val">${esc(fmtDt(r.created_at))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">提出</span><span class="cp-row__val">${esc(fmtDt(r.submitted_at))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">確認開始</span><span class="cp-row__val">${esc(fmtDt(r.reviewed_at))}</span></div>
+          <div class="cp-row"><span class="cp-row__key">受諾</span><span class="cp-row__val">${esc(fmtDt(r.accepted_at))}</span></div>
+        </div>
+      `;
+    }
+
+    // Esc キーで閉じる
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeV2CasePanel();
+    });
 
     /* ─── v2 リアル提案テーブル（Phase C） ─────────
        /api/v2/proposals から自組織宛の提案を取得し、状態別に表示。
