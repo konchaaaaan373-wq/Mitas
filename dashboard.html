@@ -179,6 +179,7 @@
       border-radius: 9px;
       padding: 0 5px;
     }
+    .nav-item__badge:empty { display: none; }
 
     .sidebar__footer {
       padding: 14px 18px;
@@ -1416,6 +1417,24 @@
       background: rgba(14,165,233,0.05);
     }
 
+    /* ─── v2 アサインステータスバッジ ─── */
+    .v2-asgn-st {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .v2-asgn-st--confirmed             { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-asgn-st--checked_in            { background: rgba(91,33,182,0.10);  color: #6D28D9; }
+    .v2-asgn-st--checked_out           { background: rgba(245,158,11,0.12); color: #F59E0B; }
+    .v2-asgn-st--completion_reported   { background: rgba(245,158,11,0.18); color: #B45309; font-weight: 700; }
+    .v2-asgn-st--completion_confirmed  { background: rgba(16,185,129,0.20); color: #047857; }
+    .v2-asgn-st--disputed              { background: rgba(220,38,38,0.10);  color: #DC2626; font-weight: 700; }
+    .v2-asgn-st--cancelled             { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-asgn-st--no_show               { background: rgba(220,38,38,0.10);  color: #DC2626; }
+
     /* ─── v2 リアルアクティビティ（Phase D） ─── */
     .v2-act-ent {
       display: inline-block;
@@ -1493,6 +1512,12 @@
           <span class="nav-item__icon">&#9670;</span>
           <span class="nav-item__label">候補者確認</span>
           <span class="nav-item__badge" id="badge-candidates">3</span>
+        </a>
+
+        <a class="nav-item" data-section="assignments" href="#">
+          <span class="nav-item__icon">&#9679;</span>
+          <span class="nav-item__label">アサイン管理</span>
+          <span class="nav-item__badge" id="badge-assignments"></span>
         </a>
 
         <a class="nav-item" data-section="tasks" href="#">
@@ -1694,6 +1719,32 @@
         </div>
         <div class="v2-cases-card__msg" id="v2ProposalsMsg">読み込み中…</div>
       </div>
+    </section>
+
+    <!-- ─── アサイン管理（v2 リアルデータ） ────────────────── -->
+    <section class="page-section" id="s-assignments">
+
+      <div class="v2-cases-card" id="v2AssignmentsCard" aria-label="アサイン管理">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">アサイン管理</span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2AssignmentsFilter">
+              <option value="active">対応中（要対応含む）</option>
+              <option value="action">要対応のみ</option>
+              <option value="all">全件</option>
+              <option value="done">完了済み</option>
+            </select>
+            <input class="v2-cases-card__filter" type="text" id="v2AssignmentsKeyword"
+                   placeholder="ワーカー名・依頼で検索" style="min-width: 180px;">
+            <button class="v2-banner__refresh" id="v2AssignmentsRefreshBtn" type="button">更新</button>
+          </div>
+        </div>
+        <div class="v2-cases-table-wrap" id="v2AssignmentsBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2AssignmentsMsg">読み込み中…</div>
+      </div>
+
     </section>
 
     <!-- ─── タスク ────────────────────────────────── -->
@@ -2971,6 +3022,296 @@
       if (r) r.addEventListener('click', loadV2Inquiries);
     }
 
+    /* ─── v2 アサイン管理（assignments） ─────────
+       /api/v2/assignments から自組織のアサインを取得し、状態別に表示。
+       facility_admin は completion_reported → completion_confirmed の
+       状態遷移（PATCH）が可能。 */
+    const V2_ASGN_STATUS_LABEL = {
+      confirmed:            '確定',
+      checked_in:           '勤務中',
+      checked_out:          '勤務終了',
+      completion_reported:  '完了報告',
+      completion_confirmed: '完了確定',
+      disputed:             '紛争中',
+      cancelled:            'キャンセル',
+      no_show:              '無断欠勤',
+    };
+    const V2_ASGN_ACTION_REQUIRED = ['completion_reported'];     // facility_admin の対応待ち
+    const V2_ASGN_ACTIVE = ['confirmed','checked_in','checked_out','completion_reported','disputed'];
+    const V2_ASGN_DONE   = ['completion_confirmed','cancelled','no_show'];
+
+    const v2AsgnState = { rows: [], filter: 'active', keyword: '', loaded: false };
+
+    async function loadV2Assignments() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2AssignmentsBody');
+      const msgEl = $('v2AssignmentsMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2AssignmentsRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないためアサインを取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v2/assignments?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        v2AsgnState.rows = Array.isArray(data.assignments) ? data.assignments : [];
+        v2AsgnState.loaded = true;
+        renderV2AssignmentsTable();
+
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const action = v2AsgnState.rows.filter(a => V2_ASGN_ACTION_REQUIRED.includes(a.status)).length;
+        setMsg(`v2 API より取得：${ts} 時点 / 総件数 ${v2AsgnState.rows.length}件 / 要対応 ${action}件${data.source === 'mock' ? '（モック）' : ''}`);
+
+        // サイドバーバッジに要対応件数を反映
+        const badge = document.getElementById('badge-assignments');
+        if (badge) badge.textContent = action ? action : '';
+      } catch (e) {
+        console.error('v2 アサイン取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2AssignmentsTable() {
+      const body = document.getElementById('v2AssignmentsBody');
+      if (!body) return;
+      const f = v2AsgnState.filter;
+      const kw = (v2AsgnState.keyword || '').trim().toLowerCase();
+      const rows = (v2AsgnState.rows || []).filter(a => {
+        if (f === 'action' && !V2_ASGN_ACTION_REQUIRED.includes(a.status)) return false;
+        if (f === 'active' && !V2_ASGN_ACTIVE.includes(a.status))           return false;
+        if (f === 'done'   && !V2_ASGN_DONE.includes(a.status))             return false;
+        if (kw) {
+          const w = (a.worker_profiles && a.worker_profiles.full_name) || '';
+          const r = (a.staffing_requests && a.staffing_requests.title) || '';
+          const num = (a.staffing_requests && a.staffing_requests.request_number) || '';
+          const hay = [w, r, num, a.assignment_number].filter(Boolean).join(' ').toLowerCase();
+          if (!hay.includes(kw)) return false;
+        }
+        return true;
+      }).sort((a, b) => {
+        // 要対応を先頭に、次に scheduled_start_at 昇順（直近を先に）
+        const aPri = V2_ASGN_ACTION_REQUIRED.includes(a.status) ? 0 : 1;
+        const bPri = V2_ASGN_ACTION_REQUIRED.includes(b.status) ? 0 : 1;
+        if (aPri !== bPri) return aPri - bPri;
+        return (a.scheduled_start_at || '').localeCompare(b.scheduled_start_at || '');
+      });
+
+      if (!rows.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当するアサインはありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        const m  = ('0'+(d.getMonth()+1)).slice(-2);
+        const dd = ('0'+d.getDate()).slice(-2);
+        const hh = ('0'+d.getHours()).slice(-2);
+        const mm = ('0'+d.getMinutes()).slice(-2);
+        return `${d.getFullYear()}/${m}/${dd} ${hh}:${mm}`;
+      };
+      const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>アサイン番号</th>
+              <th>ワーカー</th>
+              <th>依頼</th>
+              <th>予定開始</th>
+              <th>予定終了</th>
+              <th class="num">時給</th>
+              <th class="num">総報酬</th>
+              <th>ステータス</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(a => {
+              const wp = a.worker_profiles || {};
+              const sr = a.staffing_requests || {};
+              const isAction = V2_ASGN_ACTION_REQUIRED.includes(a.status);
+              const canConfirm = a.status === 'completion_reported';
+              const canDispute = a.status === 'completion_reported' || a.status === 'checked_out';
+              return `
+                <tr class="${isAction ? 'v2-row-action' : ''}">
+                  <td><span class="v2-cases-table__num">${esc(a.assignment_number || '')}</span></td>
+                  <td>
+                    <div class="v2-cases-table__title">${esc(wp.full_name || '—')}</div>
+                    <div style="font-size:11px;color:var(--gray-500,#64748B);">${esc(V2_PROFESSION_LABEL[wp.profession_type] || wp.profession_type || '')}</div>
+                  </td>
+                  <td>
+                    <div>${esc(sr.title || '—')}</div>
+                    <div style="font-size:11px;color:var(--gray-400,#94A3B8);">${esc(sr.request_number || '')}</div>
+                  </td>
+                  <td>${esc(fmt(a.scheduled_start_at))}</td>
+                  <td>${esc(fmt(a.scheduled_end_at))}</td>
+                  <td class="num">${esc(yen(a.hourly_rate))}</td>
+                  <td class="num">${esc(yen(a.total_compensation))}</td>
+                  <td><span class="v2-asgn-st v2-asgn-st--${esc(a.status)}">${esc(V2_ASGN_STATUS_LABEL[a.status] || a.status)}</span></td>
+                  <td>
+                    ${canConfirm
+                      ? `<button class="v2-banner__refresh v2-asgn-confirm" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;background:#10B981;color:#FFFFFF;border-color:#10B981;">完了確定</button>`
+                      : ''}
+                    ${canDispute
+                      ? `<button class="v2-banner__refresh v2-asgn-dispute" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;margin-left:4px;color:#DC2626;border-color:#DC2626;">紛争申告</button>`
+                      : ''}
+                    ${(!canConfirm && !canDispute) ? '<span class="v2-act-meta">—</span>' : ''}
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      body.querySelectorAll('.v2-asgn-confirm').forEach(btn => {
+        btn.addEventListener('click', () => confirmV2Assignment(btn.dataset.id, btn));
+      });
+      body.querySelectorAll('.v2-asgn-dispute').forEach(btn => {
+        btn.addEventListener('click', () => disputeV2Assignment(btn.dataset.id, btn));
+      });
+    }
+
+    async function confirmV2Assignment(id, btn) {
+      if (!id) return;
+      const ok = window.confirm('このアサインを「完了確定」に変更します。よろしいですか？');
+      if (!ok) return;
+      btn.disabled = true;
+      btn.textContent = '処理中…';
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+      if (!token) {
+        if (typeof toast === 'function') toast('セッションが見つかりません', 'error');
+        btn.disabled = false; btn.textContent = '完了確定';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v2/assignments/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completion_confirmed' }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        if (typeof toast === 'function') toast('完了確定に変更しました', 'success');
+        const idx = v2AsgnState.rows.findIndex(a => a.id === id);
+        if (idx >= 0) v2AsgnState.rows[idx] = { ...v2AsgnState.rows[idx], status: 'completion_confirmed' };
+        renderV2AssignmentsTable();
+      } catch (e) {
+        console.error('完了確定失敗:', e);
+        if (typeof toast === 'function') toast(`変更に失敗しました：${e.message}`, 'error');
+        btn.disabled = false; btn.textContent = '完了確定';
+      }
+    }
+
+    async function disputeV2Assignment(id, btn) {
+      if (!id) return;
+      const reason = window.prompt('紛争申告の理由を入力してください（例：勤怠記録の相違、業務範囲の認識違い 等）');
+      if (reason == null) return;
+      const trimmed = reason.trim();
+      if (!trimmed) { toast('理由を入力してください', 'error'); return; }
+
+      btn.disabled = true;
+      btn.textContent = '処理中…';
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+      if (!token) {
+        if (typeof toast === 'function') toast('セッションが見つかりません', 'error');
+        btn.disabled = false; btn.textContent = '紛争申告';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v2/assignments/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'disputed', dispute_reason: trimmed }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        if (typeof toast === 'function') toast('紛争を申告しました。MITAS担当者が確認します', 'success');
+        const idx = v2AsgnState.rows.findIndex(a => a.id === id);
+        if (idx >= 0) v2AsgnState.rows[idx] = { ...v2AsgnState.rows[idx], status: 'disputed', dispute_reason: trimmed };
+        renderV2AssignmentsTable();
+      } catch (e) {
+        console.error('紛争申告失敗:', e);
+        if (typeof toast === 'function') toast(`申告に失敗しました：${e.message}`, 'error');
+        btn.disabled = false; btn.textContent = '紛争申告';
+      }
+    }
+
+    function bindV2AssignmentsControls() {
+      if (bindV2AssignmentsControls._bound) return;
+      bindV2AssignmentsControls._bound = true;
+      const f = document.getElementById('v2AssignmentsFilter');
+      const k = document.getElementById('v2AssignmentsKeyword');
+      const r = document.getElementById('v2AssignmentsRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2AsgnState.filter = f.value; renderV2AssignmentsTable(); });
+      if (k) {
+        let t = null;
+        k.addEventListener('input', () => {
+          if (t) clearTimeout(t);
+          t = setTimeout(() => { v2AsgnState.keyword = k.value; renderV2AssignmentsTable(); }, 200);
+        });
+      }
+      if (r) r.addEventListener('click', loadV2Assignments);
+    }
+
     function getV2MockActivity() {
       const now = Date.now();
       const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
@@ -2988,12 +3329,13 @@
 
     /* ─── セクション切り替え ─────────────────────── */
     const SECTION_TITLES = {
-      overview:   'ダッシュボード',
-      cases:      '案件管理',
-      candidates: '候補者確認',
-      tasks:      'タスク',
-      inquiries:  '問い合わせ',
-      settings:   '設定',
+      overview:    'ダッシュボード',
+      cases:       '案件管理',
+      candidates:  '候補者確認',
+      assignments: 'アサイン管理',
+      tasks:       'タスク',
+      inquiries:   '問い合わせ',
+      settings:    '設定',
     };
 
     function showSection(id) {
@@ -3363,6 +3705,12 @@
         bindV2ProposalsControls();
         if (!v2PropState.loaded) loadV2Proposals();
         else                     renderV2ProposalsTable();
+      }
+      if (id === 'assignments') {
+        // アサイン管理（v2 リアル）：初回コントロールバインド＋初回ロード
+        bindV2AssignmentsControls();
+        if (!v2AsgnState.loaded) loadV2Assignments();
+        else                     renderV2AssignmentsTable();
       }
       if (id === 'tasks')      renderTasks();
       if (id === 'inquiries') {
