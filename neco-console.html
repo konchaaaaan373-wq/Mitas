@@ -759,6 +759,53 @@
       .topbar__title { display: none; }
       .console { padding: 10px; gap: 10px; }
     }
+
+    /* ─── キーボードショートカットヘルプ ─── */
+    .kb-help-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.55);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .kb-help-overlay[hidden] { display: none; }
+    .kb-help {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 480px; max-height: 85vh;
+      overflow: auto;
+      box-shadow: 0 20px 50px rgba(15,23,42,0.25);
+    }
+    .kb-help__head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .kb-help__title {
+      font-size: 14px; font-weight: 700; color: var(--navy-deep);
+      letter-spacing: 0.04em;
+    }
+    .kb-help__close {
+      background: transparent; border: none;
+      font-size: 22px; line-height: 1; padding: 4px 8px;
+      color: var(--gray-500); cursor: pointer;
+    }
+    .kb-help__close:hover { color: var(--navy-deep); }
+    .kb-help__list { width: 100%; border-collapse: collapse; }
+    .kb-help__list th {
+      text-align: left; padding: 10px 22px; width: 110px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 12px; font-weight: 700; color: var(--teal);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: top;
+    }
+    .kb-help__list td {
+      padding: 10px 22px; font-size: 13px; color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .kb-help__list tr:last-child th,
+    .kb-help__list tr:last-child td { border-bottom: none; }
   </style>
 </head>
 <body>
@@ -928,6 +975,25 @@
         <button type="submit" class="action-btn action-btn--primary" id="invoiceSubmitBtn">請求書を作成</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- キーボードショートカットヘルプ -->
+<div class="kb-help-overlay" id="kbHelpOverlay" hidden>
+  <div class="kb-help" role="dialog" aria-labelledby="kbHelpTitle">
+    <div class="kb-help__head">
+      <span class="kb-help__title" id="kbHelpTitle">キーボードショートカット</span>
+      <button class="kb-help__close" id="kbHelpClose" aria-label="閉じる">&times;</button>
+    </div>
+    <table class="kb-help__list">
+      <tr><th>1</th>   <td>「新規」タブに切替</td></tr>
+      <tr><th>2</th>   <td>「確認中」タブに切替</td></tr>
+      <tr><th>3</th>   <td>「提案中」タブに切替</td></tr>
+      <tr><th>4</th>   <td>「完了」タブに切替</td></tr>
+      <tr><th>/</th>   <td>候補者の検索ボックスにフォーカス</td></tr>
+      <tr><th>?</th>   <td>このヘルプを表示</td></tr>
+      <tr><th>Esc</th> <td>モーダル/ヘルプを閉じる</td></tr>
+    </table>
   </div>
 </div>
 
@@ -2805,6 +2871,64 @@
       { id: '00000000-0000-0000-0000-000000000007', request_number: 'SR-2026-000119', title: '在宅医療 訪問同行',           profession_type: 'physician', headcount: 1, status: 'cancelled', priority: 'low',  start_at: iso(-10), created_at: iso(-25) },
     ];
   }
+
+  /* ─── キーボードショートカット ──────────────
+     1〜4 で4ステータスタブ切替 / / で候補者検索フォーカス /
+     ? でヘルプ / Esc でヘルプ・モーダル閉じる */
+  (function () {
+    const TAB_KEYS = { '1': 'new', '2': 'in_review', '3': 'proposing', '4': 'done' };
+
+    function isTyping() {
+      const el = document.activeElement;
+      if (!el) return false;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return true;
+      return el.isContentEditable === true;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const o = document.getElementById('kbHelpOverlay');
+        if (o && !o.hidden) { o.hidden = true; return; }
+      }
+      if (isTyping()) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (TAB_KEYS[e.key]) {
+        const tab = TAB_KEYS[e.key];
+        if (state.activeTab !== tab) {
+          state.activeTab = tab;
+          document.querySelectorAll('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === tab));
+          renderRequestList();
+        }
+        e.preventDefault();
+        return;
+      }
+      if (e.key === '/') {
+        e.preventDefault();
+        const input = document.getElementById('candKeyword');
+        if (input) { input.focus(); input.select(); return; }
+        // 候補者セクションが描画されていない場合は依頼リストの選択へフォールバック
+        const first = document.querySelector('.request-card');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        const o = document.getElementById('kbHelpOverlay');
+        if (o) o.hidden = false;
+        return;
+      }
+    });
+
+    const closeBtn = document.getElementById('kbHelpClose');
+    if (closeBtn) closeBtn.addEventListener('click', () => {
+      document.getElementById('kbHelpOverlay').hidden = true;
+    });
+    const overlay = document.getElementById('kbHelpOverlay');
+    if (overlay) overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.hidden = true;
+    });
+  })();
 
   // ─── 起動 ───
   init();
