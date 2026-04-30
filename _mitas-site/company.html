@@ -106,6 +106,22 @@
 
     .header__nav a.active { color: var(--navy); font-weight: 600; }
 
+    .header__service-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 999px;
+      font-size: 13px; font-weight: 600;
+      color: var(--teal);
+      background: rgba(14,165,233,0.06);
+      border: 1px solid rgba(14,165,233,0.32);
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .header__service-link:hover {
+      background: rgba(14,165,233,0.14);
+      border-color: rgba(14,165,233,0.55);
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -629,7 +645,7 @@
     @media (max-width: 768px) {
       .container { padding: 0 16px; }
       .section { padding: 64px 0; }
-      .header__nav, .header__cta { display: none; }
+      .header__nav, .header__cta, .header__service-link { display: none; }
       .hamburger { display: flex; }
 
       .pillars { grid-template-columns: 1fr; }
@@ -682,6 +698,10 @@
         <a href="/#flow">ご利用の流れ</a>
         <a href="/company.html" class="active">会社概要</a>
       </nav>
+      <a class="header__service-link" href="https://necofindjob.com/service.html"
+         aria-label="サービスサイトを開く">
+        サービスサイトはこちら&nbsp;&rarr;
+      </a>
       <a href="/#contact" class="btn btn--primary header__cta">まずは相談する</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
         <span></span><span></span><span></span>
@@ -694,6 +714,8 @@
     <a href="/#reasons" onclick="closeMobileNav()">選ばれる理由</a>
     <a href="/#flow" onclick="closeMobileNav()">ご利用の流れ</a>
     <a href="/company.html" onclick="closeMobileNav()">会社概要</a>
+    <a href="https://necofindjob.com/service.html" onclick="closeMobileNav()"
+       style="color: var(--teal); font-weight: 600;">サービスサイトはこちら &rarr;</a>
     <a href="/#contact" class="btn btn--primary" onclick="closeMobileNav()">まずは相談する</a>
   </div>
 </header>
