@@ -1250,6 +1250,140 @@
       .v2-kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
+    /* ─── v2 リアル案件テーブル（Phase B：並行表示） ─── */
+    .v2-cases-card {
+      background: #FFFFFF;
+      border: 1px solid #BAE6FD;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .v2-cases-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);
+      border-bottom: 1px solid #E0F2FE;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .v2-cases-card__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0369A1;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+    .v2-cases-card__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .v2-cases-card__filter {
+      padding: 5px 10px;
+      font-size: 11px;
+      border: 1px solid #BAE6FD;
+      border-radius: 6px;
+      background: #FFFFFF;
+      color: #0369A1;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .v2-cases-card__msg {
+      padding: 8px 16px;
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+      background: var(--gray-50, #F8FAFC);
+      border-top: 1px solid var(--gray-100, #F1F5F9);
+    }
+    .v2-cases-card__msg--error { color: var(--red, #DC2626); }
+    .v2-cases-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .v2-cases-table th {
+      text-align: left;
+      padding: 9px 14px;
+      background: var(--gray-50, #F8FAFC);
+      color: var(--gray-500, #64748B);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--gray-200, #E2E8F0);
+      white-space: nowrap;
+    }
+    .v2-cases-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-100, #F1F5F9);
+      vertical-align: middle;
+    }
+    .v2-cases-table tr:hover td { background: #F8FAFC; }
+    .v2-cases-table tr:last-child td { border-bottom: none; }
+    .v2-cases-table .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .v2-cases-table__num {
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--gray-400, #94A3B8);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .v2-cases-table__title {
+      font-weight: 600;
+      color: var(--navy-deep, #0D2340);
+    }
+    .v2-cases-table__placeholder {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--gray-500, #64748B);
+      font-size: 12px;
+    }
+    .v2-cases-pri {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .v2-cases-pri--urgent { background: rgba(220,38,38,0.10); color: var(--red, #DC2626); }
+    .v2-cases-pri--high   { background: rgba(245,158,11,0.12); color: var(--amber, #F59E0B); }
+    .v2-cases-pri--medium { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-cases-pri--low    { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-cases-st {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .v2-cases-st--draft              { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-cases-st--submitted          { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-cases-st--under_review       { background: rgba(245,158,11,0.12); color: var(--amber, #F59E0B); }
+    .v2-cases-st--accepted           { background: rgba(16,185,129,0.10); color: var(--green, #10B981); }
+    .v2-cases-st--rejected           { background: rgba(220,38,38,0.10); color: var(--red, #DC2626); }
+    .v2-cases-st--proposing          { background: rgba(91,33,182,0.10); color: #6D28D9; }
+    .v2-cases-st--partially_assigned { background: rgba(16,185,129,0.10); color: #047857; }
+    .v2-cases-st--fully_assigned     { background: rgba(16,185,129,0.18); color: #047857; }
+    .v2-cases-st--in_progress        { background: rgba(91,33,182,0.18); color: #5B21B6; }
+    .v2-cases-st--completion_pending { background: rgba(245,158,11,0.18); color: #B45309; }
+    .v2-cases-st--confirmed          { background: rgba(16,185,129,0.20); color: #047857; }
+    .v2-cases-st--invoiced           { background: rgba(14,165,233,0.18); color: #0369A1; }
+    .v2-cases-st--paid               { background: rgba(16,185,129,0.25); color: #065F46; }
+    .v2-cases-st--cancelled          { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-cases-table-wrap { overflow-x: auto; }
+
   </style>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1447,6 +1581,43 @@
 
     <!-- ─── 案件管理 ──────────────────────────────── -->
     <section class="page-section" id="s-cases">
+
+      <!-- ═════ v2 リアル案件（Phase B：並行表示プレビュー） ═════ -->
+      <div class="v2-cases-card" id="v2CasesCard" aria-label="v2 リアル案件">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">
+            v2 リアル案件
+            <span class="v2-banner__pill">PREVIEW</span>
+          </span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2CasesFilter">
+              <option value="open">未終端のみ</option>
+              <option value="all">全件</option>
+              <option value="done">終端のみ</option>
+            </select>
+            <select class="v2-cases-card__filter" id="v2CasesProfession">
+              <option value="">職種：全て</option>
+              <option value="physician">医師</option>
+              <option value="nurse">看護師</option>
+              <option value="pharmacist">薬剤師</option>
+              <option value="medical_technologist">臨床検査技師</option>
+              <option value="radiologic_technologist">診療放射線技師</option>
+              <option value="physical_therapist">理学療法士</option>
+              <option value="occupational_therapist">作業療法士</option>
+              <option value="speech_therapist">言語聴覚士</option>
+              <option value="care_worker">介護職</option>
+            </select>
+            <input class="v2-cases-card__filter" type="text" id="v2CasesKeyword"
+                   placeholder="タイトル・専門で検索" style="min-width: 180px;">
+            <button class="v2-banner__refresh" id="v2CasesRefreshBtn" type="button">更新</button>
+          </div>
+        </div>
+        <div class="v2-cases-table-wrap" id="v2CasesBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2CasesMsg">読み込み中…</div>
+      </div>
+
       <div class="filter-bar">
         <select class="filter-select" id="filterStatus">
           <option value="">ステータス：全て</option>
@@ -1879,6 +2050,167 @@
       } finally {
         if (btn) btn.disabled = false;
       }
+    }
+
+    /* ─── v2 リアル案件テーブル（Phase B） ─────────
+       /api/v2/requests から自組織の依頼を取得し、v2スキーマで表示。
+       既存の CASES（モック）テーブルとは別領域に並行表示する。 */
+    const V2_STATUS_LABEL = {
+      draft:'下書き', submitted:'受付', under_review:'確認中', accepted:'受諾',
+      rejected:'差戻し', proposing:'提案中', partially_assigned:'一部充足',
+      fully_assigned:'充足完了', in_progress:'進行中', completion_pending:'完了申請',
+      confirmed:'完了確定', invoiced:'請求済', paid:'入金済', cancelled:'キャンセル',
+    };
+    const V2_PRIORITY_LABEL = { urgent:'緊急', high:'高', medium:'中', low:'低' };
+    const V2_PROFESSION_LABEL = {
+      physician:'医師', nurse:'看護師', pharmacist:'薬剤師',
+      medical_technologist:'臨床検査技師', radiologic_technologist:'診療放射線技師',
+      physical_therapist:'理学療法士', occupational_therapist:'作業療法士',
+      speech_therapist:'言語聴覚士', care_worker:'介護職',
+    };
+    const V2_TERMINAL_STATUS = ['fully_assigned','confirmed','invoiced','paid','cancelled','rejected'];
+
+    const v2State = { cases: [], filter: 'open', profession: '', keyword: '', loaded: false };
+
+    async function loadV2Cases() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2CasesBody');
+      const msgEl = $('v2CasesMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2CasesRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないためv2案件を取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v2/requests?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        v2State.cases = Array.isArray(data.requests) ? data.requests : [];
+        v2State.loaded = true;
+        renderV2CasesTable();
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        setMsg(`v2 API より取得：${ts} 時点 / 総件数 ${v2State.cases.length}件${data.source === 'mock' ? '（モック）' : ''}`);
+      } catch (e) {
+        console.error('v2 案件取得失敗:', e);
+        body.innerHTML = `<div class="v2-cases-table__placeholder">取得に失敗しました</div>`;
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2CasesTable() {
+      const body = document.getElementById('v2CasesBody');
+      if (!body) return;
+      const all = v2State.cases || [];
+      const f = v2State.filter;
+      const prof = v2State.profession;
+      const kw = (v2State.keyword || '').trim().toLowerCase();
+
+      const filtered = all.filter(r => {
+        if (f === 'open' && V2_TERMINAL_STATUS.includes(r.status)) return false;
+        if (f === 'done' && !V2_TERMINAL_STATUS.includes(r.status)) return false;
+        if (prof && r.profession_type !== prof) return false;
+        if (kw) {
+          const hay = [r.title, r.specialty, r.request_number]
+            .filter(Boolean).join(' ').toLowerCase();
+          if (!hay.includes(kw)) return false;
+        }
+        return true;
+      }).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+
+      if (!filtered.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当する依頼はありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${d.getFullYear()}/${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)}`;
+      };
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>依頼番号</th>
+              <th>タイトル</th>
+              <th>職種</th>
+              <th class="num">人数</th>
+              <th>ステータス</th>
+              <th>優先度</th>
+              <th>開始予定</th>
+              <th>作成日</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(r => `
+              <tr>
+                <td><span class="v2-cases-table__num">${esc(r.request_number || '')}</span></td>
+                <td><span class="v2-cases-table__title">${esc(r.title || '(タイトルなし)')}</span></td>
+                <td>${esc(V2_PROFESSION_LABEL[r.profession_type] || r.profession_type || '—')}</td>
+                <td class="num">${r.headcount || 1}</td>
+                <td><span class="v2-cases-st v2-cases-st--${esc(r.status)}">${esc(V2_STATUS_LABEL[r.status] || r.status)}</span></td>
+                <td><span class="v2-cases-pri v2-cases-pri--${esc(r.priority || 'medium')}">${esc(V2_PRIORITY_LABEL[r.priority] || r.priority || '—')}</span></td>
+                <td>${esc(fmt(r.start_at))}</td>
+                <td>${esc(fmt(r.created_at))}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    /* ─── v2 案件テーブルのフィルター・ボタンを一度だけバインド ─── */
+    function bindV2CasesControls() {
+      if (bindV2CasesControls._bound) return;
+      bindV2CasesControls._bound = true;
+      const onChange = () => renderV2CasesTable();
+      const f = document.getElementById('v2CasesFilter');
+      const p = document.getElementById('v2CasesProfession');
+      const k = document.getElementById('v2CasesKeyword');
+      const r = document.getElementById('v2CasesRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2State.filter = f.value; onChange(); });
+      if (p) p.addEventListener('change', () => { v2State.profession = p.value; onChange(); });
+      if (k) {
+        let t = null;
+        k.addEventListener('input', () => {
+          if (t) clearTimeout(t);
+          t = setTimeout(() => { v2State.keyword = k.value; onChange(); }, 200);
+        });
+      }
+      if (r) r.addEventListener('click', loadV2Cases);
     }
 
     /* ─── セクション切り替え ─────────────────────── */
@@ -2481,7 +2813,13 @@
     const _origShowSection = showSection;
     showSection = function(id) {
       _origShowSection(id);
-      if (id === 'cases')      renderCases();
+      if (id === 'cases') {
+        renderCases();
+        // v2 リアル案件（Phase B）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        bindV2CasesControls();
+        if (!v2State.loaded) loadV2Cases();
+        else                 renderV2CasesTable();
+      }
       if (id === 'candidates') renderCandidates();
       if (id === 'tasks')      renderTasks();
       if (id === 'inquiries')  renderInquiries();
