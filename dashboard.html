@@ -1159,6 +1159,97 @@
       display: flex; gap: 8px; flex-shrink: 0;
     }
 
+    /* ─── v2 リアルデータバナー（Phase A：並行表示） ───
+       既存のKPIには影響を与えず、新スキーマの依頼集計を上部にプレビュー表示 */
+    .v2-banner {
+      background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);
+      border: 1px solid #BAE6FD;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    .v2-banner__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .v2-banner__title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0369A1;
+      letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+    .v2-banner__pill {
+      background: #0EA5E9;
+      color: #FFFFFF;
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+    .v2-banner__refresh {
+      background: transparent;
+      border: 1px solid #BAE6FD;
+      color: #0369A1;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .v2-banner__refresh:hover { background: #E0F2FE; }
+    .v2-banner__refresh:disabled { opacity: 0.5; cursor: not-allowed; }
+    .v2-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .v2-kpi {
+      background: #FFFFFF;
+      border: 1px solid var(--gray-200, #E2E8F0);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .v2-kpi__label {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .v2-kpi__value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy-deep, #0D2340);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .v2-kpi__unit {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gray-500, #64748B);
+      margin-left: 3px;
+    }
+    .v2-kpi--urgent .v2-kpi__value { color: var(--red, #DC2626); }
+    .v2-kpi--active .v2-kpi__value { color: var(--green, #10B981); }
+    .v2-banner__msg {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+      margin-top: 10px;
+    }
+    .v2-banner__msg--error { color: var(--red, #DC2626); }
+    @media (max-width: 768px) {
+      .v2-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
   </style>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1276,6 +1367,36 @@
 
     <!-- ─── ダッシュボード概要 ─────────────────── -->
     <section class="page-section" id="s-overview">
+
+      <!-- ═════ v2 リアルデータ（Phase A：並行表示プレビュー） ═════ -->
+      <div class="v2-banner" id="v2Banner" aria-label="v2 リアルデータ">
+        <div class="v2-banner__head">
+          <span class="v2-banner__title">
+            v2 リアルデータ
+            <span class="v2-banner__pill">PREVIEW</span>
+          </span>
+          <button class="v2-banner__refresh" id="v2RefreshBtn" type="button">更新</button>
+        </div>
+        <div class="v2-kpi-grid">
+          <div class="v2-kpi">
+            <div class="v2-kpi__label">受付中の依頼</div>
+            <div class="v2-kpi__value"><span id="v2-pending">—</span><span class="v2-kpi__unit">件</span></div>
+          </div>
+          <div class="v2-kpi">
+            <div class="v2-kpi__label">提案中の依頼</div>
+            <div class="v2-kpi__value"><span id="v2-proposing">—</span><span class="v2-kpi__unit">件</span></div>
+          </div>
+          <div class="v2-kpi v2-kpi--active">
+            <div class="v2-kpi__label">進行中アサイン</div>
+            <div class="v2-kpi__value"><span id="v2-active">—</span><span class="v2-kpi__unit">件</span></div>
+          </div>
+          <div class="v2-kpi v2-kpi--urgent">
+            <div class="v2-kpi__label">緊急の未充足</div>
+            <div class="v2-kpi__value"><span id="v2-urgent">—</span><span class="v2-kpi__unit">件</span></div>
+          </div>
+        </div>
+        <div class="v2-banner__msg" id="v2Msg">読み込み中…</div>
+      </div>
 
       <!-- KPIカード（CASES データから動的算出） -->
       <div class="kpi-grid">
@@ -1675,8 +1796,89 @@
       renderActivity();
       renderKPIs();
 
+      // v2 リアルデータ（並行表示・既存KPIには影響なし）
+      loadV2Kpis();
+      const v2Btn = document.getElementById('v2RefreshBtn');
+      if (v2Btn) v2Btn.addEventListener('click', loadV2Kpis);
+
       // 初期セクション表示
       showSection('overview');
+    }
+
+    /* ─── v2 リアルデータ KPI 取得（Phase A） ─────────
+       /api/v2/requests から自組織の依頼一覧を取得し、状態別に集計する。
+       RLS によりログインユーザーが閲覧可能な依頼だけが返るため、
+       facility_admin は自組織の依頼のみを集計する形になる。
+       既存のモックKPIには影響を与えない並行表示。 */
+    async function loadV2Kpis() {
+      const $ = (id) => document.getElementById(id);
+      const setMsg = (txt, isError) => {
+        const el = $('v2Msg');
+        if (!el) return;
+        el.textContent = txt;
+        el.classList.toggle('v2-banner__msg--error', !!isError);
+      };
+      const btn = $('v2RefreshBtn');
+
+      // 値をリセット
+      ['v2-pending','v2-proposing','v2-active','v2-urgent'].forEach(id => $(id) && ($(id).textContent = '—'));
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      // Supabase セッションから access_token を取得
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        setMsg('Supabaseセッションが見つかりません（既存のKPIは引き続き利用できます）', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v2/requests?limit=200', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        const requests = Array.isArray(data.requests) ? data.requests : [];
+
+        // 状態別に集計（neco-console.html の TAB_STATUS_MAP と整合）
+        const PENDING   = ['submitted', 'under_review'];
+        const PROPOSING = ['accepted', 'proposing', 'partially_assigned'];
+        const ACTIVE    = ['in_progress', 'completion_pending'];
+        const OPEN      = [...PENDING, ...PROPOSING, ...ACTIVE];
+
+        const pending   = requests.filter(r => PENDING.includes(r.status)).length;
+        const proposing = requests.filter(r => PROPOSING.includes(r.status)).length;
+        const active    = requests.filter(r => ACTIVE.includes(r.status)).length;
+        const urgent    = requests.filter(r => r.priority === 'urgent' && OPEN.includes(r.status)).length;
+
+        $('v2-pending').textContent   = pending;
+        $('v2-proposing').textContent = proposing;
+        $('v2-active').textContent    = active;
+        $('v2-urgent').textContent    = urgent;
+
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const src = data.source === 'mock' ? '（モック）' : '';
+        setMsg(`v2 API より取得：${ts} 時点 / 総依頼数 ${requests.length}件${src}`);
+      } catch (e) {
+        console.error('v2 KPI 取得失敗:', e);
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     /* ─── セクション切り替え ─────────────────────── */
