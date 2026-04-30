@@ -1693,13 +1693,10 @@
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
 
-      <!-- ═════ v2 リアル提案（Phase C：並行表示プレビュー） ═════ -->
-      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="v2 リアル提案">
+      <!-- ═════ 候補者・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="候補者・提案一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">
-            v2 リアル提案
-            <span class="v2-banner__pill">PREVIEW</span>
-          </span>
+          <span class="v2-cases-card__title">候補者・提案一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2ProposalsFilter">
               <option value="action">要対応のみ</option>
@@ -1716,13 +1713,6 @@
         </div>
         <div class="v2-cases-card__msg" id="v2ProposalsMsg">読み込み中…</div>
       </div>
-
-      <div class="tab-bar" id="candTabBar">
-        <div class="tab-item active" data-tab="pending">確認待ち<span class="tab-count">3</span></div>
-        <div class="tab-item" data-tab="screening">選考中<span class="tab-count">8</span></div>
-        <div class="tab-item" data-tab="done">面談済<span class="tab-count">3</span></div>
-      </div>
-      <div class="cand-grid" id="candGrid"></div>
     </section>
 
     <!-- ─── タスク ────────────────────────────────── -->
@@ -2957,20 +2947,27 @@
     /* ─── 候補者確認 ────────────────────────────── */
     let currentCandTab = 'pending';
 
-    document.getElementById('candTabBar').addEventListener('click', e => {
-      const tab = e.target.closest('.tab-item');
-      if (!tab) return;
-      document.querySelectorAll('#candTabBar .tab-item').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentCandTab = tab.dataset.tab;
-      renderCandidates();
-    });
+    // Phase E-3 で candTabBar / candGrid を削除済み。要素がある場合のみバインドする。
+    const _candTabBar = document.getElementById('candTabBar');
+    if (_candTabBar) {
+      _candTabBar.addEventListener('click', e => {
+        const tab = e.target.closest('.tab-item');
+        if (!tab) return;
+        document.querySelectorAll('#candTabBar .tab-item').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCandTab = tab.dataset.tab;
+        renderCandidates();
+      });
+    }
 
     function renderCandidates() {
       const tab    = currentCandTab;
       const list   = CANDIDATES[tab] || [];
       const isPending = tab === 'pending';
-      document.getElementById('candGrid').innerHTML = list.map((c, i) => `
+      // Phase E-3 で candGrid を削除したため要素が無ければ何もしない
+      const _grid = document.getElementById('candGrid');
+      if (!_grid) return;
+      _grid.innerHTML = list.map((c, i) => `
         <div class="cand-card" style="cursor:pointer;" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">
           <div class="cand-card__head">
             <span class="cand-card__num">${s(c.num)}</span>
@@ -3302,8 +3299,7 @@
         else                 renderV2CasesTable();
       }
       if (id === 'candidates') {
-        renderCandidates();
-        // v2 リアル提案（Phase C）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        // 候補者・提案一覧（v2 リアル）：初回コントロールバインド＋初回ロード／既ロードなら再描画
         bindV2ProposalsControls();
         if (!v2PropState.loaded) loadV2Proposals();
         else                     renderV2ProposalsTable();
