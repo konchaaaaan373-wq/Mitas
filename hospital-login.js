@@ -19,11 +19,25 @@ function toJa(msg = '') {
   return 'ログインに失敗しました。担当者にお問い合わせください。'
 }
 
-/** ログイン：成功時は dashboard.html へ遷移 */
-async function hospitalLogin(email, password) {
+/**
+ * リダイレクト先の安全性を検証
+ * 相対パス（/ で始まり、//や :// を含まない）のみ許可（open redirect 防止）
+ */
+function safeRedirectPath(path, fallback = '/dashboard.html') {
+  if (typeof path !== 'string' || !path) return fallback
+  // 絶対 URL や protocol-relative URL は拒否
+  if (/^https?:\/\//i.test(path)) return fallback
+  if (path.startsWith('//')) return fallback
+  // 相対パス（/ で始まる）のみ許可
+  if (!path.startsWith('/')) return fallback
+  return path
+}
+
+/** ログイン：成功時は redirectTo（または /dashboard.html）へ遷移 */
+async function hospitalLogin(email, password, redirectTo) {
   const { error } = await db.auth.signInWithPassword({ email, password })
   if (error) throw new Error(toJa(error.message))
-  location.href = '/dashboard.html'
+  location.href = safeRedirectPath(redirectTo)
 }
 
 /** セッション取得（dashboard.html の認証確認に使用） */
@@ -50,20 +64,27 @@ async function resetPassword(email) {
 }
 
 /**
- * セッション監視：有効期限切れ・ログアウト時に login.html へ遷移
+ * セッション監視：他タブでのログアウト時に即座に login.html へ遷移
  * dashboard.html の initApp() 内から一度だけ呼び出す
  */
 function watchSession() {
-  db.auth.onAuthStateChange((event) => {
-    if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') return
-    if (event === 'USER_UPDATED') return
-    // SIGNED_IN 以外のイベントで session が null になった場合はログアウト
+  // SIGNED_OUT イベントで即座にログイン画面へ
+  db.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT' || (event !== 'INITIAL_SESSION' && !session)) {
+      // 既に login.html にいる場合は無限ループを避ける
+      if (!location.pathname.endsWith('/login.html')) {
+        location.href = '/login.html'
+      }
+    }
   })
-  // 定期的にセッションを確認（30分ごと）
+  // 定期的にセッション期限切れも確認（30分ごと）
   setInterval(async () => {
     const { data, error } = await db.auth.getSession()
     if (error || !data.session) {
-      location.href = '/login.html'
+      if (!location.pathname.endsWith('/login.html')) {
+        location.href = '/login.html'
+      }
     }
   }, 30 * 60 * 1000)
 }
+

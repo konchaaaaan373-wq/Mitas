@@ -1941,17 +1941,19 @@
       try { session = await getSession(); } catch { /* Supabase未設定時はスキップ */ }
 
       if (!session) {
+        // 元の画面に戻れるよう next パラメータを付与
+        const next = '?next=' + encodeURIComponent(location.pathname);
         // 開発時フォールバック：sessionStorage の旧トークンを許容
         const token = sessionStorage.getItem('mitas_token');
-        if (!token) { location.href = '/login.html'; return; }
+        if (!token) { location.href = '/login.html' + next; return; }
         try {
           const pad = s => s + '='.repeat((4 - s.length % 4) % 4);
           const payload = JSON.parse(atob(pad(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))));
           if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-            sessionStorage.clear(); location.href = '/login.html'; return;
+            sessionStorage.clear(); location.href = '/login.html' + next; return;
           }
           initApp({ email: payload.name || '管理者', sub: payload.sub });
-        } catch { sessionStorage.clear(); location.href = '/login.html'; }
+        } catch { sessionStorage.clear(); location.href = '/login.html' + next; }
         return;
       }
 
