@@ -107,7 +107,8 @@
     .header__nav a.active { color: var(--navy); font-weight: 600; }
 
     .header__service-link {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center;
+      margin-left: 10px;
       padding: 8px 14px; border-radius: 999px;
       font-size: 13px; font-weight: 600;
       color: var(--teal);
@@ -698,11 +699,9 @@
         <a href="/#flow">ご利用の流れ</a>
         <a href="/company.html" class="active">会社概要</a>
       </nav>
-      <a class="header__service-link" href="https://necofindjob.com/service.html"
-         aria-label="サービスサイトを開く">
-        サービスサイトはこちら&nbsp;&rarr;
-      </a>
       <a href="/#contact" class="btn btn--primary header__cta">まずは相談する</a>
+      <a class="header__service-link" href="https://necofindjob.com/service.html"
+         aria-label="サービスサイトを開く">サービスサイトはこちら</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
         <span></span><span></span><span></span>
       </button>
@@ -714,9 +713,9 @@
     <a href="/#reasons" onclick="closeMobileNav()">選ばれる理由</a>
     <a href="/#flow" onclick="closeMobileNav()">ご利用の流れ</a>
     <a href="/company.html" onclick="closeMobileNav()">会社概要</a>
-    <a href="https://necofindjob.com/service.html" onclick="closeMobileNav()"
-       style="color: var(--teal); font-weight: 600;">サービスサイトはこちら &rarr;</a>
     <a href="/#contact" class="btn btn--primary" onclick="closeMobileNav()">まずは相談する</a>
+    <a href="https://necofindjob.com/service.html" onclick="closeMobileNav()"
+       style="color: var(--teal); font-weight: 600;">サービスサイトはこちら</a>
   </div>
 </header>
 
