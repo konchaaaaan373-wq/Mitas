@@ -1,6 +1,6 @@
 // Supabase 設定（Netlify 環境変数から取得、またはここに直接記入）
-const SUPABASE_URL      = window.__SUPABASE_URL__      || 'https://YOUR_PROJECT.supabase.co'
-const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__ || 'YOUR_SUPABASE_ANON_KEY'
+const SUPABASE_URL      = window.__SUPABASE_URL__      || 'https://cztoepghaimofqjnuvou.supabase.co'
+const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__ || 'sb_publishable_Fc1Dp1Daj-GeHRlSmCR4ow_rFahzKql'
 
 const { createClient } = supabase  // CDN（@supabase/supabase-js）でロード済み
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
