@@ -472,6 +472,192 @@
     .timeline__label { color: var(--gray-500); }
     .timeline__value { color: var(--gray-700); font-variant-numeric: tabular-nums; }
 
+    /* ─── 候補者抽出・既存提案セクション ─── */
+    .sub-panel__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sub-panel__count {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+
+    /* ── 候補者カード ── */
+    .candidate-list { display: grid; gap: 8px; }
+    .candidate-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+    .candidate-card:hover { border-color: var(--gray-300); }
+    .candidate-card__main { min-width: 0; }
+    .candidate-card__name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .candidate-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+    .candidate-card__meta strong {
+      color: var(--gray-700);
+      font-weight: 600;
+    }
+    .candidate-card__action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── 既存提案カード ── */
+    .proposal-list { display: grid; gap: 8px; }
+    .proposal-card {
+      padding: 10px 12px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+    }
+    .proposal-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .proposal-card__num {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--gray-400);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .proposal-card__name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-deep);
+      margin-bottom: 4px;
+    }
+    .proposal-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    /* ── 提案ステータスバッジ ── */
+    .badge--prop-created             { background: var(--gray-100); color: var(--gray-700); }
+    .badge--prop-worker_contacted    { background: rgba(14,165,233,0.10); color: var(--teal); }
+    .badge--prop-worker_accepted     { background: rgba(16,185,129,0.10); color: var(--green); }
+    .badge--prop-worker_declined     { background: rgba(220,38,38,0.10);  color: var(--red); }
+    .badge--prop-proposed_to_facility{ background: rgba(91,33,182,0.10);  color: #6D28D9; }
+    .badge--prop-facility_accepted   { background: rgba(16,185,129,0.18); color: #047857; }
+    .badge--prop-facility_declined   { background: rgba(220,38,38,0.10);  color: var(--red); }
+    .badge--prop-withdrawn           { background: var(--gray-100); color: var(--gray-500); }
+    .badge--prop-expired             { background: var(--gray-100); color: var(--gray-500); }
+
+    /* ─── モーダル ─── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 480px;
+      max-height: calc(100vh - 40px);
+      overflow: auto;
+      box-shadow: 0 20px 50px rgba(15,23,42,0.25);
+      transform: translateY(8px);
+      transition: transform 0.2s;
+    }
+    .modal-backdrop.is-open .modal { transform: translateY(0); }
+    .modal__head {
+      padding: 18px 22px 12px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy-deep);
+    }
+    .modal__subtitle {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+    .modal__body { padding: 18px 22px; display: grid; gap: 14px; }
+    .modal__foot {
+      padding: 12px 22px 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ─── フォームフィールド ─── */
+    .field { display: grid; gap: 4px; }
+    .field__label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-700);
+      letter-spacing: 0.04em;
+    }
+    .field__hint { font-size: 11px; color: var(--gray-400); }
+    .field__input,
+    .field__textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+      background: var(--white);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--gray-900);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field__input:focus,
+    .field__textarea:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+    }
+    .field__textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     /* ─── トースト ─── */
     .toast {
       position: fixed;
@@ -589,6 +775,50 @@
   </section>
 </div>
 
+<!-- 提案作成モーダル -->
+<div class="modal-backdrop" id="proposalModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="proposalModalTitle">
+    <div class="modal__head">
+      <div class="modal__title" id="proposalModalTitle">提案を作成</div>
+      <div class="modal__subtitle" id="proposalModalSubtitle">—</div>
+    </div>
+    <form id="proposalForm" novalidate>
+      <div class="modal__body">
+        <div class="field-grid">
+          <div class="field">
+            <label class="field__label" for="propRate">提案時給（円）</label>
+            <input class="field__input" type="number" id="propRate" name="proposed_hourly_rate"
+                   min="0" step="100" inputmode="numeric" placeholder="例：8000">
+            <div class="field__hint">空欄の場合は依頼の希望レンジで提案されます</div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="propScore">マッチスコア（0〜100）</label>
+            <input class="field__input" type="number" id="propScore" name="match_score"
+                   min="0" max="100" step="0.1" inputmode="decimal" placeholder="例：85">
+            <div class="field__hint">省略可。Step4で自動計算予定</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="propExpiry">有効期限（日数）</label>
+          <input class="field__input" type="number" id="propExpiry" name="expiry_days"
+                 min="1" max="60" step="1" value="7">
+          <div class="field__hint">作成日からN日後をワーカーへの提案期限とします</div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="propReason">マッチ理由</label>
+          <textarea class="field__textarea" id="propReason" name="match_reason"
+                    placeholder="例：内科一般10年・当直経験豊富・希望地域一致"></textarea>
+          <div class="field__hint">候補者を選定した根拠を記録します</div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="action-btn action-btn--ghost" id="proposalCancelBtn">キャンセル</button>
+        <button type="submit" class="action-btn action-btn--primary" id="proposalSubmitBtn">提案を作成</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- トースト（成功・失敗メッセージ用） -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -630,6 +860,19 @@
 
   const PRIORITY_LABEL = {
     urgent: '緊急', high: '高', medium: '中', low: '低',
+  };
+
+  // 提案ステータス表示名
+  const PROPOSAL_STATUS_LABEL = {
+    created:              '作成',
+    worker_contacted:     'ワーカー連絡',
+    worker_accepted:      'ワーカー承諾',
+    worker_declined:      'ワーカー辞退',
+    proposed_to_facility: '施設提案中',
+    facility_accepted:    '施設承諾',
+    facility_declined:    '施設辞退',
+    withdrawn:            '取り下げ',
+    expired:              '期限切れ',
   };
 
   const SHIFT_LABEL = {
@@ -714,6 +957,20 @@
         document.querySelectorAll('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === tab));
         renderRequestList();
       });
+    });
+
+    // 提案作成モーダル
+    document.getElementById('proposalCancelBtn').addEventListener('click', closeProposalModal);
+    document.getElementById('proposalForm').addEventListener('submit', submitProposal);
+    document.getElementById('proposalModal').addEventListener('click', (e) => {
+      // 背景クリックで閉じる（モーダル本体クリックは閉じない）
+      if (e.target.id === 'proposalModal') closeProposalModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('proposalModal');
+        if (modal.classList.contains('is-open')) closeProposalModal();
+      }
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
@@ -829,6 +1086,43 @@
       if (fromList) renderDetail(fromList);
       showToast('error', `詳細の取得に失敗しました（${e.message}）`);
     }
+
+    // 詳細を表示したあとに、提案・候補者を非同期で取得して描画
+    loadProposalsAndCandidates(id);
+  }
+
+  // ─── 既存提案と候補者を並行取得 → 描画 ───
+  async function loadProposalsAndCandidates(requestId) {
+    state.selectedProposals = [];
+    state.selectedCandidates = [];
+
+    const r = state.selectedRequest;
+    if (!r) return;
+
+    const [proposalsResult, candidatesResult] = await Promise.allSettled([
+      fetchExistingProposals(requestId),
+      fetchCandidates(r.profession_type),
+    ]);
+
+    // 切替が起きていたら描画をスキップ
+    if (state.selectedId !== requestId) return;
+
+    if (proposalsResult.status === 'fulfilled') {
+      state.selectedProposals = proposalsResult.value;
+    } else {
+      console.error('既存提案の取得に失敗:', proposalsResult.reason);
+      showToast('error', `既存提案の取得に失敗しました：${proposalsResult.reason.message}`);
+    }
+
+    if (candidatesResult.status === 'fulfilled') {
+      state.selectedCandidates = candidatesResult.value;
+    } else {
+      console.error('候補者の取得に失敗:', candidatesResult.reason);
+      showToast('error', `候補者の取得に失敗しました：${candidatesResult.reason.message}`);
+    }
+
+    renderProposalsSection();
+    renderCandidatesSection();
   }
 
   async function fetchRequestDetail(id) {
@@ -975,6 +1269,28 @@
             <div class="timeline__value">${escapeHtml(formatDateTime(r.accepted_at))}</div>
           </div>
         </div>
+
+        <!-- ─── 既存提案セクション ─── -->
+        <div class="detail-section">
+          <div class="sub-panel__head">
+            <div class="detail-section__title" style="margin: 0;">既存の提案</div>
+            <span class="sub-panel__count" id="proposalsCount">読み込み中…</span>
+          </div>
+          <div id="proposalsContainer">
+            <div class="placeholder" style="padding: 16px;">読み込み中…</div>
+          </div>
+        </div>
+
+        <!-- ─── 候補者抽出セクション ─── -->
+        <div class="detail-section">
+          <div class="sub-panel__head">
+            <div class="detail-section__title" style="margin: 0;">候補者の抽出</div>
+            <span class="sub-panel__count" id="candidatesCount">読み込み中…</span>
+          </div>
+          <div id="candidatesContainer">
+            <div class="placeholder" style="padding: 16px;">読み込み中…</div>
+          </div>
+        </div>
       </div>
     `;
 
@@ -1058,6 +1374,267 @@
     } finally {
       state.isPatching = false;
     }
+  }
+
+  // ─── PostgREST 直接アクセス（提案POST・候補者抽出に使用） ───
+  async function pgFetch(path, init = {}) {
+    if (isMockMode) {
+      return mockPgFetch(path, init);
+    }
+    const headers = {
+      'Content-Type': 'application/json',
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${state.token}`,
+      ...(init.headers || {}),
+    };
+    const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, { ...init, headers });
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { /* noop */ }
+    if (!res.ok) {
+      const msg = (json && (json.message || json.error)) || `HTTP ${res.status}`;
+      const err = new Error(msg);
+      err.status = res.status;
+      err.body = json;
+      throw err;
+    }
+    return json;
+  }
+
+  // ─── 候補者抽出 ───
+  // profession_type一致 + is_available_for_offers=true + onboarding_status=approved
+  async function fetchCandidates(profession_type) {
+    if (!profession_type) return [];
+    const select = [
+      'id', 'full_name', 'full_name_kana',
+      'profession_type', 'primary_specialty', 'sub_specialties',
+      'years_experience', 'current_prefecture', 'current_city',
+      'desired_prefectures', 'work_radius_km',
+    ].join(',');
+    const path = `/worker_profiles`
+      + `?profession_type=eq.${encodeURIComponent(profession_type)}`
+      + `&is_available_for_offers=eq.true`
+      + `&onboarding_status=eq.approved`
+      + `&select=${select}`
+      + `&order=years_experience.desc.nullslast`
+      + `&limit=50`;
+    const rows = await pgFetch(path);
+    return Array.isArray(rows) ? rows : [];
+  }
+
+  // ─── 既存提案の取得（依頼単位） ───
+  async function fetchExistingProposals(requestId) {
+    const select = '*,worker_profiles(id,full_name,profession_type,primary_specialty)';
+    const path = `/proposals?request_id=eq.${encodeURIComponent(requestId)}`
+      + `&select=${select}`
+      + `&order=created_at.desc`;
+    const rows = await pgFetch(path);
+    return (Array.isArray(rows) ? rows : []).map(p => ({
+      ...p,
+      worker_name: (p.worker_profiles && p.worker_profiles.full_name) || '—',
+    }));
+  }
+
+  // ─── 既存提案セクションの描画 ───
+  function renderProposalsSection() {
+    const container = document.getElementById('proposalsContainer');
+    const countEl = document.getElementById('proposalsCount');
+    if (!container || !countEl) return;
+
+    const list = state.selectedProposals || [];
+    countEl.textContent = `${list.length}件`;
+
+    if (!list.length) {
+      container.innerHTML = '<div class="placeholder" style="padding: 16px;">まだ提案はありません</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="proposal-list">
+        ${list.map(p => `
+          <div class="proposal-card">
+            <div class="proposal-card__head">
+              <span class="proposal-card__num">${escapeHtml(p.proposal_number || '')}</span>
+              <span class="badge badge--prop-${escapeHtml(p.status)}">
+                ${escapeHtml(PROPOSAL_STATUS_LABEL[p.status] || p.status)}
+              </span>
+            </div>
+            <div class="proposal-card__name">${escapeHtml(p.worker_name || '—')}</div>
+            <div class="proposal-card__meta">
+              ${p.proposed_hourly_rate != null ? `<span>提案時給 ¥${Number(p.proposed_hourly_rate).toLocaleString()} /時</span>` : ''}
+              ${p.match_score != null ? `<span>スコア ${escapeHtml(String(p.match_score))}</span>` : ''}
+              <span>作成 ${escapeHtml(formatDate(p.created_at))}</span>
+              ${p.expires_at ? `<span>期限 ${escapeHtml(formatDate(p.expires_at))}</span>` : ''}
+            </div>
+            ${p.match_reason ? `
+              <div style="font-size: 11px; color: var(--gray-700); margin-top: 6px; line-height: 1.6;">
+                ${escapeHtml(p.match_reason)}
+              </div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // ─── 候補者セクションの描画 ───
+  function renderCandidatesSection() {
+    const container = document.getElementById('candidatesContainer');
+    const countEl = document.getElementById('candidatesCount');
+    if (!container || !countEl) return;
+
+    const candidates = state.selectedCandidates || [];
+    const proposedIds = new Set((state.selectedProposals || []).map(p => p.worker_id));
+    countEl.textContent = `${candidates.length}名（提案済み ${proposedIds.size}名）`;
+
+    if (!candidates.length) {
+      container.innerHTML = '<div class="placeholder" style="padding: 16px;">該当する候補者は見つかりませんでした</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="candidate-list">
+        ${candidates.map(c => {
+          const proposed = proposedIds.has(c.id);
+          const exp = (c.years_experience != null) ? `経験 ${c.years_experience}年` : '経験 未登録';
+          const region = [c.current_prefecture, c.current_city].filter(Boolean).join(' ') || '—';
+          const specialty = c.primary_specialty || '—';
+          return `
+            <div class="candidate-card">
+              <div class="candidate-card__main">
+                <div class="candidate-card__name">
+                  ${escapeHtml(c.full_name || '(無名)')}
+                  ${proposed ? '<span class="badge badge--low">提案済み</span>' : ''}
+                </div>
+                <div class="candidate-card__meta">
+                  <span><strong>${escapeHtml(specialty)}</strong></span>
+                  <span>${escapeHtml(exp)}</span>
+                  <span>${escapeHtml(region)}</span>
+                </div>
+              </div>
+              <div class="candidate-card__action">
+                <button class="action-btn ${proposed ? 'action-btn--ghost' : 'action-btn--primary'}"
+                        data-worker-id="${escapeHtml(c.id)}"
+                        ${proposed ? 'disabled' : ''}>
+                  ${proposed ? '提案済み' : '提案する'}
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    // ボタンのバインド
+    container.querySelectorAll('.candidate-card .action-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const wid = btn.dataset.workerId;
+        const worker = (state.selectedCandidates || []).find(c => c.id === wid);
+        if (worker && state.selectedRequest) {
+          openProposalModal(worker, state.selectedRequest);
+        }
+      });
+    });
+  }
+
+  // ─── 提案モーダルの開閉 ───
+  function openProposalModal(worker, request) {
+    state.proposalContext = { worker, request };
+    document.getElementById('proposalModalTitle').textContent =
+      `${worker.full_name || '候補者'} さんを提案`;
+    document.getElementById('proposalModalSubtitle').textContent =
+      `依頼番号 ${request.request_number || ''} / ${request.title || ''}`;
+
+    // 入力初期値
+    document.getElementById('propRate').value = request.hourly_rate_max || request.hourly_rate_min || '';
+    document.getElementById('propScore').value = '';
+    document.getElementById('propExpiry').value = '7';
+    document.getElementById('propReason').value = '';
+
+    const modal = document.getElementById('proposalModal');
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => document.getElementById('propRate').focus(), 50);
+  }
+
+  function closeProposalModal() {
+    const modal = document.getElementById('proposalModal');
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    state.proposalContext = null;
+  }
+
+  // ─── 提案を作成（POST /rest/v1/proposals） ───
+  async function submitProposal(e) {
+    e.preventDefault();
+    if (!state.proposalContext || state.isPosting) return;
+
+    const { worker, request } = state.proposalContext;
+    const submitBtn = document.getElementById('proposalSubmitBtn');
+    state.isPosting = true;
+    submitBtn.disabled = true;
+
+    const form = document.getElementById('proposalForm');
+    const fd = new FormData(form);
+    const rate = (fd.get('proposed_hourly_rate') || '').toString().trim();
+    const score = (fd.get('match_score') || '').toString().trim();
+    const expiryDays = parseInt(fd.get('expiry_days'), 10);
+    const reason = (fd.get('match_reason') || '').toString().trim();
+
+    const days = Number.isFinite(expiryDays) && expiryDays > 0 ? expiryDays : 7;
+    const expiresAt = new Date(Date.now() + days * 86400000).toISOString();
+
+    const payload = {
+      proposal_number: generateProposalNumber(),
+      request_id: request.id,
+      worker_id: worker.id,
+      proposed_by: state.user && state.user.id ? state.user.id : null,
+      proposed_hourly_rate: rate ? parseInt(rate, 10) : null,
+      match_score: score ? parseFloat(score) : null,
+      match_reason: reason || null,
+      expires_at: expiresAt,
+      status: 'created',
+    };
+
+    try {
+      const created = await pgFetch('/proposals', {
+        method: 'POST',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify(payload),
+      });
+      const row = Array.isArray(created) ? created[0] : created;
+      // worker名を補強（描画用）
+      row.worker_name = worker.full_name;
+
+      state.selectedProposals = [row, ...(state.selectedProposals || [])];
+
+      showToast('success', `${worker.full_name} さんへの提案を作成しました`);
+      closeProposalModal();
+      renderProposalsSection();
+      renderCandidatesSection();
+    } catch (err) {
+      console.error('提案作成失敗:', err);
+      // PostgREST の UNIQUE 違反は HTTP 409
+      if (err.status === 409 || /duplicate|unique|23505/i.test(err.message)) {
+        showToast('error', 'この候補者には既に提案済みです');
+      } else if (err.status === 403) {
+        showToast('error', '提案作成の権限がありません（neco_admin のみ）');
+      } else {
+        showToast('error', `提案の作成に失敗しました：${err.message}`);
+      }
+    } finally {
+      state.isPosting = false;
+      submitBtn.disabled = false;
+    }
+  }
+
+  // ─── 提案番号の採番（PR-YYYY-NNNNNN） ───
+  // proposal_number は UNIQUE。フロントで生成する場合の衝突を避けるため
+  // Date.now() の末尾6桁を使用（worker-app の request_number と同方式）。
+  function generateProposalNumber() {
+    const y = new Date().getFullYear();
+    const tail = ('00000' + Date.now().toString()).slice(-6);
+    return `PR-${y}-${tail}`;
   }
 
   // ─── トースト ───
@@ -1185,6 +1762,79 @@
   function showError(msg) {
     const box = document.getElementById('errorBox');
     box.innerHTML = `<div class="alert">${escapeHtml(msg)}</div>`;
+  }
+
+  // ─── モック PostgREST（開発・UI確認用） ───
+  // pgFetch がモックモードで呼ばれた時に、最低限のクエリを解釈して固定データを返す
+  function mockPgFetch(path, init = {}) {
+    const method = (init.method || 'GET').toUpperCase();
+
+    // 提案作成（POST）
+    if (method === 'POST' && path.startsWith('/proposals')) {
+      const body = init.body ? JSON.parse(init.body) : {};
+      // UNIQUE(request_id, worker_id) の模擬チェック
+      const dup = (state.selectedProposals || []).some(
+        p => p.worker_id === body.worker_id && p.request_id === body.request_id
+      );
+      if (dup) {
+        const err = new Error('duplicate key value violates unique constraint');
+        err.status = 409;
+        throw err;
+      }
+      const row = { id: 'mock-' + Date.now(), created_at: new Date().toISOString(), ...body };
+      return [row];
+    }
+
+    // 提案一覧（GET）
+    if (method === 'GET' && path.startsWith('/proposals?')) {
+      const m = path.match(/request_id=eq\.([^&]+)/);
+      const requestId = m ? decodeURIComponent(m[1]) : null;
+      return getMockProposalsFor(requestId);
+    }
+
+    // 候補者抽出（GET worker_profiles）
+    if (method === 'GET' && path.startsWith('/worker_profiles?')) {
+      const m = path.match(/profession_type=eq\.([^&]+)/);
+      const profession = m ? decodeURIComponent(m[1]) : null;
+      return getMockCandidates(profession);
+    }
+
+    return [];
+  }
+
+  function getMockProposalsFor(requestId) {
+    if (requestId === '00000000-0000-0000-0000-000000000005') {
+      return [
+        {
+          id: '00000000-0000-0000-0000-000000000201',
+          proposal_number: 'PR-2026-000201',
+          request_id: requestId,
+          worker_id: '00000000-0000-0000-0000-000000000301',
+          proposed_hourly_rate: 4200,
+          match_score: 88.5,
+          match_reason: '訪問リハ経験10年・希望地域一致',
+          status: 'proposed_to_facility',
+          created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+          expires_at: new Date(Date.now() + 5 * 86400000).toISOString(),
+          worker_profiles: { id: '00000000-0000-0000-0000-000000000301', full_name: '佐藤 浩二' },
+          worker_name: '佐藤 浩二',
+        },
+      ];
+    }
+    return [];
+  }
+
+  function getMockCandidates(profession) {
+    const all = [
+      { id: '00000000-0000-0000-0000-000000000301', full_name: '佐藤 浩二', profession_type: 'physical_therapist', primary_specialty: '訪問リハビリ', years_experience: 10, current_prefecture: '東京都', current_city: '世田谷区', desired_prefectures: ['東京都', '神奈川県'] },
+      { id: '00000000-0000-0000-0000-000000000302', full_name: '田中 早苗', profession_type: 'nurse',              primary_specialty: '訪問看護',     years_experience: 8,  current_prefecture: '神奈川県', current_city: '横浜市', desired_prefectures: ['神奈川県', '東京都'] },
+      { id: '00000000-0000-0000-0000-000000000303', full_name: '山田 太郎', profession_type: 'physician',          primary_specialty: '内科',         years_experience: 15, current_prefecture: '東京都', current_city: '新宿区', desired_prefectures: ['東京都'] },
+      { id: '00000000-0000-0000-0000-000000000304', full_name: '鈴木 花子', profession_type: 'physician',          primary_specialty: '腎臓内科',     years_experience: 12, current_prefecture: '埼玉県', current_city: 'さいたま市', desired_prefectures: ['埼玉県', '東京都'] },
+      { id: '00000000-0000-0000-0000-000000000305', full_name: '伊藤 健一', profession_type: 'nurse',              primary_specialty: '夜勤専従',     years_experience: 6,  current_prefecture: '東京都', current_city: '練馬区', desired_prefectures: ['東京都'] },
+      { id: '00000000-0000-0000-0000-000000000306', full_name: '高橋 美香', profession_type: 'physician',          primary_specialty: '健診',         years_experience: 20, current_prefecture: '千葉県', current_city: '千葉市', desired_prefectures: ['千葉県', '東京都'] },
+      { id: '00000000-0000-0000-0000-000000000307', full_name: '渡辺 涼子', profession_type: 'occupational_therapist', primary_specialty: '回復期OT', years_experience: 7, current_prefecture: '東京都', current_city: '杉並区', desired_prefectures: ['東京都'] },
+    ];
+    return profession ? all.filter(c => c.profession_type === profession) : all;
   }
 
   // ─── モックデータ（開発・UI確認用） ───
