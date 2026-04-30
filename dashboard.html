@@ -2115,18 +2115,25 @@
       }
 
       try {
-        const res = await fetch('/api/v2/requests?limit=200', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+        // requests と proposals を並行取得（proposals は kpiPending（要対応）算出に必要）
+        const [reqRes, propRes] = await Promise.all([
+          fetch('/api/v2/requests?limit=200',  { headers }),
+          fetch('/api/v2/proposals?limit=200', { headers }).catch(() => null),
+        ]);
+
+        if (!reqRes.ok) {
+          const text = await reqRes.text();
+          throw new Error(`requests API ${reqRes.status}: ${text.slice(0, 80)}`);
         }
-        const data = await res.json();
-        const requests = Array.isArray(data.requests) ? data.requests : [];
+        const reqData = await reqRes.json();
+        const requests = Array.isArray(reqData.requests) ? reqData.requests : [];
+
+        let proposals = [];
+        if (propRes && propRes.ok) {
+          const propData = await propRes.json();
+          proposals = Array.isArray(propData.proposals) ? propData.proposals : [];
+        }
 
         // 状態別に集計（neco-console.html の TAB_STATUS_MAP と整合）
         const PENDING   = ['submitted', 'under_review'];
@@ -2134,22 +2141,54 @@
         const ACTIVE    = ['in_progress', 'completion_pending'];
         const OPEN      = [...PENDING, ...PROPOSING, ...ACTIVE];
 
-        const pending   = requests.filter(r => PENDING.includes(r.status)).length;
-        const proposing = requests.filter(r => PROPOSING.includes(r.status)).length;
-        const active    = requests.filter(r => ACTIVE.includes(r.status)).length;
-        const urgent    = requests.filter(r => r.priority === 'urgent' && OPEN.includes(r.status)).length;
+        const v2pending   = requests.filter(r => PENDING.includes(r.status)).length;
+        const v2proposing = requests.filter(r => PROPOSING.includes(r.status)).length;
+        const v2active    = requests.filter(r => ACTIVE.includes(r.status)).length;
+        const v2urgent    = requests.filter(r => r.priority === 'urgent' && OPEN.includes(r.status)).length;
 
-        $('v2-pending').textContent   = pending;
-        $('v2-proposing').textContent = proposing;
-        $('v2-active').textContent    = active;
-        $('v2-urgent').textContent    = urgent;
+        // v2 バナーを更新
+        $('v2-pending').textContent   = v2pending;
+        $('v2-proposing').textContent = v2proposing;
+        $('v2-active').textContent    = v2active;
+        $('v2-urgent').textContent    = v2urgent;
+
+        // ── Phase E-1: 既存の上部 KPI カードも v2 リアルデータで上書き ──
+        // 失敗時は renderKPIs() の結果（モック値）がそのまま残るのでフォールバック
+        const totalActive = v2pending + v2proposing + v2active;  // 進行中案件（OPEN 全体）
+        const inFourteenDays = requests.filter(r => {
+          if (!OPEN.includes(r.status)) return false;
+          if (!r.start_at) return false;
+          const diff = (new Date(r.start_at).getTime() - Date.now()) / 86400000;
+          return diff >= 0 && diff <= 14;
+        }).length;
+        const proposedToFacility = proposals.filter(p => p.status === 'proposed_to_facility').length;
+
+        const setKpiValue = (id, value, unit) => {
+          const el = $(id);
+          if (el) el.innerHTML = `${value}<em>${unit}</em>`;
+        };
+        const setKpiSub = (id, txt) => {
+          const el = $(id);
+          if (el) el.textContent = txt;
+        };
+
+        setKpiValue('kpiActive',  totalActive,        '件');
+        setKpiSub  ('kpiActiveSub',  `受付${v2pending}・提案${v2proposing}・進行${v2active}`);
+        setKpiValue('kpiPending', proposedToFacility, '名');
+        setKpiSub  ('kpiPendingSub', proposals.length ? `要対応の提案` : `提案データを取得中`);
+        setKpiValue('kpiSoon',    inFourteenDays,     '件');
+        setKpiSub  ('kpiSoonSub',    `14日以内に開始予定`);
+        setKpiValue('kpiUrgent',  v2urgent,           '件');
+        setKpiSub  ('kpiUrgentSub',  `priority=urgent`);
 
         const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-        const src = data.source === 'mock' ? '（モック）' : '';
-        setMsg(`v2 API より取得：${ts} 時点 / 総依頼数 ${requests.length}件${src}`);
+        const src = reqData.source === 'mock' ? '（モック）' : '';
+        const propNote = (propRes && !propRes.ok) ? ' / 提案取得失敗' : '';
+        setMsg(`v2 API より取得：${ts} 時点 / 依頼 ${requests.length}件 / 提案 ${proposals.length}件${src}${propNote}`);
       } catch (e) {
         console.error('v2 KPI 取得失敗:', e);
         setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+        // KPIカードは renderKPIs() の結果（モック値）がそのまま残るためフォールバック完了
       } finally {
         if (btn) btn.disabled = false;
       }
