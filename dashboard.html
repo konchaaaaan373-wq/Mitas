@@ -1615,13 +1615,10 @@
         </div>
       </div>
 
-      <!-- 最近のアクティビティ -->
+      <!-- 最近のアクティビティ（v2 リアル監査ログ・Phase E-4 でメイン化） -->
       <div class="section">
         <div class="section__header">
-          <span class="section__title">
-            v2 リアルアクティビティ
-            <span class="v2-banner__pill" style="margin-left:8px;">PREVIEW</span>
-          </span>
+          <span class="section__title">最近のアクティビティ</span>
           <button class="v2-banner__refresh" id="v2ActRefreshBtn" type="button">更新</button>
         </div>
         <div class="v2-cases-table-wrap" id="v2ActBody">
@@ -1630,39 +1627,15 @@
         <div class="v2-cases-card__msg" id="v2ActMsg" style="border-top:none;background:transparent;padding-top:6px;">読み込み中…</div>
       </div>
 
-      <!-- 最近のアクティビティ（既存モック・並行表示） -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">最近のアクティビティ</span>
-          <a class="section__action" data-section="cases" href="#">案件一覧を見る</a>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:28px;"></th>
-              <th>内容</th>
-              <th>案件ID</th>
-              <th>担当者</th>
-              <th>種別</th>
-              <th>日時</th>
-            </tr>
-          </thead>
-          <tbody id="activityTbody"></tbody>
-        </table>
-      </div>
-
     </section>
 
     <!-- ─── 案件管理 ──────────────────────────────── -->
     <section class="page-section" id="s-cases">
 
-      <!-- ═════ v2 リアル案件（Phase B：並行表示プレビュー） ═════ -->
-      <div class="v2-cases-card" id="v2CasesCard" aria-label="v2 リアル案件">
+      <!-- ═════ 案件一覧（v2 リアルデータ・Phase E-2 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2CasesCard" aria-label="案件一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">
-            v2 リアル案件
-            <span class="v2-banner__pill">PREVIEW</span>
-          </span>
+          <span class="v2-cases-card__title">案件一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2CasesFilter">
               <option value="open">未終端のみ</option>
@@ -1691,72 +1664,15 @@
         </div>
         <div class="v2-cases-card__msg" id="v2CasesMsg">読み込み中…</div>
       </div>
-
-      <div class="filter-bar">
-        <select class="filter-select" id="filterStatus">
-          <option value="">ステータス：全て</option>
-          <option value="intake">受付</option>
-          <option value="scoping">要件整理</option>
-          <option value="sourcing">候補者選定</option>
-          <option value="interviewing">面談中</option>
-          <option value="offer">内定提案</option>
-          <option value="placed">充足済</option>
-          <option value="on_hold">保留中</option>
-        </select>
-        <select class="filter-select" id="filterPriority">
-          <option value="">優先度：全て</option>
-          <option value="critical">最緊急</option>
-          <option value="urgent">緊急</option>
-          <option value="high">高</option>
-          <option value="medium">中</option>
-          <option value="low">低</option>
-        </select>
-        <select class="filter-select" id="filterProfession">
-          <option value="">職種：全て</option>
-          <option value="physician">医師</option>
-          <option value="nurse">看護師</option>
-          <option value="pharmacist">薬剤師</option>
-          <option value="therapist">療法士</option>
-          <option value="care_worker">介護福祉士</option>
-          <option value="care_manager">ケアマネジャー</option>
-          <option value="medical_clerk">医療事務</option>
-        </select>
-        <input class="filter-input" type="text" id="filterSearch" placeholder="案件名・施設名で検索">
-        <div class="filter-bar__spacer"></div>
-        <button class="btn-primary" id="btnOpenRequest">+ 新規依頼</button>
-      </div>
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">案件一覧 <span id="casesCount" style="font-weight:400;color:var(--gray-400);font-size:11px;"></span></span>
-        </div>
-        <table class="data-table" id="casesTable">
-          <thead>
-            <tr>
-              <th class="sortable" data-sort="title">案件<span class="sort-icon"></span></th>
-              <th>職種</th>
-              <th class="sortable" data-sort="status">ステータス<span class="sort-icon"></span></th>
-              <th class="sortable sort-desc" data-sort="priority">優先度<span class="sort-icon"></span></th>
-              <th>人数</th>
-              <th class="sortable" data-sort="deadline">期限<span class="sort-icon"></span></th>
-              <th>マッチ</th>
-              <th>担当</th>
-            </tr>
-          </thead>
-          <tbody id="casesTbody"></tbody>
-        </table>
-      </div>
     </section>
 
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
 
-      <!-- ═════ v2 リアル提案（Phase C：並行表示プレビュー） ═════ -->
-      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="v2 リアル提案">
+      <!-- ═════ 候補者・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="候補者・提案一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">
-            v2 リアル提案
-            <span class="v2-banner__pill">PREVIEW</span>
-          </span>
+          <span class="v2-cases-card__title">候補者・提案一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2ProposalsFilter">
               <option value="action">要対応のみ</option>
@@ -1773,13 +1689,6 @@
         </div>
         <div class="v2-cases-card__msg" id="v2ProposalsMsg">読み込み中…</div>
       </div>
-
-      <div class="tab-bar" id="candTabBar">
-        <div class="tab-item active" data-tab="pending">確認待ち<span class="tab-count">3</span></div>
-        <div class="tab-item" data-tab="screening">選考中<span class="tab-count">8</span></div>
-        <div class="tab-item" data-tab="done">面談済<span class="tab-count">3</span></div>
-      </div>
-      <div class="cand-grid" id="candGrid"></div>
     </section>
 
     <!-- ─── タスク ────────────────────────────────── -->
@@ -1805,27 +1714,29 @@
       </div>
     </section>
 
-    <!-- ─── 問い合わせ ──────────────────────────────── -->
+    <!-- ─── 問い合わせ（v2 リアル：未提出・受付の依頼） ──────────── -->
     <section class="page-section" id="s-inquiries">
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">問い合わせ履歴</span>
-          <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新規依頼</button>
+
+      <!-- 問い合わせ・受付（v2 リアルデータ・Phase F でメイン化） -->
+      <div class="v2-cases-card" id="v2InquiriesCard" aria-label="問い合わせ履歴">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">問い合わせ・受付中の依頼</span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2InquiriesFilter">
+              <option value="all">下書き＋受付</option>
+              <option value="draft">下書きのみ</option>
+              <option value="submitted">受付のみ</option>
+            </select>
+            <button class="v2-banner__refresh" id="v2InquiriesRefreshBtn" type="button">更新</button>
+            <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新規依頼</button>
+          </div>
         </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>受付番号</th>
-              <th>内容</th>
-              <th>職種</th>
-              <th>ステータス</th>
-              <th>対応案件</th>
-              <th>受付日</th>
-            </tr>
-          </thead>
-          <tbody id="inquiriesTbody"></tbody>
-        </table>
+        <div class="v2-cases-table-wrap" id="v2InquiriesBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2InquiriesMsg">読み込み中…</div>
       </div>
+
     </section>
 
     <!-- ─── 設定 ──────────────────────────────────── -->
@@ -1943,17 +1854,22 @@
         </div>
         <div class="modal-body">
           <div class="modal-form-row">
+            <label>依頼タイトル<span class="req">*</span></label>
+            <input type="text" id="reqTitle" placeholder="例：内科外来 当直医（5月急募）">
+          </div>
+          <div class="modal-form-row">
             <label>職種<span class="req">*</span></label>
             <select id="reqProfession">
               <option value="">選択してください</option>
               <option value="physician">医師</option>
               <option value="nurse">看護師</option>
               <option value="pharmacist">薬剤師</option>
-              <option value="therapist">理学療法士 / 作業療法士</option>
-              <option value="care_worker">介護福祉士</option>
-              <option value="care_manager">ケアマネジャー</option>
-              <option value="medical_clerk">医療事務</option>
-              <option value="other">その他</option>
+              <option value="medical_technologist">臨床検査技師</option>
+              <option value="radiologic_technologist">診療放射線技師</option>
+              <option value="physical_therapist">理学療法士</option>
+              <option value="occupational_therapist">作業療法士</option>
+              <option value="speech_therapist">言語聴覚士</option>
+              <option value="care_worker">介護職</option>
             </select>
           </div>
           <div class="modal-form-2col">
@@ -1962,12 +1878,14 @@
               <input type="number" id="reqHeadcount" min="1" value="1">
             </div>
             <div class="modal-form-row">
-              <label>雇用形態</label>
-              <select id="reqEmployment">
-                <option value="full_time">正職員</option>
-                <option value="part_time">パート・非常勤</option>
-                <option value="dispatch">派遣</option>
-                <option value="locum">スポット・代診</option>
+              <label>シフト種別</label>
+              <select id="reqShiftType">
+                <option value="regular_shift">通常シフト</option>
+                <option value="day_duty">日勤</option>
+                <option value="night_duty">夜勤</option>
+                <option value="on_call">オンコール</option>
+                <option value="spot">スポット</option>
+                <option value="long_term">長期</option>
               </select>
             </div>
           </div>
@@ -1984,11 +1902,21 @@
           <div class="modal-form-row">
             <label>緊急度</label>
             <select id="reqUrgency">
-              <option value="medium">中（通常）</option>
+              <option value="low">低</option>
+              <option value="medium" selected>中（通常）</option>
               <option value="high">高（急いでいる）</option>
-              <option value="urgent">緊急（施設基準に影響）</option>
-              <option value="critical">最緊急（即日対応必要）</option>
+              <option value="urgent">緊急（即日〜数日で対応必要）</option>
             </select>
+          </div>
+          <div class="modal-form-2col">
+            <div class="modal-form-row">
+              <label>時給レンジ・下限（円）</label>
+              <input type="number" id="reqRateMin" min="0" step="100" placeholder="例：8000">
+            </div>
+            <div class="modal-form-row">
+              <label>時給レンジ・上限（円）</label>
+              <input type="number" id="reqRateMax" min="0" step="100" placeholder="例：12000">
+            </div>
           </div>
           <div class="modal-form-row">
             <label>必須要件・特記事項</label>
@@ -2063,7 +1991,7 @@
       document.getElementById('mainContent').style.display   = 'block';
 
       // 各セクションの初期描画
-      renderActivity();
+      // renderActivity（モック）は Phase E-4 で削除済みの activityTbody に書き込むためスキップ
       renderKPIs();
 
       // v2 リアルデータ（並行表示・既存KPIには影響なし）
@@ -2115,18 +2043,25 @@
       }
 
       try {
-        const res = await fetch('/api/v2/requests?limit=200', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+        // requests と proposals を並行取得（proposals は kpiPending（要対応）算出に必要）
+        const [reqRes, propRes] = await Promise.all([
+          fetch('/api/v2/requests?limit=200',  { headers }),
+          fetch('/api/v2/proposals?limit=200', { headers }).catch(() => null),
+        ]);
+
+        if (!reqRes.ok) {
+          const text = await reqRes.text();
+          throw new Error(`requests API ${reqRes.status}: ${text.slice(0, 80)}`);
         }
-        const data = await res.json();
-        const requests = Array.isArray(data.requests) ? data.requests : [];
+        const reqData = await reqRes.json();
+        const requests = Array.isArray(reqData.requests) ? reqData.requests : [];
+
+        let proposals = [];
+        if (propRes && propRes.ok) {
+          const propData = await propRes.json();
+          proposals = Array.isArray(propData.proposals) ? propData.proposals : [];
+        }
 
         // 状態別に集計（neco-console.html の TAB_STATUS_MAP と整合）
         const PENDING   = ['submitted', 'under_review'];
@@ -2134,22 +2069,54 @@
         const ACTIVE    = ['in_progress', 'completion_pending'];
         const OPEN      = [...PENDING, ...PROPOSING, ...ACTIVE];
 
-        const pending   = requests.filter(r => PENDING.includes(r.status)).length;
-        const proposing = requests.filter(r => PROPOSING.includes(r.status)).length;
-        const active    = requests.filter(r => ACTIVE.includes(r.status)).length;
-        const urgent    = requests.filter(r => r.priority === 'urgent' && OPEN.includes(r.status)).length;
+        const v2pending   = requests.filter(r => PENDING.includes(r.status)).length;
+        const v2proposing = requests.filter(r => PROPOSING.includes(r.status)).length;
+        const v2active    = requests.filter(r => ACTIVE.includes(r.status)).length;
+        const v2urgent    = requests.filter(r => r.priority === 'urgent' && OPEN.includes(r.status)).length;
 
-        $('v2-pending').textContent   = pending;
-        $('v2-proposing').textContent = proposing;
-        $('v2-active').textContent    = active;
-        $('v2-urgent').textContent    = urgent;
+        // v2 バナーを更新
+        $('v2-pending').textContent   = v2pending;
+        $('v2-proposing').textContent = v2proposing;
+        $('v2-active').textContent    = v2active;
+        $('v2-urgent').textContent    = v2urgent;
+
+        // ── Phase E-1: 既存の上部 KPI カードも v2 リアルデータで上書き ──
+        // 失敗時は renderKPIs() の結果（モック値）がそのまま残るのでフォールバック
+        const totalActive = v2pending + v2proposing + v2active;  // 進行中案件（OPEN 全体）
+        const inFourteenDays = requests.filter(r => {
+          if (!OPEN.includes(r.status)) return false;
+          if (!r.start_at) return false;
+          const diff = (new Date(r.start_at).getTime() - Date.now()) / 86400000;
+          return diff >= 0 && diff <= 14;
+        }).length;
+        const proposedToFacility = proposals.filter(p => p.status === 'proposed_to_facility').length;
+
+        const setKpiValue = (id, value, unit) => {
+          const el = $(id);
+          if (el) el.innerHTML = `${value}<em>${unit}</em>`;
+        };
+        const setKpiSub = (id, txt) => {
+          const el = $(id);
+          if (el) el.textContent = txt;
+        };
+
+        setKpiValue('kpiActive',  totalActive,        '件');
+        setKpiSub  ('kpiActiveSub',  `受付${v2pending}・提案${v2proposing}・進行${v2active}`);
+        setKpiValue('kpiPending', proposedToFacility, '名');
+        setKpiSub  ('kpiPendingSub', proposals.length ? `要対応の提案` : `提案データを取得中`);
+        setKpiValue('kpiSoon',    inFourteenDays,     '件');
+        setKpiSub  ('kpiSoonSub',    `14日以内に開始予定`);
+        setKpiValue('kpiUrgent',  v2urgent,           '件');
+        setKpiSub  ('kpiUrgentSub',  `priority=urgent`);
 
         const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-        const src = data.source === 'mock' ? '（モック）' : '';
-        setMsg(`v2 API より取得：${ts} 時点 / 総依頼数 ${requests.length}件${src}`);
+        const src = reqData.source === 'mock' ? '（モック）' : '';
+        const propNote = (propRes && !propRes.ok) ? ' / 提案取得失敗' : '';
+        setMsg(`v2 API より取得：${ts} 時点 / 依頼 ${requests.length}件 / 提案 ${proposals.length}件${src}${propNote}`);
       } catch (e) {
         console.error('v2 KPI 取得失敗:', e);
         setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+        // KPIカードは renderKPIs() の結果（モック値）がそのまま残るためフォールバック完了
       } finally {
         if (btn) btn.disabled = false;
       }
@@ -2691,6 +2658,190 @@
       if (r) r.addEventListener('click', loadV2Activity);
     }
 
+    /* ─── v2 リアル問い合わせ・受付（Phase F） ─────────
+       /api/v2/requests から status in [draft, submitted] の依頼を取得し、
+       問い合わせセクションに表示。draft 状態の依頼は「提出する」ボタンで
+       PATCH /api/v2/requests/:id { status:'submitted' } を送信できる。 */
+    const v2InqState = { rows: [], filter: 'all', loaded: false };
+
+    async function loadV2Inquiries() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2InquiriesBody');
+      const msgEl = $('v2InquiriesMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2InquiriesRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないため問い合わせを取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        // requests-v2 は status フィルターを1値だけ受けるため、draft と submitted を
+        // 1リクエストでまとめて取りたい場合は status を渡さず、クライアント側で絞る。
+        const res = await fetch('/api/v2/requests?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        const all = Array.isArray(data.requests) ? data.requests : [];
+        v2InqState.rows = all.filter(r => r.status === 'draft' || r.status === 'submitted');
+        v2InqState.loaded = true;
+        renderV2InquiriesTable();
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const draft = v2InqState.rows.filter(r => r.status === 'draft').length;
+        const submitted = v2InqState.rows.filter(r => r.status === 'submitted').length;
+        setMsg(`v2 API より取得：${ts} 時点 / 下書き ${draft}件 / 受付 ${submitted}件${data.source === 'mock' ? '（モック）' : ''}`);
+      } catch (e) {
+        console.error('v2 問い合わせ取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2InquiriesTable() {
+      const body = document.getElementById('v2InquiriesBody');
+      if (!body) return;
+      const f = v2InqState.filter;
+      const rows = (v2InqState.rows || []).filter(r => {
+        if (f === 'draft')     return r.status === 'draft';
+        if (f === 'submitted') return r.status === 'submitted';
+        return true;
+      }).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+
+      if (!rows.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当する問い合わせはありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${d.getFullYear()}/${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)}`;
+      };
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>受付番号</th>
+              <th>タイトル</th>
+              <th>職種</th>
+              <th class="num">人数</th>
+              <th>ステータス</th>
+              <th>受付日</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const isDraft = r.status === 'draft';
+              return `
+                <tr>
+                  <td><span class="v2-cases-table__num">${esc(r.request_number || '')}</span></td>
+                  <td><span class="v2-cases-table__title">${esc(r.title || '(タイトルなし)')}</span></td>
+                  <td>${esc(V2_PROFESSION_LABEL[r.profession_type] || r.profession_type || '—')}</td>
+                  <td class="num">${r.headcount || 1}</td>
+                  <td><span class="v2-cases-st v2-cases-st--${esc(r.status)}">${esc(V2_STATUS_LABEL[r.status] || r.status)}</span></td>
+                  <td>${esc(fmt(r.created_at))}</td>
+                  <td>
+                    ${isDraft
+                      ? `<button class="v2-banner__refresh v2-inq-submit" data-id="${esc(r.id)}" type="button" style="font-size:11px;padding:4px 10px;">提出する</button>`
+                      : '<span class="v2-act-meta">提出済み</span>'}
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      // 「提出する」ボタンのイベントバインド
+      body.querySelectorAll('.v2-inq-submit').forEach(btn => {
+        btn.addEventListener('click', () => submitV2Inquiry(btn.dataset.id, btn));
+      });
+    }
+
+    async function submitV2Inquiry(id, btn) {
+      if (!id) return;
+      const ok = window.confirm('この依頼を「受付」状態として正式に提出します。よろしいですか？');
+      if (!ok) return;
+      btn.disabled = true;
+      btn.textContent = '提出中…';
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        if (typeof toast === 'function') toast('セッションが見つかりません', 'error');
+        btn.disabled = false; btn.textContent = '提出する';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v2/requests/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'submitted' }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        if (typeof toast === 'function') toast('依頼を受付状態に提出しました', 'success');
+        // ローカル状態を更新して再描画
+        const idx = v2InqState.rows.findIndex(r => r.id === id);
+        if (idx >= 0) v2InqState.rows[idx] = { ...v2InqState.rows[idx], status: 'submitted' };
+        renderV2InquiriesTable();
+      } catch (e) {
+        console.error('問い合わせ提出失敗:', e);
+        if (typeof toast === 'function') toast(`提出に失敗しました：${e.message}`, 'error');
+        btn.disabled = false; btn.textContent = '提出する';
+      }
+    }
+
+    function bindV2InquiriesControls() {
+      if (bindV2InquiriesControls._bound) return;
+      bindV2InquiriesControls._bound = true;
+      const f = document.getElementById('v2InquiriesFilter');
+      const r = document.getElementById('v2InquiriesRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2InqState.filter = f.value; renderV2InquiriesTable(); });
+      if (r) r.addEventListener('click', loadV2Inquiries);
+    }
+
     function getV2MockActivity() {
       const now = Date.now();
       const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
@@ -2950,38 +3101,52 @@
       });
     }
 
-    // ヘッダークリックでソート切り替え
-    document.getElementById('casesTable').addEventListener('click', e => {
-      const th = e.target.closest('th[data-sort]');
-      if (!th) return;
-      const key = th.dataset.sort;
-      if (caseSortBy === key) { caseSortDir = -caseSortDir; }
-      else { caseSortBy = key; caseSortDir = 1; }
-      renderCases();
-    });
+    // Phase E-2 で案件一覧の DOM を v2 に置き換え済み。
+    // 旧 CASES テーブル / フィルター / btnOpenRequest 要素は削除されたため、
+    // 関連リスナーは要素が存在する場合のみバインドする（後方互換）
+    const _casesTable = document.getElementById('casesTable');
+    if (_casesTable) {
+      _casesTable.addEventListener('click', e => {
+        const th = e.target.closest('th[data-sort]');
+        if (!th) return;
+        const key = th.dataset.sort;
+        if (caseSortBy === key) { caseSortDir = -caseSortDir; }
+        else { caseSortBy = key; caseSortDir = 1; }
+        renderCases();
+      });
+    }
 
     ['filterStatus','filterPriority','filterProfession','filterSearch'].forEach(id => {
-      document.getElementById(id).addEventListener('input', renderCases);
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', renderCases);
     });
-    document.getElementById('btnOpenRequest').addEventListener('click', openRequestModal);
+    const _btnOpenRequest = document.getElementById('btnOpenRequest');
+    if (_btnOpenRequest) _btnOpenRequest.addEventListener('click', openRequestModal);
 
     /* ─── 候補者確認 ────────────────────────────── */
     let currentCandTab = 'pending';
 
-    document.getElementById('candTabBar').addEventListener('click', e => {
-      const tab = e.target.closest('.tab-item');
-      if (!tab) return;
-      document.querySelectorAll('#candTabBar .tab-item').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentCandTab = tab.dataset.tab;
-      renderCandidates();
-    });
+    // Phase E-3 で candTabBar / candGrid を削除済み。要素がある場合のみバインドする。
+    const _candTabBar = document.getElementById('candTabBar');
+    if (_candTabBar) {
+      _candTabBar.addEventListener('click', e => {
+        const tab = e.target.closest('.tab-item');
+        if (!tab) return;
+        document.querySelectorAll('#candTabBar .tab-item').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCandTab = tab.dataset.tab;
+        renderCandidates();
+      });
+    }
 
     function renderCandidates() {
       const tab    = currentCandTab;
       const list   = CANDIDATES[tab] || [];
       const isPending = tab === 'pending';
-      document.getElementById('candGrid').innerHTML = list.map((c, i) => `
+      // Phase E-3 で candGrid を削除したため要素が無ければ何もしない
+      const _grid = document.getElementById('candGrid');
+      if (!_grid) return;
+      _grid.innerHTML = list.map((c, i) => `
         <div class="cand-card" style="cursor:pointer;" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">
           <div class="cand-card__head">
             <span class="cand-card__num">${s(c.num)}</span>
@@ -3049,7 +3214,10 @@
 
     /* ─── 問い合わせ ────────────────────────────── */
     function renderInquiries() {
-      document.getElementById('inquiriesTbody').innerHTML = INQUIRIES.map(q => `
+      // Phase F で inquiriesTbody を削除済み。要素が無ければ no-op
+      const _tbody = document.getElementById('inquiriesTbody');
+      if (!_tbody) return;
+      _tbody.innerHTML = INQUIRIES.map(q => `
         <tr>
           <td><span class="td-mono">${q.num}</span></td>
           <td class="td-primary">${q.content}</td>
@@ -3115,22 +3283,122 @@
       }
     }
 
-    /* ─── 新規依頼モーダル ──────────────────────── */
+    /* ─── 新規依頼モーダル（v2 API 接続） ────────────
+       POST /api/v2/requests を呼び、自組織の staffing_requests を作成する。
+       organization_id は sessionStorage の mitas_org から取得。
+       status='submitted' で送り、即座に「受付」状態として登録する。 */
     function openRequestModal() {
       document.getElementById('requestModal').classList.add('open');
       document.getElementById('requestFormWrap').style.display = 'block';
       document.getElementById('requestSent').classList.remove('show');
+      // フォーム値を毎回クリア
+      ['reqTitle','reqHeadcount','reqStartDate','reqDeadline','reqRateMin','reqRateMax','reqNote'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = (id === 'reqHeadcount') ? '1' : '';
+      });
+      const prof = document.getElementById('reqProfession');   if (prof) prof.value = '';
+      const sft  = document.getElementById('reqShiftType');    if (sft)  sft.value  = 'regular_shift';
+      const urg  = document.getElementById('reqUrgency');      if (urg)  urg.value  = 'medium';
     }
     function closeRequestModal() {
       document.getElementById('requestModal').classList.remove('open');
     }
-    function submitRequest() {
-      const prof     = document.getElementById('reqProfession').value;
-      const deadline = document.getElementById('reqDeadline').value;
-      if (!prof || !deadline) { toast('職種と充足期限を入力してください。', 'error'); return; }
-      document.getElementById('requestFormWrap').style.display = 'none';
-      document.getElementById('requestSent').classList.add('show');
+
+    async function submitRequest() {
+      const $ = (id) => document.getElementById(id);
+      const title    = ($('reqTitle')?.value || '').trim();
+      const prof     = $('reqProfession')?.value || '';
+      const headcnt  = parseInt($('reqHeadcount')?.value || '1', 10) || 1;
+      const shift    = $('reqShiftType')?.value || 'regular_shift';
+      const start    = $('reqStartDate')?.value || '';
+      const deadline = $('reqDeadline')?.value || '';
+      const urgency  = $('reqUrgency')?.value || 'medium';
+      const rateMin  = $('reqRateMin')?.value || '';
+      const rateMax  = $('reqRateMax')?.value || '';
+      const note     = ($('reqNote')?.value || '').trim();
+
+      // バリデーション
+      if (!title)    { toast('依頼タイトルを入力してください。', 'error'); return; }
+      if (!prof)     { toast('職種を選択してください。', 'error'); return; }
+      if (!deadline) { toast('充足期限を入力してください。', 'error'); return; }
+
+      // 組織IDを sessionStorage から取得
+      let organization_id = '';
+      try {
+        const org = JSON.parse(sessionStorage.getItem('mitas_org') || '{}');
+        organization_id = org.id || '';
+      } catch (_) { /* noop */ }
+
+      if (!organization_id) {
+        toast('組織情報が取得できません。再ログインしてください。', 'error');
+        return;
+      }
+
+      // セッショントークン取得
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        toast('セッションが見つかりません。再ログインしてください。', 'error');
+        return;
+      }
+
+      // 送信ボタンを無効化
+      const submitBtn = document.querySelector('#requestFormWrap .btn-submit');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '送信中…'; }
+
+      // ペイロード組み立て（time部分はローカルタイム想定。0900 を付加して ISO に）
+      const toIso = (d, hour) => d ? new Date(`${d}T${hour}:00`).toISOString() : null;
+      const payload = {
+        organization_id,
+        title,
+        description: note || null,
+        profession_type: prof,
+        headcount: headcnt,
+        shift_type: shift,
+        start_at: toIso(start, '09:00'),
+        end_at:   toIso(deadline, '23:59'),
+        hourly_rate_min: rateMin ? parseInt(rateMin, 10) : null,
+        hourly_rate_max: rateMax ? parseInt(rateMax, 10) : null,
+        priority: urgency,
+        status: 'submitted',
+      };
+
+      try {
+        const res = await fetch('/api/v2/requests', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        const data = await res.json();
+        const created = data.request || {};
+        toast(`依頼を作成しました（${created.request_number || '受付済'}）`, 'success');
+
+        // 成功画面を表示
+        $('requestFormWrap').style.display = 'none';
+        $('requestSent').classList.add('show');
+
+        // 既存の v2 一覧を再取得して即時反映
+        if (typeof loadV2Cases === 'function')     loadV2Cases();
+        if (typeof loadV2Inquiries === 'function') loadV2Inquiries();
+        if (typeof loadV2Kpis === 'function')      loadV2Kpis();
+      } catch (e) {
+        console.error('依頼作成失敗:', e);
+        toast(`依頼の作成に失敗しました：${e.message}`, 'error');
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '依頼を送信'; }
+      }
     }
+
     document.getElementById('requestModal').addEventListener('click', e => {
       if (e.target === document.getElementById('requestModal')) closeRequestModal();
     });
@@ -3307,21 +3575,24 @@
     showSection = function(id) {
       _origShowSection(id);
       if (id === 'cases') {
-        renderCases();
-        // v2 リアル案件（Phase B）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        // 案件一覧（v2 リアル）：初回コントロールバインド＋初回ロード／既ロードなら再描画
         bindV2CasesControls();
         if (!v2State.loaded) loadV2Cases();
         else                 renderV2CasesTable();
       }
       if (id === 'candidates') {
-        renderCandidates();
-        // v2 リアル提案（Phase C）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        // 候補者・提案一覧（v2 リアル）：初回コントロールバインド＋初回ロード／既ロードなら再描画
         bindV2ProposalsControls();
         if (!v2PropState.loaded) loadV2Proposals();
         else                     renderV2ProposalsTable();
       }
       if (id === 'tasks')      renderTasks();
-      if (id === 'inquiries')  renderInquiries();
+      if (id === 'inquiries') {
+        // 問い合わせ・受付一覧（v2 リアル）：初回コントロールバインド＋初回ロード
+        bindV2InquiriesControls();
+        if (!v2InqState.loaded) loadV2Inquiries();
+        else                    renderV2InquiriesTable();
+      }
       if (id === 'settings')   initSettings();
       // モバイル時はセクション切り替えでサイドバーを閉じる
       sidebar.classList.remove('open');
