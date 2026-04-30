@@ -486,8 +486,57 @@
       font-weight: 500;
     }
 
+    /* ── 候補者フィルター ── */
+    .candidate-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .candidate-filter__search {
+      flex: 1 1 200px;
+      min-width: 160px;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+    .candidate-filter__select {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .candidate-filter__check {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--gray-700);
+      cursor: pointer;
+      user-select: none;
+    }
+    .candidate-filter__check input { cursor: pointer; }
+
+    /* ── スコアバッジ ── */
+    .candidate-card__score {
+      font-variant-numeric: tabular-nums;
+      min-width: 28px;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .badge--score-high { background: rgba(16,185,129,0.15);  color: #047857; }
+    .badge--score-mid  { background: rgba(14,165,233,0.15);  color: var(--teal); }
+    .badge--score-low  { background: rgba(245,158,11,0.15);  color: var(--amber); }
+    .badge--score-none { background: var(--gray-100);        color: var(--gray-500); }
+
     /* ── 候補者カード ── */
-    .candidate-list { display: grid; gap: 8px; }
+    .candidate-list {
+      display: grid;
+      gap: 8px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
     .candidate-card {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -917,7 +966,17 @@
     requests: [],
     selectedId: null,
     selectedRequest: null,   // 選択中の依頼の詳細（GET /api/v2/requests/:id の結果）
-    isPatching: false,       // 多重送信防止
+    selectedCandidates: [],
+    selectedProposals: [],
+    candidateFilter: {       // 候補者リストのフィルター
+      keyword: '',
+      minYears: 0,
+      minScore: 0,
+      hideProposed: false,
+    },
+    proposalContext: null,   // モーダル表示中の { worker, request }
+    isPatching: false,       // 状態遷移の多重送信防止
+    isPosting: false,        // 提案POST の多重送信防止
   };
 
   // ─── 認証確認＋初期化 ───
@@ -1064,6 +1123,12 @@
 
   // ─── 依頼の選択 → 詳細取得 → 描画 ───
   async function selectRequest(id) {
+    // 別の依頼に切り替わる場合は候補者フィルターと選択中データをリセット
+    if (state.selectedId !== id) {
+      state.candidateFilter = { keyword: '', minYears: 0, minScore: 0, hideProposed: false };
+      state.selectedCandidates = [];
+      state.selectedProposals = [];
+    }
     state.selectedId = id;
     document.querySelectorAll('.request-card').forEach(c => {
       c.classList.toggle('is-selected', c.dataset.id === id);
@@ -1476,6 +1541,83 @@
     `;
   }
 
+  // ─── マッチスコア計算（0〜100点） ───
+  // 評価軸：
+  //   1. 専門領域の一致     0〜35点（primary一致=35 / sub含む=25 / specialty未指定=10 / 不一致=0）
+  //   2. 経験年数           0〜30点（10年以上=30 / 5年以上=22 / 3年以上=15 / 1年以上=8 / 0=0）
+  //   3. 即時対応可能       0〜20点（is_available_for_offers=true は前段で抽出済みなので常に20）
+  //   4. 勤務地情報の整備   0〜15点（希望地登録=10 / 現在地登録=5）
+  // 戻り値：{ score: number(0-100), breakdown: { specialty, experience, availability, region }, reasons: string[] }
+  function calcMatchScore(candidate, request) {
+    const breakdown = { specialty: 0, experience: 0, availability: 20, region: 0 };
+    const reasons = [];
+
+    // 1. 専門領域
+    const reqSpec = (request && request.specialty || '').trim();
+    const primary = (candidate.primary_specialty || '').trim();
+    const subs = Array.isArray(candidate.sub_specialties) ? candidate.sub_specialties : [];
+    if (reqSpec) {
+      if (primary && primary === reqSpec) {
+        breakdown.specialty = 35;
+        reasons.push(`専門「${primary}」が一致`);
+      } else if (subs.some(s => (s || '').trim() === reqSpec)) {
+        breakdown.specialty = 25;
+        reasons.push(`サブ専門「${reqSpec}」を保有`);
+      } else {
+        breakdown.specialty = 0;
+      }
+    } else {
+      // 依頼側で specialty 未指定の場合は職種一致で十分とみなして部分点
+      breakdown.specialty = 10;
+    }
+
+    // 2. 経験年数
+    const yrs = Number(candidate.years_experience);
+    if (Number.isFinite(yrs)) {
+      if (yrs >= 10)      { breakdown.experience = 30; reasons.push(`経験 ${yrs}年（ベテラン）`); }
+      else if (yrs >= 5)  { breakdown.experience = 22; reasons.push(`経験 ${yrs}年`); }
+      else if (yrs >= 3)  { breakdown.experience = 15; reasons.push(`経験 ${yrs}年`); }
+      else if (yrs >= 1)  { breakdown.experience = 8;  reasons.push(`経験 ${yrs}年`); }
+      else                { breakdown.experience = 0; }
+    }
+
+    // 3. 即時対応（抽出条件として is_available_for_offers=true を満たすので常に加点）
+    reasons.push('オファー受付中');
+
+    // 4. 勤務地情報
+    const desired = Array.isArray(candidate.desired_prefectures) ? candidate.desired_prefectures : [];
+    const cur = (candidate.current_prefecture || '').trim();
+    let regionPts = 0;
+    const regionDescs = [];
+    if (desired.length) {
+      regionPts += 10;
+      regionDescs.push(`希望勤務地：${desired.slice(0, 2).join('・')}${desired.length > 2 ? ' ほか' : ''}`);
+    }
+    if (cur) {
+      regionPts += 5;
+      regionDescs.push(`現在地：${cur}`);
+    }
+    breakdown.region = regionPts;
+    if (regionDescs.length) reasons.push(regionDescs.join(' / '));
+
+    const score = breakdown.specialty + breakdown.experience + breakdown.availability + breakdown.region;
+    return { score: Math.min(100, score), breakdown, reasons };
+  }
+
+  // マッチ理由の文字列を組み立て（候補者カード・モーダル両方で使用）
+  function buildMatchReason(candidate, request) {
+    const m = calcMatchScore(candidate, request);
+    return m.reasons.join(' / ');
+  }
+
+  // スコアバッジの色分け（85+/70+/50+/それ以下）
+  function scoreClass(score) {
+    if (score >= 85) return 'badge--score-high';
+    if (score >= 70) return 'badge--score-mid';
+    if (score >= 50) return 'badge--score-low';
+    return 'badge--score-none';
+  }
+
   // ─── 候補者セクションの描画 ───
   function renderCandidatesSection() {
     const container = document.getElementById('candidatesContainer');
@@ -1483,58 +1625,149 @@
     if (!container || !countEl) return;
 
     const candidates = state.selectedCandidates || [];
+    const request = state.selectedRequest || {};
     const proposedIds = new Set((state.selectedProposals || []).map(p => p.worker_id));
-    countEl.textContent = `${candidates.length}名（提案済み ${proposedIds.size}名）`;
 
-    if (!candidates.length) {
-      container.innerHTML = '<div class="placeholder" style="padding: 16px;">該当する候補者は見つかりませんでした</div>';
-      return;
-    }
+    // スコアを付与・降順ソート（同点は経験年数の降順）
+    const scored = candidates.map(c => {
+      const m = calcMatchScore(c, request);
+      return Object.assign({}, c, {
+        _score: m.score,
+        _scoreReasons: m.reasons,
+        _isProposed: proposedIds.has(c.id),
+      });
+    }).sort((a, b) => {
+      if (b._score !== a._score) return b._score - a._score;
+      return (Number(b.years_experience) || 0) - (Number(a.years_experience) || 0);
+    });
+
+    // フィルター適用
+    const f = state.candidateFilter || { keyword: '', minYears: 0, minScore: 0, hideProposed: false };
+    const kw = (f.keyword || '').trim().toLowerCase();
+    const filtered = scored.filter(c => {
+      if (f.hideProposed && c._isProposed) return false;
+      if (f.minYears > 0 && (Number(c.years_experience) || 0) < f.minYears) return false;
+      if (f.minScore > 0 && c._score < f.minScore) return false;
+      if (kw) {
+        const hay = [
+          c.full_name, c.full_name_kana, c.primary_specialty,
+          ...(c.sub_specialties || []),
+          c.current_prefecture, c.current_city,
+          ...(c.desired_prefectures || []),
+        ].filter(Boolean).join(' ').toLowerCase();
+        if (!hay.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    countEl.textContent = `${filtered.length}/${candidates.length}名（提案済み ${proposedIds.size}名）`;
 
     container.innerHTML = `
-      <div class="candidate-list">
-        ${candidates.map(c => {
-          const proposed = proposedIds.has(c.id);
-          const exp = (c.years_experience != null) ? `経験 ${c.years_experience}年` : '経験 未登録';
-          const region = [c.current_prefecture, c.current_city].filter(Boolean).join(' ') || '—';
-          const specialty = c.primary_specialty || '—';
-          return `
-            <div class="candidate-card">
-              <div class="candidate-card__main">
-                <div class="candidate-card__name">
-                  ${escapeHtml(c.full_name || '(無名)')}
-                  ${proposed ? '<span class="badge badge--low">提案済み</span>' : ''}
-                </div>
-                <div class="candidate-card__meta">
-                  <span><strong>${escapeHtml(specialty)}</strong></span>
-                  <span>${escapeHtml(exp)}</span>
-                  <span>${escapeHtml(region)}</span>
-                </div>
-              </div>
-              <div class="candidate-card__action">
-                <button class="action-btn ${proposed ? 'action-btn--ghost' : 'action-btn--primary'}"
-                        data-worker-id="${escapeHtml(c.id)}"
-                        ${proposed ? 'disabled' : ''}>
-                  ${proposed ? '提案済み' : '提案する'}
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('')}
+      <div class="candidate-filter">
+        <input class="field__input candidate-filter__search" id="candKeyword"
+               placeholder="名前・専門・地域で検索" value="${escapeHtml(f.keyword || '')}">
+        <select class="field__input candidate-filter__select" id="candMinYears">
+          <option value="0"  ${f.minYears === 0  ? 'selected' : ''}>経験 指定なし</option>
+          <option value="1"  ${f.minYears === 1  ? 'selected' : ''}>経験 1年以上</option>
+          <option value="3"  ${f.minYears === 3  ? 'selected' : ''}>経験 3年以上</option>
+          <option value="5"  ${f.minYears === 5  ? 'selected' : ''}>経験 5年以上</option>
+          <option value="10" ${f.minYears === 10 ? 'selected' : ''}>経験 10年以上</option>
+        </select>
+        <select class="field__input candidate-filter__select" id="candMinScore">
+          <option value="0"  ${f.minScore === 0  ? 'selected' : ''}>スコア 全件</option>
+          <option value="50" ${f.minScore === 50 ? 'selected' : ''}>スコア 50+</option>
+          <option value="70" ${f.minScore === 70 ? 'selected' : ''}>スコア 70+</option>
+          <option value="85" ${f.minScore === 85 ? 'selected' : ''}>スコア 85+</option>
+        </select>
+        <label class="candidate-filter__check">
+          <input type="checkbox" id="candHideProposed" ${f.hideProposed ? 'checked' : ''}>
+          <span>提案済みを隠す</span>
+        </label>
       </div>
+
+      ${filtered.length === 0 ? `
+        <div class="placeholder" style="padding: 16px;">条件に一致する候補者はいません</div>
+      ` : `
+        <div class="candidate-list">
+          ${filtered.map(c => renderCandidateCard(c)).join('')}
+        </div>
+      `}
     `;
 
-    // ボタンのバインド
+    // フィルター UI のイベントバインド
+    const onChange = () => {
+      state.candidateFilter = {
+        keyword:      document.getElementById('candKeyword').value,
+        minYears:     parseInt(document.getElementById('candMinYears').value, 10) || 0,
+        minScore:     parseInt(document.getElementById('candMinScore').value, 10) || 0,
+        hideProposed: document.getElementById('candHideProposed').checked,
+      };
+      renderCandidatesSection();
+    };
+    const kwEl = document.getElementById('candKeyword');
+    if (kwEl) {
+      kwEl.addEventListener('input', debounce(onChange, 200));
+      // 検索時にフォーカスを保つ
+      if (f.keyword) {
+        kwEl.focus();
+        kwEl.setSelectionRange(kwEl.value.length, kwEl.value.length);
+      }
+    }
+    document.getElementById('candMinYears')?.addEventListener('change', onChange);
+    document.getElementById('candMinScore')?.addEventListener('change', onChange);
+    document.getElementById('candHideProposed')?.addEventListener('change', onChange);
+
+    // 提案ボタンのバインド
     container.querySelectorAll('.candidate-card .action-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         if (btn.disabled) return;
         const wid = btn.dataset.workerId;
-        const worker = (state.selectedCandidates || []).find(c => c.id === wid);
+        const worker = scored.find(c => c.id === wid);
         if (worker && state.selectedRequest) {
           openProposalModal(worker, state.selectedRequest);
         }
       });
     });
+  }
+
+  function renderCandidateCard(c) {
+    const proposed = c._isProposed;
+    const exp = (c.years_experience != null) ? `経験 ${c.years_experience}年` : '経験 未登録';
+    const region = [c.current_prefecture, c.current_city].filter(Boolean).join(' ') || '—';
+    const specialty = c.primary_specialty || '—';
+    const score = c._score;
+    return `
+      <div class="candidate-card">
+        <div class="candidate-card__main">
+          <div class="candidate-card__name">
+            <span class="candidate-card__score badge ${scoreClass(score)}">${score}</span>
+            ${escapeHtml(c.full_name || '(無名)')}
+            ${proposed ? '<span class="badge badge--low">提案済み</span>' : ''}
+          </div>
+          <div class="candidate-card__meta">
+            <span><strong>${escapeHtml(specialty)}</strong></span>
+            <span>${escapeHtml(exp)}</span>
+            <span>${escapeHtml(region)}</span>
+          </div>
+        </div>
+        <div class="candidate-card__action">
+          <button class="action-btn ${proposed ? 'action-btn--ghost' : 'action-btn--primary'}"
+                  data-worker-id="${escapeHtml(c.id)}"
+                  ${proposed ? 'disabled' : ''}>
+            ${proposed ? '提案済み' : '提案する'}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // 簡易 debounce（フィルター入力用）
+  function debounce(fn, ms) {
+    let t = null;
+    return function (...args) {
+      if (t) clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), ms);
+    };
   }
 
   // ─── 提案モーダルの開閉 ───
@@ -1545,11 +1778,14 @@
     document.getElementById('proposalModalSubtitle').textContent =
       `依頼番号 ${request.request_number || ''} / ${request.title || ''}`;
 
+    // マッチスコアと理由を計算して初期値に反映
+    const match = calcMatchScore(worker, request);
+
     // 入力初期値
     document.getElementById('propRate').value = request.hourly_rate_max || request.hourly_rate_min || '';
-    document.getElementById('propScore').value = '';
+    document.getElementById('propScore').value = match.score.toFixed(1);
     document.getElementById('propExpiry').value = '7';
-    document.getElementById('propReason').value = '';
+    document.getElementById('propReason').value = match.reasons.join(' / ');
 
     const modal = document.getElementById('proposalModal');
     modal.classList.add('is-open');
