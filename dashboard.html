@@ -1384,6 +1384,33 @@
     .v2-cases-st--cancelled          { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
     .v2-cases-table-wrap { overflow-x: auto; }
 
+    /* ─── v2 提案ステータスバッジ（Phase C） ─── */
+    .v2-prop-st {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .v2-prop-st--created              { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-prop-st--worker_contacted     { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-prop-st--worker_accepted      { background: rgba(16,185,129,0.10); color: #10B981; }
+    .v2-prop-st--worker_declined      { background: rgba(220,38,38,0.10); color: #DC2626; }
+    .v2-prop-st--proposed_to_facility { background: rgba(91,33,182,0.10); color: #6D28D9; font-weight: 700; }
+    .v2-prop-st--facility_accepted    { background: rgba(16,185,129,0.20); color: #047857; }
+    .v2-prop-st--facility_declined    { background: rgba(220,38,38,0.10); color: #DC2626; }
+    .v2-prop-st--withdrawn            { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-prop-st--expired              { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+
+    /* 要対応の行を強調 */
+    .v2-cases-table tr.v2-row-action td {
+      background: rgba(91,33,182,0.04);
+    }
+    .v2-cases-table tr.v2-row-action:hover td {
+      background: rgba(91,33,182,0.08);
+    }
+
   </style>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1675,6 +1702,31 @@
 
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
+
+      <!-- ═════ v2 リアル提案（Phase C：並行表示プレビュー） ═════ -->
+      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="v2 リアル提案">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">
+            v2 リアル提案
+            <span class="v2-banner__pill">PREVIEW</span>
+          </span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2ProposalsFilter">
+              <option value="action">要対応のみ</option>
+              <option value="all">全件</option>
+              <option value="done">対応済み</option>
+            </select>
+            <input class="v2-cases-card__filter" type="text" id="v2ProposalsKeyword"
+                   placeholder="ワーカー名・依頼で検索" style="min-width: 180px;">
+            <button class="v2-banner__refresh" id="v2ProposalsRefreshBtn" type="button">更新</button>
+          </div>
+        </div>
+        <div class="v2-cases-table-wrap" id="v2ProposalsBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2ProposalsMsg">読み込み中…</div>
+      </div>
+
       <div class="tab-bar" id="candTabBar">
         <div class="tab-item active" data-tab="pending">確認待ち<span class="tab-count">3</span></div>
         <div class="tab-item" data-tab="screening">選考中<span class="tab-count">8</span></div>
@@ -2211,6 +2263,186 @@
         });
       }
       if (r) r.addEventListener('click', loadV2Cases);
+    }
+
+    /* ─── v2 リアル提案テーブル（Phase C） ─────────
+       /api/v2/proposals から自組織宛の提案を取得し、状態別に表示。
+       既存の CANDIDATES（モック）パネルとは別領域に並行表示する。
+       proposals_select RLS により facility_admin は自組織宛の提案のみ閲覧可能。 */
+    const V2_PROPOSAL_STATUS_LABEL = {
+      created:              '作成',
+      worker_contacted:     'ワーカー連絡',
+      worker_accepted:      'ワーカー承諾',
+      worker_declined:      'ワーカー辞退',
+      proposed_to_facility: '要対応',
+      facility_accepted:    '承諾済',
+      facility_declined:    '辞退済',
+      withdrawn:            '取り下げ',
+      expired:              '期限切れ',
+    };
+    const V2_PROP_ACTION_REQUIRED = ['proposed_to_facility'];
+    const V2_PROP_DONE = ['facility_accepted','facility_declined','withdrawn','expired'];
+
+    const v2PropState = { rows: [], filter: 'action', keyword: '', loaded: false };
+
+    async function loadV2Proposals() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2ProposalsBody');
+      const msgEl = $('v2ProposalsMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2ProposalsRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないためv2提案を取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v2/proposals?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        v2PropState.rows = Array.isArray(data.proposals) ? data.proposals : [];
+        v2PropState.loaded = true;
+        renderV2ProposalsTable();
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const actionCount = v2PropState.rows.filter(p => V2_PROP_ACTION_REQUIRED.includes(p.status)).length;
+        setMsg(`v2 API より取得：${ts} 時点 / 総件数 ${v2PropState.rows.length}件 / 要対応 ${actionCount}件${data.source === 'mock' ? '（モック）' : ''}`);
+      } catch (e) {
+        console.error('v2 提案取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2ProposalsTable() {
+      const body = document.getElementById('v2ProposalsBody');
+      if (!body) return;
+      const all = v2PropState.rows || [];
+      const f = v2PropState.filter;
+      const kw = (v2PropState.keyword || '').trim().toLowerCase();
+
+      const filtered = all.filter(p => {
+        if (f === 'action' && !V2_PROP_ACTION_REQUIRED.includes(p.status)) return false;
+        if (f === 'done'   && !V2_PROP_DONE.includes(p.status))            return false;
+        if (kw) {
+          const w = (p.worker_profiles && p.worker_profiles.full_name) || '';
+          const r = (p.staffing_requests && p.staffing_requests.title) || '';
+          const num = (p.staffing_requests && p.staffing_requests.request_number) || '';
+          const hay = [w, r, num, p.proposal_number].filter(Boolean).join(' ').toLowerCase();
+          if (!hay.includes(kw)) return false;
+        }
+        return true;
+      }).sort((a, b) => {
+        // 要対応を先頭に、次に作成日時降順
+        const aPri = V2_PROP_ACTION_REQUIRED.includes(a.status) ? 0 : 1;
+        const bPri = V2_PROP_ACTION_REQUIRED.includes(b.status) ? 0 : 1;
+        if (aPri !== bPri) return aPri - bPri;
+        return (b.created_at || '').localeCompare(a.created_at || '');
+      });
+
+      if (!filtered.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当する提案はありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${d.getFullYear()}/${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)}`;
+      };
+      const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>提案番号</th>
+              <th>ワーカー</th>
+              <th>依頼</th>
+              <th class="num">提案時給</th>
+              <th class="num">スコア</th>
+              <th>ステータス</th>
+              <th>期限</th>
+              <th>作成日</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(p => {
+              const wp = p.worker_profiles || {};
+              const sr = p.staffing_requests || {};
+              const isAction = V2_PROP_ACTION_REQUIRED.includes(p.status);
+              return `
+                <tr class="${isAction ? 'v2-row-action' : ''}">
+                  <td><span class="v2-cases-table__num">${esc(p.proposal_number || '')}</span></td>
+                  <td>
+                    <div class="v2-cases-table__title">${esc(wp.full_name || '—')}</div>
+                    <div style="font-size:11px;color:var(--gray-500,#64748B);">
+                      ${esc(V2_PROFESSION_LABEL[wp.profession_type] || wp.profession_type || '')}
+                      ${wp.primary_specialty ? '・' + esc(wp.primary_specialty) : ''}
+                    </div>
+                  </td>
+                  <td>
+                    <div>${esc(sr.title || '—')}</div>
+                    <div style="font-size:11px;color:var(--gray-400,#94A3B8);">${esc(sr.request_number || '')}</div>
+                  </td>
+                  <td class="num">${esc(yen(p.proposed_hourly_rate))}</td>
+                  <td class="num">${p.match_score == null ? '—' : esc(String(p.match_score))}</td>
+                  <td><span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(V2_PROPOSAL_STATUS_LABEL[p.status] || p.status)}</span></td>
+                  <td>${esc(fmt(p.expires_at))}</td>
+                  <td>${esc(fmt(p.created_at))}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function bindV2ProposalsControls() {
+      if (bindV2ProposalsControls._bound) return;
+      bindV2ProposalsControls._bound = true;
+      const onChange = () => renderV2ProposalsTable();
+      const f = document.getElementById('v2ProposalsFilter');
+      const k = document.getElementById('v2ProposalsKeyword');
+      const r = document.getElementById('v2ProposalsRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2PropState.filter = f.value; onChange(); });
+      if (k) {
+        let t = null;
+        k.addEventListener('input', () => {
+          if (t) clearTimeout(t);
+          t = setTimeout(() => { v2PropState.keyword = k.value; onChange(); }, 200);
+        });
+      }
+      if (r) r.addEventListener('click', loadV2Proposals);
     }
 
     /* ─── セクション切り替え ─────────────────────── */
@@ -2820,7 +3052,13 @@
         if (!v2State.loaded) loadV2Cases();
         else                 renderV2CasesTable();
       }
-      if (id === 'candidates') renderCandidates();
+      if (id === 'candidates') {
+        renderCandidates();
+        // v2 リアル提案（Phase C）：初回コントロールバインド＋初回ロード／既ロードなら再描画
+        bindV2ProposalsControls();
+        if (!v2PropState.loaded) loadV2Proposals();
+        else                     renderV2ProposalsTable();
+      }
       if (id === 'tasks')      renderTasks();
       if (id === 'inquiries')  renderInquiries();
       if (id === 'settings')   initSettings();
