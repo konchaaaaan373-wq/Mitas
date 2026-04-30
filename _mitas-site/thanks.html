@@ -12,17 +12,15 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --navy:      #1B3A6B;
-      --navy-deep: #0D2340;
-      --teal:      #0EA5E9;
-      --teal-light:#38BDF8;
-      --gray-500:  #64748B;
-      --gray-100:  #F1F5F9;
-      --white:     #ffffff;
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --white:      #FFFFFF;
     }
     body {
       font-family: 'Noto Sans JP', sans-serif;
-      background: var(--navy-deep);
+      background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 100%);
       color: var(--white);
       min-height: 100vh;
       display: flex;
@@ -31,6 +29,7 @@
       justify-content: center;
       text-align: center;
       padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
     }
     .logo {
       display: flex;
@@ -59,6 +58,7 @@
       width: 32px;
       height: 32px;
       stroke: var(--teal-light);
+      fill: none;
     }
     h1 {
       font-size: clamp(22px, 4vw, 32px);
@@ -69,38 +69,56 @@
     }
     p {
       font-size: 15px;
-      color: rgba(255,255,255,0.62);
+      color: rgba(255,255,255,0.7);
       line-height: 2;
-      max-width: 480px;
-      margin: 0 auto 40px;
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+    .actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--teal);
-      color: var(--white);
       font-size: 15px;
       font-weight: 600;
-      padding: 14px 32px;
+      padding: 14px 28px;
       border-radius: 8px;
       text-decoration: none;
-      transition: background 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.18s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn--primary {
+      background: var(--teal);
+      color: var(--white);
       box-shadow: 0 4px 16px rgba(14,165,233,0.35);
     }
-    .btn:hover {
+    .btn--primary:hover {
       background: var(--teal-light);
       box-shadow: 0 6px 24px rgba(14,165,233,0.45);
     }
+    .btn--ghost {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.32);
+    }
+    .btn--ghost:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.6);
+    }
     .note {
-      margin-top: 24px;
-      font-size: 13px;
+      margin-top: 32px;
+      font-size: 12.5px;
       color: rgba(255,255,255,0.35);
     }
   </style>
 </head>
 <body>
-  <a href="/" class="logo">
+  <a href="/service.html" class="logo">
     <svg viewBox="0 0 24 24" fill="none">
       <path d="M12 3C12 3 5 11.5 5 16C5 19.866 8.134 23 12 23C15.866 23 19 19.866 19 16C19 11.5 12 3 12 3Z"
             stroke="rgba(56,189,248,0.75)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
@@ -110,26 +128,23 @@
   </a>
 
   <div class="icon-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="20 6 9 17 4 12"/>
     </svg>
   </div>
 
   <h1>お問い合わせを<br>受け付けました</h1>
   <p>
-    ご相談内容を確認の上、営業日2日以内にご連絡いたします。<br>
+    ご相談内容を確認のうえ、営業日2日以内に担当者よりご連絡いたします。<br>
     しばらくお待ちください。<br><br>
-    売り込みはありません。<br>
-    状況をお聞きした上で、最適な対応をご案内します。
+    売り込みのご連絡はいたしません。<br>
+    まずは状況をお伺いしたうえで、最適な対応をご案内します。
   </p>
 
-  <a href="/" class="btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="19" y1="12" x2="5" y2="12"/>
-      <polyline points="12 19 5 12 12 5"/>
-    </svg>
-    トップページへ戻る
-  </a>
+  <div class="actions">
+    <a href="/service.html" class="btn btn--primary">サービストップへ戻る</a>
+    <a href="/" class="btn btn--ghost">ポータルトップへ</a>
+  </div>
 
   <p class="note">このページはお問い合わせ完了後に表示されます。</p>
 </body>
