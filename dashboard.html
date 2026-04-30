@@ -1591,7 +1591,7 @@
         <div class="v2-banner__msg" id="v2Msg">読み込み中…</div>
       </div>
 
-      <!-- KPIカード（CASES データから動的算出） -->
+      <!-- KPIカード（v2 リアルデータから動的算出） -->
       <div class="kpi-grid">
         <div class="kpi-card">
           <p class="kpi-card__label">進行中案件</p>
@@ -1814,35 +1814,8 @@
 
   </main>
 
-  <!-- ─── 案件詳細スライドパネル ──────────────────── -->
-  <div class="case-panel-overlay" id="casePanelOverlay" onclick="closeCasePanel()"></div>
-  <aside class="case-panel" id="casePanel" role="dialog" aria-modal="true" aria-label="案件詳細">
-    <div class="case-panel__header">
-      <span class="case-panel__id" id="cpCaseId">-</span>
-      <button class="case-panel__close" onclick="closeCasePanel()" aria-label="閉じる">&#10005;</button>
-    </div>
-    <div class="case-panel__body" id="cpBody">
-      <!-- renderCasePanel() で描画 -->
-    </div>
-    <div class="case-panel__footer">
-      <button class="btn-contact" onclick="contactMitas()">MITAS担当者に連絡する</button>
-      <button class="btn-secondary" onclick="closeCasePanel()">閉じる</button>
-    </div>
-  </aside>
-
-  <!-- ─── 候補者詳細スライドパネル ──────────────────── -->
-  <div class="cand-panel-overlay" id="candPanelOverlay" onclick="closeCandPanel()"></div>
-  <aside class="cand-panel" id="candPanel" role="dialog" aria-modal="true" aria-label="候補者詳細">
-    <div class="cand-panel__header">
-      <span class="cand-panel__num" id="cpCandNum">-</span>
-      <button class="cand-panel__close" onclick="closeCandPanel()" aria-label="閉じる">&#10005;</button>
-    </div>
-    <div class="cand-panel__body" id="cpCandBody"></div>
-    <div class="cand-panel__footer">
-      <button class="btn-contact" id="cpCandAcceptBtn" onclick="acceptFromPanel()">面談を希望する</button>
-      <button class="btn-secondary" onclick="closeCandPanel()">閉じる</button>
-    </div>
-  </aside>
+  <!-- ─── 案件詳細スライドパネル（v2 ベースで再設計予定） ──── -->
+  <!-- 旧 case-panel / cand-panel は CASES / CANDIDATES に依存していたため削除済み -->
 
   <!-- ─── 新規依頼モーダル ────────────────────────── -->
   <div class="modal-overlay" id="requestModal">
@@ -2910,69 +2883,12 @@
       }
     });
 
-    /* ─── アクティビティデータ ──────────────────── */
-    const ACTIVITIES = [
-      { type:'blue',  text:'SC-2026-008 に新しい候補者が提案されました',  caseId:'SC-2026-008', owner:'近藤', tag:'新規提案',  tagClass:'blue',   time:'2時間前'    },
-      { type:'green', text:'SC-2026-005 薬剤師ポジションで内定承諾',       caseId:'SC-2026-005', owner:'近藤', tag:'内定承諾',  tagClass:'green',  time:'昨日 15:32' },
-      { type:'amber', text:'SC-2026-002 精神科医師案件 期限まで10日',      caseId:'SC-2026-002', owner:'近藤', tag:'期限警告',  tagClass:'amber',  time:'昨日 09:00' },
-      { type:'blue',  text:'SC-2026-007 候補者との面談日程を調整中',       caseId:'SC-2026-007', owner:'近藤', tag:'面談調整',  tagClass:'blue',   time:'2日前'      },
-      { type:'red',   text:'SC-2026-004 理学療法士候補1名が辞退',          caseId:'SC-2026-004', owner:'近藤', tag:'辞退',      tagClass:'red',    time:'3日前'      },
-      { type:'gray',  text:'SC-2026-003 ケアマネ要件ヒアリング完了',       caseId:'SC-2026-003', owner:'近藤', tag:'要件確定',  tagClass:'gray',   time:'4日前'      },
-      { type:'green', text:'SC-2026-006 医療事務 候補者3名エントリー',     caseId:'SC-2026-006', owner:'近藤', tag:'候補追加',  tagClass:'green',  time:'5日前'      },
-    ];
-
-    function renderActivity() {
-      const tbody = document.getElementById('activityTbody');
-      if (!tbody) return;
-      tbody.innerHTML = ACTIVITIES.map(a => `
-        <tr>
-          <td style="text-align:center;">
-            <span class="act-dot act-dot--${a.type}"></span>
-          </td>
-          <td>${a.text}</td>
-          <td><span class="td-mono">${a.caseId}</span></td>
-          <td>${a.owner}</td>
-          <td><span class="badge badge--${a.tagClass}">${a.tag}</span></td>
-          <td style="color:var(--gray-400);white-space:nowrap;">${a.time}</td>
-        </tr>
-      `).join('');
-    }
-
-    /* ─── モックデータ ──────────────────────────── */
-    const CASES = [
-      { id:'SC-2026-008', title:'内科系医師 緊急補充',       facility:'さくら病院 本院',             profession:'physician',    profLabel:'医師（内科）',   status:'sourcing',     priority:'urgent',   headcount:1, deadline:'2026-05-15', created_at:'2026-04-01', owner:'近藤', match_total:2, match_interview:0, match_offer:0, note:'施設基準に影響するため至急対応が必要。週4以上・外来可能な医師を希望。' },
-      { id:'SC-2026-007', title:'訪問看護師 複数名採用',     facility:'ひまわり訪問看護ステーション', profession:'nurse',        profLabel:'看護師',         status:'interviewing', priority:'high',     headcount:3, deadline:'2026-05-31', created_at:'2026-03-20', owner:'近藤', match_total:5, match_interview:2, match_offer:0, note:'夜間対応可能な方優遇。車の運転必須。' },
-      { id:'SC-2026-006', title:'医療事務員 正職員',         facility:'さくら病院 分院',             profession:'medical_clerk', profLabel:'医療事務',       status:'sourcing',     priority:'medium',   headcount:1, deadline:'2026-06-30', created_at:'2026-03-15', owner:'近藤', match_total:3, match_interview:0, match_offer:0, note:'レセプト経験者歓迎。電子カルテはMEDIS-DC対応。' },
-      { id:'SC-2026-005', title:'薬剤師 パート募集',         facility:'さくら調剤薬局',             profession:'pharmacist',   profLabel:'薬剤師',         status:'offer',        priority:'medium',   headcount:1, deadline:'2026-06-15', created_at:'2026-03-10', owner:'近藤', match_total:2, match_interview:1, match_offer:1, note:'週2〜3日から可。在宅業務経験あれば優遇。' },
-      { id:'SC-2026-004', title:'理学療法士 増員',           facility:'リハビリテーション病院',     profession:'therapist',    profLabel:'理学療法士',     status:'interviewing', priority:'high',     headcount:2, deadline:'2026-05-20', created_at:'2026-03-05', owner:'近藤', match_total:4, match_interview:1, match_offer:0, note:'整形・神経リハビリいずれも歓迎。日勤のみ可。' },
-      { id:'SC-2026-003', title:'ケアマネジャー 専任',       facility:'みらい介護センター',         profession:'care_manager', profLabel:'ケアマネジャー', status:'scoping',      priority:'medium',   headcount:1, deadline:'2026-07-01', created_at:'2026-02-28', owner:'近藤', match_total:0, match_interview:0, match_offer:0, note:'' },
-      { id:'SC-2026-002', title:'精神科専門医 非常勤',       facility:'こころのクリニック',         profession:'physician',    profLabel:'医師（精神科）', status:'sourcing',     priority:'critical', headcount:1, deadline:'2026-05-10', created_at:'2026-02-20', owner:'近藤', match_total:1, match_interview:0, match_offer:0, note:'月4〜8回程度。精神科専門医資格必須。' },
-      { id:'SC-2026-001', title:'介護福祉士 夜勤対応可',     facility:'しおかぜ特養',               profession:'care_worker',  profLabel:'介護福祉士',     status:'intake',       priority:'low',      headcount:2, deadline:'2026-08-01', created_at:'2026-02-10', owner:'近藤', match_total:0, match_interview:0, match_offer:0, note:'夜勤2〜4回/月希望。介護福祉士資格必須。' },
-    ];
-
-    const CANDIDATES = {
-      pending: [
-        { num:'CAND-047', prof:'看護師', detail:'経験8年・急性期病棟・夜勤可', caseId:'SC-2026-007', caseTitle:'訪問看護師 複数名採用', date:'4月25日' },
-        { num:'CAND-046', prof:'医師（内科）', detail:'経験12年・内科・在宅医療経験あり', caseId:'SC-2026-008', caseTitle:'内科系医師 緊急補充', date:'4月24日' },
-        { num:'CAND-045', prof:'医師（精神科）', detail:'経験6年・精神科専門医資格あり', caseId:'SC-2026-002', caseTitle:'精神科専門医 非常勤', date:'4月23日' },
-      ],
-      screening: [
-        { num:'CAND-044', prof:'理学療法士', detail:'経験5年・整形外科リハビリ専門', caseId:'SC-2026-004', caseTitle:'理学療法士 増員', date:'4月20日' },
-        { num:'CAND-043', prof:'理学療法士', detail:'経験3年・神経リハビリ', caseId:'SC-2026-004', caseTitle:'理学療法士 増員', date:'4月20日' },
-        { num:'CAND-042', prof:'薬剤師', detail:'経験7年・調剤薬局・在宅業務経験', caseId:'SC-2026-005', caseTitle:'薬剤師 パート募集', date:'4月18日' },
-        { num:'CAND-041', prof:'看護師', detail:'経験10年・訪問看護4年', caseId:'SC-2026-007', caseTitle:'訪問看護師 複数名採用', date:'4月17日' },
-        { num:'CAND-040', prof:'看護師', detail:'経験5年・地域包括ケア経験', caseId:'SC-2026-007', caseTitle:'訪問看護師 複数名採用', date:'4月17日' },
-        { num:'CAND-039', prof:'医療事務', detail:'経験3年・電子カルテ（NEC）対応可', caseId:'SC-2026-006', caseTitle:'医療事務員 正職員', date:'4月15日' },
-        { num:'CAND-038', prof:'医療事務', detail:'経験6年・レセプト業務経験豊富', caseId:'SC-2026-006', caseTitle:'医療事務員 正職員', date:'4月15日' },
-        { num:'CAND-037', prof:'医療事務', detail:'経験2年・医師事務作業補助経験', caseId:'SC-2026-006', caseTitle:'医療事務員 正職員', date:'4月14日' },
-      ],
-      done: [
-        { num:'CAND-036', prof:'ケアマネジャー', detail:'経験8年・居宅介護支援事業所勤務', caseId:'SC-2026-003', caseTitle:'ケアマネジャー 専任', date:'4月10日' },
-        { num:'CAND-035', prof:'介護福祉士', detail:'経験4年・特養夜勤経験3年', caseId:'SC-2026-001', caseTitle:'介護福祉士 夜勤対応可', date:'4月8日' },
-        { num:'CAND-034', prof:'看護師', detail:'経験15年・管理職経験あり', caseId:'SC-2026-007', caseTitle:'訪問看護師 複数名採用', date:'4月5日' },
-      ],
-    };
-
+    /* ─── タスクは現在 LocalStorage ベースで残置（v2 化未実装） ───
+       Phase E〜F で CASES / CANDIDATES / ACTIVITIES / INQUIRIES とその
+       関連描画関数（renderCases / renderCandidates / renderActivity /
+       renderInquiries）および付随定数（STATUS_LABEL / STATUS_CLS /
+       PRIORITY_LABEL / INQ_STATUS / INQ_CLS / PRIORITY_SORT /
+       STATUS_SORT / fmtDeadline / deadlineCls）はすべて削除。 */
     let TASKS = [
       { id:1, text:'SC-2026-008: 山本様のプロフィール詳細を確認する',   due:'本日中', done:false },
       { id:2, text:'SC-2026-007: 面談日程候補（3案）を担当者に送付',   due:'本日中', done:false },
@@ -2982,204 +2898,21 @@
     ];
     let taskIdSeq = 6;
 
-    const INQUIRIES = [
-      { num:'INQ-2026-012', content:'看護師増員に関する相談', prof:'看護師',         status:'converted', caseId:'SC-2026-007', date:'2026-03-20' },
-      { num:'INQ-2026-011', content:'内科医師の緊急確保について', prof:'医師',       status:'converted', caseId:'SC-2026-008', date:'2026-04-01' },
-      { num:'INQ-2026-010', content:'医療事務の採用計画について', prof:'医療事務',   status:'converted', caseId:'SC-2026-006', date:'2026-03-15' },
-      { num:'INQ-2026-009', content:'薬剤師のパート採用',         prof:'薬剤師',     status:'converted', caseId:'SC-2026-005', date:'2026-03-10' },
-      { num:'INQ-2026-008', content:'精神科医の非常勤確保',       prof:'医師',       status:'converted', caseId:'SC-2026-002', date:'2026-02-20' },
-    ];
-
-    /* ─── ステータス・優先度ラベル ───────────────── */
-    const STATUS_LABEL = { intake:'受付', scoping:'要件整理', sourcing:'候補者選定', interviewing:'面談中', offer:'内定提案', placed:'充足済', on_hold:'保留中' };
-    const STATUS_CLS   = { intake:'blue', scoping:'purple', sourcing:'amber', interviewing:'orange', offer:'green', placed:'green', on_hold:'gray' };
-    const PRIORITY_LABEL = { critical:'最緊急', urgent:'緊急', high:'高', medium:'中', low:'低' };
-    const INQ_STATUS = { converted:'案件化済', reviewing:'確認中', new:'新規' };
-    const INQ_CLS    = { converted:'green', reviewing:'amber', new:'blue' };
-
-    function fmtDeadline(iso) {
-      const [,m,d] = iso.split('-');
-      return `${m}/${d}`;
-    }
-    function deadlineCls(iso) {
-      const diff = (new Date(iso) - new Date()) / 86400000;
-      return diff < 0 ? 'overdue' : diff <= 14 ? 'soon' : '';
-    }
-
-    /* ─── KPI動的計算 ──────────────────────────── */
+    /* ─── KPI プレースホルダー表示 ────────────────────
+       v2 KPI 取得（loadV2Kpis）が完了するまでの初期プレースホルダー。
+       Phase E-1 で v2 リアルデータ表示に置き換わる前の一瞬だけ
+       「— / 読み込み中」を表示する。v2 取得失敗時もこのままダッシュ表示が残る。 */
     function renderKPIs() {
-      const activeCases   = CASES.filter(c => !['placed','cancelled'].includes(c.status));
-      const soonCases     = CASES.filter(c => deadlineCls(c.deadline) !== '' && !['placed','cancelled'].includes(c.status));
-      const overdueCases  = CASES.filter(c => deadlineCls(c.deadline) === 'overdue');
-      const urgentCases   = CASES.filter(c => ['critical','urgent'].includes(c.priority) && !['placed','cancelled'].includes(c.status));
-      const pendingCount  = CANDIDATES.pending.length;
-      const screeningCount= CANDIDATES.screening.length;
-
-      const PRIORITY_ORDER = { critical:0, urgent:1, high:2, medium:3, low:4 };
-      const topUrgent = [...urgentCases].sort((a,b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])[0];
-
-      document.getElementById('kpiActive').innerHTML   = `${activeCases.length}<em>件</em>`;
-      document.getElementById('kpiActiveSub').innerHTML= screeningCount
-        ? `<span class="info">${screeningCount}名</span> 選考中`
-        : '選考候補者を待機中';
-
-      document.getElementById('kpiPending').innerHTML   = `${pendingCount}<em>名</em>`;
-      document.getElementById('kpiPendingSub').innerHTML= pendingCount
-        ? `<span class="warn">${pendingCount}名</span> 要確認`
-        : '確認待ちなし';
-
-      document.getElementById('kpiSoon').innerHTML   = `${soonCases.length}<em>件</em>`;
-      document.getElementById('kpiSoonSub').innerHTML= overdueCases.length
-        ? `<span class="down">${overdueCases.length}件</span> 期限超過`
-        : soonCases.length ? '<span class="warn">期限接近</span> 要対応' : '期限に余裕あり';
-
-      document.getElementById('kpiUrgent').innerHTML   = `${urgentCases.length}<em>件</em>`;
-      document.getElementById('kpiUrgentSub').innerHTML= topUrgent
-        ? `<span class="down">${s(topUrgent.title.slice(0, 12))}…</span>`
-        : '緊急案件なし';
-    }
-
-    /* ─── 案件管理（ソート対応） ─────────────────── */
-    const PRIORITY_SORT = { critical:0, urgent:1, high:2, medium:3, low:4 };
-    const STATUS_SORT   = { intake:0, scoping:1, sourcing:2, interviewing:3, offer:4, placed:5, on_hold:6 };
-    let caseSortBy  = 'priority';
-    let caseSortDir = 1;  // 1=昇順, -1=降順
-
-    function renderCases() {
-      const status    = document.getElementById('filterStatus').value;
-      const priority  = document.getElementById('filterPriority').value;
-      const profession= document.getElementById('filterProfession').value;
-      const search    = document.getElementById('filterSearch').value.toLowerCase();
-
-      let filtered = CASES.filter(c =>
-        (!status     || c.status === status) &&
-        (!priority   || c.priority === priority) &&
-        (!profession || c.profession === profession) &&
-        (!search     || c.title.toLowerCase().includes(search) || c.facility.toLowerCase().includes(search))
-      );
-
-      // ソート
-      filtered = [...filtered].sort((a, b) => {
-        let va, vb;
-        if      (caseSortBy === 'priority') { va = PRIORITY_SORT[a.priority] ?? 9; vb = PRIORITY_SORT[b.priority] ?? 9; }
-        else if (caseSortBy === 'status')   { va = STATUS_SORT[a.status] ?? 9;     vb = STATUS_SORT[b.status] ?? 9; }
-        else if (caseSortBy === 'deadline') { va = a.deadline; vb = b.deadline; }
-        else if (caseSortBy === 'title')    { va = a.title;    vb = b.title; }
-        else return 0;
-        return va < vb ? -caseSortDir : va > vb ? caseSortDir : 0;
-      });
-
-      // ヘッダーのソートアイコン更新
-      document.querySelectorAll('#casesTable thead th[data-sort]').forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-        if (th.dataset.sort === caseSortBy) {
-          th.classList.add(caseSortDir === 1 ? 'sort-asc' : 'sort-desc');
-        }
-      });
-
-      document.getElementById('casesCount').textContent = `${filtered.length}件`;
-      const tbody = document.getElementById('casesTbody');
-      tbody.innerHTML = filtered.map(c => `
-        <tr class="clickable" data-caseid="${s(c.id)}" title="クリックで詳細を表示">
-          <td>
-            <span class="td-mono">${s(c.id)}</span>
-            <div class="td-primary" style="margin-top:2px;">${s(c.title)}</div>
-            <div class="td-secondary">${s(c.facility)}</div>
-          </td>
-          <td>${s(c.profLabel)}</td>
-          <td><span class="badge badge--${s(STATUS_CLS[c.status])}">${s(STATUS_LABEL[c.status])}</span></td>
-          <td><span class="priority-dot priority-dot--${s(c.priority)}">${s(PRIORITY_LABEL[c.priority])}</span></td>
-          <td style="text-align:center;">${s(c.headcount)}名</td>
-          <td><span class="deadline-cell ${s(deadlineCls(c.deadline))}">${s(fmtDeadline(c.deadline))}</span></td>
-          <td style="text-align:center;color:var(--gray-500);">${c.match_total > 0 ? `<span style="font-weight:600;color:var(--navy);">${c.match_total}</span>` : '-'}</td>
-          <td>${s(c.owner)}</td>
-        </tr>
-      `).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--gray-400);">該当する案件がありません</td></tr>';
-
-      tbody.querySelectorAll('tr.clickable').forEach(row => {
-        row.addEventListener('click', () => openCasePanel(row.dataset.caseid));
-      });
-    }
-
-    // Phase E-2 で案件一覧の DOM を v2 に置き換え済み。
-    // 旧 CASES テーブル / フィルター / btnOpenRequest 要素は削除されたため、
-    // 関連リスナーは要素が存在する場合のみバインドする（後方互換）
-    const _casesTable = document.getElementById('casesTable');
-    if (_casesTable) {
-      _casesTable.addEventListener('click', e => {
-        const th = e.target.closest('th[data-sort]');
-        if (!th) return;
-        const key = th.dataset.sort;
-        if (caseSortBy === key) { caseSortDir = -caseSortDir; }
-        else { caseSortBy = key; caseSortDir = 1; }
-        renderCases();
-      });
-    }
-
-    ['filterStatus','filterPriority','filterProfession','filterSearch'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('input', renderCases);
-    });
-    const _btnOpenRequest = document.getElementById('btnOpenRequest');
-    if (_btnOpenRequest) _btnOpenRequest.addEventListener('click', openRequestModal);
-
-    /* ─── 候補者確認 ────────────────────────────── */
-    let currentCandTab = 'pending';
-
-    // Phase E-3 で candTabBar / candGrid を削除済み。要素がある場合のみバインドする。
-    const _candTabBar = document.getElementById('candTabBar');
-    if (_candTabBar) {
-      _candTabBar.addEventListener('click', e => {
-        const tab = e.target.closest('.tab-item');
-        if (!tab) return;
-        document.querySelectorAll('#candTabBar .tab-item').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentCandTab = tab.dataset.tab;
-        renderCandidates();
-      });
-    }
-
-    function renderCandidates() {
-      const tab    = currentCandTab;
-      const list   = CANDIDATES[tab] || [];
-      const isPending = tab === 'pending';
-      // Phase E-3 で candGrid を削除したため要素が無ければ何もしない
-      const _grid = document.getElementById('candGrid');
-      if (!_grid) return;
-      _grid.innerHTML = list.map((c, i) => `
-        <div class="cand-card" style="cursor:pointer;" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">
-          <div class="cand-card__head">
-            <span class="cand-card__num">${s(c.num)}</span>
-            <span class="cand-card__date">提案日: ${s(c.date)}</span>
-          </div>
-          <p class="cand-card__prof">${s(c.prof)}</p>
-          <p class="cand-card__detail">${s(c.detail)}</p>
-          <div class="cand-card__case">
-            <span class="td-mono">${s(c.caseId)}</span> ${s(c.caseTitle)}
-          </div>
-          <div class="cand-card__actions" onclick="event.stopPropagation()">
-            ${isPending ? `
-              <button class="btn-accept"  onclick="acceptCand(${i});toast('面談希望を送信しました。','success')">面談を希望する</button>
-              <button class="btn-decline" onclick="declineCand(${i})">見送り</button>
-            ` : `
-              <button class="btn-detail" onclick="openCandPanel('${s(c.num)}','${s(tab)}')">詳細を確認</button>
-            `}
-          </div>
-        </div>
-      `).join('') || '<p style="color:var(--gray-400);font-size:13px;padding:8px;">候補者はいません</p>';
-    }
-
-    function acceptCand(i) {
-      const c = CANDIDATES.pending.splice(i, 1)[0];
-      CANDIDATES.screening.unshift(c);
-      document.querySelector('#candTabBar .tab-item[data-tab="pending"] .tab-count').textContent = CANDIDATES.pending.length;
-      document.querySelector('#candTabBar .tab-item[data-tab="screening"] .tab-count').textContent = CANDIDATES.screening.length;
-      renderCandidates();
-    }
-    function declineCand(i) {
-      CANDIDATES.pending.splice(i, 1);
-      document.querySelector('#candTabBar .tab-item[data-tab="pending"] .tab-count').textContent = CANDIDATES.pending.length;
-      renderCandidates();
+      const setKpi = (id, html, sub) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = html;
+        const subEl = document.getElementById(id + 'Sub');
+        if (subEl) subEl.textContent = sub || '';
+      };
+      setKpi('kpiActive',  '—<em>件</em>', '読み込み中…');
+      setKpi('kpiPending', '—<em>名</em>', '読み込み中…');
+      setKpi('kpiSoon',    '—<em>件</em>', '読み込み中…');
+      setKpi('kpiUrgent',  '—<em>件</em>', '読み込み中…');
     }
 
     /* ─── タスク ────────────────────────────────── */
@@ -3211,23 +2944,6 @@
     document.getElementById('taskInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') addTask();
     });
-
-    /* ─── 問い合わせ ────────────────────────────── */
-    function renderInquiries() {
-      // Phase F で inquiriesTbody を削除済み。要素が無ければ no-op
-      const _tbody = document.getElementById('inquiriesTbody');
-      if (!_tbody) return;
-      _tbody.innerHTML = INQUIRIES.map(q => `
-        <tr>
-          <td><span class="td-mono">${q.num}</span></td>
-          <td class="td-primary">${q.content}</td>
-          <td>${q.prof}</td>
-          <td><span class="badge badge--${INQ_CLS[q.status]}">${INQ_STATUS[q.status]}</span></td>
-          <td>${q.caseId ? `<span class="td-mono">${q.caseId}</span>` : '-'}</td>
-          <td style="color:var(--gray-400);">${q.date}</td>
-        </tr>
-      `).join('');
-    }
 
     /* ─── 設定 ──────────────────────────────────── */
     async function initSettings() {
@@ -3427,131 +3143,6 @@
       if (!el.parentNode) return;
       el.classList.add('removing');
       setTimeout(() => el.remove(), 200);
-    }
-
-    /* ─── 候補者詳細スライドパネル ──────────────── */
-    let _currentCandIdx  = null;  // 現在表示中の候補者インデックス（pending タブ用）
-
-    function openCandPanel(num, tab) {
-      tab = tab || currentCandTab;
-      const list = CANDIDATES[tab] || [];
-      const idx  = list.findIndex(c => c.num === num);
-      if (idx < 0) return;
-      const c = list[idx];
-      _currentCandIdx = tab === 'pending' ? idx : null;
-
-      document.getElementById('cpCandNum').textContent  = c.num;
-      document.getElementById('cpCandBody').innerHTML   = buildCandPanelHtml(c, tab);
-      document.getElementById('cpCandAcceptBtn').style.display = tab === 'pending' ? '' : 'none';
-      document.getElementById('candPanelOverlay').classList.add('open');
-      document.getElementById('candPanel').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeCandPanel() {
-      document.getElementById('candPanelOverlay').classList.remove('open');
-      document.getElementById('candPanel').classList.remove('open');
-      document.body.style.overflow = '';
-      _currentCandIdx = null;
-    }
-    function acceptFromPanel() {
-      if (_currentCandIdx === null) return;
-      acceptCand(_currentCandIdx);
-      toast('面談希望を送信しました。MITAS担当者が日程を調整します。', 'success');
-      closeCandPanel();
-    }
-
-    const CAND_STATUS_LABEL = { pending:'確認待ち', screening:'選考中', done:'面談済' };
-    const CAND_STATUS_CLS   = { pending:'amber',    screening:'blue',   done:'green' };
-
-    function buildCandPanelHtml(c, tab) {
-      return `
-        <p class="cand-panel__prof">${s(c.prof)}</p>
-        <p class="cand-panel__exp">${s(c.detail)}</p>
-        <div class="case-panel__badges" style="margin-bottom:18px;">
-          <span class="badge badge--${CAND_STATUS_CLS[tab]}">${CAND_STATUS_LABEL[tab]}</span>
-        </div>
-        <div class="cp-section">
-          <p class="cp-section__label">候補者情報</p>
-          <div class="cp-row"><span class="cp-row__key">候補者番号</span><span class="cp-row__val" style="font-family:'Courier New',monospace;">${s(c.num)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">職種</span><span class="cp-row__val">${s(c.prof)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">経歴</span><span class="cp-row__val">${s(c.detail)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">提案日</span><span class="cp-row__val">${s(c.date)}</span></div>
-        </div>
-        <div class="cp-section">
-          <p class="cp-section__label">対応案件</p>
-          <div class="cp-row"><span class="cp-row__key">案件ID</span><span class="cp-row__val" style="font-family:'Courier New',monospace;">${s(c.caseId)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">案件名</span><span class="cp-row__val">${s(c.caseTitle)}</span></div>
-        </div>
-        <div class="cp-section" style="background:var(--gray-50);padding:12px;border:1px solid var(--gray-200);">
-          <p style="font-size:12px;color:var(--gray-500);line-height:1.7;">
-            この候補者の詳細プロフィールはMITAS担当者が管理しています。<br>
-            個人情報の取り扱いには十分ご注意ください。
-          </p>
-        </div>
-      `;
-    }
-
-    /* ─── 案件詳細スライドパネル ─────────────────── */
-    function openCasePanel(caseId) {
-      const c = CASES.find(x => x.id === caseId);
-      if (!c) return;
-      document.getElementById('cpCaseId').textContent = c.id;
-      document.getElementById('cpBody').innerHTML = buildCasePanelHtml(c);
-      document.getElementById('casePanelOverlay').classList.add('open');
-      document.getElementById('casePanel').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeCasePanel() {
-      document.getElementById('casePanelOverlay').classList.remove('open');
-      document.getElementById('casePanel').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeCasePanel(); closeCandPanel(); }
-    });
-
-    function buildCasePanelHtml(c) {
-      const dlCls = deadlineCls(c.deadline);
-      const dlLabel = dlCls === 'overdue' ? '期限超過' : dlCls === 'soon' ? '期限間近' : '';
-      return `
-        <p class="case-panel__title">${s(c.title)}</p>
-        <div class="case-panel__badges">
-          <span class="badge badge--${s(STATUS_CLS[c.status])}">${s(STATUS_LABEL[c.status])}</span>
-          <span class="priority-dot priority-dot--${s(c.priority)}">${s(PRIORITY_LABEL[c.priority])}</span>
-          ${dlLabel ? `<span class="badge badge--${dlCls === 'overdue' ? 'red' : 'amber'}">${dlLabel}</span>` : ''}
-        </div>
-
-        <div class="cp-section">
-          <p class="cp-section__label">案件情報</p>
-          <div class="cp-row"><span class="cp-row__key">施設</span><span class="cp-row__val">${s(c.facility)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">職種</span><span class="cp-row__val">${s(c.profLabel)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">必要人数</span><span class="cp-row__val">${s(c.headcount)}名</span></div>
-          <div class="cp-row"><span class="cp-row__key">充足期限</span><span class="cp-row__val">${s(c.deadline)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">MITAS担当</span><span class="cp-row__val">${s(c.owner)}</span></div>
-          <div class="cp-row"><span class="cp-row__key">登録日</span><span class="cp-row__val">${s(c.created_at)}</span></div>
-        </div>
-
-        <div class="cp-section">
-          <p class="cp-section__label">候補者パイプライン</p>
-          <div class="cp-pipeline">
-            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_total ?? 0)}</span><span class="cp-stage__lbl">提案</span></div>
-            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_interview ?? 0)}</span><span class="cp-stage__lbl">面談中</span></div>
-            <div class="cp-stage"><span class="cp-stage__num">${s(c.match_offer ?? 0)}</span><span class="cp-stage__lbl">内定</span></div>
-            <div class="cp-stage ${c.status === 'placed' ? 'active' : ''}"><span class="cp-stage__num">${c.status === 'placed' ? c.headcount : 0}</span><span class="cp-stage__lbl">充足済</span></div>
-          </div>
-        </div>
-
-        ${c.note ? `<div class="cp-section">
-          <p class="cp-section__label">備考</p>
-          <p style="font-size:13px;color:var(--gray-700);line-height:1.7;">${s(c.note)}</p>
-        </div>` : ''}
-      `;
-    }
-
-    function contactMitas() {
-      const id = document.getElementById('cpCaseId').textContent;
-      toast(`${id} について、MITAS担当者に連絡リクエストを送りました。`, 'success');
-      closeCasePanel();
     }
 
     /* ─── モバイル: サイドバー開閉 ──────────────── */
