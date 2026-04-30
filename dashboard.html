@@ -1615,40 +1615,16 @@
         </div>
       </div>
 
-      <!-- 最近のアクティビティ -->
+      <!-- 最近のアクティビティ（v2 リアル監査ログ・Phase E-4 でメイン化） -->
       <div class="section">
         <div class="section__header">
-          <span class="section__title">
-            v2 リアルアクティビティ
-            <span class="v2-banner__pill" style="margin-left:8px;">PREVIEW</span>
-          </span>
+          <span class="section__title">最近のアクティビティ</span>
           <button class="v2-banner__refresh" id="v2ActRefreshBtn" type="button">更新</button>
         </div>
         <div class="v2-cases-table-wrap" id="v2ActBody">
           <div class="v2-cases-table__placeholder">読み込み中…</div>
         </div>
         <div class="v2-cases-card__msg" id="v2ActMsg" style="border-top:none;background:transparent;padding-top:6px;">読み込み中…</div>
-      </div>
-
-      <!-- 最近のアクティビティ（既存モック・並行表示） -->
-      <div class="section">
-        <div class="section__header">
-          <span class="section__title">最近のアクティビティ</span>
-          <a class="section__action" data-section="cases" href="#">案件一覧を見る</a>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:28px;"></th>
-              <th>内容</th>
-              <th>案件ID</th>
-              <th>担当者</th>
-              <th>種別</th>
-              <th>日時</th>
-            </tr>
-          </thead>
-          <tbody id="activityTbody"></tbody>
-        </table>
       </div>
 
     </section>
@@ -1996,7 +1972,7 @@
       document.getElementById('mainContent').style.display   = 'block';
 
       // 各セクションの初期描画
-      renderActivity();
+      // renderActivity（モック）は Phase E-4 で削除済みの activityTbody に書き込むためスキップ
       renderKPIs();
 
       // v2 リアルデータ（並行表示・既存KPIには影響なし）
