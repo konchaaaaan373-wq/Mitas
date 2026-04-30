@@ -230,6 +230,18 @@
   to = "/worker-app.html"
   status = 200
 
+# Neco オペレーションコンソール（neco_admin 専用）
+[[redirects]]
+  from = "/neco-console.html"
+  to = "/neco-console.html"
+  status = 200
+
+# /neco は neco-console.html へエイリアス
+[[redirects]]
+  from = "/neco"
+  to = "/neco-console.html"
+  status = 200
+
 [[redirects]]
   from = "/login.html"
   to = "/login.html"

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neco Console | MITAS</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 本番環境では Netlify の build hook 等で実値に差し替えること
+    window.__SUPABASE_URL__      = 'https://YOUR_PROJECT.supabase.co';
+    window.__SUPABASE_ANON_KEY__ = 'YOUR_SUPABASE_ANON_KEY';
+  </script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy:       #1B3A6B;
+      --navy-deep:  #0D2340;
+      --navy-mid:   #243B5E;
+      --teal:       #0EA5E9;
+      --teal-light: #38BDF8;
+      --teal-pale:  #F0F9FF;
+      --green:      #10B981;
+      --green-pale: #ECFDF5;
+      --amber:      #F59E0B;
+      --amber-pale: #FFFBEB;
+      --red:        #DC2626;
+      --red-pale:   #FEF2F2;
+      --gray-900:   #0F172A;
+      --gray-700:   #334155;
+      --gray-500:   #64748B;
+      --gray-400:   #94A3B8;
+      --gray-300:   #CBD5E1;
+      --gray-200:   #E2E8F0;
+      --gray-100:   #F1F5F9;
+      --gray-50:    #F8FAFC;
+      --white:      #FFFFFF;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md:  0 4px 20px rgba(0,0,0,0.08);
+      --radius:     8px;
+      --radius-lg:  14px;
+      --topbar-h:   52px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #EEF2F7;
+      color: var(--gray-700);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── トップバー ─── */
+    .topbar {
+      background: var(--navy-deep);
+      color: var(--white);
+      padding: 0 24px;
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar__brand { display: flex; align-items: center; gap: 14px; }
+    .topbar__logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+    .topbar__divider { width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
+    .topbar__title {
+      font-size: 13px;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.04em;
+    }
+    .topbar__actions { display: flex; align-items: center; gap: 16px; }
+    .topbar__user {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .topbar__btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .topbar__btn:hover { background: rgba(255,255,255,0.16); }
+
+    /* ─── 全体レイアウト：左カラム35% / 右カラム65% ─── */
+    .console {
+      display: grid;
+      grid-template-columns: minmax(360px, 35%) 1fr;
+      gap: 16px;
+      padding: 16px;
+      height: calc(100vh - var(--topbar-h));
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ─── パネル共通 ─── */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .panel__head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .panel__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      letter-spacing: 0.02em;
+    }
+    .panel__subtitle {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    /* ─── ステータスタブ ─── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 8px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--gray-500);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab:hover { color: var(--navy); }
+    .tab.is-active {
+      color: var(--navy-deep);
+      border-bottom-color: var(--teal);
+      background: var(--white);
+    }
+    .tab__count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 100px;
+      background: var(--gray-200);
+      color: var(--gray-700);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .tab.is-active .tab__count {
+      background: var(--teal-pale);
+      color: var(--teal);
+    }
+
+    /* ─── 依頼カード一覧 ─── */
+    .request-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      background: var(--gray-50);
+    }
+    .request-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.05s;
+    }
+    .request-card:hover {
+      border-color: var(--teal-light);
+      box-shadow: 0 2px 8px rgba(14,165,233,0.12);
+    }
+    .request-card.is-selected {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px var(--teal), 0 4px 12px rgba(14,165,233,0.15);
+    }
+    .request-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .request-card__num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--gray-400);
+      font-variant-numeric: tabular-nums;
+    }
+    .request-card__title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-deep);
+      line-height: 1.4;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .request-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+    .request-card__meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .request-card__meta-item strong {
+      color: var(--gray-700);
+      font-weight: 600;
+    }
+
+    /* ─── バッジ ─── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .badge--urgent { background: rgba(220,38,38,0.1);  color: var(--red); }
+    .badge--high   { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .badge--medium { background: rgba(14,165,233,0.1); color: var(--teal); }
+    .badge--low    { background: var(--gray-100); color: var(--gray-500); }
+
+    .badge--status {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .badge--status-submitted     { background: rgba(14,165,233,0.1);  color: var(--teal); }
+    .badge--status-under_review  { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .badge--status-accepted      { background: rgba(16,185,129,0.1);  color: var(--green); }
+    .badge--status-proposing     { background: rgba(91,33,182,0.1);   color: #6D28D9; }
+    .badge--status-fully_assigned{ background: rgba(16,185,129,0.12); color: #047857; }
+    .badge--status-confirmed     { background: rgba(16,185,129,0.18); color: #047857; }
+    .badge--status-cancelled     { background: var(--gray-100); color: var(--gray-500); }
+    .badge--status-rejected      { background: rgba(220,38,38,0.08);  color: var(--red); }
+
+    /* ─── 右カラム（詳細プレースホルダー） ─── */
+    .detail-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-400);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .detail-empty__icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      color: var(--gray-300);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+    .detail-empty__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+    }
+    .detail-empty__desc {
+      font-size: 12px;
+      color: var(--gray-400);
+      max-width: 320px;
+      line-height: 1.7;
+    }
+
+    /* ─── ローディング・エラー・空 ─── */
+    .placeholder {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 13px;
+    }
+    .alert {
+      margin: 12px;
+      padding: 12px 14px;
+      background: rgba(220,38,38,0.06);
+      border: 1px solid rgba(220,38,38,0.18);
+      color: var(--red);
+      border-radius: var(--radius);
+      font-size: 12px;
+    }
+
+    /* ─── レスポンシブ ─── */
+    @media (max-width: 960px) {
+      .console {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .panel { min-height: 480px; }
+    }
+    @media (max-width: 640px) {
+      .topbar { padding: 0 14px; }
+      .topbar__title { display: none; }
+      .console { padding: 10px; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar__brand">
+    <span class="topbar__logo">MITAS</span>
+    <span class="topbar__divider"></span>
+    <span class="topbar__title">Neco オペレーションコンソール</span>
+  </div>
+  <div class="topbar__actions">
+    <span class="topbar__user" id="userName">読み込み中…</span>
+    <button class="topbar__btn" id="logoutBtn">ログアウト</button>
+  </div>
+</div>
+
+<div class="console">
+  <!-- ═════ 左カラム：依頼一覧 ═════ -->
+  <section class="panel" aria-label="依頼一覧">
+    <div class="panel__head">
+      <div class="panel__title">人材依頼</div>
+      <div class="panel__subtitle">施設からの依頼を状態別に確認します</div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" role="tab" data-tab="new">
+        <span>新規</span>
+        <span class="tab__count" id="count-new">0</span>
+      </button>
+      <button class="tab" role="tab" data-tab="in_review">
+        <span>確認中</span>
+        <span class="tab__count" id="count-in_review">0</span>
+      </button>
+      <button class="tab" role="tab" data-tab="proposing">
+        <span>提案中</span>
+        <span class="tab__count" id="count-proposing">0</span>
+      </button>
+      <button class="tab" role="tab" data-tab="done">
+        <span>完了</span>
+        <span class="tab__count" id="count-done">0</span>
+      </button>
+    </div>
+
+    <div id="errorBox"></div>
+
+    <div class="request-list" id="requestList" role="list">
+      <div class="placeholder">読み込み中…</div>
+    </div>
+  </section>
+
+  <!-- ═════ 右カラム：詳細（Step1ではプレースホルダー） ═════ -->
+  <section class="panel" aria-label="依頼詳細">
+    <div class="panel__head">
+      <div class="panel__title">依頼の詳細</div>
+      <div class="panel__subtitle">左の一覧から依頼を選択してください</div>
+    </div>
+    <div class="detail-empty" id="detailArea">
+      <div class="detail-empty__icon">i</div>
+      <div class="detail-empty__title">依頼が選択されていません</div>
+      <div class="detail-empty__desc">
+        左の一覧から依頼カードを選択すると、詳細・状態遷移ボタン・候補者抽出・既存提案が表示されます。
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // ─── Supabaseクライアント初期化 ───
+  const SUPABASE_URL = window.__SUPABASE_URL__;
+  const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__;
+  const isMockMode = !SUPABASE_URL || SUPABASE_URL.includes('YOUR_PROJECT');
+  const supabase = !isMockMode && window.supabase
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  // ─── 状態タブ → DBステータス値の対応 ───
+  // Necoのオペ視点で「新規 / 確認中 / 提案中 / 完了」の4分類にまとめる
+  const TAB_STATUS_MAP = {
+    new:        ['submitted'],
+    in_review:  ['under_review', 'accepted'],
+    proposing:  ['proposing', 'partially_assigned'],
+    done:       ['fully_assigned', 'in_progress', 'completion_pending', 'confirmed', 'invoiced', 'paid', 'cancelled', 'rejected'],
+  };
+
+  // ステータス表示名（badge用）
+  const STATUS_LABEL = {
+    draft:              '下書き',
+    submitted:          '受付',
+    under_review:       '確認中',
+    accepted:           '受諾',
+    rejected:           '差戻し',
+    proposing:          '提案中',
+    partially_assigned: '一部充足',
+    fully_assigned:     '充足完了',
+    in_progress:        '進行中',
+    completion_pending: '完了申請',
+    confirmed:          '完了確定',
+    invoiced:           '請求済',
+    paid:               '入金済',
+    cancelled:          'キャンセル',
+  };
+
+  const PRIORITY_LABEL = {
+    urgent: '緊急', high: '高', medium: '中', low: '低',
+  };
+
+  // ─── アプリ状態 ───
+  const state = {
+    token: null,
+    user: null,
+    activeTab: 'new',
+    requests: [],
+    selectedId: null,
+  };
+
+  // ─── 認証確認＋初期化 ───
+  async function init() {
+    let token = null;
+    let user = null;
+
+    if (supabase) {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        location.href = '/login.html?next=' + encodeURIComponent(location.pathname);
+        return;
+      }
+      token = data.session.access_token;
+      user = data.session.user;
+    } else {
+      // モックモード
+      token = 'mock-token';
+      user = { email: 'neco-admin@example.com' };
+    }
+
+    state.token = token;
+    state.user = user;
+    document.getElementById('userName').textContent = user.email || '';
+
+    bindEvents();
+    await loadRequests();
+  }
+
+  // ─── イベントバインド ───
+  function bindEvents() {
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        if (tab === state.activeTab) return;
+        state.activeTab = tab;
+        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === tab));
+        renderRequestList();
+      });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+      location.href = '/login.html';
+    });
+  }
+
+  // ─── 依頼一覧の取得 ───
+  async function loadRequests() {
+    const listEl = document.getElementById('requestList');
+    listEl.innerHTML = '<div class="placeholder">読み込み中…</div>';
+
+    try {
+      const res = await fetch('/api/v2/requests?limit=200', {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`API ${res.status}: ${text}`);
+      }
+      const data = await res.json();
+      state.requests = Array.isArray(data.requests) ? data.requests : [];
+
+      // モックモードでは件数が少ないので簡易データを補強
+      if (isMockMode) {
+        state.requests = getMockRequests();
+      }
+
+      updateTabCounts();
+      renderRequestList();
+    } catch (e) {
+      console.error('依頼一覧の取得に失敗:', e);
+      // 開発時はモックにフォールバックして UI を確認できるようにする
+      state.requests = getMockRequests();
+      updateTabCounts();
+      renderRequestList();
+      showError(`依頼一覧の取得に失敗しました（${e.message}）。モックデータを表示しています。`);
+    }
+  }
+
+  // ─── タブの件数バッジ更新 ───
+  function updateTabCounts() {
+    Object.keys(TAB_STATUS_MAP).forEach(tab => {
+      const statuses = TAB_STATUS_MAP[tab];
+      const n = state.requests.filter(r => statuses.includes(r.status)).length;
+      const el = document.getElementById('count-' + tab);
+      if (el) el.textContent = n;
+    });
+  }
+
+  // ─── 依頼一覧のレンダリング ───
+  function renderRequestList() {
+    const listEl = document.getElementById('requestList');
+    const statuses = TAB_STATUS_MAP[state.activeTab] || [];
+    const items = state.requests
+      .filter(r => statuses.includes(r.status))
+      .sort((a, b) => {
+        // 緊急・高優先 を先頭に、次に作成日時の降順
+        const p = priorityRank(a.priority) - priorityRank(b.priority);
+        if (p !== 0) return p;
+        return (b.created_at || '').localeCompare(a.created_at || '');
+      });
+
+    if (!items.length) {
+      listEl.innerHTML = '<div class="placeholder">該当する依頼はありません</div>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(r => renderCard(r)).join('');
+
+    // クリックで選択
+    listEl.querySelectorAll('.request-card').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.id;
+        state.selectedId = id;
+        listEl.querySelectorAll('.request-card').forEach(c => {
+          c.classList.toggle('is-selected', c.dataset.id === id);
+        });
+        // Step 2 で詳細パネルの実装を行う
+      });
+    });
+  }
+
+  function renderCard(r) {
+    const priority = r.priority || 'medium';
+    const priorityClass = `badge--${priority}`;
+    const statusClass = `badge--status-${r.status}`;
+    const profession = professionLabel(r.profession_type);
+    const headcount = r.headcount || 1;
+    const startAt = r.start_at ? formatDate(r.start_at) : '—';
+
+    return `
+      <article class="request-card" data-id="${escapeHtml(r.id)}" role="listitem">
+        <div class="request-card__head">
+          <span class="request-card__num">${escapeHtml(r.request_number || '')}</span>
+          <span class="badge ${priorityClass}">${PRIORITY_LABEL[priority] || priority}</span>
+        </div>
+        <div class="request-card__title">${escapeHtml(r.title || '(タイトルなし)')}</div>
+        <div class="request-card__meta">
+          <span class="request-card__meta-item"><strong>${escapeHtml(profession)}</strong></span>
+          <span class="request-card__meta-item">${headcount}名</span>
+          <span class="request-card__meta-item">${escapeHtml(startAt)}</span>
+          <span class="badge ${statusClass}">${STATUS_LABEL[r.status] || r.status}</span>
+        </div>
+      </article>
+    `;
+  }
+
+  // ─── ヘルパー ───
+  function priorityRank(p) {
+    return { urgent: 0, high: 1, medium: 2, low: 3 }[p] ?? 9;
+  }
+
+  function professionLabel(t) {
+    return ({
+      physician: '医師', nurse: '看護師', pharmacist: '薬剤師',
+      medical_technologist: '臨床検査技師', radiologic_technologist: '診療放射線技師',
+      physical_therapist: '理学療法士', occupational_therapist: '作業療法士',
+      speech_therapist: '言語聴覚士', care_worker: '介護職',
+    })[t] || t || '—';
+  }
+
+  function formatDate(s) {
+    if (!s) return '';
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return s;
+    const m = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}/${m}/${day}`;
+  }
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.innerHTML = `<div class="alert">${escapeHtml(msg)}</div>`;
+  }
+
+  // ─── モックデータ（開発・UI確認用） ───
+  function getMockRequests() {
+    const now = new Date();
+    const iso = (offset) => new Date(now.getTime() + offset * 86400000).toISOString();
+    return [
+      { id: '00000000-0000-0000-0000-000000000001', request_number: 'SR-2026-000123', title: '内科外来 当直医（5月急募）', profession_type: 'physician', specialty: '内科', headcount: 1, status: 'submitted', priority: 'urgent', start_at: iso(7),  created_at: iso(-1) },
+      { id: '00000000-0000-0000-0000-000000000002', request_number: 'SR-2026-000124', title: '訪問看護 週末スポット',     profession_type: 'nurse',     headcount: 2, status: 'submitted', priority: 'high',   start_at: iso(10), created_at: iso(-2) },
+      { id: '00000000-0000-0000-0000-000000000003', request_number: 'SR-2026-000125', title: '透析クリニック 常勤医',     profession_type: 'physician', specialty: '腎臓内科', headcount: 1, status: 'under_review', priority: 'medium', start_at: iso(30), created_at: iso(-4) },
+      { id: '00000000-0000-0000-0000-000000000004', request_number: 'SR-2026-000126', title: '夜勤専従ナース 6月以降',     profession_type: 'nurse',     headcount: 3, status: 'accepted',     priority: 'high',   start_at: iso(35), created_at: iso(-6) },
+      { id: '00000000-0000-0000-0000-000000000005', request_number: 'SR-2026-000127', title: 'リハビリ専門 PT/OT',         profession_type: 'physical_therapist', headcount: 2, status: 'proposing', priority: 'medium', start_at: iso(20), created_at: iso(-8) },
+      { id: '00000000-0000-0000-0000-000000000006', request_number: 'SR-2026-000118', title: '健診センター 5月GW',         profession_type: 'physician', specialty: '健診', headcount: 4, status: 'fully_assigned', priority: 'medium', start_at: iso(-3), created_at: iso(-21) },
+      { id: '00000000-0000-0000-0000-000000000007', request_number: 'SR-2026-000119', title: '在宅医療 訪問同行',           profession_type: 'physician', headcount: 1, status: 'cancelled', priority: 'low',  start_at: iso(-10), created_at: iso(-25) },
+    ];
+  }
+
+  // ─── 起動 ───
+  init();
+</script>
+</body>
+</html>
