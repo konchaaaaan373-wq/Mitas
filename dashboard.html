@@ -1411,6 +1411,38 @@
       background: rgba(91,33,182,0.08);
     }
 
+    /* ─── v2 リアルアクティビティ（Phase D） ─── */
+    .v2-act-ent {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .v2-act-ent--staffing_request { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-act-ent--proposal         { background: rgba(91,33,182,0.10); color: #6D28D9; }
+    .v2-act-ent--assignment       { background: rgba(16,185,129,0.10); color: #10B981; }
+    .v2-act-ent--invoice          { background: rgba(245,158,11,0.12); color: #F59E0B; }
+    .v2-act-ent--worker_profile   { background: var(--gray-100, #F1F5F9); color: var(--gray-700, #334155); }
+    .v2-act-ent--organization     { background: rgba(220,38,38,0.06); color: #B91C1C; }
+    .v2-act-ent--default          { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-act-action {
+      font-weight: 600;
+      color: var(--navy-deep, #0D2340);
+    }
+    .v2-act-meta {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+    }
+    .v2-act-mono {
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+    }
+
   </style>
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1584,6 +1616,21 @@
       </div>
 
       <!-- 最近のアクティビティ -->
+      <div class="section">
+        <div class="section__header">
+          <span class="section__title">
+            v2 リアルアクティビティ
+            <span class="v2-banner__pill" style="margin-left:8px;">PREVIEW</span>
+          </span>
+          <button class="v2-banner__refresh" id="v2ActRefreshBtn" type="button">更新</button>
+        </div>
+        <div class="v2-cases-table-wrap" id="v2ActBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2ActMsg" style="border-top:none;background:transparent;padding-top:6px;">読み込み中…</div>
+      </div>
+
+      <!-- 最近のアクティビティ（既存モック・並行表示） -->
       <div class="section">
         <div class="section__header">
           <span class="section__title">最近のアクティビティ</span>
@@ -2024,6 +2071,10 @@
       const v2Btn = document.getElementById('v2RefreshBtn');
       if (v2Btn) v2Btn.addEventListener('click', loadV2Kpis);
 
+      // v2 リアルアクティビティ（Phase D）
+      bindV2ActivityControls();
+      loadV2Activity();
+
       // 初期セクション表示
       showSection('overview');
     }
@@ -2443,6 +2494,216 @@
         });
       }
       if (r) r.addEventListener('click', loadV2Proposals);
+    }
+
+    /* ─── v2 リアルアクティビティ（Phase D） ─────────
+       PostgREST 直接アクセスで activity_log テーブルを参照する。
+       facility_admin は activity_log_select RLS により自組織の操作のみ閲覧可能。
+       状態遷移時に requests-v2 / proposals-v2 が logActivity を呼んで監査ログを書き込む仕組み。 */
+    const V2_ENTITY_LABEL = {
+      staffing_request: '依頼',
+      proposal:         '提案',
+      assignment:       'アサイン',
+      invoice:          '請求',
+      worker_profile:   'ワーカー',
+      organization:     '組織',
+    };
+    const V2_ACTION_LABEL = {
+      // 依頼
+      'request.created':                  '依頼を作成',
+      'request.updated':                  '依頼を更新',
+      'request.status.draft':             '下書きに戻す',
+      'request.status.submitted':         '依頼を提出',
+      'request.status.under_review':      '確認を開始',
+      'request.status.accepted':          '依頼を受諾',
+      'request.status.rejected':          '依頼を差戻し',
+      'request.status.proposing':         '提案を開始',
+      'request.status.partially_assigned':'一部充足',
+      'request.status.fully_assigned':    '充足完了',
+      'request.status.in_progress':       '進行中',
+      'request.status.completion_pending':'完了申請',
+      'request.status.confirmed':         '完了確定',
+      'request.status.invoiced':          '請求発行',
+      'request.status.paid':              '入金確認',
+      'request.status.cancelled':         '依頼をキャンセル',
+      // 提案
+      'proposal.created':                 '提案を作成',
+      'proposal.updated':                 '提案を更新',
+      'proposal.worker_contacted':        'ワーカーへ連絡',
+      'proposal.worker_accepted':         'ワーカー承諾',
+      'proposal.worker_declined':         'ワーカー辞退',
+      'proposal.proposed_to_facility':    '施設へ提案',
+      'proposal.facility_accepted':       '施設承諾',
+      'proposal.facility_declined':       '施設辞退',
+      'proposal.withdrawn':               '提案取り下げ',
+      'proposal.expired':                 '提案期限切れ',
+      // アサイン
+      'assignment.created':               'アサイン確定',
+      'assignment.checked_in':            '勤務開始',
+      'assignment.checked_out':           '勤務終了',
+      'assignment.completion_reported':   '完了報告',
+      'assignment.completion_confirmed':  '完了確定',
+      'assignment.disputed':              '紛争申告',
+      // 請求
+      'invoice.issued':                   '請求書発行',
+      'invoice.paid':                     '入金完了',
+    };
+
+    const v2ActState = { rows: [], loaded: false };
+
+    async function loadV2Activity() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2ActBody');
+      const msgEl = $('v2ActMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2ActRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないためアクティビティを取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // モックモード時は固定データ（PostgREST 直接アクセスのため Function側で吸収できない）
+      const supabaseUrl  = window.__SUPABASE_URL__  || '';
+      const supabaseAnon = window.__SUPABASE_ANON_KEY__ || '';
+      const isMock = !supabaseUrl || supabaseUrl.includes('YOUR_PROJECT');
+
+      try {
+        if (isMock) {
+          v2ActState.rows = getV2MockActivity();
+          v2ActState.loaded = true;
+          renderV2ActivityTable();
+          setMsg('モックデータを表示中（Supabase未設定）');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        const path = '/activity_log?order=occurred_at.desc&limit=30&select=id,actor_user_id,actor_role,action,entity_type,entity_id,organization_id,occurred_at';
+        const res = await fetch(`${supabaseUrl}/rest/v1${path}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            apikey: supabaseAnon,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`HTTP ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const rows = await res.json();
+        v2ActState.rows = Array.isArray(rows) ? rows : [];
+        v2ActState.loaded = true;
+        renderV2ActivityTable();
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        setMsg(`PostgREST より取得：${ts} 時点 / 直近 ${v2ActState.rows.length}件`);
+      } catch (e) {
+        console.error('v2 アクティビティ取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`activity_log への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2ActivityTable() {
+      const body = document.getElementById('v2ActBody');
+      if (!body) return;
+      const rows = v2ActState.rows || [];
+      if (!rows.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">アクティビティはまだありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        const m = ('0'+(d.getMonth()+1)).slice(-2);
+        const dd = ('0'+d.getDate()).slice(-2);
+        const hh = ('0'+d.getHours()).slice(-2);
+        const mm = ('0'+d.getMinutes()).slice(-2);
+        return `${d.getFullYear()}/${m}/${dd} ${hh}:${mm}`;
+      };
+      const shortId = (id) => (typeof id === 'string' && id.length >= 8) ? id.slice(0, 8) : (id || '—');
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>種別</th>
+              <th>操作</th>
+              <th>対象ID</th>
+              <th>操作者</th>
+              <th>日時</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(a => {
+              const entCls = V2_ENTITY_LABEL[a.entity_type] ? a.entity_type : 'default';
+              const entLabel = V2_ENTITY_LABEL[a.entity_type] || a.entity_type;
+              const action = V2_ACTION_LABEL[a.action] || a.action;
+              return `
+                <tr>
+                  <td><span class="v2-act-ent v2-act-ent--${esc(entCls)}">${esc(entLabel)}</span></td>
+                  <td>
+                    <span class="v2-act-action">${esc(action)}</span>
+                    <div class="v2-act-meta">${esc(a.action)}</div>
+                  </td>
+                  <td><span class="v2-act-mono">${esc(shortId(a.entity_id))}</span></td>
+                  <td>
+                    <div>${esc(a.actor_role || '—')}</div>
+                    <div class="v2-act-mono">${esc(shortId(a.actor_user_id))}</div>
+                  </td>
+                  <td>${esc(fmt(a.occurred_at))}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function bindV2ActivityControls() {
+      if (bindV2ActivityControls._bound) return;
+      bindV2ActivityControls._bound = true;
+      const r = document.getElementById('v2ActRefreshBtn');
+      if (r) r.addEventListener('click', loadV2Activity);
+    }
+
+    function getV2MockActivity() {
+      const now = Date.now();
+      const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
+      return [
+        { id:'a-001', actor_user_id:'u-1234abcd', actor_role:'neco_admin',     action:'request.status.accepted',          entity_type:'staffing_request', entity_id:'r-aaaa1111', occurred_at:t(5)   },
+        { id:'a-002', actor_user_id:'u-1234abcd', actor_role:'neco_admin',     action:'proposal.created',                 entity_type:'proposal',         entity_id:'p-bbbb2222', occurred_at:t(8)   },
+        { id:'a-003', actor_user_id:'u-5678efgh', actor_role:'facility_admin', action:'proposal.facility_accepted',       entity_type:'proposal',         entity_id:'p-cccc3333', occurred_at:t(45)  },
+        { id:'a-004', actor_user_id:'u-9999wwww', actor_role:'worker',         action:'assignment.checked_in',            entity_type:'assignment',       entity_id:'as-dddd4444',occurred_at:t(120) },
+        { id:'a-005', actor_user_id:'u-1234abcd', actor_role:'neco_admin',     action:'request.created',                  entity_type:'staffing_request', entity_id:'r-eeee5555', occurred_at:t(180) },
+        { id:'a-006', actor_user_id:'u-9999wwww', actor_role:'worker',         action:'assignment.completion_reported',   entity_type:'assignment',       entity_id:'as-ffff6666',occurred_at:t(360) },
+        { id:'a-007', actor_user_id:'u-5678efgh', actor_role:'facility_admin', action:'assignment.completion_confirmed',  entity_type:'assignment',       entity_id:'as-ffff6666',occurred_at:t(720) },
+        { id:'a-008', actor_user_id:'u-1234abcd', actor_role:'neco_admin',     action:'invoice.issued',                   entity_type:'invoice',          entity_id:'i-gggg7777', occurred_at:t(1440)},
+      ];
     }
 
     /* ─── セクション切り替え ─────────────────────── */
