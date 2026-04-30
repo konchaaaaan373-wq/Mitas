@@ -1232,9 +1232,17 @@
       allAssignments = data.assignments || [];
 
       // Today: アクティブな状態のものから優先順位で1件選ぶ
-      const active = allAssignments.filter(a =>
-        ['confirmed', 'checked_in', 'checked_out'].includes(a.status)
-      );
+      // completion_reported は終了から24時間以内のものを含める（紛争申告のため）
+      const now = Date.now();
+      const _24h = 24 * 3600 * 1000;
+      const active = allAssignments.filter(a => {
+        if (['confirmed', 'checked_in', 'checked_out'].includes(a.status)) return true;
+        if (a.status === 'completion_reported') {
+          const end = new Date(a.scheduled_end_at || 0).getTime();
+          return end > 0 && (now - end) <= _24h;
+        }
+        return false;
+      });
       active.sort((a, b) => priorityOf(a) - priorityOf(b));
       currentAssignment = active[0] || null;
       renderAssignment(currentAssignment);
@@ -1253,9 +1261,9 @@
   }
 
   function priorityOf(a) {
-    // checked_in を最優先、次に開始時刻が近い confirmed、最後に checked_out
-    const order = { checked_in: 0, confirmed: 1, checked_out: 2 };
-    const base = (order[a.status] ?? 3) * 1e13;
+    // checked_in を最優先、次に開始時刻が近い confirmed、checked_out、最後に completion_reported
+    const order = { checked_in: 0, confirmed: 1, checked_out: 2, completion_reported: 3 };
+    const base = (order[a.status] ?? 4) * 1e13;
     const t = new Date(a.scheduled_start_at || 0).getTime();
     return base + t;
   }
@@ -1324,6 +1332,8 @@
     // ボタンイベント
     const btn = document.getElementById('primaryAction');
     if (btn) btn.addEventListener('click', onPrimaryAction);
+    const disputeBtn = document.getElementById('disputeAction');
+    if (disputeBtn) disputeBtn.addEventListener('click', onDisputeAction);
   }
 
   function renderActionButton(a) {
@@ -1340,7 +1350,36 @@
     if (a.status === 'checked_out') {
       return `<button id="primaryAction" class="action action--completion" type="button" data-next="completion_reported">
         <span class="action__icon">${iconFlag()}</span>勤務完了を報告する
+      </button>
+      <button id="disputeAction" class="action action--dispute" type="button"
+              style="margin-top:10px;background:#FEF2F2;color:#DC2626;border:1px solid rgba(220,38,38,0.18);">
+        条件に問題あり（紛争を申告）
       </button>`;
+    }
+    if (a.status === 'completion_reported') {
+      return `<div class="action-pending"
+              style="padding:14px 16px;background:var(--amber-pale);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius);text-align:center;">
+        <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:4px;">完了確定をお待ちください</div>
+        <div style="font-size:11px;color:var(--gray-500);">施設管理者の確認後、報酬が確定します</div>
+      </div>
+      <button id="disputeAction" class="action action--dispute" type="button"
+              style="margin-top:10px;background:#FEF2F2;color:#DC2626;border:1px solid rgba(220,38,38,0.18);">
+        条件に問題あり（紛争を申告）
+      </button>`;
+    }
+    if (a.status === 'completion_confirmed') {
+      return `<div class="action-pending"
+              style="padding:14px 16px;background:var(--green-pale);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius);text-align:center;">
+        <div style="font-size:13px;font-weight:600;color:var(--green-deep);">完了が確定しました</div>
+        <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">お疲れ様でした</div>
+      </div>`;
+    }
+    if (a.status === 'disputed') {
+      return `<div class="action-pending"
+              style="padding:14px 16px;background:var(--red-pale);border:1px solid rgba(220,38,38,0.20);border-radius:var(--radius);text-align:center;">
+        <div style="font-size:13px;font-weight:600;color:var(--red);">紛争申告中</div>
+        <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">MITAS担当者が確認します</div>
+      </div>`;
     }
     return `<button class="action" type="button" disabled>このアサインは操作できません</button>`;
   }
@@ -1350,6 +1389,20 @@
     const btn = ev.currentTarget;
     const next = btn.dataset.next;
     if (!currentAssignment || !next) return;
+
+    // 完了報告時はメモを尋ねる（任意）
+    let workerNote = null;
+    if (next === 'completion_reported') {
+      const input = window.prompt(
+        'お疲れ様でした。\n勤務時間や業務内容について、施設へ伝えたいメモがあれば入力してください（任意）',
+        ''
+      );
+      if (input == null) {
+        // キャンセルされた場合は完了報告も中止
+        return;
+      }
+      workerNote = input.trim() || null;
+    }
 
     btn.disabled = true;
     btn.textContent = '送信中…';
@@ -1362,6 +1415,9 @@
     if (next === 'checked_out' && lastGpsCoords?.lat) {
       body.check_out_lat = lastGpsCoords.lat;
       body.check_out_lng = lastGpsCoords.lng;
+    }
+    if (next === 'completion_reported' && workerNote) {
+      body.worker_completion_note = workerNote;
     }
 
     try {
@@ -1378,6 +1434,40 @@
       showToast(e.message || '更新に失敗しました', 'error');
       // ボタン状態を元に戻すため再描画
       renderAssignment(currentAssignment);
+    }
+  }
+
+  // ─── 紛争申告 ───
+  async function onDisputeAction(ev) {
+    const btn = ev.currentTarget;
+    if (!currentAssignment) return;
+    const reason = window.prompt(
+      '紛争申告の理由を入力してください\n（例：勤務時間が予定と相違、業務範囲の認識違い 等）'
+    );
+    if (reason == null) return;
+    const trimmed = reason.trim();
+    if (!trimmed) {
+      showToast('理由を入力してください', 'error');
+      return;
+    }
+
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = '送信中…';
+
+    try {
+      const data = await apiFetch(`/api/v2/assignments/${currentAssignment.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'disputed', dispute_reason: trimmed }),
+      });
+      currentAssignment = { ...currentAssignment, ...(data.assignment || {}) };
+      renderAssignment(currentAssignment);
+      showToast('紛争を申告しました。MITAS担当者が確認します', 'success');
+    } catch (e) {
+      console.error(e);
+      showToast(e.message || '申告に失敗しました', 'error');
+      btn.disabled = false;
+      btn.textContent = orig;
     }
   }
 
