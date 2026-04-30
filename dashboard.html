@@ -2883,20 +2883,34 @@
       }
     });
 
-    /* ─── タスクは現在 LocalStorage ベースで残置（v2 化未実装） ───
-       Phase E〜F で CASES / CANDIDATES / ACTIVITIES / INQUIRIES とその
-       関連描画関数（renderCases / renderCandidates / renderActivity /
-       renderInquiries）および付随定数（STATUS_LABEL / STATUS_CLS /
-       PRIORITY_LABEL / INQ_STATUS / INQ_CLS / PRIORITY_SORT /
-       STATUS_SORT / fmtDeadline / deadlineCls）はすべて削除。 */
-    let TASKS = [
-      { id:1, text:'SC-2026-008: 山本様のプロフィール詳細を確認する',   due:'本日中', done:false },
-      { id:2, text:'SC-2026-007: 面談日程候補（3案）を担当者に送付',   due:'本日中', done:false },
-      { id:3, text:'SC-2026-002: 勤務条件確認書類をメールで返送',       due:'明日まで', done:false },
-      { id:4, text:'SC-2026-005: 内定承諾書の受領を確認する',           due:'4/29', done:true  },
-      { id:5, text:'SC-2026-004: 面談後フィードバックを担当者に共有',   due:'4/30', done:false },
+    /* ─── タスク（LocalStorage 永続化）────────────────────
+       v2 スキーマには tasks テーブルが無いため、当面は LocalStorage
+       でブラウザローカルに永続化する。組織横断・複数端末同期は対象外。
+       Phase E〜F で CASES / CANDIDATES / ACTIVITIES / INQUIRIES およ
+       び関連定数・関数はすべて削除済み。 */
+    const TASKS_STORAGE_KEY = 'mitas:dashboard:tasks:v1';
+    const DEFAULT_TASKS = [
+      { id:1, text:'依頼内容の最終確認',         due:'本日中', done:false },
+      { id:2, text:'施設からの問い合わせに返信', due:'本日中', done:false },
+      { id:3, text:'候補者の追加情報を確認',     due:'明日まで', done:false },
     ];
-    let taskIdSeq = 6;
+    let TASKS = loadTasksFromStorage();
+    let taskIdSeq = (TASKS.reduce((m, t) => Math.max(m, t.id || 0), 0) + 1) || 1;
+
+    function loadTasksFromStorage() {
+      try {
+        const raw = localStorage.getItem(TASKS_STORAGE_KEY);
+        if (!raw) return [...DEFAULT_TASKS];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [...DEFAULT_TASKS];
+      } catch (_) {
+        return [...DEFAULT_TASKS];
+      }
+    }
+    function saveTasksToStorage() {
+      try { localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(TASKS)); }
+      catch (_) { /* QuotaExceeded等は無視（in-memory のまま動く） */ }
+    }
 
     /* ─── KPI プレースホルダー表示 ────────────────────
        v2 KPI 取得（loadV2Kpis）が完了するまでの初期プレースホルダー。
@@ -2917,33 +2931,50 @@
 
     /* ─── タスク ────────────────────────────────── */
     function renderTasks() {
-      const filter = document.getElementById('taskFilter').value;
+      const filterEl = document.getElementById('taskFilter');
+      const listEl = document.getElementById('taskList');
+      if (!listEl) return;
+      const filter = filterEl ? filterEl.value : 'all';
       const list   = TASKS.filter(t => filter === 'all' || (filter === 'open' ? !t.done : t.done));
-      document.getElementById('taskList').innerHTML = list.map(t => `
+      listEl.innerHTML = list.map(t => `
         <div class="task-row">
           <div class="task-checkbox ${t.done ? 'done' : ''}" onclick="toggleTask(${t.id})">${t.done ? '&#10003;' : ''}</div>
           <div class="task-body">
-            <p class="task-text ${t.done ? 'done' : ''}">${t.text}</p>
-            <p class="task-due ${t.due === '本日中' && !t.done ? 'urgent' : ''}">${t.due}</p>
+            <p class="task-text ${t.done ? 'done' : ''}">${s(t.text)}</p>
+            <p class="task-due ${t.due === '本日中' && !t.done ? 'urgent' : ''}">${s(t.due)}</p>
           </div>
+          <button class="task-delete" onclick="deleteTask(${t.id})" aria-label="削除"
+                  style="background:transparent;border:none;color:var(--gray-400);font-size:16px;cursor:pointer;padding:4px 8px;">
+            &#10005;
+          </button>
         </div>
       `).join('') || '<p style="color:var(--gray-400);font-size:13px;padding:8px;">タスクはありません</p>';
     }
     function toggleTask(id) {
       const t = TASKS.find(t => t.id === id);
-      if (t) { t.done = !t.done; renderTasks(); }
+      if (t) { t.done = !t.done; saveTasksToStorage(); renderTasks(); }
+    }
+    function deleteTask(id) {
+      const idx = TASKS.findIndex(t => t.id === id);
+      if (idx < 0) return;
+      TASKS.splice(idx, 1);
+      saveTasksToStorage();
+      renderTasks();
     }
     function addTask() {
       const input = document.getElementById('taskInput');
+      if (!input) return;
       const text  = input.value.trim();
       if (!text) return;
       TASKS.unshift({ id: taskIdSeq++, text, due:'期限なし', done:false });
       input.value = '';
+      saveTasksToStorage();
       renderTasks();
     }
-    document.getElementById('taskInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') addTask();
-    });
+    const _taskInput = document.getElementById('taskInput');
+    if (_taskInput) {
+      _taskInput.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+    }
 
     /* ─── 設定 ──────────────────────────────────── */
     async function initSettings() {
