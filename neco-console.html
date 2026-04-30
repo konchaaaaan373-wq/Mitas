@@ -324,6 +324,176 @@
       line-height: 1.7;
     }
 
+    /* ─── 詳細パネル ─── */
+    .detail {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .detail__head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .detail__num {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .detail__title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      letter-spacing: -0.01em;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .detail__badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── アクションバー ─── */
+    .detail__actions {
+      padding: 12px 22px;
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .detail__actions-label {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-right: 4px;
+    }
+    .action-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn:hover { box-shadow: 0 2px 6px rgba(15,23,42,0.10); }
+    .action-btn:active { transform: translateY(1px); }
+    .action-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+    .action-btn--primary { background: var(--teal); color: var(--white); border-color: var(--teal); }
+    .action-btn--primary:hover { background: var(--teal-light); }
+    .action-btn--success { background: var(--green); color: var(--white); border-color: var(--green); }
+    .action-btn--warn    { background: var(--amber); color: var(--white); border-color: var(--amber); }
+    .action-btn--danger  { background: var(--red); color: var(--white); border-color: var(--red); }
+    .action-btn--ghost   { background: var(--white); color: var(--gray-700); border-color: var(--gray-300); }
+    .action-btn--ghost:hover { background: var(--gray-50); }
+
+    /* ─── 詳細本体 ─── */
+    .detail__body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 22px 28px;
+    }
+    .detail-section { margin-bottom: 22px; }
+    .detail-section:last-child { margin-bottom: 0; }
+    .detail-section__title {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .detail-section__body {
+      color: var(--gray-700);
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ─── メタデータグリッド ─── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 18px;
+    }
+    .meta-item__label {
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .meta-item__value {
+      font-size: 14px;
+      color: var(--navy-deep);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      word-break: break-word;
+    }
+    .meta-item__value--muted { color: var(--gray-400); font-weight: 400; }
+
+    /* ─── チップ群（資格・スキル） ─── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .chip--required  { background: rgba(220,38,38,0.08);  color: var(--red); }
+    .chip--preferred { background: rgba(14,165,233,0.08); color: var(--teal); }
+
+    /* ─── タイムライン ─── */
+    .timeline {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 6px 12px;
+      font-size: 12px;
+    }
+    .timeline__label { color: var(--gray-500); }
+    .timeline__value { color: var(--gray-700); font-variant-numeric: tabular-nums; }
+
+    /* ─── トースト ─── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      z-index: 200;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.25s, opacity 0.25s;
+      pointer-events: none;
+      max-width: 420px;
+    }
+    .toast.is-visible { transform: translateY(0); opacity: 1; }
+    .toast--success { background: var(--green); color: var(--white); }
+    .toast--error   { background: var(--red);   color: var(--white); }
+    .toast--info    { background: var(--navy-mid); color: var(--white); }
+
     /* ─── ローディング・エラー・空 ─── */
     .placeholder {
       padding: 40px 16px;
@@ -404,21 +574,23 @@
     </div>
   </section>
 
-  <!-- ═════ 右カラム：詳細（Step1ではプレースホルダー） ═════ -->
-  <section class="panel" aria-label="依頼詳細">
-    <div class="panel__head">
-      <div class="panel__title">依頼の詳細</div>
-      <div class="panel__subtitle">左の一覧から依頼を選択してください</div>
-    </div>
-    <div class="detail-empty" id="detailArea">
+  <!-- ═════ 右カラム：詳細パネル ═════ -->
+  <section class="panel" id="detailPanel" aria-label="依頼詳細">
+    <div class="detail-empty" id="detailEmpty">
       <div class="detail-empty__icon">i</div>
       <div class="detail-empty__title">依頼が選択されていません</div>
       <div class="detail-empty__desc">
         左の一覧から依頼カードを選択すると、詳細・状態遷移ボタン・候補者抽出・既存提案が表示されます。
       </div>
     </div>
+    <div class="detail" id="detailArea" hidden>
+      <!-- detail__head / __actions / __body は JS で描画 -->
+    </div>
   </section>
 </div>
+
+<!-- トースト（成功・失敗メッセージ用） -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
   // ─── Supabaseクライアント初期化 ───
@@ -460,6 +632,40 @@
     urgent: '緊急', high: '高', medium: '中', low: '低',
   };
 
+  const SHIFT_LABEL = {
+    on_call: 'オンコール',
+    night_duty: '夜勤',
+    day_duty: '日勤',
+    spot: 'スポット',
+    regular_shift: '通常シフト',
+    long_term: '長期',
+  };
+
+  // ─── 状態遷移マップ（neco_admin が操作可能な遷移） ───
+  // db/migrations/0005 の validate_request_transition と整合させること
+  // kind は action-btn--*** の修飾子名と対応
+  const TRANSITION_MAP = {
+    submitted:    [{ target: 'under_review', label: '確認を開始',  kind: 'primary'  }],
+    under_review: [
+      { target: 'accepted', label: '受諾', kind: 'success' },
+      { target: 'rejected', label: '差戻し', kind: 'warn'    },
+    ],
+    accepted:     [{ target: 'proposing',    label: '提案を開始', kind: 'primary'  }],
+    // proposing/partially_assigned は提案・アサインの結果として自動更新される想定だが、
+    // オペが手動で進めるケースも想定して用意しておく
+    proposing:    [
+      { target: 'partially_assigned', label: '一部充足にする', kind: 'ghost' },
+      { target: 'fully_assigned',     label: '充足完了にする', kind: 'success' },
+    ],
+    partially_assigned: [
+      { target: 'fully_assigned', label: '充足完了にする', kind: 'success' },
+      { target: 'in_progress',    label: '進行中にする',   kind: 'ghost'   },
+    ],
+  };
+
+  // すべての非終端状態から「キャンセル」が可能（DBトリガー側で paid / cancelled は弾かれる）
+  const NON_CANCELLABLE = new Set(['paid', 'cancelled']);
+
   // ─── アプリ状態 ───
   const state = {
     token: null,
@@ -467,6 +673,8 @@
     activeTab: 'new',
     requests: [],
     selectedId: null,
+    selectedRequest: null,   // 選択中の依頼の詳細（GET /api/v2/requests/:id の結果）
+    isPatching: false,       // 多重送信防止
   };
 
   // ─── 認証確認＋初期化 ───
@@ -586,13 +794,282 @@
     listEl.querySelectorAll('.request-card').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.dataset.id;
-        state.selectedId = id;
-        listEl.querySelectorAll('.request-card').forEach(c => {
-          c.classList.toggle('is-selected', c.dataset.id === id);
-        });
-        // Step 2 で詳細パネルの実装を行う
+        selectRequest(id);
       });
     });
+
+    // 直前まで選択していた依頼を再選択（リスト再描画後の状態維持）
+    if (state.selectedId) {
+      const card = listEl.querySelector(`.request-card[data-id="${cssEscape(state.selectedId)}"]`);
+      if (card) card.classList.add('is-selected');
+    }
+  }
+
+  // ─── 依頼の選択 → 詳細取得 → 描画 ───
+  async function selectRequest(id) {
+    state.selectedId = id;
+    document.querySelectorAll('.request-card').forEach(c => {
+      c.classList.toggle('is-selected', c.dataset.id === id);
+    });
+
+    // 一覧から見つかった行を仮表示し、その後詳細APIで上書きする
+    const fromList = state.requests.find(r => r.id === id);
+    if (fromList) {
+      state.selectedRequest = fromList;
+      renderDetail(fromList, { loading: true });
+    }
+
+    try {
+      const r = await fetchRequestDetail(id);
+      state.selectedRequest = r;
+      renderDetail(r);
+    } catch (e) {
+      console.error('依頼詳細の取得に失敗:', e);
+      // 一覧データのままで描画継続（最低限の情報は出る）
+      if (fromList) renderDetail(fromList);
+      showToast('error', `詳細の取得に失敗しました（${e.message}）`);
+    }
+  }
+
+  async function fetchRequestDetail(id) {
+    if (isMockMode) {
+      const r = state.requests.find(x => x.id === id);
+      if (!r) throw new Error('該当依頼が見つかりません');
+      // モック詳細を補強
+      return Object.assign({
+        description: 'これはモックデータの説明文です。\n施設の希望や条件をここに記載します。',
+        shift_type: 'on_call',
+        end_at: r.start_at,
+        hourly_rate_min: 8000,
+        hourly_rate_max: 12000,
+        total_budget: null,
+        required_licenses: ['医師免許'],
+        required_skills: ['内科一般', '当直経験'],
+        preferred_skills: ['英会話', '電子カルテ操作'],
+        submitted_at: r.created_at,
+        reviewed_at: null,
+        accepted_at: null,
+      }, r);
+    }
+    const res = await fetch(`/api/v2/requests/${encodeURIComponent(id)}`, {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(`API ${res.status}: ${t}`);
+    }
+    const data = await res.json();
+    return data.request || data;
+  }
+
+  // ─── 詳細パネルのレンダリング ───
+  function renderDetail(r, opts = {}) {
+    const empty = document.getElementById('detailEmpty');
+    const area  = document.getElementById('detailArea');
+    empty.hidden = true;
+    area.hidden  = false;
+
+    const priority = r.priority || 'medium';
+    const transitions = TRANSITION_MAP[r.status] || [];
+    const canCancel = !NON_CANCELLABLE.has(r.status);
+
+    const startEnd = formatRange(r.start_at, r.end_at);
+    const wage = formatWage(r.hourly_rate_min, r.hourly_rate_max);
+    const budget = r.total_budget != null ? `¥${Number(r.total_budget).toLocaleString()}` : '—';
+
+    const reqLicenses = arrChips(r.required_licenses, 'required');
+    const reqSkills   = arrChips(r.required_skills,   'required');
+    const prefSkills  = arrChips(r.preferred_skills,  'preferred');
+
+    area.innerHTML = `
+      <div class="detail__head">
+        <div class="detail__num">${escapeHtml(r.request_number || '')}</div>
+        <h2 class="detail__title">${escapeHtml(r.title || '(タイトルなし)')}</h2>
+        <div class="detail__badges">
+          <span class="badge badge--status-${escapeHtml(r.status)}">${STATUS_LABEL[r.status] || r.status}</span>
+          <span class="badge badge--${priority}">優先度：${PRIORITY_LABEL[priority] || priority}</span>
+          ${opts.loading ? '<span class="badge badge--low">読み込み中…</span>' : ''}
+        </div>
+      </div>
+
+      <div class="detail__actions" id="detailActions">
+        ${transitions.length || canCancel
+          ? '<span class="detail__actions-label">状態遷移：</span>'
+          : '<span class="detail__actions-label">この状態では遷移できる操作はありません。</span>'}
+        ${transitions.map(t => `
+          <button class="action-btn action-btn--${t.kind}" data-target="${t.target}">
+            ${escapeHtml(t.label)}
+          </button>
+        `).join('')}
+        ${canCancel ? `
+          <button class="action-btn action-btn--ghost" data-target="cancelled">
+            キャンセル
+          </button>` : ''}
+      </div>
+
+      <div class="detail__body">
+        ${r.description ? `
+          <div class="detail-section">
+            <div class="detail-section__title">概要</div>
+            <div class="detail-section__body">${escapeHtml(r.description)}</div>
+          </div>` : ''}
+
+        <div class="detail-section">
+          <div class="detail-section__title">基本情報</div>
+          <div class="meta-grid">
+            <div><div class="meta-item__label">職種</div><div class="meta-item__value">${escapeHtml(professionLabel(r.profession_type))}</div></div>
+            <div><div class="meta-item__label">専門・科</div><div class="meta-item__value ${r.specialty ? '' : 'meta-item__value--muted'}">${escapeHtml(r.specialty || '—')}</div></div>
+            <div><div class="meta-item__label">必要人数</div><div class="meta-item__value">${r.headcount || 1}名</div></div>
+            <div><div class="meta-item__label">シフト種別</div><div class="meta-item__value">${escapeHtml(SHIFT_LABEL[r.shift_type] || r.shift_type || '—')}</div></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section__title">スケジュール</div>
+          <div class="meta-grid">
+            <div><div class="meta-item__label">開始</div><div class="meta-item__value">${escapeHtml(formatDateTime(r.start_at))}</div></div>
+            <div><div class="meta-item__label">終了</div><div class="meta-item__value">${escapeHtml(formatDateTime(r.end_at))}</div></div>
+            <div style="grid-column: 1 / -1;"><div class="meta-item__label">期間</div><div class="meta-item__value">${escapeHtml(startEnd)}</div></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section__title">報酬</div>
+          <div class="meta-grid">
+            <div><div class="meta-item__label">時給レンジ</div><div class="meta-item__value">${escapeHtml(wage)}</div></div>
+            <div><div class="meta-item__label">総予算</div><div class="meta-item__value">${escapeHtml(budget)}</div></div>
+          </div>
+        </div>
+
+        ${reqLicenses ? `
+          <div class="detail-section">
+            <div class="detail-section__title">必須資格</div>
+            <div class="chips">${reqLicenses}</div>
+          </div>` : ''}
+
+        ${reqSkills ? `
+          <div class="detail-section">
+            <div class="detail-section__title">必須スキル</div>
+            <div class="chips">${reqSkills}</div>
+          </div>` : ''}
+
+        ${prefSkills ? `
+          <div class="detail-section">
+            <div class="detail-section__title">希望スキル</div>
+            <div class="chips">${prefSkills}</div>
+          </div>` : ''}
+
+        <div class="detail-section">
+          <div class="detail-section__title">タイムライン</div>
+          <div class="timeline">
+            <div class="timeline__label">作成</div>
+            <div class="timeline__value">${escapeHtml(formatDateTime(r.created_at))}</div>
+            <div class="timeline__label">提出</div>
+            <div class="timeline__value">${escapeHtml(formatDateTime(r.submitted_at))}</div>
+            <div class="timeline__label">確認開始</div>
+            <div class="timeline__value">${escapeHtml(formatDateTime(r.reviewed_at))}</div>
+            <div class="timeline__label">受諾</div>
+            <div class="timeline__value">${escapeHtml(formatDateTime(r.accepted_at))}</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // アクションボタンのバインド
+    area.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        if (!target) return;
+        transitionRequest(r.id, r.status, target);
+      });
+    });
+
+    // 読み込み中はボタンを無効化
+    if (opts.loading) {
+      area.querySelectorAll('.action-btn').forEach(b => { b.disabled = true; });
+    }
+  }
+
+  // ─── 状態遷移の PATCH ───
+  async function transitionRequest(id, currentStatus, targetStatus) {
+    if (state.isPatching) return;
+
+    const targetLabel = STATUS_LABEL[targetStatus] || targetStatus;
+    const currentLabel = STATUS_LABEL[currentStatus] || currentStatus;
+    const ok = window.confirm(`依頼の状態を「${currentLabel}」→「${targetLabel}」に変更します。よろしいですか？`);
+    if (!ok) return;
+
+    state.isPatching = true;
+    document.querySelectorAll('#detailActions .action-btn').forEach(b => { b.disabled = true; });
+
+    try {
+      if (isMockMode) {
+        // モックでは状態だけローカルで書き換えてリスト・詳細を再描画
+        const idx = state.requests.findIndex(x => x.id === id);
+        if (idx >= 0) {
+          state.requests[idx] = { ...state.requests[idx], status: targetStatus };
+          if (state.selectedRequest && state.selectedRequest.id === id) {
+            state.selectedRequest = { ...state.selectedRequest, status: targetStatus };
+          }
+        }
+        await new Promise(r => setTimeout(r, 250));
+        showToast('success', `状態を「${targetLabel}」に変更しました（モック）`);
+      } else {
+        const res = await fetch(`/api/v2/requests/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: targetStatus }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) {
+            throw new Error(data.error || '不正な状態遷移です');
+          }
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        showToast('success', `状態を「${targetLabel}」に変更しました`);
+      }
+
+      updateTabCounts();
+      renderRequestList();
+      if (state.selectedId === id) {
+        // 最新の値を取り直して詳細を再描画
+        try {
+          const fresh = await fetchRequestDetail(id);
+          state.selectedRequest = fresh;
+          renderDetail(fresh);
+        } catch (_) {
+          // 取れなかった場合はローカル値で描画
+          const local = state.requests.find(x => x.id === id);
+          if (local) renderDetail(local);
+        }
+      }
+    } catch (e) {
+      console.error('状態遷移失敗:', e);
+      showToast('error', `変更に失敗しました：${e.message}`);
+      // ボタン再有効化のためもう一度描画
+      if (state.selectedRequest) renderDetail(state.selectedRequest);
+    } finally {
+      state.isPatching = false;
+    }
+  }
+
+  // ─── トースト ───
+  let _toastTimer = null;
+  function showToast(kind, message) {
+    const el = document.getElementById('toast');
+    el.className = `toast toast--${kind} is-visible`;
+    el.textContent = message;
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+      el.classList.remove('is-visible');
+    }, 3500);
   }
 
   function renderCard(r) {
@@ -641,6 +1118,61 @@
     const m = ('0' + (d.getMonth() + 1)).slice(-2);
     const day = ('0' + d.getDate()).slice(-2);
     return `${d.getFullYear()}/${m}/${day}`;
+  }
+
+  // YYYY/MM/DD HH:mm 形式（NULLは「—」）
+  function formatDateTime(s) {
+    if (!s) return '—';
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return s;
+    const m  = ('0' + (d.getMonth() + 1)).slice(-2);
+    const dd = ('0' + d.getDate()).slice(-2);
+    const hh = ('0' + d.getHours()).slice(-2);
+    const mm = ('0' + d.getMinutes()).slice(-2);
+    return `${d.getFullYear()}/${m}/${dd} ${hh}:${mm}`;
+  }
+
+  // 開始〜終了の期間表示（同日なら時間レンジに圧縮）
+  function formatRange(start, end) {
+    if (!start && !end) return '—';
+    if (!start) return `〜 ${formatDateTime(end)}`;
+    if (!end)   return `${formatDateTime(start)} 〜`;
+    const s = new Date(start), e = new Date(end);
+    if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) {
+      return `${formatDateTime(start)} 〜 ${formatDateTime(end)}`;
+    }
+    const sameDay = s.getFullYear() === e.getFullYear()
+      && s.getMonth() === e.getMonth() && s.getDate() === e.getDate();
+    if (sameDay) {
+      const ehh = ('0' + e.getHours()).slice(-2);
+      const emm = ('0' + e.getMinutes()).slice(-2);
+      return `${formatDateTime(start)} 〜 ${ehh}:${emm}`;
+    }
+    return `${formatDateTime(start)} 〜 ${formatDateTime(end)}`;
+  }
+
+  // 時給レンジの表示
+  function formatWage(min, max) {
+    const yen = (n) => `¥${Number(n).toLocaleString()}`;
+    if (min == null && max == null) return '—';
+    if (min != null && max != null) {
+      if (min === max) return `${yen(min)} / 時`;
+      return `${yen(min)} 〜 ${yen(max)} / 時`;
+    }
+    return `${yen(min ?? max)} / 時`;
+  }
+
+  // 配列 → チップ群のHTML（空なら null を返す）
+  function arrChips(arr, kind) {
+    if (!Array.isArray(arr) || !arr.length) return null;
+    const cls = kind ? `chip chip--${kind}` : 'chip';
+    return arr.map(v => `<span class="${cls}">${escapeHtml(v)}</span>`).join('');
+  }
+
+  // querySelector 用に ID をエスケープ（UUID なので過剰な対応は不要だが念のため）
+  function cssEscape(s) {
+    if (window.CSS && CSS.escape) return CSS.escape(s);
+    return String(s).replace(/["\\]/g, '\\$&');
   }
 
   function escapeHtml(s) {
