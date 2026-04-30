@@ -1417,6 +1417,21 @@
       background: rgba(14,165,233,0.05);
     }
 
+    /* ─── v2 請求ステータスバッジ ─── */
+    .v2-inv-st {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .v2-inv-st--draft   { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+    .v2-inv-st--issued  { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-inv-st--paid    { background: rgba(16,185,129,0.20); color: #047857; }
+    .v2-inv-st--overdue { background: rgba(220,38,38,0.10); color: #DC2626; font-weight: 700; }
+    .v2-inv-st--void    { background: var(--gray-100, #F1F5F9); color: var(--gray-500, #64748B); }
+
     /* ─── v2 アサインステータスバッジ ─── */
     .v2-asgn-st {
       display: inline-block;
@@ -1532,6 +1547,12 @@
         <a class="nav-item" data-section="inquiries" href="#">
           <span class="nav-item__icon">&#9993;</span>
           <span class="nav-item__label">問い合わせ</span>
+        </a>
+
+        <a class="nav-item" data-section="invoices" href="#">
+          <span class="nav-item__icon">&#36;</span>
+          <span class="nav-item__label">請求</span>
+          <span class="nav-item__badge" id="badge-invoices"></span>
         </a>
 
         <a class="nav-item" data-section="settings" href="#">
@@ -1791,6 +1812,30 @@
           <div class="v2-cases-table__placeholder">読み込み中…</div>
         </div>
         <div class="v2-cases-card__msg" id="v2InquiriesMsg">読み込み中…</div>
+      </div>
+
+    </section>
+
+    <!-- ─── 請求（v2 リアルデータ） ──────────────────── -->
+    <section class="page-section" id="s-invoices">
+
+      <div class="v2-cases-card" id="v2InvoicesCard" aria-label="請求一覧">
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">請求一覧</span>
+          <div class="v2-cases-card__actions">
+            <select class="v2-cases-card__filter" id="v2InvoicesFilter">
+              <option value="open">未回収のみ</option>
+              <option value="all">全件</option>
+              <option value="paid">入金済み</option>
+              <option value="overdue">支払期日超過</option>
+            </select>
+            <button class="v2-banner__refresh" id="v2InvoicesRefreshBtn" type="button">更新</button>
+          </div>
+        </div>
+        <div class="v2-cases-table-wrap" id="v2InvoicesBody">
+          <div class="v2-cases-table__placeholder">読み込み中…</div>
+        </div>
+        <div class="v2-cases-card__msg" id="v2InvoicesMsg">読み込み中…</div>
       </div>
 
     </section>
@@ -3312,6 +3357,150 @@
       if (r) r.addEventListener('click', loadV2Assignments);
     }
 
+    /* ─── v2 請求（invoices） ─────────────
+       /api/v2/invoices から自組織宛の請求書を取得し、ステータス別に表示。
+       facility_admin は閲覧のみ（作成・更新は Neco 社内オペレーション）。 */
+    const V2_INV_STATUS_LABEL = {
+      draft:   '下書き',
+      issued:  '発行済',
+      paid:    '入金済',
+      overdue: '支払期日超過',
+      void:    '無効',
+    };
+    const V2_INV_OPEN = ['draft','issued','overdue'];
+
+    const v2InvState = { rows: [], filter: 'open', loaded: false };
+
+    async function loadV2Invoices() {
+      const $ = (id) => document.getElementById(id);
+      const body = $('v2InvoicesBody');
+      const msgEl = $('v2InvoicesMsg');
+      const setMsg = (txt, isError) => {
+        if (!msgEl) return;
+        msgEl.textContent = txt;
+        msgEl.classList.toggle('v2-cases-card__msg--error', !!isError);
+      };
+      const btn = $('v2InvoicesRefreshBtn');
+
+      body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
+      setMsg('読み込み中…');
+      if (btn) btn.disabled = true;
+
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = session && session.access_token ? session.access_token : null;
+        }
+      } catch (_) { /* noop */ }
+
+      if (!token) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">Supabaseセッションが見つかりません</div>';
+        setMsg('セッションがないため請求書を取得できません', true);
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v2/invoices?limit=200', {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API ${res.status}: ${text.slice(0, 80)}`);
+        }
+        const data = await res.json();
+        v2InvState.rows = Array.isArray(data.invoices) ? data.invoices : [];
+        v2InvState.loaded = true;
+        renderV2InvoicesTable();
+
+        const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+        const overdue = v2InvState.rows.filter(i => i.status === 'overdue').length;
+        setMsg(`v2 API より取得：${ts} 時点 / 総件数 ${v2InvState.rows.length}件 / 期日超過 ${overdue}件${data.source === 'mock' ? '（モック）' : ''}`);
+
+        // サイドバーバッジに「期日超過」を反映
+        const badge = document.getElementById('badge-invoices');
+        if (badge) badge.textContent = overdue ? overdue : '';
+      } catch (e) {
+        console.error('v2 請求書取得失敗:', e);
+        body.innerHTML = '<div class="v2-cases-table__placeholder">取得に失敗しました</div>';
+        setMsg(`v2 API への接続に失敗しました（${e.message}）`, true);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderV2InvoicesTable() {
+      const body = document.getElementById('v2InvoicesBody');
+      if (!body) return;
+      const f = v2InvState.filter;
+      const rows = (v2InvState.rows || []).filter(i => {
+        if (f === 'open')    return V2_INV_OPEN.includes(i.status);
+        if (f === 'paid')    return i.status === 'paid';
+        if (f === 'overdue') return i.status === 'overdue';
+        return true;
+      }).sort((a, b) => (b.period_start || '').localeCompare(a.period_start || ''));
+
+      if (!rows.length) {
+        body.innerHTML = '<div class="v2-cases-table__placeholder">該当する請求書はありません</div>';
+        return;
+      }
+
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      const fmt = (iso) => {
+        if (!iso) return '—';
+        // 'YYYY-MM-DD' or ISO
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${d.getFullYear()}/${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)}`;
+      };
+      const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
+
+      body.innerHTML = `
+        <table class="v2-cases-table">
+          <thead>
+            <tr>
+              <th>請求番号</th>
+              <th>対象期間</th>
+              <th class="num">小計</th>
+              <th class="num">税</th>
+              <th class="num">合計</th>
+              <th>発行日</th>
+              <th>支払期日</th>
+              <th>入金日</th>
+              <th>ステータス</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(i => `
+              <tr>
+                <td><span class="v2-cases-table__num">${esc(i.invoice_number || '')}</span></td>
+                <td>${esc(fmt(i.period_start))} 〜 ${esc(fmt(i.period_end))}</td>
+                <td class="num">${esc(yen(i.subtotal))}</td>
+                <td class="num">${esc(yen(i.tax))}</td>
+                <td class="num"><strong>${esc(yen(i.total))}</strong></td>
+                <td>${esc(fmt(i.issue_date))}</td>
+                <td>${esc(fmt(i.due_date))}</td>
+                <td>${esc(fmt(i.paid_date))}</td>
+                <td><span class="v2-inv-st v2-inv-st--${esc(i.status)}">${esc(V2_INV_STATUS_LABEL[i.status] || i.status)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function bindV2InvoicesControls() {
+      if (bindV2InvoicesControls._bound) return;
+      bindV2InvoicesControls._bound = true;
+      const f = document.getElementById('v2InvoicesFilter');
+      const r = document.getElementById('v2InvoicesRefreshBtn');
+      if (f) f.addEventListener('change', () => { v2InvState.filter = f.value; renderV2InvoicesTable(); });
+      if (r) r.addEventListener('click', loadV2Invoices);
+    }
+
     function getV2MockActivity() {
       const now = Date.now();
       const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
@@ -3335,6 +3524,7 @@
       assignments: 'アサイン管理',
       tasks:       'タスク',
       inquiries:   '問い合わせ',
+      invoices:    '請求',
       settings:    '設定',
     };
 
@@ -3718,6 +3908,12 @@
         bindV2InquiriesControls();
         if (!v2InqState.loaded) loadV2Inquiries();
         else                    renderV2InquiriesTable();
+      }
+      if (id === 'invoices') {
+        // 請求書（v2 リアル）：初回コントロールバインド＋初回ロード
+        bindV2InvoicesControls();
+        if (!v2InvState.loaded) loadV2Invoices();
+        else                    renderV2InvoicesTable();
       }
       if (id === 'settings')   initSettings();
       // モバイル時はセクション切り替えでサイドバーを閉じる
