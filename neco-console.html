@@ -868,6 +868,69 @@
   </div>
 </div>
 
+<!-- 請求書作成モーダル -->
+<div class="modal-backdrop" id="invoiceModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="invoiceModalTitle"
+       style="max-width: 640px;">
+    <div class="modal__head">
+      <div class="modal__title" id="invoiceModalTitle">請求書を作成</div>
+      <div class="modal__subtitle" id="invoiceModalSubtitle">—</div>
+    </div>
+    <form id="invoiceForm" novalidate>
+      <div class="modal__body">
+        <div class="field-grid">
+          <div class="field">
+            <label class="field__label" for="invIssueDate">発行日</label>
+            <input class="field__input" type="date" id="invIssueDate" name="issue_date">
+          </div>
+          <div class="field">
+            <label class="field__label" for="invDueDays">支払期日（日数）</label>
+            <input class="field__input" type="number" id="invDueDays" name="due_days"
+                   min="1" max="180" step="1" value="30">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="invTaxRate">消費税率（%）</label>
+          <input class="field__input" type="number" id="invTaxRate" name="tax_rate"
+                 min="0" max="30" step="0.5" value="10">
+          <div class="field__hint">明細の合計に上乗せします（既定：10%）</div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="invNote">備考</label>
+          <textarea class="field__textarea" id="invNote" name="note"
+                    placeholder="請求書に記載するメモ（任意）"></textarea>
+        </div>
+
+        <div class="field" style="margin-top: 4px;">
+          <label class="field__label">明細プレビュー</label>
+          <div id="invoiceLinesPreview" style="border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px; background: var(--gray-50); max-height: 200px; overflow-y: auto;">
+            <div class="placeholder" style="padding: 8px;">明細を準備中…</div>
+          </div>
+        </div>
+
+        <div class="field-grid" style="background: var(--gray-50); padding: 12px; border-radius: var(--radius); border: 1px solid var(--gray-200);">
+          <div>
+            <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 2px;">小計</div>
+            <div id="invSubtotal" style="font-size: 16px; font-weight: 700; color: var(--navy-deep); font-variant-numeric: tabular-nums;">¥0</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 2px;">消費税</div>
+            <div id="invTaxAmount" style="font-size: 16px; font-weight: 700; color: var(--navy-deep); font-variant-numeric: tabular-nums;">¥0</div>
+          </div>
+          <div style="grid-column: 1 / -1; padding-top: 8px; border-top: 1px solid var(--gray-200);">
+            <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 2px;">合計</div>
+            <div id="invTotal" style="font-size: 22px; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums;">¥0</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="action-btn action-btn--ghost" id="invoiceCancelBtn">キャンセル</button>
+        <button type="submit" class="action-btn action-btn--primary" id="invoiceSubmitBtn">請求書を作成</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- トースト（成功・失敗メッセージ用） -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1027,10 +1090,21 @@
       // 背景クリックで閉じる（モーダル本体クリックは閉じない）
       if (e.target.id === 'proposalModal') closeProposalModal();
     });
+
+    // 請求書作成モーダル（v0.3）
+    document.getElementById('invoiceCancelBtn').addEventListener('click', closeInvoiceModal);
+    document.getElementById('invoiceForm').addEventListener('submit', submitInvoice);
+    document.getElementById('invoiceModal').addEventListener('click', (e) => {
+      if (e.target.id === 'invoiceModal') closeInvoiceModal();
+    });
+    document.getElementById('invTaxRate').addEventListener('input', renderInvoicePreview);
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        const modal = document.getElementById('proposalModal');
-        if (modal.classList.contains('is-open')) closeProposalModal();
+        const propModal = document.getElementById('proposalModal');
+        const invModal  = document.getElementById('invoiceModal');
+        if (propModal.classList.contains('is-open')) closeProposalModal();
+        if (invModal.classList.contains('is-open'))  closeInvoiceModal();
       }
     });
 
@@ -1834,9 +1908,27 @@
 
     const list = state.selectedAssignments || [];
     const dispute = list.filter(a => a.status === 'disputed').length;
+    const billable = list.filter(a => a.status === 'completion_confirmed').length;
     countEl.textContent = list.length
-      ? `${list.length}件${dispute ? `（紛争中 ${dispute}件）` : ''}`
+      ? `${list.length}件${dispute ? `（紛争中 ${dispute}件）` : ''}${billable ? `（請求可 ${billable}件）` : ''}`
       : '0件';
+
+    // 請求書作成ボタンを sub-panel ヘッダーに追加
+    const headEl = countEl.parentElement;
+    if (headEl) {
+      const oldBtn = headEl.querySelector('.invoice-create-btn');
+      if (oldBtn) oldBtn.remove();
+      if (billable > 0) {
+        const btn = document.createElement('button');
+        btn.className = 'action-btn action-btn--primary invoice-create-btn';
+        btn.textContent = '請求書を作成';
+        btn.style.padding = '6px 12px';
+        btn.style.fontSize = '11px';
+        btn.style.marginLeft = '8px';
+        btn.addEventListener('click', () => openInvoiceModal());
+        headEl.appendChild(btn);
+      }
+    }
 
     if (!list.length) {
       container.innerHTML = '<div class="placeholder" style="padding: 16px;">確定したアサインはまだありません</div>';
@@ -1871,11 +1963,15 @@
                 <div style="font-size:11px; color: var(--gray-700); margin-top:6px; line-height:1.6;">
                   ワーカーメモ：${escapeHtml(a.worker_completion_note)}
                 </div>` : ''}
-              ${canConfirm ? `
-                <div style="margin-top: 8px; display:flex; gap:6px;">
+              <div style="margin-top: 8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                ${canConfirm ? `
                   <button class="action-btn action-btn--success v0-asgn-confirm" data-id="${escapeHtml(a.id)}" type="button"
                           style="font-size:11px; padding:6px 10px;">完了確定にする</button>
-                </div>` : ''}
+                ` : ''}
+                <button class="action-btn action-btn--ghost v0-asgn-toggle-logs" data-id="${escapeHtml(a.id)}" type="button"
+                        style="font-size:11px; padding:6px 10px;">タイムラインを見る</button>
+              </div>
+              <div class="v0-asgn-logs" id="wlogs-${escapeHtml(a.id)}" hidden></div>
             </div>
           `;
         }).join('')}
@@ -1885,6 +1981,82 @@
     container.querySelectorAll('.v0-asgn-confirm').forEach(btn => {
       btn.addEventListener('click', () => confirmAssignmentNeco(btn.dataset.id, btn));
     });
+    container.querySelectorAll('.v0-asgn-toggle-logs').forEach(btn => {
+      btn.addEventListener('click', () => toggleAssignmentLogs(btn.dataset.id, btn));
+    });
+  }
+
+  // ─── アサインの work_logs（タイムライン）展開 ───
+  const WORK_LOG_LABEL = {
+    check_in:    'チェックイン',
+    check_out:   'チェックアウト',
+    break_start: '休憩開始',
+    break_end:   '休憩終了',
+    note:        'メモ',
+    incident:    'インシデント',
+  };
+
+  async function toggleAssignmentLogs(assignmentId, btn) {
+    if (!assignmentId) return;
+    const box = document.getElementById('wlogs-' + assignmentId);
+    if (!box) return;
+
+    if (!box.hidden) {
+      box.hidden = true;
+      btn.textContent = 'タイムラインを見る';
+      return;
+    }
+
+    box.hidden = false;
+    btn.textContent = '閉じる';
+    box.innerHTML = '<div class="placeholder" style="padding: 8px;">読み込み中…</div>';
+
+    try {
+      const path = `/work_logs?assignment_id=eq.${encodeURIComponent(assignmentId)}`
+        + `&select=*&order=occurred_at.asc&limit=100`;
+      const rows = await pgFetch(path);
+      const logs = Array.isArray(rows) ? rows : [];
+
+      if (!logs.length) {
+        box.innerHTML = '<div class="placeholder" style="padding: 8px;">タイムラインはまだありません</div>';
+        return;
+      }
+
+      box.innerHTML = `
+        <div style="margin-top: 8px; display: grid; gap: 4px; padding: 8px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px;">
+          ${logs.map(l => {
+            const detail = l.detail || {};
+            const hasGps = detail.lat && detail.lng;
+            const note = detail.note || detail.message || '';
+            return `
+              <div style="display: grid; grid-template-columns: 90px 100px 1fr; gap: 8px; align-items: start; font-size: 11px; padding: 4px 0;">
+                <div style="color: var(--gray-500); font-variant-numeric: tabular-nums;">${escapeHtml(formatDateTime(l.occurred_at))}</div>
+                <div>
+                  <span class="badge ${logBadgeClass(l.log_type)}">${escapeHtml(WORK_LOG_LABEL[l.log_type] || l.log_type)}</span>
+                </div>
+                <div style="color: var(--gray-700); min-width: 0;">
+                  ${note ? `<div>${escapeHtml(note)}</div>` : ''}
+                  ${hasGps ? `<div style="color: var(--gray-500); font-size: 10px;">GPS: ${Number(detail.lat).toFixed(5)}, ${Number(detail.lng).toFixed(5)}</div>` : ''}
+                  ${!note && !hasGps ? '<span style="color: var(--gray-400);">—</span>' : ''}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } catch (e) {
+      console.error('work_logs 取得失敗:', e);
+      box.innerHTML = `<div class="placeholder" style="padding:8px; color:var(--red);">取得に失敗しました：${escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  function logBadgeClass(type) {
+    if (type === 'check_in')    return 'badge--prop-worker_accepted';
+    if (type === 'check_out')   return 'badge--prop-proposed_to_facility';
+    if (type === 'break_start') return 'badge--low';
+    if (type === 'break_end')   return 'badge--low';
+    if (type === 'incident')    return 'badge--prop-worker_declined';
+    return 'badge--low';
   }
 
   // neco_admin がアサインを完了確定にする
@@ -1995,6 +2167,204 @@
         }).join('')}
       </div>
     `;
+  }
+
+  // ─── 請求書作成モーダル（neco-console v0.3） ───
+  // 選択中の依頼に紐づく completion_confirmed アサインから明細を生成し、
+  // /invoices と /invoice_line_items に POST する。
+  function openInvoiceModal() {
+    const r = state.selectedRequest;
+    const list = (state.selectedAssignments || []).filter(a => a.status === 'completion_confirmed');
+    if (!r || !list.length) {
+      showToast('error', '請求対象の完了確定アサインがありません');
+      return;
+    }
+
+    state.invoiceContext = { request: r, assignments: list };
+
+    document.getElementById('invoiceModalTitle').textContent = '請求書を作成';
+    document.getElementById('invoiceModalSubtitle').textContent =
+      `依頼番号 ${r.request_number || ''} / 対象アサイン ${list.length}件`;
+
+    // 発行日のデフォルト：今日
+    const today = new Date();
+    const ymd = `${today.getFullYear()}-${('0'+(today.getMonth()+1)).slice(-2)}-${('0'+today.getDate()).slice(-2)}`;
+    document.getElementById('invIssueDate').value = ymd;
+    document.getElementById('invDueDays').value = '30';
+    document.getElementById('invTaxRate').value = '10';
+    document.getElementById('invNote').value = '';
+
+    renderInvoicePreview();
+
+    const modal = document.getElementById('invoiceModal');
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeInvoiceModal() {
+    const modal = document.getElementById('invoiceModal');
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    state.invoiceContext = null;
+  }
+
+  // 明細プレビューと合計を再計算
+  function renderInvoicePreview() {
+    const ctx = state.invoiceContext;
+    if (!ctx) return;
+    const previewEl = document.getElementById('invoiceLinesPreview');
+    const subtotalEl = document.getElementById('invSubtotal');
+    const taxEl = document.getElementById('invTaxAmount');
+    const totalEl = document.getElementById('invTotal');
+
+    const lines = ctx.assignments.map((a, i) => buildLineFromAssignment(a, i));
+    const subtotal = lines.reduce((sum, l) => sum + (Number(l.amount) || 0), 0);
+    const taxRate = parseFloat(document.getElementById('invTaxRate').value || '10');
+    const tax = Math.round(subtotal * (taxRate / 100));
+    const total = subtotal + tax;
+
+    previewEl.innerHTML = lines.length
+      ? `<div style="display: grid; gap: 6px;">
+          ${lines.map(l => `
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 6px 8px; background: var(--white); border-radius: 4px;">
+              <div style="font-size: 12px; color: var(--gray-700); min-width: 0;">
+                <div style="font-weight: 500;">${escapeHtml(l.description)}</div>
+                <div style="font-size: 10px; color: var(--gray-500); margin-top: 2px;">
+                  ${l.hours != null ? `${l.hours}時間 × ¥${Number(l.hourly_rate || 0).toLocaleString()}/時` : ''}
+                </div>
+              </div>
+              <div style="font-weight: 600; color: var(--navy-deep); font-variant-numeric: tabular-nums; white-space: nowrap;">
+                ¥${Number(l.amount).toLocaleString()}
+              </div>
+            </div>
+          `).join('')}
+        </div>`
+      : '<div class="placeholder" style="padding:8px;">明細がありません</div>';
+
+    subtotalEl.textContent = `¥${subtotal.toLocaleString()}`;
+    taxEl.textContent = `¥${tax.toLocaleString()}`;
+    totalEl.textContent = `¥${total.toLocaleString()}`;
+
+    state.invoiceContext.computed = { lines, subtotal, tax, total };
+  }
+
+  function buildLineFromAssignment(a, sortOrder) {
+    const start = a.scheduled_start_at ? new Date(a.scheduled_start_at) : null;
+    const end   = a.scheduled_end_at   ? new Date(a.scheduled_end_at)   : null;
+    let hours = null;
+    if (start && end && !Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())) {
+      hours = Math.round(((end.getTime() - start.getTime()) / 3600000) * 100) / 100;
+    }
+    const dateStr = start ? `${start.getFullYear()}/${('0'+(start.getMonth()+1)).slice(-2)}/${('0'+start.getDate()).slice(-2)}` : '—';
+    const wp = a.worker_profiles || {};
+    const desc = `${wp.full_name || '—'} ${dateStr} 勤務（${a.assignment_number || ''}）`;
+    return {
+      assignment_id: a.id,
+      description: desc,
+      hours,
+      hourly_rate: a.hourly_rate || null,
+      amount: a.total_compensation || (hours && a.hourly_rate ? Math.round(hours * a.hourly_rate) : 0),
+      sort_order: sortOrder,
+    };
+  }
+
+  function generateInvoiceNumber() {
+    const y = new Date().getFullYear();
+    const tail = ('00000' + Date.now().toString()).slice(-6);
+    return `IN-${y}-${tail}`;
+  }
+
+  async function submitInvoice(e) {
+    e.preventDefault();
+    const ctx = state.invoiceContext;
+    if (!ctx || state.isPosting) return;
+    if (!ctx.computed || !ctx.computed.lines.length) {
+      showToast('error', '明細がありません');
+      return;
+    }
+
+    state.isPosting = true;
+    const submitBtn = document.getElementById('invoiceSubmitBtn');
+    submitBtn.disabled = true;
+
+    const issueDate = document.getElementById('invIssueDate').value;
+    const dueDays = parseInt(document.getElementById('invDueDays').value, 10) || 30;
+    const note = (document.getElementById('invNote').value || '').trim();
+    const dueDate = (() => {
+      const d = new Date(issueDate);
+      if (Number.isNaN(d.getTime())) return null;
+      d.setDate(d.getDate() + dueDays);
+      return `${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${('0'+d.getDate()).slice(-2)}`;
+    })();
+
+    // 期間：明細の最古開始日 〜 最新終了日
+    const periods = ctx.assignments
+      .map(a => ({ s: a.scheduled_start_at, e: a.scheduled_end_at }))
+      .filter(p => p.s && p.e);
+    const periodStart = periods.length
+      ? periods.reduce((m, p) => p.s < m ? p.s : m, periods[0].s).slice(0, 10)
+      : issueDate;
+    const periodEnd = periods.length
+      ? periods.reduce((m, p) => p.e > m ? p.e : m, periods[0].e).slice(0, 10)
+      : issueDate;
+
+    const invoicePayload = {
+      invoice_number: generateInvoiceNumber(),
+      organization_id: ctx.request.organization_id,
+      period_start: periodStart,
+      period_end: periodEnd,
+      subtotal: ctx.computed.subtotal,
+      tax: ctx.computed.tax,
+      total: ctx.computed.total,
+      currency: 'JPY',
+      issue_date: issueDate,
+      due_date: dueDate,
+      status: 'draft',
+      issued_by: state.user && state.user.id ? state.user.id : null,
+      note: note || null,
+    };
+
+    try {
+      // 1. invoices に POST
+      const created = await pgFetch('/invoices', {
+        method: 'POST',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify(invoicePayload),
+      });
+      const invoice = Array.isArray(created) ? created[0] : created;
+      if (!invoice || !invoice.id) throw new Error('請求書の作成レスポンスが不正');
+
+      // 2. invoice_line_items に bulk POST
+      const lines = ctx.computed.lines.map(l => ({
+        invoice_id: invoice.id,
+        assignment_id: l.assignment_id,
+        description: l.description,
+        hours: l.hours,
+        hourly_rate: l.hourly_rate,
+        amount: l.amount,
+        sort_order: l.sort_order,
+      }));
+      if (lines.length) {
+        await pgFetch('/invoice_line_items', {
+          method: 'POST',
+          headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify(lines),
+        });
+      }
+
+      showToast('success', `請求書 ${invoice.invoice_number} を作成しました`);
+      closeInvoiceModal();
+    } catch (err) {
+      console.error('請求書作成失敗:', err);
+      if (err.status === 403) {
+        showToast('error', '請求書作成の権限がありません（neco_admin のみ）');
+      } else {
+        showToast('error', `請求書の作成に失敗しました：${err.message}`);
+      }
+    } finally {
+      state.isPosting = false;
+      submitBtn.disabled = false;
+    }
   }
 
   // 簡易 debounce（フィルター入力用）
@@ -2241,6 +2611,20 @@
   function mockPgFetch(path, init = {}) {
     const method = (init.method || 'GET').toUpperCase();
 
+    // 請求書作成（POST /invoices）— v0.3
+    if (method === 'POST' && path.startsWith('/invoices')) {
+      const body = init.body ? JSON.parse(init.body) : {};
+      const row = { id: 'mock-inv-' + Date.now(), created_at: new Date().toISOString(), ...body };
+      return [row];
+    }
+
+    // 請求書明細（POST /invoice_line_items）— v0.3
+    if (method === 'POST' && path.startsWith('/invoice_line_items')) {
+      const body = init.body ? JSON.parse(init.body) : [];
+      // 配列でも単一でも受ける
+      return Array.isArray(body) ? body.map((b, i) => ({ id: 'mock-li-' + Date.now() + '-' + i, ...b })) : [body];
+    }
+
     // 提案作成（POST）
     if (method === 'POST' && path.startsWith('/proposals')) {
       const body = init.body ? JSON.parse(init.body) : {};
@@ -2285,6 +2669,39 @@
       return getMockActivityFor(entityId);
     }
 
+    // タイムライン（GET work_logs）— v0.4
+    if (method === 'GET' && path.startsWith('/work_logs?')) {
+      const m = path.match(/assignment_id=eq\.([^&]+)/);
+      const aid = m ? decodeURIComponent(m[1]) : null;
+      return getMockWorkLogsFor(aid);
+    }
+
+    return [];
+  }
+
+  function getMockWorkLogsFor(assignmentId) {
+    if (!assignmentId) return [];
+    if (assignmentId === '00000000-0000-0000-0000-000000000401') {
+      // completion_reported のサンプル
+      const start = new Date(Date.now() + 5 * 86400000); start.setHours(9, 0, 0, 0);
+      const end   = new Date(start.getTime() + 8 * 3600000 + 30 * 60000);  // 8.5時間
+      return [
+        { id:'wl-1', assignment_id: assignmentId, log_type:'check_in',  occurred_at: start.toISOString(),                                          detail:{ lat: 35.6895, lng: 139.6917 } },
+        { id:'wl-2', assignment_id: assignmentId, log_type:'break_start', occurred_at: new Date(start.getTime() + 4 * 3600000).toISOString(),       detail:{} },
+        { id:'wl-3', assignment_id: assignmentId, log_type:'break_end',   occurred_at: new Date(start.getTime() + 4.5 * 3600000).toISOString(),     detail:{} },
+        { id:'wl-4', assignment_id: assignmentId, log_type:'note',        occurred_at: new Date(start.getTime() + 6 * 3600000).toISOString(),       detail:{ note: '患者対応で予定より30分超過' } },
+        { id:'wl-5', assignment_id: assignmentId, log_type:'check_out', occurred_at: end.toISOString(),                                          detail:{ lat: 35.6895, lng: 139.6917 } },
+      ];
+    }
+    if (assignmentId === '00000000-0000-0000-0000-000000000402') {
+      // completion_confirmed のサンプル
+      const start = new Date(Date.now() - 3 * 86400000); start.setHours(8, 0, 0, 0);
+      const end   = new Date(start.getTime() + 9 * 3600000);
+      return [
+        { id:'wl-1', assignment_id: assignmentId, log_type:'check_in',  occurred_at: start.toISOString(),                                          detail:{ lat: 35.5494, lng: 139.6488 } },
+        { id:'wl-2', assignment_id: assignmentId, log_type:'check_out', occurred_at: end.toISOString(),                                            detail:{ lat: 35.5494, lng: 139.6488 } },
+      ];
+    }
     return [];
   }
 

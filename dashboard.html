@@ -1251,6 +1251,69 @@
       .v2-kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
+    /* ─── 対応が必要な事項（通知センター） ─── */
+    .v2-notice-list {
+      display: grid;
+      gap: 0;
+    }
+    .v2-notice-item {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-100, #F1F5F9);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .v2-notice-item:hover { background: var(--gray-50, #F8FAFC); }
+    .v2-notice-item:last-child { border-bottom: none; }
+    .v2-notice-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .v2-notice-item__icon--urgent  { background: rgba(220,38,38,0.10);  color: #DC2626; }
+    .v2-notice-item__icon--warn    { background: rgba(245,158,11,0.12); color: #F59E0B; }
+    .v2-notice-item__icon--info    { background: rgba(14,165,233,0.10); color: #0EA5E9; }
+    .v2-notice-item__icon--ok      { background: rgba(16,185,129,0.10); color: #10B981; }
+    .v2-notice-item__main { min-width: 0; }
+    .v2-notice-item__label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-deep, #0D2340);
+      margin-bottom: 2px;
+    }
+    .v2-notice-item__sub {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+    }
+    .v2-notice-item__count {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy-deep, #0D2340);
+      font-variant-numeric: tabular-nums;
+      min-width: 36px;
+      text-align: right;
+    }
+    .v2-notice-item__count--urgent { color: #DC2626; }
+    .v2-notice-item__count--warn   { color: #F59E0B; }
+    .v2-notice-item__chevron {
+      font-size: 14px;
+      color: var(--gray-400, #94A3B8);
+    }
+    .v2-notice-empty {
+      padding: 20px 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-500, #64748B);
+    }
+
     /* ─── v2 リアル案件テーブル（Phase B：並行表示） ─── */
     .v2-cases-card {
       background: #FFFFFF;
@@ -1640,6 +1703,17 @@
           </div>
         </div>
         <div class="v2-banner__msg" id="v2Msg">読み込み中…</div>
+      </div>
+
+      <!-- ═════ 対応が必要な事項（通知センター） ═════ -->
+      <div class="v2-cases-card" id="v2NoticeCard" aria-label="対応が必要な事項" hidden>
+        <div class="v2-cases-card__head">
+          <span class="v2-cases-card__title">対応が必要な事項</span>
+          <span class="v2-cases-card__msg" id="v2NoticeSummary" style="border:none;padding:0;background:transparent;"></span>
+        </div>
+        <div id="v2NoticeBody" style="padding: 4px 0;">
+          <!-- renderV2Notices() で動的描画 -->
+        </div>
       </div>
 
       <!-- KPIカード（v2 リアルデータから動的算出） -->
@@ -2095,6 +2169,90 @@
       showSection('overview');
     }
 
+    /* ─── 通知センター（対応が必要な事項） ─────────
+       v2 リアルデータから「対応が必要な事項」を集計し、
+       ダッシュボード上部にカード形式で表示する。 */
+    function renderV2Notices(data) {
+      const card = document.getElementById('v2NoticeCard');
+      const body = document.getElementById('v2NoticeBody');
+      const summary = document.getElementById('v2NoticeSummary');
+      if (!card || !body) return;
+
+      const { requests = [], proposals = [], assignments = [], invoices = [] } = data;
+
+      // 集計
+      const items = [
+        {
+          key: 'inquiries',
+          label: '受付中の依頼',
+          sub: '提出された依頼を確認してください',
+          count: requests.filter(r => r.status === 'submitted').length,
+          icon: '!',
+          tone: 'info',
+        },
+        {
+          key: 'candidates',
+          label: '候補者の確認待ち',
+          sub: 'Necoから提案された候補者があります',
+          count: proposals.filter(p => p.status === 'proposed_to_facility').length,
+          icon: '?',
+          tone: 'warn',
+        },
+        {
+          key: 'assignments',
+          label: '完了確定待ち',
+          sub: 'ワーカーから完了報告が届いています',
+          count: assignments.filter(a => a.status === 'completion_reported').length,
+          icon: '+',
+          tone: 'urgent',
+        },
+        {
+          key: 'invoices',
+          label: '支払期日超過',
+          sub: '請求書の支払いが遅延しています',
+          count: invoices.filter(i => i.status === 'overdue').length,
+          icon: '$',
+          tone: 'urgent',
+        },
+      ];
+
+      const totalCount = items.reduce((s, i) => s + i.count, 0);
+
+      if (totalCount === 0) {
+        card.hidden = false;
+        if (summary) summary.textContent = '対応が必要な事項はありません';
+        body.innerHTML = '<div class="v2-notice-empty">対応が必要な事項はありません。すべて確認済みです。</div>';
+        return;
+      }
+
+      card.hidden = false;
+      if (summary) summary.textContent = `合計 ${totalCount}件`;
+
+      const visible = items.filter(i => i.count > 0);
+      body.innerHTML = `
+        <div class="v2-notice-list">
+          ${visible.map(i => `
+            <div class="v2-notice-item" data-section="${i.key}">
+              <div class="v2-notice-item__icon v2-notice-item__icon--${i.tone}">${i.icon}</div>
+              <div class="v2-notice-item__main">
+                <div class="v2-notice-item__label">${i.label}</div>
+                <div class="v2-notice-item__sub">${i.sub}</div>
+              </div>
+              <div class="v2-notice-item__count v2-notice-item__count--${i.tone}">${i.count}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      // クリックでセクション切替
+      body.querySelectorAll('.v2-notice-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.section;
+          if (typeof showSection === 'function' && target) showSection(target);
+        });
+      });
+    }
+
     /* ─── v2 リアルデータ KPI 取得（Phase A） ─────────
        /api/v2/requests から自組織の依頼一覧を取得し、状態別に集計する。
        RLS によりログインユーザーが閲覧可能な依頼だけが返るため、
@@ -2132,10 +2290,12 @@
 
       try {
         const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
-        // requests と proposals を並行取得（proposals は kpiPending（要対応）算出に必要）
-        const [reqRes, propRes] = await Promise.all([
-          fetch('/api/v2/requests?limit=200',  { headers }),
-          fetch('/api/v2/proposals?limit=200', { headers }).catch(() => null),
+        // requests / proposals / assignments / invoices を並行取得（通知センター用）
+        const [reqRes, propRes, asgnRes, invRes] = await Promise.all([
+          fetch('/api/v2/requests?limit=200',     { headers }),
+          fetch('/api/v2/proposals?limit=200',    { headers }).catch(() => null),
+          fetch('/api/v2/assignments?limit=200',  { headers }).catch(() => null),
+          fetch('/api/v2/invoices?limit=200',     { headers }).catch(() => null),
         ]);
 
         if (!reqRes.ok) {
@@ -2149,6 +2309,16 @@
         if (propRes && propRes.ok) {
           const propData = await propRes.json();
           proposals = Array.isArray(propData.proposals) ? propData.proposals : [];
+        }
+        let assignments = [];
+        if (asgnRes && asgnRes.ok) {
+          const asgnData = await asgnRes.json();
+          assignments = Array.isArray(asgnData.assignments) ? asgnData.assignments : [];
+        }
+        let invoices = [];
+        if (invRes && invRes.ok) {
+          const invData = await invRes.json();
+          invoices = Array.isArray(invData.invoices) ? invData.invoices : [];
         }
 
         // 状態別に集計（neco-console.html の TAB_STATUS_MAP と整合）
@@ -2196,6 +2366,9 @@
         setKpiSub  ('kpiSoonSub',    `14日以内に開始予定`);
         setKpiValue('kpiUrgent',  v2urgent,           '件');
         setKpiSub  ('kpiUrgentSub',  `priority=urgent`);
+
+        // 通知センター（対応が必要な事項）
+        renderV2Notices({ requests, proposals, assignments, invoices });
 
         const ts = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
         const src = reqData.source === 'mock' ? '（モック）' : '';
