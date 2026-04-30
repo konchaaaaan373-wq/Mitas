@@ -180,11 +180,11 @@
 
     .header__cta { margin-left: 8px; padding: 10px 22px; font-size: 14px; }
 
-    /* サービスサイト（本体）への導線リンク。ヘッダー右、CTA の左に配置 */
+    /* サービスサイト（本体）への導線リンク。ヘッダー右、CTA の右側に配置 */
     .header__service-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      margin-left: 10px;
       padding: 8px 14px;
       border-radius: 999px;
       font-size: 13px;
@@ -199,14 +199,6 @@
     }
     .header__service-link:hover {
       background: rgba(255,255,255,0.20);
-    }
-    .header__service-link__arrow {
-      font-size: 14px;
-      line-height: 1;
-      transition: transform 0.2s var(--ease);
-    }
-    .header__service-link:hover .header__service-link__arrow {
-      transform: translateX(2px);
     }
     /* solid（スクロール後の白背景）時はティール系で視認性を確保 */
     #siteHeader.solid .header__service-link {
@@ -1303,6 +1295,37 @@
       text-align: center;
       margin-top: 12px;
     }
+    /* バリデーションエラー表示 */
+    .form-input.is-invalid {
+      border-color: #DC2626;
+      background: #FEF2F2;
+    }
+    .form-input.is-invalid:focus {
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+    }
+    .form-error {
+      display: none;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #DC2626;
+      font-weight: 500;
+    }
+    .form-error.is-visible { display: block; }
+    /* 送信中（disabled）スタイル */
+    .form-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    .form-submit__spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: form-spin 0.7s linear infinite;
+    }
+    @keyframes form-spin { to { transform: rotate(360deg); } }
 
     /* ─── Responsive: タブレット以下 (≤ 1024px) ─── */
     @media (max-width: 1024px) {
@@ -1451,13 +1474,10 @@
         <a href="#contact">お問い合わせ</a>
       </nav>
 
+      <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
       <a class="header__service-link"
          href="https://necofindjob.com/service.html"
-         aria-label="サービスサイトを開く">
-        サービスサイトはこちら
-        <span class="header__service-link__arrow" aria-hidden="true">&rarr;</span>
-      </a>
-      <a href="#contact" class="btn btn--primary header__cta">まずは相談する</a>
+         aria-label="サービスサイトを開く">サービスサイトはこちら</a>
 
       <button class="hamburger" id="hamburgerBtn" aria-label="メニュー">
         <span></span><span></span><span></span>
@@ -1963,28 +1983,32 @@
         初回相談 無料
       </span>
 
-      <form name="contact" method="POST" data-netlify="true" action="/thanks.html" class="contact-form">
+      <form id="contactForm" name="contact" method="POST" data-netlify="true" action="/thanks.html" class="contact-form" novalidate>
         <input type="hidden" name="form-name" value="contact" />
 
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="facility">施設名・事業所名 <span class="form-required">必須</span></label>
             <input class="form-input" type="text" id="facility" name="facility" required placeholder="〇〇病院　〇〇訪問看護ステーション">
+            <p class="form-error" data-error-for="facility">施設名・事業所名を入力してください。</p>
           </div>
           <div class="form-group">
             <label class="form-label" for="contact-name">ご担当者名 <span class="form-required">必須</span></label>
             <input class="form-input" type="text" id="contact-name" name="name" required placeholder="山田 太郎">
+            <p class="form-error" data-error-for="contact-name">ご担当者名を入力してください。</p>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="phone">電話番号 <span class="form-required">必須</span></label>
-            <input class="form-input" type="tel" id="phone" name="phone" required placeholder="03-0000-0000">
+            <input class="form-input" type="tel" id="phone" name="phone" required inputmode="tel" placeholder="03-0000-0000">
+            <p class="form-error" data-error-for="phone">電話番号を半角数字で入力してください。</p>
           </div>
           <div class="form-group">
             <label class="form-label" for="email">メールアドレス <span class="form-required">必須</span></label>
-            <input class="form-input" type="email" id="email" name="email" required placeholder="info@example.com">
+            <input class="form-input" type="email" id="email" name="email" required inputmode="email" autocomplete="email" placeholder="info@example.com">
+            <p class="form-error" data-error-for="email">メールアドレスの形式を確認してください。</p>
           </div>
         </div>
 
@@ -2004,12 +2028,14 @@
           <textarea class="form-input form-textarea" id="message" name="message" placeholder="現在の状況、気になっていること、どんなことでもお気軽にどうぞ。"></textarea>
         </div>
 
-        <button type="submit" class="btn btn--primary form-submit">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-          相談を送る（無料）
+        <button type="submit" class="btn btn--primary form-submit" id="contactSubmitBtn">
+          <span class="form-submit__icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+          <span class="form-submit__label">相談を送る（無料）</span>
         </button>
         <p class="form-note">売り込みはありません。相談だけでも歓迎です。お返事は営業日2日以内を目安にします。</p>
       </form>
@@ -2053,6 +2079,106 @@
 
 
 <script>
+/* ── 問い合わせフォームのバリデーション＋送信中表示 ───────────
+   Netlify Forms の action="/thanks.html" に submit するが、
+   form は novalidate なので JS 側で日本語メッセージを表示する。
+   送信ボタンは loading 表示にして連打を防ぐ。 */
+(function () {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  // 半角数字 + ハイフン + 空白 + 「+」のみ、合計7〜15桁
+  const TEL_RE = /^[+\d\s-]{7,20}$/;
+  const TEL_DIGITS_RE = /\d/g;
+
+  const fields = [
+    { id: 'facility',     check: (v) => v.trim() !== '',                         msg: '施設名・事業所名を入力してください。' },
+    { id: 'contact-name', check: (v) => v.trim() !== '',                         msg: 'ご担当者名を入力してください。' },
+    { id: 'phone',        check: (v) => {
+        const t = v.trim();
+        if (!t) return false;
+        if (!TEL_RE.test(t)) return false;
+        const digits = (t.match(TEL_DIGITS_RE) || []).join('');
+        return digits.length >= 9 && digits.length <= 15;
+      },
+      msg: '電話番号を半角数字（ハイフン可）で入力してください。'
+    },
+    { id: 'email',        check: (v) => {
+        const t = v.trim();
+        if (!t) return false;
+        // 必要最低限のメール形式チェック
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t);
+      },
+      msg: 'メールアドレスの形式を確認してください。'
+    },
+  ];
+
+  function getInput(id) { return document.getElementById(id); }
+  function getError(id) { return form.querySelector('.form-error[data-error-for="' + id + '"]'); }
+
+  function showError(id, msg) {
+    const input = getInput(id);
+    const errEl = getError(id);
+    if (input) input.classList.add('is-invalid');
+    if (errEl) {
+      if (msg) errEl.textContent = msg;
+      errEl.classList.add('is-visible');
+    }
+  }
+  function clearError(id) {
+    const input = getInput(id);
+    const errEl = getError(id);
+    if (input) input.classList.remove('is-invalid');
+    if (errEl) errEl.classList.remove('is-visible');
+  }
+
+  // 入力中はリアルタイムでエラー解除
+  fields.forEach(f => {
+    const el = getInput(f.id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      if (el.value.trim() !== '') clearError(f.id);
+    });
+    el.addEventListener('blur', () => {
+      if (el.value && !f.check(el.value)) showError(f.id, f.msg);
+    });
+  });
+
+  form.addEventListener('submit', (ev) => {
+    let firstInvalid = null;
+    fields.forEach(f => {
+      const el = getInput(f.id);
+      if (!el) return;
+      if (!f.check(el.value)) {
+        showError(f.id, f.msg);
+        if (!firstInvalid) firstInvalid = el;
+      } else {
+        clearError(f.id);
+      }
+    });
+
+    if (firstInvalid) {
+      ev.preventDefault();
+      firstInvalid.focus();
+      const rect = firstInvalid.getBoundingClientRect();
+      const top = rect.top + window.scrollY - 120;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      return;
+    }
+
+    // 送信開始 — ボタンを無効化＋ loading 表示
+    const btn = document.getElementById('contactSubmitBtn');
+    if (btn) {
+      btn.disabled = true;
+      const label = btn.querySelector('.form-submit__label');
+      const icon  = btn.querySelector('.form-submit__icon');
+      if (icon)  icon.innerHTML = '<span class="form-submit__spinner"></span>';
+      if (label) label.textContent = '送信中…';
+    }
+    // submit はそのまま続行（Netlify Forms の処理に渡す）
+  });
+})();
+
 /* ── 水面ウェーブアニメーション ──────────────────────────────── */
 (function () {
   const canvas = document.getElementById('heroWave');
