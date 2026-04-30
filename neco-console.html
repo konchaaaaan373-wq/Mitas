@@ -968,6 +968,8 @@
     selectedRequest: null,   // 選択中の依頼の詳細（GET /api/v2/requests/:id の結果）
     selectedCandidates: [],
     selectedProposals: [],
+    selectedAssignments: [], // v0.2: 依頼に紐づく確定アサイン
+    selectedActivities: [],  // v0.2: 依頼に紐づく activity_log
     candidateFilter: {       // 候補者リストのフィルター
       keyword: '',
       minYears: 0,
@@ -1128,6 +1130,8 @@
       state.candidateFilter = { keyword: '', minYears: 0, minScore: 0, hideProposed: false };
       state.selectedCandidates = [];
       state.selectedProposals = [];
+      state.selectedAssignments = [];
+      state.selectedActivities = [];
     }
     state.selectedId = id;
     document.querySelectorAll('.request-card').forEach(c => {
@@ -1156,17 +1160,21 @@
     loadProposalsAndCandidates(id);
   }
 
-  // ─── 既存提案と候補者を並行取得 → 描画 ───
+  // ─── 既存提案・候補者・アサイン・履歴を並行取得 → 描画 ───
   async function loadProposalsAndCandidates(requestId) {
     state.selectedProposals = [];
     state.selectedCandidates = [];
+    state.selectedAssignments = [];
+    state.selectedActivities = [];
 
     const r = state.selectedRequest;
     if (!r) return;
 
-    const [proposalsResult, candidatesResult] = await Promise.allSettled([
+    const [proposalsResult, candidatesResult, assignmentsResult, activitiesResult] = await Promise.allSettled([
       fetchExistingProposals(requestId),
       fetchCandidates(r.profession_type),
+      fetchAssignmentsForRequest(requestId),
+      fetchActivityForRequest(requestId),
     ]);
 
     // 切替が起きていたら描画をスキップ
@@ -1186,8 +1194,22 @@
       showToast('error', `候補者の取得に失敗しました：${candidatesResult.reason.message}`);
     }
 
+    if (assignmentsResult.status === 'fulfilled') {
+      state.selectedAssignments = assignmentsResult.value;
+    } else {
+      console.error('アサインの取得に失敗:', assignmentsResult.reason);
+    }
+
+    if (activitiesResult.status === 'fulfilled') {
+      state.selectedActivities = activitiesResult.value;
+    } else {
+      console.error('履歴の取得に失敗:', activitiesResult.reason);
+    }
+
     renderProposalsSection();
     renderCandidatesSection();
+    renderAssignmentsSection();
+    renderActivitySection();
   }
 
   async function fetchRequestDetail(id) {
@@ -1353,6 +1375,28 @@
             <span class="sub-panel__count" id="candidatesCount">読み込み中…</span>
           </div>
           <div id="candidatesContainer">
+            <div class="placeholder" style="padding: 16px;">読み込み中…</div>
+          </div>
+        </div>
+
+        <!-- ─── 確定アサインセクション（v0.2） ─── -->
+        <div class="detail-section">
+          <div class="sub-panel__head">
+            <div class="detail-section__title" style="margin: 0;">確定アサイン</div>
+            <span class="sub-panel__count" id="assignmentsCount">読み込み中…</span>
+          </div>
+          <div id="assignmentsContainer">
+            <div class="placeholder" style="padding: 16px;">読み込み中…</div>
+          </div>
+        </div>
+
+        <!-- ─── 履歴セクション（activity_log）（v0.2） ─── -->
+        <div class="detail-section">
+          <div class="sub-panel__head">
+            <div class="detail-section__title" style="margin: 0;">履歴</div>
+            <span class="sub-panel__count" id="activityCount">読み込み中…</span>
+          </div>
+          <div id="activityContainer">
             <div class="placeholder" style="padding: 16px;">読み込み中…</div>
           </div>
         </div>
@@ -1761,6 +1805,198 @@
     `;
   }
 
+  // ─── 確定アサインの取得・描画（v0.2） ───
+  // PostgREST 直接で /assignments?request_id=eq.X を取得
+  async function fetchAssignmentsForRequest(requestId) {
+    const select = '*,worker_profiles(id,full_name,profession_type)';
+    const path = `/assignments?request_id=eq.${encodeURIComponent(requestId)}`
+      + `&select=${select}`
+      + `&order=scheduled_start_at.asc`;
+    const rows = await pgFetch(path);
+    return Array.isArray(rows) ? rows : [];
+  }
+
+  const ASSIGNMENT_STATUS_LABEL = {
+    confirmed:            '確定',
+    checked_in:           '勤務中',
+    checked_out:          '勤務終了',
+    completion_reported:  '完了報告',
+    completion_confirmed: '完了確定',
+    disputed:             '紛争中',
+    cancelled:            'キャンセル',
+    no_show:              '無断欠勤',
+  };
+
+  function renderAssignmentsSection() {
+    const container = document.getElementById('assignmentsContainer');
+    const countEl = document.getElementById('assignmentsCount');
+    if (!container || !countEl) return;
+
+    const list = state.selectedAssignments || [];
+    const dispute = list.filter(a => a.status === 'disputed').length;
+    countEl.textContent = list.length
+      ? `${list.length}件${dispute ? `（紛争中 ${dispute}件）` : ''}`
+      : '0件';
+
+    if (!list.length) {
+      container.innerHTML = '<div class="placeholder" style="padding: 16px;">確定したアサインはまだありません</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="proposal-list">
+        ${list.map(a => {
+          const wp = a.worker_profiles || {};
+          const isDispute = a.status === 'disputed';
+          const canConfirm = a.status === 'completion_reported' || a.status === 'disputed';
+          return `
+            <div class="proposal-card" ${isDispute ? 'style="border-color:rgba(220,38,38,0.25);"' : ''}>
+              <div class="proposal-card__head">
+                <span class="proposal-card__num">${escapeHtml(a.assignment_number || '')}</span>
+                <span class="badge" style="background:var(--gray-100);color:var(--gray-700);">
+                  ${escapeHtml(ASSIGNMENT_STATUS_LABEL[a.status] || a.status)}
+                </span>
+              </div>
+              <div class="proposal-card__name">${escapeHtml(wp.full_name || '—')}</div>
+              <div class="proposal-card__meta">
+                <span>${escapeHtml(formatDateTime(a.scheduled_start_at))} 〜 ${escapeHtml(formatDateTime(a.scheduled_end_at))}</span>
+                ${a.hourly_rate != null ? `<span>時給 ¥${Number(a.hourly_rate).toLocaleString()}</span>` : ''}
+                ${a.total_compensation != null ? `<span>総報酬 ¥${Number(a.total_compensation).toLocaleString()}</span>` : ''}
+              </div>
+              ${a.dispute_reason ? `
+                <div style="font-size:11px; color: var(--red); margin-top:6px; line-height:1.6; padding:6px 8px; background:rgba(220,38,38,0.06); border-radius:4px;">
+                  紛争理由：${escapeHtml(a.dispute_reason)}
+                </div>` : ''}
+              ${a.worker_completion_note ? `
+                <div style="font-size:11px; color: var(--gray-700); margin-top:6px; line-height:1.6;">
+                  ワーカーメモ：${escapeHtml(a.worker_completion_note)}
+                </div>` : ''}
+              ${canConfirm ? `
+                <div style="margin-top: 8px; display:flex; gap:6px;">
+                  <button class="action-btn action-btn--success v0-asgn-confirm" data-id="${escapeHtml(a.id)}" type="button"
+                          style="font-size:11px; padding:6px 10px;">完了確定にする</button>
+                </div>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    container.querySelectorAll('.v0-asgn-confirm').forEach(btn => {
+      btn.addEventListener('click', () => confirmAssignmentNeco(btn.dataset.id, btn));
+    });
+  }
+
+  // neco_admin がアサインを完了確定にする
+  async function confirmAssignmentNeco(id, btn) {
+    if (!id || state.isPatching) return;
+    const ok = window.confirm('このアサインを「完了確定」にします。よろしいですか？');
+    if (!ok) return;
+    state.isPatching = true;
+    btn.disabled = true;
+    btn.textContent = '処理中…';
+
+    try {
+      if (isMockMode) {
+        const idx = state.selectedAssignments.findIndex(a => a.id === id);
+        if (idx >= 0) state.selectedAssignments[idx] = { ...state.selectedAssignments[idx], status: 'completion_confirmed' };
+        await new Promise(r => setTimeout(r, 200));
+        showToast('success', '完了確定しました（モック）');
+      } else {
+        const res = await fetch(`/api/v2/assignments/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${state.token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completion_confirmed' }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        const data = await res.json();
+        const idx = state.selectedAssignments.findIndex(a => a.id === id);
+        if (idx >= 0) state.selectedAssignments[idx] = { ...state.selectedAssignments[idx], ...(data.assignment || {}), status: 'completion_confirmed' };
+        showToast('success', '完了確定しました');
+      }
+      renderAssignmentsSection();
+    } catch (e) {
+      console.error('完了確定失敗:', e);
+      showToast('error', `処理に失敗しました：${e.message}`);
+      btn.disabled = false;
+      btn.textContent = '完了確定にする';
+    } finally {
+      state.isPatching = false;
+    }
+  }
+
+  // ─── 履歴の取得・描画（v0.2） ───
+  // 依頼に紐づく activity_log を取得（entity_type='staffing_request'）
+  async function fetchActivityForRequest(requestId) {
+    const path = `/activity_log?entity_type=eq.staffing_request`
+      + `&entity_id=eq.${encodeURIComponent(requestId)}`
+      + `&select=id,actor_user_id,actor_role,action,occurred_at`
+      + `&order=occurred_at.desc&limit=20`;
+    const rows = await pgFetch(path);
+    return Array.isArray(rows) ? rows : [];
+  }
+
+  const ACTIVITY_ACTION_LABEL = {
+    'request.created':                  '依頼を作成',
+    'request.updated':                  '依頼を更新',
+    'request.status.draft':             '下書きに戻す',
+    'request.status.submitted':         '依頼を提出',
+    'request.status.under_review':      '確認を開始',
+    'request.status.accepted':          '依頼を受諾',
+    'request.status.rejected':          '依頼を差戻し',
+    'request.status.proposing':         '提案を開始',
+    'request.status.partially_assigned':'一部充足',
+    'request.status.fully_assigned':    '充足完了',
+    'request.status.in_progress':       '進行中',
+    'request.status.completion_pending':'完了申請',
+    'request.status.confirmed':         '完了確定',
+    'request.status.invoiced':          '請求発行',
+    'request.status.paid':              '入金確認',
+    'request.status.cancelled':         '依頼をキャンセル',
+  };
+
+  function renderActivitySection() {
+    const container = document.getElementById('activityContainer');
+    const countEl = document.getElementById('activityCount');
+    if (!container || !countEl) return;
+
+    const list = state.selectedActivities || [];
+    countEl.textContent = `直近 ${list.length}件`;
+
+    if (!list.length) {
+      container.innerHTML = '<div class="placeholder" style="padding: 16px;">履歴はまだありません</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display: grid; gap: 6px;">
+        ${list.map(a => {
+          const action = ACTIVITY_ACTION_LABEL[a.action] || a.action;
+          const actor = a.actor_role || '—';
+          return `
+            <div style="padding: 8px 10px; background: var(--gray-50); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <div style="min-width: 0;">
+                <div style="font-size: 12px; font-weight: 500; color: var(--navy-deep); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  ${escapeHtml(action)}
+                </div>
+                <div style="font-size: 10px; color: var(--gray-500);">
+                  ${escapeHtml(actor)} ・ ${escapeHtml(a.action)}
+                </div>
+              </div>
+              <div style="font-size: 10px; color: var(--gray-400); white-space: nowrap;">
+                ${escapeHtml(formatDateTime(a.occurred_at))}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
   // 簡易 debounce（フィルター入力用）
   function debounce(fn, ms) {
     let t = null;
@@ -2035,7 +2271,72 @@
       return getMockCandidates(profession);
     }
 
+    // 確定アサイン（GET assignments）— v0.2
+    if (method === 'GET' && path.startsWith('/assignments?')) {
+      const m = path.match(/request_id=eq\.([^&]+)/);
+      const requestId = m ? decodeURIComponent(m[1]) : null;
+      return getMockAssignmentsFor(requestId);
+    }
+
+    // 履歴（GET activity_log）— v0.2
+    if (method === 'GET' && path.startsWith('/activity_log?')) {
+      const m = path.match(/entity_id=eq\.([^&]+)/);
+      const entityId = m ? decodeURIComponent(m[1]) : null;
+      return getMockActivityFor(entityId);
+    }
+
     return [];
+  }
+
+  function getMockAssignmentsFor(requestId) {
+    if (requestId === '00000000-0000-0000-0000-000000000005') {
+      const start = new Date(Date.now() + 5 * 86400000); start.setHours(9, 0, 0, 0);
+      const end   = new Date(start.getTime() + 8 * 3600000);
+      return [
+        {
+          id: '00000000-0000-0000-0000-000000000401',
+          assignment_number: 'AS-2026-000401',
+          request_id: requestId,
+          worker_id: '00000000-0000-0000-0000-000000000301',
+          status: 'completion_reported',
+          scheduled_start_at: start.toISOString(),
+          scheduled_end_at:   end.toISOString(),
+          hourly_rate: 4200, total_compensation: 33600,
+          worker_completion_note: '想定通り完了。患者対応で30分超過しました。',
+          worker_profiles: { id: '00000000-0000-0000-0000-000000000301', full_name: '佐藤 浩二' },
+        },
+      ];
+    }
+    if (requestId === '00000000-0000-0000-0000-000000000006') {
+      const start = new Date(Date.now() - 3 * 86400000); start.setHours(8, 0, 0, 0);
+      const end   = new Date(start.getTime() + 9 * 3600000);
+      return [
+        {
+          id: '00000000-0000-0000-0000-000000000402',
+          assignment_number: 'AS-2026-000402',
+          request_id: requestId,
+          worker_id: '00000000-0000-0000-0000-000000000306',
+          status: 'completion_confirmed',
+          scheduled_start_at: start.toISOString(),
+          scheduled_end_at:   end.toISOString(),
+          hourly_rate: 8500, total_compensation: 76500,
+          worker_profiles: { id: '00000000-0000-0000-0000-000000000306', full_name: '高橋 美香' },
+        },
+      ];
+    }
+    return [];
+  }
+
+  function getMockActivityFor(entityId) {
+    if (!entityId) return [];
+    const now = Date.now();
+    const t = (offsetMin) => new Date(now - offsetMin * 60000).toISOString();
+    return [
+      { id:'al-1', actor_user_id:'u-neco', actor_role:'neco_admin', action:'request.status.accepted',     occurred_at: t(15)  },
+      { id:'al-2', actor_user_id:'u-neco', actor_role:'neco_admin', action:'request.status.under_review', occurred_at: t(120) },
+      { id:'al-3', actor_user_id:'u-fac',  actor_role:'facility_admin', action:'request.status.submitted',occurred_at: t(180) },
+      { id:'al-4', actor_user_id:'u-fac',  actor_role:'facility_admin', action:'request.created',         occurred_at: t(360) },
+    ];
   }
 
   function getMockProposalsFor(requestId) {
