@@ -2378,17 +2378,47 @@
 
       const { requests = [], proposals = [], assignments = [], invoices = [] } = data;
 
+      // 経過時間ヘルパー
+      const hoursSinceISO = (iso) => {
+        if (!iso) return null;
+        const t = new Date(iso).getTime();
+        if (Number.isNaN(t)) return null;
+        return (Date.now() - t) / 3600000;
+      };
+      const formatElapsed = (h) => {
+        if (h == null) return '';
+        if (h < 24)  return `${Math.max(0, Math.round(h))}時間経過`;
+        return `${Math.round(h / 24)}日経過`;
+      };
+      const maxElapsedH = (list, accessor) => {
+        let max = null;
+        list.forEach(x => {
+          const h = hoursSinceISO(accessor(x));
+          if (h != null && (max == null || h > max)) max = h;
+        });
+        return max;
+      };
+
       // ステータス・優先度から「対応が必要な事項」を集計
       const openStatuses = ['submitted','under_review','accepted','proposing','partially_assigned'];
-      const urgentUnfilled = requests.filter(r =>
+      const urgentUnfilledList = requests.filter(r =>
         openStatuses.includes(r.status) && (r.priority === 'urgent' || r.priority === 'high')
-      ).length;
+      );
+      const submittedList    = requests.filter(r => r.status === 'submitted');
+      const approvalList     = proposals.filter(p => p.status === 'proposed_to_facility');
+      const completionList   = assignments.filter(a => a.status === 'completion_reported');
+      const disputedList     = assignments.filter(a => a.status === 'disputed');
+      const invoiceAttention = invoices.filter(i => i.status === 'overdue' || i.status === 'sent' || i.status === 'issued');
+
+      const approvalMaxH = maxElapsedH(approvalList,   p => p.updated_at || p.created_at);
+      const completionMaxH = maxElapsedH(completionList, a => a.worker_reported_at || a.checked_out_at);
+
       const items = [
         {
           key: 'cases',
           label: '緊急度の高い未充足勤務枠',
           sub: '優先度が「緊急」「高」の未充足勤務枠があります',
-          count: urgentUnfilled,
+          count: urgentUnfilledList.length,
           icon: '!',
           tone: 'urgent',
         },
@@ -2396,33 +2426,45 @@
           key: 'inquiries',
           label: '新規依頼が受付中です',
           sub: 'Necoが内容を確認しています',
-          count: requests.filter(r => r.status === 'submitted').length,
+          count: submittedList.length,
           icon: 'i',
           tone: 'info',
         },
         {
           key: 'candidates',
           label: '提案候補の承認が必要です',
-          sub: 'Necoから医療者候補が提案されています',
-          count: proposals.filter(p => p.status === 'proposed_to_facility').length,
+          sub: approvalMaxH != null && approvalMaxH >= 24
+            ? `候補者提案から${formatElapsed(approvalMaxH)}しています。承認または見送りをご判断ください。`
+            : 'Necoから医療者候補が提案されています。承認または見送りをご判断ください。',
+          count: approvalList.length,
           icon: '?',
-          tone: 'warn',
+          tone: approvalMaxH != null && approvalMaxH >= 48 ? 'urgent' : 'warn',
         },
         {
           key: 'assignments',
           label: '勤務完了確認が必要です',
-          sub: '医療者から稼働完了報告が届いています',
-          count: assignments.filter(a => a.status === 'completion_reported').length,
+          sub: completionMaxH != null && completionMaxH >= 24
+            ? `完了報告から${formatElapsed(completionMaxH)}しています。完了確認をお願いします。`
+            : '完了報告済みの勤務があります。完了確認をお願いします。',
+          count: completionList.length,
           icon: '+',
+          tone: completionMaxH != null && completionMaxH >= 48 ? 'urgent' : 'warn',
+        },
+        {
+          key: 'assignments',
+          label: '確認事項ありの勤務があります',
+          sub: '紛争申告中の勤務があります。Neco担当者が調整中です。',
+          count: disputedList.length,
+          icon: '!',
           tone: 'urgent',
         },
         {
           key: 'invoices',
-          label: '請求確認が必要です',
-          sub: '請求書の支払いが遅延または未確認です',
-          count: invoices.filter(i => i.status === 'overdue' || i.status === 'sent').length,
+          label: '請求確認が必要な項目があります',
+          sub: '請求書の支払いが遅延または未確認です。',
+          count: invoiceAttention.length,
           icon: '$',
-          tone: 'warn',
+          tone: invoiceAttention.some(i => i.status === 'overdue') ? 'urgent' : 'warn',
         },
       ];
 

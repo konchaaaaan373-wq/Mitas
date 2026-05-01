@@ -200,6 +200,40 @@
       font-size: 13px; color: var(--gray-900, #0f172a); line-height: 1.7;
       white-space: pre-wrap;
     }
+    .reminder-list {
+      display: grid; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .reminder {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200, #e2e8f0);
+      background: var(--white, #fff);
+    }
+    .reminder--info  { background: rgba(56,189,248,0.05); border-color: rgba(56,189,248,0.20); }
+    .reminder--warn  { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.25); }
+    .reminder--alert { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.22); }
+    .reminder--ok    { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.22); }
+    .reminder__icon {
+      width: 22px; height: 22px; flex-shrink: 0;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      background: rgba(0,0,0,0.04); color: var(--gray-700, #334155);
+    }
+    .reminder--info  .reminder__icon { background: rgba(56,189,248,0.12); color: #0369a1; }
+    .reminder--warn  .reminder__icon { background: rgba(245,158,11,0.15); color: #b45309; }
+    .reminder--alert .reminder__icon { background: rgba(220,38,38,0.12); color: #b91c1c; }
+    .reminder--ok    .reminder__icon { background: rgba(16,185,129,0.15); color: #047857; }
+    .reminder__main { flex: 1; min-width: 0; }
+    .reminder__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .reminder__body {
+      margin-top: 2px;
+      font-size: 12px; color: var(--gray-700, #334155); line-height: 1.7;
+    }
     .pre-shift {
       margin: 0 0 16px;
       padding: 12px 14px;
@@ -1076,6 +1110,9 @@
       <p class="page-head__sub" id="todayDate"></p>
     </div>
 
+    <!-- アプリ内リマインド（勤務予定に応じて表示） -->
+    <div id="reminderRoot" class="reminder-list" hidden></div>
+
     <!-- スケルトン -->
     <div id="skeleton" class="card skeleton-card">
       <div class="skeleton skeleton-line skeleton-line--lg"></div>
@@ -1432,6 +1469,9 @@
       currentAssignment = active[0] || null;
       renderAssignment(currentAssignment);
 
+      // アプリ内リマインドを描画
+      renderReminders(allAssignments, currentAssignment);
+
       // Schedule: 全件をセクション分け
       renderSchedule(allAssignments);
     } catch (e) {
@@ -1454,6 +1494,140 @@
   }
 
   // ─── 描画 ───
+  // 勤務予定に応じて、アプリ内リマインドを描画する。
+  // confirmed → 開始までの残時間 / 本日 / 明日 / 過ぎている
+  // checked_in → 終了時刻が近づいている / 終了時刻を過ぎている
+  // checked_out → 完了報告のお願い
+  // completion_reported → 施設確認待ち
+  // completion_confirmed → 完了済みのお知らせ
+  // disputed → 確認事項のお知らせ
+  function renderReminders(all, current) {
+    const root = document.getElementById('reminderRoot');
+    if (!root) return;
+    const reminders = [];
+    const now = Date.now();
+
+    // 1) 直近の confirmed を探す
+    const upcomingConfirmed = (all || [])
+      .filter(a => a.status === 'confirmed' && a.scheduled_start_at)
+      .sort((a, b) => new Date(a.scheduled_start_at) - new Date(b.scheduled_start_at));
+
+    if (upcomingConfirmed.length) {
+      const next = upcomingConfirmed[0];
+      const startMs = new Date(next.scheduled_start_at).getTime();
+      const diff = startMs - now;
+      const oneHour = 3600000;
+      const today = new Date();
+      const startDate = new Date(startMs);
+      const isSameDay =
+        startDate.getFullYear() === today.getFullYear() &&
+        startDate.getMonth() === today.getMonth() &&
+        startDate.getDate() === today.getDate();
+      const isTomorrow = (() => {
+        const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        return startDate.getFullYear() === tomorrow.getFullYear() &&
+               startDate.getMonth() === tomorrow.getMonth() &&
+               startDate.getDate() === tomorrow.getDate();
+      })();
+
+      const facility = next.staffing_requests?.organization_name || next.staffing_requests?.title || '勤務先';
+      const time = `${formatDateShort(startDate)} ${formatTime(startDate)}`;
+
+      if (diff < 0 && next.status === 'confirmed') {
+        reminders.push({
+          tone: 'alert', icon: '!',
+          title: '勤務開始時刻を過ぎています',
+          body: `${escapeHtml(time)}〜の勤務が確定済みです。チェックインがまだの場合はお早めにお願いします。`,
+        });
+      } else if (diff <= oneHour) {
+        reminders.push({
+          tone: 'warn', icon: '!',
+          title: '本日の勤務開始時刻が近づいています',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。勤務内容・場所をご確認のうえ、勤務開始時にチェックインしてください。`,
+        });
+      } else if (isSameDay) {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '本日の勤務があります',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。勤務開始時にチェックインしてください。`,
+        });
+      } else if (isTomorrow) {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '明日の勤務があります',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。事前に勤務内容・場所・持ち物をご確認ください。`,
+        });
+      }
+    }
+
+    // 2) 現在の状態に応じたリマインド
+    if (current) {
+      if (current.status === 'checked_in') {
+        const endMs = current.scheduled_end_at ? new Date(current.scheduled_end_at).getTime() : null;
+        const diff = endMs ? endMs - now : null;
+        if (diff != null && diff < 0) {
+          reminders.push({
+            tone: 'warn', icon: '!',
+            title: '勤務終了時刻を過ぎています',
+            body: '勤務終了時にチェックアウトをお願いします。',
+          });
+        } else if (diff != null && diff <= 60 * 60000) {
+          reminders.push({
+            tone: 'warn', icon: '!',
+            title: '勤務終了時刻が近づいています',
+            body: '勤務終了時にチェックアウトをお願いします。',
+          });
+        } else {
+          reminders.push({
+            tone: 'info', icon: 'i',
+            title: '勤務中です',
+            body: '勤務終了時にチェックアウトしてください。',
+          });
+        }
+      } else if (current.status === 'checked_out') {
+        reminders.push({
+          tone: 'warn', icon: '!',
+          title: '完了報告のお願い',
+          body: '勤務終了後は完了報告をお願いします。',
+        });
+      } else if (current.status === 'completion_reported') {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '施設の完了確認待ちです',
+          body: '完了報告済みです。施設側の確認後、稼働実績に反映されます。',
+        });
+      } else if (current.status === 'completion_confirmed') {
+        reminders.push({
+          tone: 'ok', icon: '✓',
+          title: '施設確認が完了しました',
+          body: '勤務完了が確定しました。お疲れさまでした。',
+        });
+      } else if (current.status === 'disputed') {
+        reminders.push({
+          tone: 'alert', icon: '!',
+          title: '確認事項があります',
+          body: 'Neco担当者からの連絡をお待ちください。',
+        });
+      }
+    }
+
+    // 表示
+    if (!reminders.length) {
+      root.hidden = true;
+      root.innerHTML = '';
+      return;
+    }
+    root.hidden = false;
+    root.innerHTML = reminders.map(r => `
+      <div class="reminder reminder--${r.tone}">
+        <div class="reminder__icon">${escapeHtml(r.icon)}</div>
+        <div class="reminder__main">
+          <div class="reminder__title">${escapeHtml(r.title)}</div>
+          <div class="reminder__body">${r.body}</div>
+        </div>
+      </div>`).join('');
+  }
+
   function renderAssignment(a) {
     const root = document.getElementById('assignmentRoot');
     const empty = document.getElementById('emptyState');
