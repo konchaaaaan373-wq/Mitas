@@ -1654,7 +1654,8 @@
     const guidance = statusGuidance(a.status);
     const facilityName = a.staffing_requests?.organization_name || a.organization_name || '施設情報はNeco担当者にご確認ください';
     const shiftType = a.staffing_requests?.shift_type ? shiftTypeLabel(a.staffing_requests.shift_type) : '';
-    const workNote = a.staffing_requests?.notes || '';
+    // staffing_requests の自由記述は description 列（旧 notes はスキーマに無い）
+    const workNote = a.staffing_requests?.description || '';
     // 構造化された notes から、勤務前確認用にセクションを抽出
     const sections = parseStructuredNotes(workNote);
     const preShift = renderPreShiftBlock(sections);
