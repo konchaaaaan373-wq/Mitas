@@ -179,47 +179,49 @@ BEGIN
     request_number, organization_id, created_by_user_id,
     title, description, profession_type, specialty, headcount, shift_type,
     start_at, end_at, hourly_rate_min, hourly_rate_max,
-    required_licenses, status, priority, submitted_at, notes
+    required_licenses, status, priority, submitted_at
   ) VALUES (
     'SR-DEMO-0001', v_org_demo_hosp, v_fa1_user,
-    '内科外来 当直医（DEMO 緊急）', 'DEMO DATA - 常勤医退職に伴う当直枠の代替',
+    '内科外来 当直医（DEMO 緊急）',
+    E'DEMO DATA - 常勤医退職に伴う当直枠の代替\n\n【想定患者数】\n外来5〜10名（DEMO）\n\n【業務範囲】\n一般内科、当直対応\n\n【バックアップ体制】\n上級医オンコール\n\n【電子カルテ】\nDEMO-EMR\n\n【集合場所・持ち物】\n医局集合、白衣持参\n\n【注意事項】\nDEMO DATA。実勤務はありません。',
     'physician', '内科', 1, 'on_call',
     NOW() + INTERVAL '5 days', NOW() + INTERVAL '5 days 16 hours',
     15000, 18000,
-    ARRAY['医師免許'], 'submitted', 'urgent', NOW() - INTERVAL '1 day',
-    E'【想定患者数】\n外来5〜10名（DEMO）\n\n【業務範囲】\n一般内科、当直対応\n\n【バックアップ体制】\n上級医オンコール\n\n【電子カルテ】\nDEMO-EMR\n\n【集合場所・持ち物】\n医局集合、白衣持参\n\n【注意事項】\nDEMO DATA。実勤務はありません。'
+    ARRAY['医師免許'], 'submitted', 'urgent', NOW() - INTERVAL '1 day'
   )
   RETURNING id INTO v_request_1_id;
 
   INSERT INTO staffing_requests (
     request_number, organization_id, created_by_user_id,
-    title, profession_type, headcount, shift_type,
+    title, description, profession_type, headcount, shift_type,
     start_at, end_at, hourly_rate_min, hourly_rate_max,
-    status, priority, submitted_at, accepted_at, notes
+    status, priority, submitted_at, accepted_at
   ) VALUES (
     'SR-DEMO-0002', v_org_demo_vns, v_fa2_user,
-    '訪問看護 週末スポット（DEMO）', 'nurse', 1, 'spot',
+    '訪問看護 週末スポット（DEMO）',
+    'DEMO DATA - 訪問看護 週末勤務枠',
+    'nurse', 1, 'spot',
     NOW() + INTERVAL '7 days', NOW() + INTERVAL '7 days 8 hours',
     3500, 4000,
     'accepted', 'medium',
-    NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days',
-    'DEMO DATA - 訪問看護 週末勤務枠'
+    NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days'
   )
   RETURNING id INTO v_request_2_id;
 
   INSERT INTO staffing_requests (
     request_number, organization_id, created_by_user_id,
-    title, profession_type, specialty, headcount, shift_type,
+    title, description, profession_type, specialty, headcount, shift_type,
     start_at, end_at, hourly_rate_min, hourly_rate_max,
-    status, priority, submitted_at, accepted_at, notes
+    status, priority, submitted_at, accepted_at
   ) VALUES (
     'SR-DEMO-0003', v_org_demo_hosp, v_fa1_user,
-    '健診 GW 応援（DEMO）', 'physician', '健診', 2, 'spot',
+    '健診 GW 応援（DEMO）',
+    'DEMO DATA - GW 応援勤務枠',
+    'physician', '健診', 2, 'spot',
     NOW() + INTERVAL '14 days', NOW() + INTERVAL '14 days 8 hours',
     12000, 15000,
     'proposing', 'high',
-    NOW() - INTERVAL '5 days', NOW() - INTERVAL '4 days',
-    'DEMO DATA - GW 応援勤務枠'
+    NOW() - INTERVAL '5 days', NOW() - INTERVAL '4 days'
   )
   RETURNING id INTO v_request_3_id;
 
