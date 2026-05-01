@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MITAS Worker</title>
+  <title>医療者向け勤務機会アプリ | Mitas for Alliance</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#0D2340">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -905,7 +905,7 @@
 
 <!-- ═════ トップバー ═════ -->
 <header class="topbar">
-  <div class="topbar__brand">MITAS<small>Worker</small></div>
+  <div class="topbar__brand">Mitas<small>for Professionals</small></div>
   <div class="topbar__user">
     <span class="topbar__email" id="userEmail">読み込み中…</span>
     <button class="topbar__btn" id="logoutBtn" type="button">ログアウト</button>
@@ -917,11 +917,15 @@
 
   <div id="devBanner" class="dev-banner" hidden>モックモードで動作中（Supabase未接続）</div>
 
-  <!-- ─── Today ビュー ─── -->
+  <p class="page-head__sub" style="margin: -4px 0 14px; padding: 10px 14px; background: rgba(56,189,248,0.06); border-left: 3px solid #38bdf8; border-radius: 6px; color: #334155; font-size: 12px; line-height: 1.7;">
+    登録された資格・経験・希望条件に基づき、医療機関からの応援勤務・非常勤勤務・当直・オンコール・専門外来支援等の勤務機会をご案内します。
+  </p>
+
+  <!-- ─── 本日の勤務 ─── -->
   <section id="view-today" class="view view--active" aria-labelledby="head-today">
     <div class="page-head">
-      <div class="page-head__eyebrow">Today</div>
-      <h1 class="page-head__title" id="head-today">本日のアサイン</h1>
+      <div class="page-head__eyebrow">本日の勤務</div>
+      <h1 class="page-head__title" id="head-today">本日の勤務</h1>
       <p class="page-head__sub" id="todayDate"></p>
     </div>
 
@@ -938,17 +942,17 @@
 
     <!-- 空状態 -->
     <div id="emptyState" class="empty" hidden>
-      <div class="empty__title">現在のアサインはありません</div>
-      <div class="empty__sub">新しい依頼が確定するとここに表示されます。</div>
+      <div class="empty__title">本日確定している勤務はありません</div>
+      <div class="empty__sub">新しい勤務機会が確定するとここに表示されます。</div>
     </div>
   </section>
 
-  <!-- ─── Schedule ビュー ─── -->
+  <!-- ─── 勤務予定ビュー ─── -->
   <section id="view-schedule" class="view" aria-labelledby="head-schedule">
     <div class="page-head">
-      <div class="page-head__eyebrow">Schedule</div>
-      <h1 class="page-head__title" id="head-schedule">アサイン一覧</h1>
-      <p class="page-head__sub">今後の予定と過去の勤務履歴</p>
+      <div class="page-head__eyebrow">勤務予定</div>
+      <h1 class="page-head__title" id="head-schedule">勤務予定・実績</h1>
+      <p class="page-head__sub">今後の勤務予定と過去の稼働実績</p>
     </div>
 
     <!-- スケルトン -->
@@ -962,17 +966,17 @@
     <div id="scheduleRoot" hidden></div>
 
     <div id="scheduleEmpty" class="empty" hidden>
-      <div class="empty__title">表示できるアサインがありません</div>
-      <div class="empty__sub">確定したアサインや過去の勤務がここに一覧表示されます。</div>
+      <div class="empty__title">表示できる勤務予定がありません</div>
+      <div class="empty__sub">確定した勤務や過去の稼働実績がここに一覧表示されます。</div>
     </div>
   </section>
 
-  <!-- ─── Profile ビュー ─── -->
+  <!-- ─── 医療者プロフィールビュー ─── -->
   <section id="view-profile" class="view" aria-labelledby="head-profile">
     <div class="page-head">
-      <div class="page-head__eyebrow">Profile</div>
-      <h1 class="page-head__title" id="head-profile">プロフィール</h1>
-      <p class="page-head__sub">基本情報・資格・勤務可能時間</p>
+      <div class="page-head__eyebrow">医療者プロフィール</div>
+      <h1 class="page-head__title" id="head-profile">医療者プロフィール</h1>
+      <p class="page-head__sub">基本情報・専門領域・対応可能業務・希望勤務条件・勤務可能時間・資格書類</p>
     </div>
 
     <!-- スケルトン -->
@@ -1040,12 +1044,12 @@
       </div>
 
       <div class="form-row">
-        <div class="form-row__label">シフト種別</div>
+        <div class="form-row__label">勤務種別</div>
         <select class="form-select" id="shiftType">
-          <option value="regular_shift">通常シフト</option>
+          <option value="regular_shift">通常勤務</option>
           <option value="on_call">オンコール</option>
-          <option value="night_duty">夜勤</option>
-          <option value="spot">スポット</option>
+          <option value="night_duty">夜勤・当直</option>
+          <option value="spot">応援勤務</option>
           <option value="other">その他</option>
         </select>
       </div>
@@ -1064,19 +1068,19 @@
     <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>
     </svg>
-    Today
+    本日
   </button>
   <button class="bottom-nav__item" type="button" data-tab="schedule">
     <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
     </svg>
-    Schedule
+    勤務予定
   </button>
   <button class="bottom-nav__item" type="button" data-tab="profile" disabled title="準備中">
     <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>
     </svg>
-    Profile
+    プロフィール
   </button>
 </nav>
 
@@ -1222,7 +1226,7 @@
     }
   }
 
-  // ─── アサイン一覧取得（Today / Schedule 両用）───
+  // ─── 勤務情報取得（本日 / 勤務予定 両用）───
   async function loadAssignments() {
     showSkeleton(true);
     showScheduleSkeleton(true);
@@ -1251,7 +1255,7 @@
       renderSchedule(allAssignments);
     } catch (e) {
       console.error(e);
-      showToast('アサインの取得に失敗しました', 'error');
+      showToast('勤務情報の取得に失敗しました', 'error');
       renderAssignment(null);
       renderSchedule([]);
     } finally {
@@ -1293,7 +1297,7 @@
     const total = a.total_compensation != null ? `¥${fmt(a.total_compensation)}` : '-';
 
     root.innerHTML = `
-      <article class="card" aria-label="次のアサイン">
+      <article class="card" aria-label="次の勤務">
         <header class="card__head">
           <div>
             <div class="card__title">${escapeHtml(title)}</div>
@@ -1316,7 +1320,7 @@
               <div class="card__meta-value card__meta-value--num">${total}</div>
             </div>
             <div class="card__meta-item">
-              <div class="card__meta-label">アサイン番号</div>
+              <div class="card__meta-label">勤務番号</div>
               <div class="card__meta-value">${escapeHtml(a.assignment_number || '-')}</div>
             </div>
           </div>
@@ -1381,7 +1385,7 @@
         <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">MITAS担当者が確認します</div>
       </div>`;
     }
-    return `<button class="action" type="button" disabled>このアサインは操作できません</button>`;
+    return `<button class="action" type="button" disabled>この勤務は操作できません</button>`;
   }
 
   // ─── アクション実行 ───
@@ -1564,8 +1568,8 @@
     return `
       <div class="toggle-row">
         <div class="toggle-row__label-wrap">
-          <div class="toggle-row__title">新しいオファーを受け取る</div>
-          <div class="toggle-row__sub">${p.is_available_for_offers ? 'オファー受付中' : '受付停止中（既存アサインには影響しません）'}</div>
+          <div class="toggle-row__title">勤務機会の案内を受け取る</div>
+          <div class="toggle-row__sub">${p.is_available_for_offers ? 'オンにすると、登録された資格・経験・希望条件に合う勤務枠について、Necoからご相談する場合があります。' : '案内停止中（既に確定している勤務には影響しません）'}</div>
         </div>
         <label class="switch">
           <input type="checkbox" id="offerToggle" ${checked}>
@@ -1786,8 +1790,8 @@
     const pastLimited = past.slice(0, 20);
 
     const sections = [];
-    sections.push(renderScheduleSection('今後のアサイン', upcoming, false));
-    sections.push(renderScheduleSection('過去のアサイン', pastLimited, true));
+    sections.push(renderScheduleSection('今後の勤務予定', upcoming, false));
+    sections.push(renderScheduleSection('過去の稼働実績', pastLimited, true));
     root.innerHTML = sections.join('');
 
     // タップで Today タブへ遷移してそのアサインを表示
@@ -2173,10 +2177,10 @@
   }
   function shiftTypeLabel(s) {
     return ({
-      regular_shift: '通常シフト',
+      regular_shift: '通常勤務',
       on_call: 'オンコール',
-      night_duty: '夜勤',
-      spot: 'スポット',
+      night_duty: '夜勤・当直',
+      spot: '応援勤務',
       other: 'その他',
     })[s] || s || '-';
   }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neco Console | MITAS</title>
+  <title>配置マッチングコンソール | Mitas for Alliance</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -812,9 +812,9 @@
 
 <div class="topbar">
   <div class="topbar__brand">
-    <span class="topbar__logo">MITAS</span>
+    <span class="topbar__logo">Mitas for Alliance</span>
     <span class="topbar__divider"></span>
-    <span class="topbar__title">Neco オペレーションコンソール</span>
+    <span class="topbar__title">配置マッチングコンソール</span>
   </div>
   <div class="topbar__actions">
     <span class="topbar__user" id="userName">読み込み中…</span>
@@ -823,11 +823,11 @@
 </div>
 
 <div class="console">
-  <!-- ═════ 左カラム：依頼一覧 ═════ -->
-  <section class="panel" aria-label="依頼一覧">
+  <!-- ═════ 左カラム：勤務枠依頼一覧 ═════ -->
+  <section class="panel" aria-label="勤務枠依頼一覧">
     <div class="panel__head">
-      <div class="panel__title">人材依頼</div>
-      <div class="panel__subtitle">施設からの依頼を状態別に確認します</div>
+      <div class="panel__title">勤務枠依頼</div>
+      <div class="panel__subtitle">施設からの勤務枠依頼を確認し、医療者台帳から適切な候補者を提案・稼働確定まで管理します</div>
     </div>
 
     <div class="tabs" role="tablist">
@@ -836,7 +836,7 @@
         <span class="tab__count" id="count-new">0</span>
       </button>
       <button class="tab" role="tab" data-tab="in_review">
-        <span>確認中</span>
+        <span>要件確認中</span>
         <span class="tab__count" id="count-in_review">0</span>
       </button>
       <button class="tab" role="tab" data-tab="proposing">
@@ -856,13 +856,13 @@
     </div>
   </section>
 
-  <!-- ═════ 右カラム：詳細パネル ═════ -->
-  <section class="panel" id="detailPanel" aria-label="依頼詳細">
+  <!-- ═════ 右カラム：勤務枠詳細パネル ═════ -->
+  <section class="panel" id="detailPanel" aria-label="勤務枠詳細">
     <div class="detail-empty" id="detailEmpty">
       <div class="detail-empty__icon">i</div>
-      <div class="detail-empty__title">依頼が選択されていません</div>
+      <div class="detail-empty__title">勤務枠依頼が選択されていません</div>
       <div class="detail-empty__desc">
-        左の一覧から依頼カードを選択すると、詳細・状態遷移ボタン・候補者抽出・既存提案が表示されます。
+        左の一覧から勤務枠依頼を選択すると、要件・リスク確認、医療者候補ランキング、提案済み候補、確定勤務・稼働状況、タイムラインが表示されます。
       </div>
     </div>
     <div class="detail" id="detailArea" hidden>
@@ -875,7 +875,7 @@
 <div class="modal-backdrop" id="proposalModal" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="proposalModalTitle">
     <div class="modal__head">
-      <div class="modal__title" id="proposalModalTitle">提案を作成</div>
+      <div class="modal__title" id="proposalModalTitle">医療者候補を提案</div>
       <div class="modal__subtitle" id="proposalModalSubtitle">—</div>
     </div>
     <form id="proposalForm" novalidate>
@@ -898,7 +898,7 @@
           <label class="field__label" for="propExpiry">有効期限（日数）</label>
           <input class="field__input" type="number" id="propExpiry" name="expiry_days"
                  min="1" max="60" step="1" value="7">
-          <div class="field__hint">作成日からN日後をワーカーへの提案期限とします</div>
+          <div class="field__hint">作成日からN日後を医療者への提案期限とします</div>
         </div>
         <div class="field">
           <label class="field__label" for="propReason">マッチ理由</label>
@@ -1043,9 +1043,9 @@
   // 提案ステータス表示名
   const PROPOSAL_STATUS_LABEL = {
     created:              '作成',
-    worker_contacted:     'ワーカー連絡',
-    worker_accepted:      'ワーカー承諾',
-    worker_declined:      'ワーカー辞退',
+    worker_contacted:     '医療者へ連絡',
+    worker_accepted:      '医療者承諾',
+    worker_declined:      '医療者辞退',
     proposed_to_facility: '施設提案中',
     facility_accepted:    '施設承諾',
     facility_declined:    '施設辞退',
@@ -1055,11 +1055,11 @@
 
   const SHIFT_LABEL = {
     on_call: 'オンコール',
-    night_duty: '夜勤',
+    night_duty: '夜勤・当直',
     day_duty: '日勤',
-    spot: 'スポット',
-    regular_shift: '通常シフト',
-    long_term: '長期',
+    spot: '応援勤務',
+    regular_shift: '通常勤務',
+    long_term: '非常勤・継続勤務',
   };
 
   // ─── 状態遷移マップ（neco_admin が操作可能な遷移） ───
@@ -1444,7 +1444,7 @@
             <div><div class="meta-item__label">職種</div><div class="meta-item__value">${escapeHtml(professionLabel(r.profession_type))}</div></div>
             <div><div class="meta-item__label">専門・科</div><div class="meta-item__value ${r.specialty ? '' : 'meta-item__value--muted'}">${escapeHtml(r.specialty || '—')}</div></div>
             <div><div class="meta-item__label">必要人数</div><div class="meta-item__value">${r.headcount || 1}名</div></div>
-            <div><div class="meta-item__label">シフト種別</div><div class="meta-item__value">${escapeHtml(SHIFT_LABEL[r.shift_type] || r.shift_type || '—')}</div></div>
+            <div><div class="meta-item__label">勤務種別</div><div class="meta-item__value">${escapeHtml(SHIFT_LABEL[r.shift_type] || r.shift_type || '—')}</div></div>
           </div>
         </div>
 
@@ -1500,7 +1500,7 @@
         <!-- ─── 既存提案セクション ─── -->
         <div class="detail-section">
           <div class="sub-panel__head">
-            <div class="detail-section__title" style="margin: 0;">既存の提案</div>
+            <div class="detail-section__title" style="margin: 0;">提案済み候補</div>
             <span class="sub-panel__count" id="proposalsCount">読み込み中…</span>
           </div>
           <div id="proposalsContainer">
@@ -1511,7 +1511,7 @@
         <!-- ─── 候補者抽出セクション ─── -->
         <div class="detail-section">
           <div class="sub-panel__head">
-            <div class="detail-section__title" style="margin: 0;">候補者の抽出</div>
+            <div class="detail-section__title" style="margin: 0;">医療者候補ランキング</div>
             <span class="sub-panel__count" id="candidatesCount">読み込み中…</span>
           </div>
           <div id="candidatesContainer">
@@ -1522,7 +1522,7 @@
         <!-- ─── 確定アサインセクション（v0.2） ─── -->
         <div class="detail-section">
           <div class="sub-panel__head">
-            <div class="detail-section__title" style="margin: 0;">確定アサイン</div>
+            <div class="detail-section__title" style="margin: 0;">確定勤務・稼働状況</div>
             <span class="sub-panel__count" id="assignmentsCount">読み込み中…</span>
           </div>
           <div id="assignmentsContainer">
@@ -1533,11 +1533,27 @@
         <!-- ─── 履歴セクション（activity_log）（v0.2） ─── -->
         <div class="detail-section">
           <div class="sub-panel__head">
-            <div class="detail-section__title" style="margin: 0;">履歴</div>
+            <div class="detail-section__title" style="margin: 0;">タイムライン・監査ログ</div>
             <span class="sub-panel__count" id="activityCount">読み込み中…</span>
           </div>
           <div id="activityContainer">
             <div class="placeholder" style="padding: 16px;">読み込み中…</div>
+          </div>
+        </div>
+
+        <!-- ─── AI配置支援（将来実装予定） ─── -->
+        <div class="detail-section" style="border: 1px dashed var(--gray-300); border-radius: var(--radius); padding: 14px 16px; background: var(--gray-50);">
+          <div class="detail-section__title" style="margin-top: 0;">AI配置支援（将来実装予定）</div>
+          <ul style="margin: 0; padding-left: 18px; color: var(--gray-700); font-size: 13px; line-height: 1.9;">
+            <li>勤務枠の要件整理</li>
+            <li>候補者推薦理由の生成</li>
+            <li>リスクフラグ表示</li>
+            <li>施設向け提案文の作成</li>
+            <li>医療者向け打診文の作成</li>
+            <li>月次需給レポートの作成</li>
+          </ul>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--gray-500);">
+            AI配置支援は、Neco担当者と施設管理者の意思決定を補助する機能です。最終判断は人間が行います。
           </div>
         </div>
       </div>
@@ -2027,7 +2043,7 @@
                 </div>` : ''}
               ${a.worker_completion_note ? `
                 <div style="font-size:11px; color: var(--gray-700); margin-top:6px; line-height:1.6;">
-                  ワーカーメモ：${escapeHtml(a.worker_completion_note)}
+                  医療者メモ：${escapeHtml(a.worker_completion_note)}
                 </div>` : ''}
               <div style="margin-top: 8px; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
                 ${canConfirm ? `

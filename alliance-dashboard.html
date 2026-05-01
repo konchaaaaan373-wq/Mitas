@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>地域連携ダッシュボード | MITAS</title>
+  <title>連携法人 人材需給ダッシュボード | Mitas for Alliance</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -325,9 +325,9 @@
 
 <div class="topbar">
   <div class="topbar__brand">
-    <span class="topbar__logo">MITAS</span>
+    <span class="topbar__logo">Mitas for Alliance</span>
     <span class="topbar__divider"></span>
-    <span class="topbar__title">地域連携ダッシュボード</span>
+    <span class="topbar__title">連携法人 人材需給ダッシュボード</span>
   </div>
   <div class="topbar__actions">
     <span class="topbar__user" id="userName">読み込み中…</span>
@@ -337,9 +337,12 @@
 
 <div class="wrap">
   <div class="page-head">
-    <div class="page-head__eyebrow">REGIONAL ALLIANCE</div>
-    <h1 class="page-head__title">医療人材の充足状況</h1>
-    <p class="page-head__sub">地域全体の依頼パイプライン・充足率・不足分布を一望できます。</p>
+    <div class="page-head__eyebrow">MITAS FOR ALLIANCE</div>
+    <h1 class="page-head__title">連携法人 人材需給ダッシュボード</h1>
+    <p class="page-head__sub">地域医療連携法人のための、人材需給・配置最適化ダッシュボード。連携法人内の未充足勤務枠、職種別不足、施設別不足、夜勤・オンコール需給、稼働医療者数を可視化します。</p>
+    <p class="page-head__sub" style="margin-top: 8px; color: var(--gray-700); max-width: 820px;">
+      個別施設ごとの採用難を、連携法人全体の人材需給として捉え直します。施設横断で応援勤務・非常勤勤務・当直・オンコールを調整し、特定施設への負担集中を防ぎます。
+    </p>
     <div class="page-head__meta">
       <span id="updatedAt">読み込み中…</span>
     </div>
@@ -350,47 +353,47 @@
   <!-- ═════ KPIカード ═════ -->
   <div class="kpi-grid">
     <div class="kpi-card kpi-card--alert">
-      <div class="kpi-card__label">緊急の未充足依頼</div>
+      <div class="kpi-card__label">緊急未充足枠</div>
       <div class="kpi-card__value"><span id="kpi-urgent">—</span><span class="kpi-card__unit">件</span></div>
     </div>
     <div class="kpi-card kpi-card--warn">
-      <div class="kpi-card__label">未充足の総依頼</div>
+      <div class="kpi-card__label">未充足勤務枠</div>
       <div class="kpi-card__value"><span id="kpi-open">—</span><span class="kpi-card__unit">件</span></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-card__label">未充足headcount合計</div>
+      <div class="kpi-card__label">未充足人数</div>
       <div class="kpi-card__value"><span id="kpi-headcount">—</span><span class="kpi-card__unit">人</span></div>
     </div>
     <div class="kpi-card kpi-card--ok">
-      <div class="kpi-card__label">過去30日の充足完了</div>
+      <div class="kpi-card__label">30日以内の充足完了</div>
       <div class="kpi-card__value"><span id="kpi-completed">—</span><span class="kpi-card__unit">件</span></div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-card__label">進行中アサイン</div>
+      <div class="kpi-card__label">進行中の稼働</div>
       <div class="kpi-card__value"><span id="kpi-active">—</span><span class="kpi-card__unit">件</span></div>
     </div>
     <div class="kpi-card kpi-card--alert">
-      <div class="kpi-card__label">紛争中アサイン</div>
+      <div class="kpi-card__label">紛争・確認中</div>
       <div class="kpi-card__value"><span id="kpi-disputes">—</span><span class="kpi-card__unit">件</span></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-card__label">稼働ワーカー</div>
+      <div class="kpi-card__label">稼働可能医療者</div>
       <div class="kpi-card__value"><span id="kpi-workers">—</span><span class="kpi-card__unit">名</span></div>
     </div>
     <div class="kpi-card kpi-card--warn">
-      <div class="kpi-card__label">期限間近の資格</div>
+      <div class="kpi-card__label">期限間近の資格確認</div>
       <div class="kpi-card__value"><span id="kpi-expiring">—</span><span class="kpi-card__unit">件</span></div>
     </div>
   </div>
 
-  <!-- ═════ パネル：未充足の組織別ランキング & 職種別不足 ═════ -->
+  <!-- ═════ パネル：施設別ランキング & 職種別不足 ═════ -->
   <div class="section-grid">
     <div class="panel">
       <div class="panel__head">
         <div>
-          <div class="panel__title">未充足依頼が多い組織</div>
-          <div class="panel__subtitle">v_unfilled_requests_summary</div>
+          <div class="panel__title">未充足勤務枠が多い施設</div>
+          <div class="panel__subtitle">施設別の人材需給ギャップ</div>
         </div>
       </div>
       <div class="panel__body">
@@ -401,8 +404,8 @@
     <div class="panel">
       <div class="panel__head">
         <div>
-          <div class="panel__title">職種別の不足headcount</div>
-          <div class="panel__subtitle">v_shortage_by_specialty</div>
+          <div class="panel__title">職種別の人材不足</div>
+          <div class="panel__subtitle">医師・看護師・療法士などの不足人数</div>
         </div>
       </div>
       <div class="panel__body">
@@ -415,17 +418,17 @@
   <div class="panel" style="margin-bottom: 24px;">
     <div class="panel__head">
       <div>
-        <div class="panel__title">充足率（過去90日・組織×職種）</div>
-        <div class="panel__subtitle">v_fill_rate</div>
+        <div class="panel__title">充足率（過去90日・施設×職種）</div>
+        <div class="panel__subtitle">連携法人内の人材需給と配置実績</div>
       </div>
     </div>
     <table class="data-table">
       <thead>
         <tr>
-          <th>組織</th>
+          <th>施設</th>
           <th>職種</th>
-          <th class="num">依頼</th>
-          <th class="num">要求人数</th>
+          <th class="num">勤務枠</th>
+          <th class="num">必要人数</th>
           <th class="num">充足人数</th>
           <th class="num">充足率</th>
         </tr>
@@ -436,20 +439,20 @@
     </table>
   </div>
 
-  <!-- ═════ 夜勤・on-callの穴 ═════ -->
+  <!-- ═════ 夜勤・オンコールの未充足 ═════ -->
   <div class="panel">
     <div class="panel__head">
       <div>
-        <div class="panel__title">夜勤・on-callシフトの未充足</div>
-        <div class="panel__subtitle">v_night_duty_gaps</div>
+        <div class="panel__title">夜勤・オンコールの未充足</div>
+        <div class="panel__subtitle">夜勤・当直・オンコールに対する施設横断の人材ギャップ</div>
       </div>
     </div>
     <table class="data-table">
       <thead>
         <tr>
-          <th>組織</th>
+          <th>施設</th>
           <th>職種</th>
-          <th>シフト種別</th>
+          <th>勤務種別</th>
           <th class="num">未充足</th>
           <th>最早開始</th>
         </tr>
@@ -458,6 +461,20 @@
         <tr><td colspan="5" class="placeholder">読み込み中…</td></tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- ═════ AI配置支援（将来実装予定） ═════ -->
+  <div class="panel" style="margin-top: 24px; border-style: dashed;">
+    <div class="panel__head">
+      <div>
+        <div class="panel__title">AI配置支援（将来実装予定）</div>
+        <div class="panel__subtitle">需給レポート生成・リスク検知支援・配置最適化提案</div>
+      </div>
+    </div>
+    <div class="panel__body" style="color: var(--gray-700); font-size: 13px; line-height: 1.8;">
+      将来的には、AI配置支援により、勤務枠の要件整理、候補者推薦理由の生成、リスク検知支援、施設向け提案文の作成、月次の需給レポート生成を支援します。<br>
+      <span style="color: var(--gray-500);">AIは最終判断を行うものではなく、Neco担当者と施設管理者の意思決定を補助する機能として位置づけます。</span>
+    </div>
   </div>
 </div>
 
@@ -546,7 +563,7 @@
 
   function renderOrgRanking(rows) {
     const el = document.getElementById('orgRanking');
-    if (!rows || !rows.length) { el.innerHTML = '<div class="placeholder">未充足の依頼はありません</div>'; return; }
+    if (!rows || !rows.length) { el.innerHTML = '<div class="placeholder">未充足の勤務枠はありません</div>'; return; }
     rows.sort((a,b) => (b.total_unfilled_headcount || 0) - (a.total_unfilled_headcount || 0));
     const top = rows.slice(0, 8);
     const max = Math.max(...top.map(r => r.total_unfilled_headcount || 0), 1);
@@ -592,7 +609,7 @@
 
   function renderNight(rows) {
     const el = document.getElementById('nightTable');
-    if (!rows || !rows.length) { el.innerHTML = '<tr><td colspan="5" class="placeholder">夜勤・on-callの未充足はありません</td></tr>'; return; }
+    if (!rows || !rows.length) { el.innerHTML = '<tr><td colspan="5" class="placeholder">夜勤・オンコールの未充足はありません</td></tr>'; return; }
     el.innerHTML = rows.map(r => `
       <tr>
         <td>${escapeHtml(r.organization_id?.slice(0,8) || '-')}</td>
@@ -612,7 +629,7 @@
     return ({ physician:'医師', nurse:'看護師', pharmacist:'薬剤師', therapist:'療法士', care_worker:'介護福祉士', care_manager:'ケアマネ', medical_clerk:'医療事務', other:'その他' })[t] || t || '-';
   }
   function shiftLabel(t) {
-    return ({ regular_shift:'通常', on_call:'オンコール', night_duty:'夜勤', spot:'スポット', other:'その他' })[t] || t || '-';
+    return ({ regular_shift:'通常勤務', on_call:'オンコール', night_duty:'夜勤・当直', spot:'応援勤務', other:'その他' })[t] || t || '-';
   }
 
   function mockView(view) {
