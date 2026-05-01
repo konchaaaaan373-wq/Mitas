@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理ダッシュボード | MITAS</title>
+  <title>施設人材需給ダッシュボード | Mitas for Alliance</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1624,9 +1624,9 @@
   <!-- サイドバー -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar__brand">
-      <span class="sidebar__logo">MITAS</span>
+      <span class="sidebar__logo">Mitas</span>
       <div class="sidebar__logo-sep"></div>
-      <span class="sidebar__logo-sub">管理者<br>ポータル</span>
+      <span class="sidebar__logo-sub">施設管理者<br>ポータル</span>
     </div>
 
     <nav class="sidebar__nav" id="sidebarNav">
@@ -1635,30 +1635,30 @@
 
         <a class="nav-item active" data-section="overview" href="#">
           <span class="nav-item__icon">&#9632;</span>
-          <span class="nav-item__label">ダッシュボード</span>
+          <span class="nav-item__label">人材需給</span>
         </a>
 
         <a class="nav-item" data-section="cases" href="#">
           <span class="nav-item__icon">&#9654;</span>
-          <span class="nav-item__label">案件管理</span>
+          <span class="nav-item__label">勤務枠管理</span>
           <span class="nav-item__badge" id="badge-cases">8</span>
         </a>
 
         <a class="nav-item" data-section="candidates" href="#">
           <span class="nav-item__icon">&#9670;</span>
-          <span class="nav-item__label">候補者確認</span>
+          <span class="nav-item__label">配置候補</span>
           <span class="nav-item__badge" id="badge-candidates">3</span>
         </a>
 
         <a class="nav-item" data-section="assignments" href="#">
           <span class="nav-item__icon">&#9679;</span>
-          <span class="nav-item__label">アサイン管理</span>
+          <span class="nav-item__label">勤務確定・稼働</span>
           <span class="nav-item__badge" id="badge-assignments"></span>
         </a>
 
         <a class="nav-item" data-section="tasks" href="#">
           <span class="nav-item__icon">&#9744;</span>
-          <span class="nav-item__label">タスク</span>
+          <span class="nav-item__label">対応事項</span>
         </a>
       </div>
 
@@ -1667,12 +1667,12 @@
 
         <a class="nav-item" data-section="inquiries" href="#">
           <span class="nav-item__icon">&#9993;</span>
-          <span class="nav-item__label">問い合わせ</span>
+          <span class="nav-item__label">新規依頼</span>
         </a>
 
         <a class="nav-item" data-section="invoices" href="#">
           <span class="nav-item__icon">&#36;</span>
-          <span class="nav-item__label">請求</span>
+          <span class="nav-item__label">請求・実績</span>
           <span class="nav-item__badge" id="badge-invoices"></span>
         </a>
 
@@ -1701,11 +1701,11 @@
       <span></span><span></span><span></span>
     </button>
     <div class="topbar__title-area">
-      <p class="topbar__page-title" id="pageTitle">ダッシュボード</p>
+      <p class="topbar__page-title" id="pageTitle">人材需給ダッシュボード</p>
       <p class="topbar__page-sub"   id="pageDate">-</p>
     </div>
     <div class="topbar__actions">
-      <button class="btn-new-request" id="btnNewRequest">+ 新規依頼</button>
+      <button class="btn-new-request" id="btnNewRequest">+ 新しい勤務枠を登録</button>
       <div class="topbar__bell" title="通知">
         &#9993;
         <span class="dot"></span>
@@ -1714,7 +1714,7 @@
         <div class="topbar__avatar" id="userAvatar">-</div>
         <div class="topbar__user-info">
           <p class="topbar__user-name" id="userName">-</p>
-          <p class="topbar__user-role">管理者</p>
+          <p class="topbar__user-role">施設管理者</p>
         </div>
         <span class="topbar__caret">&#9660;</span>
         <div class="user-dropdown" id="userDropdown">
@@ -1734,29 +1734,29 @@
     <section class="page-section" id="s-overview">
 
       <!-- ═════ v2 リアルデータ（Phase A：並行表示プレビュー） ═════ -->
-      <div class="v2-banner" id="v2Banner" aria-label="v2 リアルデータ">
+      <div class="v2-banner" id="v2Banner" aria-label="人材需給サマリー">
         <div class="v2-banner__head">
           <span class="v2-banner__title">
-            v2 リアルデータ
-            <span class="v2-banner__pill">PREVIEW</span>
+            人材需給サマリー
+            <span class="v2-banner__pill">LIVE</span>
           </span>
           <button class="v2-banner__refresh" id="v2RefreshBtn" type="button">更新</button>
         </div>
         <div class="v2-kpi-grid">
           <div class="v2-kpi">
-            <div class="v2-kpi__label">受付中の依頼</div>
+            <div class="v2-kpi__label">受付中の勤務枠</div>
             <div class="v2-kpi__value"><span id="v2-pending">—</span><span class="v2-kpi__unit">件</span></div>
           </div>
           <div class="v2-kpi">
-            <div class="v2-kpi__label">提案中の依頼</div>
+            <div class="v2-kpi__label">提案中の勤務枠</div>
             <div class="v2-kpi__value"><span id="v2-proposing">—</span><span class="v2-kpi__unit">件</span></div>
           </div>
           <div class="v2-kpi v2-kpi--active">
-            <div class="v2-kpi__label">進行中アサイン</div>
+            <div class="v2-kpi__label">進行中の稼働</div>
             <div class="v2-kpi__value"><span id="v2-active">—</span><span class="v2-kpi__unit">件</span></div>
           </div>
           <div class="v2-kpi v2-kpi--urgent">
-            <div class="v2-kpi__label">緊急の未充足</div>
+            <div class="v2-kpi__label">緊急未充足枠</div>
             <div class="v2-kpi__value"><span id="v2-urgent">—</span><span class="v2-kpi__unit">件</span></div>
           </div>
         </div>
@@ -1777,22 +1777,22 @@
       <!-- KPIカード（v2 リアルデータから動的算出） -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <p class="kpi-card__label">進行中案件</p>
+          <p class="kpi-card__label">進行中の勤務枠</p>
           <p class="kpi-card__value" id="kpiActive">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiActiveSub"></p>
         </div>
         <div class="kpi-card kpi-card--teal">
-          <p class="kpi-card__label">確認待ち候補者</p>
+          <p class="kpi-card__label">承認待ち配置候補</p>
           <p class="kpi-card__value" id="kpiPending">-<em>名</em></p>
           <p class="kpi-card__sub" id="kpiPendingSub"></p>
         </div>
         <div class="kpi-card kpi-card--amber">
-          <p class="kpi-card__label">期限14日以内</p>
+          <p class="kpi-card__label">充足希望日まで14日以内</p>
           <p class="kpi-card__value" id="kpiSoon">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiSoonSub"></p>
         </div>
         <div class="kpi-card kpi-card--red">
-          <p class="kpi-card__label">緊急・最緊急</p>
+          <p class="kpi-card__label">優先度・高〜緊急</p>
           <p class="kpi-card__value" id="kpiUrgent">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiUrgentSub"></p>
         </div>
@@ -1815,10 +1815,10 @@
     <!-- ─── 案件管理 ──────────────────────────────── -->
     <section class="page-section" id="s-cases">
 
-      <!-- ═════ 案件一覧（v2 リアルデータ・Phase E-2 でメイン化） ═════ -->
-      <div class="v2-cases-card" id="v2CasesCard" aria-label="案件一覧">
+      <!-- ═════ 勤務枠一覧（v2 リアルデータ・Phase E-2 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2CasesCard" aria-label="勤務枠一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">案件一覧</span>
+          <span class="v2-cases-card__title">勤務枠一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2CasesFilter">
               <option value="open">未終端のみ</option>
@@ -1852,10 +1852,10 @@
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
 
-      <!-- ═════ 候補者・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
-      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="候補者・提案一覧">
+      <!-- ═════ 配置候補・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
+      <div class="v2-cases-card" id="v2ProposalsCard" aria-label="配置候補一覧">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">候補者・提案一覧</span>
+          <span class="v2-cases-card__title">配置候補・提案一覧</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2ProposalsFilter">
               <option value="action">要対応のみ</option>
@@ -1863,7 +1863,7 @@
               <option value="done">対応済み</option>
             </select>
             <input class="v2-cases-card__filter" type="text" id="v2ProposalsKeyword"
-                   placeholder="ワーカー名・依頼で検索" style="min-width: 180px;">
+                   placeholder="医療者名・勤務枠で検索" style="min-width: 180px;">
             <button class="v2-banner__refresh" id="v2ProposalsRefreshBtn" type="button">更新</button>
           </div>
         </div>
@@ -1877,9 +1877,9 @@
     <!-- ─── アサイン管理（v2 リアルデータ） ────────────────── -->
     <section class="page-section" id="s-assignments">
 
-      <div class="v2-cases-card" id="v2AssignmentsCard" aria-label="アサイン管理">
+      <div class="v2-cases-card" id="v2AssignmentsCard" aria-label="勤務確定・稼働管理">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">アサイン管理</span>
+          <span class="v2-cases-card__title">勤務確定・稼働管理</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2AssignmentsFilter">
               <option value="active">対応中（要対応含む）</option>
@@ -1888,7 +1888,7 @@
               <option value="done">完了済み</option>
             </select>
             <input class="v2-cases-card__filter" type="text" id="v2AssignmentsKeyword"
-                   placeholder="ワーカー名・依頼で検索" style="min-width: 180px;">
+                   placeholder="医療者名・勤務枠で検索" style="min-width: 180px;">
             <button class="v2-banner__refresh" id="v2AssignmentsRefreshBtn" type="button">更新</button>
           </div>
         </div>
@@ -1904,11 +1904,11 @@
     <section class="page-section" id="s-tasks">
       <div class="section" style="max-width:700px;">
         <div class="section__header">
-          <span class="section__title">タスク管理</span>
+          <span class="section__title">対応事項</span>
         </div>
         <div style="padding:16px 18px;">
           <div class="task-add-form">
-            <input type="text" id="taskInput" placeholder="新しいタスクを入力...">
+            <input type="text" id="taskInput" placeholder="新しい対応事項を入力...">
             <button onclick="addTask()">追加</button>
           </div>
           <div class="filter-bar" style="margin-bottom:12px;">
@@ -1927,9 +1927,9 @@
     <section class="page-section" id="s-inquiries">
 
       <!-- 問い合わせ・受付（v2 リアルデータ・Phase F でメイン化） -->
-      <div class="v2-cases-card" id="v2InquiriesCard" aria-label="問い合わせ履歴">
+      <div class="v2-cases-card" id="v2InquiriesCard" aria-label="新規依頼・受付中依頼">
         <div class="v2-cases-card__head">
-          <span class="v2-cases-card__title">問い合わせ・受付中の依頼</span>
+          <span class="v2-cases-card__title">新規依頼・受付中依頼</span>
           <div class="v2-cases-card__actions">
             <select class="v2-cases-card__filter" id="v2InquiriesFilter">
               <option value="all">下書き＋受付</option>
@@ -1937,7 +1937,7 @@
               <option value="submitted">受付のみ</option>
             </select>
             <button class="v2-banner__refresh" id="v2InquiriesRefreshBtn" type="button">更新</button>
-            <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新規依頼</button>
+            <button class="btn-primary" style="height:28px;font-size:11px;" onclick="openRequestModal()">+ 新しい勤務枠を登録</button>
           </div>
         </div>
         <div class="v2-cases-table-wrap" id="v2InquiriesBody">
@@ -1983,7 +1983,7 @@
             <div class="form-group">
               <label class="form-label">組織ID</label>
               <input class="form-input-field" type="text" id="setOrgId" readonly>
-              <span class="form-hint-text">変更する場合はMITAS担当者にお問い合わせください</span>
+              <span class="form-hint-text">変更する場合はNeco担当者にお問い合わせください</span>
             </div>
             <div class="form-group">
               <label class="form-label">組織名</label>
@@ -2006,7 +2006,7 @@
               <input class="form-input-field" type="text" id="setEmergency" placeholder="例: 090-0000-0000">
             </div>
             <div class="form-group full">
-              <label class="form-label">備考・MITAS担当者へのメモ</label>
+              <label class="form-label">備考・Neco担当者へのメモ</label>
               <textarea class="form-textarea" id="setNote" placeholder="特記事項があればご記入ください"></textarea>
             </div>
           </div>
@@ -2073,33 +2073,36 @@
         <tr><th>/</th>   <td>現在のセクションの検索にフォーカス</td></tr>
         <tr><th>?</th>   <td>このヘルプを表示</td></tr>
         <tr><th>Esc</th> <td>モーダル/ヘルプを閉じる</td></tr>
-        <tr><th>g o</th> <td>ダッシュボードへ移動</td></tr>
-        <tr><th>g c</th> <td>案件管理へ移動</td></tr>
-        <tr><th>g n</th> <td>候補者・提案へ移動</td></tr>
-        <tr><th>g a</th> <td>アサイン管理へ移動</td></tr>
-        <tr><th>g t</th> <td>タスクへ移動</td></tr>
-        <tr><th>g i</th> <td>問い合わせへ移動</td></tr>
-        <tr><th>g v</th> <td>請求へ移動</td></tr>
+        <tr><th>g o</th> <td>人材需給ダッシュボードへ移動</td></tr>
+        <tr><th>g c</th> <td>勤務枠管理へ移動</td></tr>
+        <tr><th>g n</th> <td>配置候補へ移動</td></tr>
+        <tr><th>g a</th> <td>勤務確定・稼働へ移動</td></tr>
+        <tr><th>g t</th> <td>対応事項へ移動</td></tr>
+        <tr><th>g i</th> <td>新規依頼へ移動</td></tr>
+        <tr><th>g v</th> <td>請求・実績へ移動</td></tr>
         <tr><th>g s</th> <td>設定へ移動</td></tr>
       </table>
     </div>
   </div>
 
-  <!-- ─── 新規依頼モーダル ────────────────────────── -->
+  <!-- ─── 勤務枠登録モーダル ────────────────────────── -->
   <div class="modal-overlay" id="requestModal">
     <div class="modal-box">
       <div id="requestFormWrap">
         <div class="modal-header">
-          <span class="modal-title">新規スタッフ依頼</span>
+          <span class="modal-title">勤務枠を登録</span>
           <button class="modal-close" onclick="closeRequestModal()">&#10005;</button>
         </div>
         <div class="modal-body">
+          <p style="font-size:12px;color:#64748B;margin:0 0 14px;line-height:1.7;">
+            不足している職種・勤務日時・必要スキルを登録してください。Necoが内容を確認し、条件に合う医療者候補をご提案します。
+          </p>
           <div class="modal-form-row">
-            <label>依頼タイトル<span class="req">*</span></label>
-            <input type="text" id="reqTitle" placeholder="例：内科外来 当直医（5月急募）">
+            <label>勤務枠名<span class="req">*</span></label>
+            <input type="text" id="reqTitle" placeholder="例：内科外来 当直医（5月応援勤務）">
           </div>
           <div class="modal-form-row">
-            <label>職種<span class="req">*</span></label>
+            <label>必要職種<span class="req">*</span></label>
             <select id="reqProfession">
               <option value="">選択してください</option>
               <option value="physician">医師</option>
@@ -2119,29 +2122,29 @@
               <input type="number" id="reqHeadcount" min="1" value="1">
             </div>
             <div class="modal-form-row">
-              <label>シフト種別</label>
+              <label>勤務種別</label>
               <select id="reqShiftType">
-                <option value="regular_shift">通常シフト</option>
+                <option value="regular_shift">通常勤務</option>
                 <option value="day_duty">日勤</option>
-                <option value="night_duty">夜勤</option>
+                <option value="night_duty">夜勤・当直</option>
                 <option value="on_call">オンコール</option>
-                <option value="spot">スポット</option>
-                <option value="long_term">長期</option>
+                <option value="spot">応援勤務</option>
+                <option value="long_term">非常勤・継続勤務</option>
               </select>
             </div>
           </div>
           <div class="modal-form-2col">
             <div class="modal-form-row">
-              <label>希望開始日</label>
+              <label>勤務開始予定</label>
               <input type="date" id="reqStartDate">
             </div>
             <div class="modal-form-row">
-              <label>充足期限<span class="req">*</span></label>
+              <label>充足希望日<span class="req">*</span></label>
               <input type="date" id="reqDeadline">
             </div>
           </div>
           <div class="modal-form-row">
-            <label>緊急度</label>
+            <label>優先度</label>
             <select id="reqUrgency">
               <option value="low">低</option>
               <option value="medium" selected>中（通常）</option>
@@ -2160,19 +2163,19 @@
             </div>
           </div>
           <div class="modal-form-row">
-            <label>必須要件・特記事項</label>
-            <textarea id="reqNote" rows="3" placeholder="経験年数・専門・夜勤可否など、要件があればご記入ください"></textarea>
+            <label>勤務内容・注意事項</label>
+            <textarea id="reqNote" rows="3" placeholder="経験年数・専門領域・夜勤可否など、勤務枠の要件・注意事項をご記入ください"></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn-cancel" onclick="closeRequestModal()">キャンセル</button>
-          <button class="btn-submit" onclick="submitRequest()">依頼を送信</button>
+          <button class="btn-submit" onclick="submitRequest()">勤務枠を登録</button>
         </div>
       </div>
       <div class="modal-sent" id="requestSent">
         <div class="modal-sent__icon">&#10003;</div>
-        <p class="modal-sent__title">依頼を受け付けました</p>
-        <p class="modal-sent__sub">MITAS担当者が内容を確認し、<br>24時間以内にご連絡いたします。</p>
+        <p class="modal-sent__title">勤務枠を受け付けました</p>
+        <p class="modal-sent__sub">Neco担当者が内容を確認し、<br>条件に合う医療者候補を24時間以内にご提案します。</p>
         <button class="btn-save" style="margin-top:20px;" onclick="closeRequestModal()">閉じる</button>
       </div>
     </div>
@@ -2265,16 +2268,16 @@
       const items = [
         {
           key: 'inquiries',
-          label: '受付中の依頼',
-          sub: '提出された依頼を確認してください',
+          label: '受付中の勤務枠依頼',
+          sub: '登録された勤務枠依頼を確認してください',
           count: requests.filter(r => r.status === 'submitted').length,
           icon: '!',
           tone: 'info',
         },
         {
           key: 'candidates',
-          label: '候補者の確認待ち',
-          sub: 'Necoから提案された候補者があります',
+          label: '配置候補の承認待ち',
+          sub: 'Necoから医療者候補が提案されています',
           count: proposals.filter(p => p.status === 'proposed_to_facility').length,
           icon: '?',
           tone: 'warn',
@@ -2282,7 +2285,7 @@
         {
           key: 'assignments',
           label: '完了確定待ち',
-          sub: 'ワーカーから完了報告が届いています',
+          sub: '医療者から稼働完了報告が届いています',
           count: assignments.filter(a => a.status === 'completion_reported').length,
           icon: '+',
           tone: 'urgent',
@@ -2768,9 +2771,9 @@
        proposals_select RLS により facility_admin は自組織宛の提案のみ閲覧可能。 */
     const V2_PROPOSAL_STATUS_LABEL = {
       created:              '作成',
-      worker_contacted:     'ワーカー連絡',
-      worker_accepted:      'ワーカー承諾',
-      worker_declined:      'ワーカー辞退',
+      worker_contacted:     '医療者へ連絡',
+      worker_accepted:      '医療者承諾',
+      worker_declined:      '医療者辞退',
       proposed_to_facility: '要対応',
       facility_accepted:    '承諾済',
       facility_declined:    '辞退済',
@@ -2883,7 +2886,7 @@
           <thead>
             <tr>
               <th>提案番号</th>
-              <th>ワーカー</th>
+              <th>医療者</th>
               <th>依頼</th>
               <th class="num">提案時給</th>
               <th class="num">スコア</th>
@@ -2951,7 +2954,7 @@
       proposal:         '提案',
       assignment:       'アサイン',
       invoice:          '請求',
-      worker_profile:   'ワーカー',
+      worker_profile:   '医療者',
       organization:     '組織',
     };
     const V2_ACTION_LABEL = {
@@ -2975,9 +2978,9 @@
       // 提案
       'proposal.created':                 '提案を作成',
       'proposal.updated':                 '提案を更新',
-      'proposal.worker_contacted':        'ワーカーへ連絡',
-      'proposal.worker_accepted':         'ワーカー承諾',
-      'proposal.worker_declined':         'ワーカー辞退',
+      'proposal.worker_contacted':        '医療者へ連絡',
+      'proposal.worker_accepted':         '医療者承諾',
+      'proposal.worker_declined':         '医療者辞退',
       'proposal.proposed_to_facility':    '施設へ提案',
       'proposal.facility_accepted':       '施設承諾',
       'proposal.facility_declined':       '施設辞退',
@@ -3450,7 +3453,7 @@
           <thead>
             <tr>
               <th>アサイン番号</th>
-              <th>ワーカー</th>
+              <th>医療者</th>
               <th>依頼</th>
               <th>予定開始</th>
               <th>予定終了</th>
@@ -3583,7 +3586,7 @@
           if (res.status === 409) throw new Error(data.error || '不正な状態遷移');
           throw new Error(data.error || data.detail || `API ${res.status}`);
         }
-        if (typeof toast === 'function') toast('紛争を申告しました。MITAS担当者が確認します', 'success');
+        if (typeof toast === 'function') toast('紛争を申告しました。Neco担当者が確認します', 'success');
         const idx = v2AsgnState.rows.findIndex(a => a.id === id);
         if (idx >= 0) v2AsgnState.rows[idx] = { ...v2AsgnState.rows[idx], status: 'disputed', dispute_reason: trimmed };
         renderV2AssignmentsTable();
@@ -3772,13 +3775,13 @@
 
     /* ─── セクション切り替え ─────────────────────── */
     const SECTION_TITLES = {
-      overview:    'ダッシュボード',
-      cases:       '案件管理',
-      candidates:  '候補者確認',
-      assignments: 'アサイン管理',
-      tasks:       'タスク',
-      inquiries:   '問い合わせ',
-      invoices:    '請求',
+      overview:    '人材需給ダッシュボード',
+      cases:       '勤務枠管理',
+      candidates:  '配置候補',
+      assignments: '勤務確定・稼働',
+      tasks:       '対応事項',
+      inquiries:   '新規依頼',
+      invoices:    '請求・実績',
       settings:    '設定',
     };
 
@@ -4007,9 +4010,9 @@
       const note     = ($('reqNote')?.value || '').trim();
 
       // バリデーション
-      if (!title)    { toast('依頼タイトルを入力してください。', 'error'); return; }
-      if (!prof)     { toast('職種を選択してください。', 'error'); return; }
-      if (!deadline) { toast('充足期限を入力してください。', 'error'); return; }
+      if (!title)    { toast('勤務枠名を入力してください。', 'error'); return; }
+      if (!prof)     { toast('必要職種を選択してください。', 'error'); return; }
+      if (!deadline) { toast('充足希望日を入力してください。', 'error'); return; }
 
       // 組織IDを sessionStorage から取得
       let organization_id = '';
