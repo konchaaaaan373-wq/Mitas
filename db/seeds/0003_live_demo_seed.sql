@@ -289,27 +289,11 @@ BEGIN
 
   -- ----------------------------------------------------------
   -- 9. 確定アサイン（DEMO 1件：confirmed）
-  --    PR-DEMO-0002 は施設承認済みのため、UI から「勤務確定を作成」を
-  --    試せるよう、ここでは未確定のままにしておく。
-  --    PR-DEMO-0001 は施設承認待ちなのでアサイン未作成が自然。
-  --    別途 confirmed 状態のサンプルを 1 件用意する。
+  --    facility_accepted の PR-DEMO-0002（request_3 × worker_1）を
+  --    勤務確定（assignment）に変換する。proposals には
+  --    UNIQUE(request_id, worker_id) があるため、同じ組合せの追加
+  --    proposal は作れない。AS-DEMO-0001 は PR-DEMO-0002 と紐付く。
   -- ----------------------------------------------------------
-  -- ※ assignments の生成には proposal が facility_accepted である必要があるため、
-  --   別途確定済み用に PR-DEMO-0003 を facility_accepted で追加し、
-  --   AS-DEMO-0001 を作成する。
-  INSERT INTO proposals (
-    proposal_number, request_id, worker_id, proposed_by,
-    proposed_hourly_rate, status,
-    worker_responded_at, facility_responded_at, facility_responded_by,
-    match_score, match_reason
-  ) VALUES (
-    'PR-DEMO-0003', v_request_2_id, v_worker_2_id, v_neco_user,
-    3800, 'facility_accepted',
-    NOW() - INTERVAL '48 hours', NOW() - INTERVAL '24 hours', v_fa2_user,
-    95.0, 'DEMO - 訪問看護 確定勤務サンプル'
-  )
-  ON CONFLICT (proposal_number) DO NOTHING;
-
   INSERT INTO assignments (
     assignment_number, proposal_id, request_id, worker_id, organization_id,
     scheduled_start_at, scheduled_end_at, hourly_rate, total_compensation,
@@ -318,15 +302,15 @@ BEGIN
   SELECT
     'AS-DEMO-0001',
     p.id,
-    v_request_2_id,
-    v_worker_2_id,
-    v_org_demo_vns,
-    NOW() + INTERVAL '7 days',
-    NOW() + INTERVAL '7 days 8 hours',
-    3800, 30400,
+    v_request_3_id,
+    v_worker_1_id,
+    v_org_demo_hosp,
+    NOW() + INTERVAL '14 days',
+    NOW() + INTERVAL '14 days 8 hours',
+    13000, 104000,
     'confirmed'
   FROM proposals p
-  WHERE p.proposal_number = 'PR-DEMO-0003'
+  WHERE p.proposal_number = 'PR-DEMO-0002'
   ON CONFLICT (proposal_id) DO NOTHING
   RETURNING id INTO v_assignment_1_id;
 
@@ -353,8 +337,8 @@ BEGIN
   RAISE NOTICE '  organizations: 2 (デモ中央病院 / デモ訪問看護)';
   RAISE NOTICE '  worker_profiles: 2 (DEMO)';
   RAISE NOTICE '  staffing_requests: 3 (SR-DEMO-0001..0003)';
-  RAISE NOTICE '  proposals: 3 (PR-DEMO-0001..0003)';
-  RAISE NOTICE '  assignments: 1 (AS-DEMO-0001 confirmed)';
+  RAISE NOTICE '  proposals: 2 (PR-DEMO-0001..0002)';
+  RAISE NOTICE '  assignments: 1 (AS-DEMO-0001 confirmed, from PR-DEMO-0002)';
   RAISE NOTICE '';
   RAISE NOTICE 'デモ終了後は docs/LIVE_DEMO_SEED_PLAN.md の';
   RAISE NOTICE '「削除（ロールバック）手順」を参照して削除してください。';
