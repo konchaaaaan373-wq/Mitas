@@ -926,6 +926,41 @@
     .modal-sent__title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
     .modal-sent__sub { font-size: 13px; color: var(--gray-500); }
 
+    /* ─── 構造化された勤務内容の入力補助 ─── */
+    .structured-notes {
+      margin-bottom: 16px;
+      border: 1px dashed var(--gray-300, #cbd5e1);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: var(--gray-50, #f8fafc);
+    }
+    .structured-notes summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy, #1B3A6B);
+      list-style: none;
+      padding: 2px 0;
+    }
+    .structured-notes summary::-webkit-details-marker { display: none; }
+    .structured-notes summary::before {
+      content: '▶';
+      display: inline-block;
+      margin-right: 6px;
+      font-size: 10px;
+      color: var(--gray-500, #64748B);
+      transition: transform 0.15s;
+    }
+    .structured-notes[open] summary::before { transform: rotate(90deg); }
+    .structured-notes__hint {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+      line-height: 1.7;
+      margin: 8px 0 12px;
+    }
+    .structured-notes .modal-form-row { margin-bottom: 10px; }
+    .structured-notes .modal-form-row:last-child { margin-bottom: 0; }
+
     /* ─── 優先度・ステータスバッジ拡張 ─────────────── */
     .priority-dot {
       display: inline-flex;
@@ -1532,6 +1567,30 @@
     .v2-cases-table tr.v2-row-action:hover td {
       background: rgba(91,33,182,0.08);
     }
+    /* 施設管理者向け：提案進捗のヒント・必要な対応バッジ */
+    .v2-prop-action {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 100px; font-size: 11px; font-weight: 600;
+    }
+    .v2-prop-action--need { background: rgba(220,38,38,0.10); color: #B91C1C; }
+    .v2-prop-action--info { background: rgba(14,165,233,0.10); color: #0369A1; }
+    .v2-prop-action--ok   { background: rgba(16,185,129,0.10); color: #047857; }
+    .v2-prop-actions {
+      margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .v2-prop-btn {
+      padding: 4px 10px; font-size: 11px; cursor: pointer;
+      background: var(--white, #fff); color: #1B3A6B;
+      border: 1px solid var(--gray-300, #cbd5e1); border-radius: 4px;
+    }
+    .v2-prop-btn:hover { background: rgba(14,165,233,0.06); }
+    .v2-prop-btn--primary {
+      background: #0EA5E9; color: #fff; border-color: #0EA5E9;
+    }
+    .v2-prop-btn--primary:hover { background: #0284C7; border-color: #0284C7; }
+    .v2-prop-btn--ghost { color: #64748B; }
+    .v2-prop-btn[disabled] { opacity: 0.6; cursor: default; }
+
     /* クリック可能な行（依頼詳細を開く） */
     .v2-cases-table tr.v2-row-clickable { cursor: pointer; }
     .v2-cases-table tr.v2-row-clickable:hover td {
@@ -2178,11 +2237,42 @@
               <input type="number" id="reqRateMax" min="0" step="100" placeholder="例：12000">
             </div>
           </div>
+          <details class="structured-notes" id="reqStructuredNotes" open>
+            <summary>勤務内容の入力補助（医療者に打診しやすくなります）</summary>
+            <p class="structured-notes__hint">
+              以下の項目に記入すると、送信時に「勤務内容・注意事項」へ整形してまとめます。<br>
+              個別に「勤務内容・注意事項」だけ記入することもできます。
+            </p>
+            <div class="modal-form-row">
+              <label>想定患者数</label>
+              <input type="text" id="reqNotePatients" placeholder="例：30名程度（午前外来）">
+            </div>
+            <div class="modal-form-row">
+              <label>業務範囲</label>
+              <input type="text" id="reqNoteScope" placeholder="例：一般内科外来、発熱対応なし">
+            </div>
+            <div class="modal-form-row">
+              <label>バックアップ体制</label>
+              <input type="text" id="reqNoteBackup" placeholder="例：院長へ相談可、専門医オンコール体制あり">
+            </div>
+            <div class="modal-form-row">
+              <label>電子カルテ</label>
+              <input type="text" id="reqNoteEmr" placeholder="例：CLIUS / 紙カルテ など">
+            </div>
+            <div class="modal-form-row">
+              <label>集合場所・持ち物</label>
+              <input type="text" id="reqNoteMeeting" placeholder="例：受付に集合、白衣持参">
+            </div>
+            <div class="modal-form-row">
+              <label>注意事項</label>
+              <input type="text" id="reqNoteCaution" placeholder="例：初回勤務のためオリエンテーションあり">
+            </div>
+          </details>
           <div class="modal-form-row">
-            <label>勤務内容・注意事項</label>
-            <textarea id="reqNote" rows="4" placeholder="経験年数・専門領域・夜勤可否などの要件、勤務内容、想定患者数、バックアップ体制、電子カルテ、集合場所などをご記入ください"></textarea>
+            <label>勤務内容・注意事項（自由記載）</label>
+            <textarea id="reqNote" rows="3" placeholder="上記の入力補助に追加で記入したい内容があればご記入ください"></textarea>
             <p style="font-size: 11px; color: #64748B; margin-top: 6px; line-height: 1.7;">
-              医療者に打診しやすくするため、勤務内容・想定患者数・バックアップ体制・電子カルテ・集合場所なども可能な範囲でご記載ください。
+              ここに記入した内容と入力補助で記入した内容は、送信時にまとめて「勤務内容・注意事項」として登録されます。
             </p>
           </div>
         </div>
@@ -2830,16 +2920,29 @@
        /api/v2/proposals から自組織宛の提案を取得し、状態別に表示。
        既存の CANDIDATES（モック）パネルとは別領域に並行表示する。
        proposals_select RLS により facility_admin は自組織宛の提案のみ閲覧可能。 */
+    // 施設管理者の視点から提案の進捗が分かるラベル
     const V2_PROPOSAL_STATUS_LABEL = {
-      created:              '作成',
-      worker_contacted:     '医療者へ連絡',
-      worker_accepted:      '医療者承諾',
+      created:              'Neco確認中',
+      worker_contacted:     '医療者打診中',
+      worker_accepted:      '医療者承諾済み',
       worker_declined:      '医療者辞退',
-      proposed_to_facility: '要対応',
-      facility_accepted:    '承諾済',
-      facility_declined:    '辞退済',
-      withdrawn:            '取り下げ',
+      proposed_to_facility: '施設承認待ち',
+      facility_accepted:    '施設承認済み',
+      facility_declined:    '見送り',
+      withdrawn:            '取下げ',
       expired:              '期限切れ',
+    };
+    // 施設管理者向けの状態の補足説明（カラム下に出す小さな注記）
+    const V2_PROPOSAL_STATUS_HINT = {
+      created:              'Necoが候補者を選定中です',
+      worker_contacted:     'Necoが医療者本人に打診中です',
+      worker_accepted:      '医療者から内諾を得ています',
+      worker_declined:      '医療者が辞退しました。別候補をNecoが調整中です',
+      proposed_to_facility: '貴施設での承認をお願いします。承認後に勤務確定へ進みます',
+      facility_accepted:    '貴施設が承認済みです。勤務確定に進んでいます',
+      facility_declined:    '貴施設が見送りとした提案です',
+      withdrawn:            '取下げられた提案です',
+      expired:              '対応期限を過ぎました',
     };
     const V2_PROP_ACTION_REQUIRED = ['proposed_to_facility'];
     const V2_PROP_DONE = ['facility_accepted','facility_declined','withdrawn','expired'];
@@ -2942,18 +3045,26 @@
       };
       const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
 
+      const facilityActionLabel = (s) => {
+        if (s === 'proposed_to_facility') return '<span class="v2-prop-action v2-prop-action--need">承認をお願いします</span>';
+        if (s === 'worker_accepted')      return '<span class="v2-prop-action v2-prop-action--info">まもなく施設承認待ちになります</span>';
+        if (s === 'created' || s === 'worker_contacted') return '<span class="v2-prop-action v2-prop-action--info">Necoが調整中です</span>';
+        if (s === 'facility_accepted')    return '<span class="v2-prop-action v2-prop-action--ok">承認済み・勤務確定へ</span>';
+        return '';
+      };
+
       body.innerHTML = `
         <table class="v2-cases-table">
           <thead>
             <tr>
               <th>提案番号</th>
               <th>医療者</th>
-              <th>依頼</th>
+              <th>勤務枠</th>
               <th class="num">提案時給</th>
               <th class="num">スコア</th>
-              <th>ステータス</th>
+              <th>進捗</th>
+              <th>必要な対応</th>
               <th>期限</th>
-              <th>作成日</th>
             </tr>
           </thead>
           <tbody>
@@ -2961,8 +3072,9 @@
               const wp = p.worker_profiles || {};
               const sr = p.staffing_requests || {};
               const isAction = V2_PROP_ACTION_REQUIRED.includes(p.status);
+              const hint = V2_PROPOSAL_STATUS_HINT[p.status] || '';
               return `
-                <tr class="${isAction ? 'v2-row-action' : ''}">
+                <tr class="${isAction ? 'v2-row-action' : ''}" data-proposal-id="${esc(p.id)}">
                   <td><span class="v2-cases-table__num">${esc(p.proposal_number || '')}</span></td>
                   <td>
                     <div class="v2-cases-table__title">${esc(wp.full_name || '—')}</div>
@@ -2977,15 +3089,91 @@
                   </td>
                   <td class="num">${esc(yen(p.proposed_hourly_rate))}</td>
                   <td class="num">${p.match_score == null ? '—' : esc(String(p.match_score))}</td>
-                  <td><span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(V2_PROPOSAL_STATUS_LABEL[p.status] || p.status)}</span></td>
+                  <td>
+                    <span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(V2_PROPOSAL_STATUS_LABEL[p.status] || p.status)}</span>
+                    ${hint ? `<div style="font-size:11px;color:var(--gray-500,#64748B);margin-top:4px;line-height:1.6;">${esc(hint)}</div>` : ''}
+                  </td>
+                  <td>
+                    ${facilityActionLabel(p.status)}
+                    ${isAction ? `
+                      <div class="v2-prop-actions">
+                        <button class="v2-prop-btn v2-prop-btn--primary" data-action="approve" data-id="${esc(p.id)}">承認する</button>
+                        <button class="v2-prop-btn"                     data-action="ask"     data-id="${esc(p.id)}">条件確認を依頼</button>
+                        <button class="v2-prop-btn v2-prop-btn--ghost"  data-action="decline" data-id="${esc(p.id)}">見送る</button>
+                      </div>` : ''}
+                  </td>
                   <td>${esc(fmt(p.expires_at))}</td>
-                  <td>${esc(fmt(p.created_at))}</td>
                 </tr>
               `;
             }).join('')}
           </tbody>
         </table>
       `;
+
+      // 施設管理者向けアクションをバインド
+      body.querySelectorAll('.v2-prop-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          const p = (v2PropState.rows || []).find(x => x.id === id);
+          if (!p) return;
+          handleFacilityProposalAction(p, action, btn);
+        });
+      });
+    }
+
+    // 施設側の提案アクション（承認 / 条件確認 / 見送り）
+    async function handleFacilityProposalAction(p, action, btn) {
+      const session = (typeof getSession === 'function') ? getSession() : null;
+      const token = session && session.access_token;
+      const apiBase = '/api/v2/proposals';
+      const url = `${apiBase}/${encodeURIComponent(p.id)}`;
+
+      if (action === 'approve') {
+        if (!window.confirm('この配置候補を承認します。よろしいですか？')) return;
+        await patchProposalAndReload(url, token, { status: 'facility_accepted' }, '承認しました', btn);
+        return;
+      }
+      if (action === 'decline') {
+        if (!window.confirm('この配置候補を見送ります。よろしいですか？')) return;
+        await patchProposalAndReload(url, token, { status: 'facility_declined' }, '見送りに変更しました', btn);
+        return;
+      }
+      if (action === 'ask') {
+        // DB変更なしで「条件確認を依頼」フィードバックを与える
+        if (typeof toast === 'function') {
+          toast('条件確認の依頼をNeco担当者にお伝えください。専用フォームは今後のアップデートで追加予定です。', 'info');
+        } else {
+          alert('条件確認の依頼をNeco担当者にお伝えください。専用フォームは今後のアップデートで追加予定です。');
+        }
+      }
+    }
+    async function patchProposalAndReload(url, token, body, successMsg, btn) {
+      try {
+        if (btn) btn.disabled = true;
+        if (!token) {
+          // モック相当：UIだけ更新
+          await new Promise(r => setTimeout(r, 200));
+          if (typeof toast === 'function') toast(successMsg + '（モック）', 'success');
+        } else {
+          const res = await fetch(url, {
+            method: 'PATCH',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || data.detail || `API ${res.status}`);
+          }
+          if (typeof toast === 'function') toast(successMsg, 'success');
+        }
+        if (typeof loadV2Proposals === 'function') loadV2Proposals();
+      } catch (e) {
+        console.error('提案更新失敗:', e);
+        if (typeof toast === 'function') toast('提案の更新に失敗しました：' + e.message, 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     function bindV2ProposalsControls() {
@@ -4047,7 +4235,10 @@
       document.getElementById('requestFormWrap').style.display = 'block';
       document.getElementById('requestSent').classList.remove('show');
       // フォーム値を毎回クリア
-      ['reqTitle','reqHeadcount','reqStartDate','reqDeadline','reqRateMin','reqRateMax','reqNote'].forEach(id => {
+      [
+        'reqTitle','reqHeadcount','reqStartDate','reqDeadline','reqRateMin','reqRateMax','reqNote',
+        'reqNotePatients','reqNoteScope','reqNoteBackup','reqNoteEmr','reqNoteMeeting','reqNoteCaution'
+      ].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = (id === 'reqHeadcount') ? '1' : '';
       });
@@ -4070,7 +4261,23 @@
       const urgency  = $('reqUrgency')?.value || 'medium';
       const rateMin  = $('reqRateMin')?.value || '';
       const rateMax  = $('reqRateMax')?.value || '';
-      const note     = ($('reqNote')?.value || '').trim();
+      const noteFree = ($('reqNote')?.value || '').trim();
+
+      // 構造化された入力補助フィールドを「勤務内容・注意事項」へ整形
+      const structured = [
+        ['想定患者数',       ($('reqNotePatients')?.value || '').trim()],
+        ['業務範囲',         ($('reqNoteScope')?.value    || '').trim()],
+        ['バックアップ体制', ($('reqNoteBackup')?.value   || '').trim()],
+        ['電子カルテ',       ($('reqNoteEmr')?.value      || '').trim()],
+        ['集合場所・持ち物', ($('reqNoteMeeting')?.value  || '').trim()],
+        ['注意事項',         ($('reqNoteCaution')?.value  || '').trim()],
+      ].filter(([, v]) => v);
+      const structuredText = structured
+        .map(([k, v]) => `【${k}】\n${v}`)
+        .join('\n\n');
+      const note = [structuredText, noteFree]
+        .filter(Boolean)
+        .join('\n\n');
 
       // バリデーション
       if (!title)    { toast('勤務枠名を入力してください。', 'error'); return; }

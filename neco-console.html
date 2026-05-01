@@ -767,6 +767,18 @@
       font-size: 11px;
       color: var(--gray-500);
     }
+    .proposal-card__actions {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--gray-200);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .proposal-card__actions .action-btn {
+      padding: 4px 10px;
+      font-size: 11px;
+    }
 
     /* ── 提案ステータスバッジ ── */
     .badge--prop-created             { background: var(--gray-100); color: var(--gray-700); }
@@ -1197,15 +1209,42 @@
 
   // 提案ステータス表示名
   const PROPOSAL_STATUS_LABEL = {
-    created:              '作成',
-    worker_contacted:     '医療者へ連絡',
+    created:              '候補者選定済み',
+    worker_contacted:     '医療者打診済み',
     worker_accepted:      '医療者承諾',
     worker_declined:      '医療者辞退',
-    proposed_to_facility: '施設提案中',
-    facility_accepted:    '施設承諾',
-    facility_declined:    '施設辞退',
-    withdrawn:            '取り下げ',
+    proposed_to_facility: '施設提案済み',
+    facility_accepted:    '施設承認',
+    facility_declined:    '施設見送り',
+    withdrawn:            '取下げ',
     expired:              '期限切れ',
+  };
+  // 提案ステータスごとに、Neco管理者が次に打てるアクション群（target = PATCH先status）
+  // 既存の状態遷移を尊重しつつ、Neco運用上自然な遷移のみを提示
+  const PROPOSAL_TRANSITIONS = {
+    created: [
+      { target: 'worker_contacted',     label: '打診済みにする',     kind: 'primary' },
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
+    worker_contacted: [
+      { target: 'worker_accepted',      label: '医療者承諾にする',   kind: 'success' },
+      { target: 'worker_declined',      label: '医療者辞退にする',   kind: 'warn'    },
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
+    worker_accepted: [
+      { target: 'proposed_to_facility', label: '施設へ提案する',     kind: 'primary' },
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
+    worker_declined: [
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
+    proposed_to_facility: [
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
+    facility_accepted:  [],
+    facility_declined:  [],
+    withdrawn:          [],
+    expired:            [],
   };
 
   const SHIFT_LABEL = {
@@ -1871,7 +1910,9 @@
 
     container.innerHTML = `
       <div class="proposal-list">
-        ${list.map(p => `
+        ${list.map(p => {
+          const transitions = PROPOSAL_TRANSITIONS[p.status] || [];
+          return `
           <div class="proposal-card">
             <div class="proposal-card__head">
               <span class="proposal-card__num">${escapeHtml(p.proposal_number || '')}</span>
@@ -1890,10 +1931,89 @@
               <div style="font-size: 11px; color: var(--gray-700); margin-top: 6px; line-height: 1.6;">
                 ${escapeHtml(p.match_reason)}
               </div>` : ''}
-          </div>
-        `).join('')}
+            ${transitions.length ? `
+              <div class="proposal-card__actions">
+                ${transitions.map(t => `
+                  <button class="action-btn action-btn--${t.kind} proposal-action"
+                          data-proposal-id="${escapeHtml(p.id)}"
+                          data-target="${escapeHtml(t.target)}"
+                          data-label="${escapeHtml(t.label)}">
+                    ${escapeHtml(t.label)}
+                  </button>`).join('')}
+              </div>` : ''}
+          </div>`;
+        }).join('')}
       </div>
     `;
+
+    // ボタンイベントを一括バインド
+    container.querySelectorAll('.proposal-action').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const id = btn.dataset.proposalId;
+        const target = btn.dataset.target;
+        const label = btn.dataset.label || '';
+        transitionProposal(id, target, label, btn);
+      });
+    });
+  }
+
+  // 提案ステータスの遷移（PATCH /api/v2/proposals/:id）
+  async function transitionProposal(id, targetStatus, targetLabel, btn) {
+    const proposal = (state.selectedProposals || []).find(p => p.id === id);
+    if (!proposal) return;
+    const ok = window.confirm(`提案ステータスを「${targetLabel || PROPOSAL_STATUS_LABEL[targetStatus] || targetStatus}」に変更します。よろしいですか？`);
+    if (!ok) return;
+
+    if (btn) btn.disabled = true;
+    try {
+      if (isMockMode || !state.token) {
+        // モック: ローカルの選択中提案リストだけ書き換える
+        const idx = state.selectedProposals.findIndex(p => p.id === id);
+        if (idx >= 0) state.selectedProposals[idx] = { ...state.selectedProposals[idx], status: targetStatus };
+        await new Promise(r => setTimeout(r, 200));
+        showToast('success', `提案ステータスを「${PROPOSAL_STATUS_LABEL[targetStatus] || targetStatus}」に変更しました（モック）`);
+      } else {
+        const res = await fetch(`/api/v2/proposals/${encodeURIComponent(id)}`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: targetStatus }),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        const updated = await res.json().catch(() => null);
+        const idx = state.selectedProposals.findIndex(p => p.id === id);
+        if (idx >= 0) {
+          state.selectedProposals[idx] = updated && updated.id
+            ? { ...state.selectedProposals[idx], ...updated }
+            : { ...state.selectedProposals[idx], status: targetStatus };
+        }
+        showToast('success', `提案ステータスを「${PROPOSAL_STATUS_LABEL[targetStatus] || targetStatus}」に変更しました`);
+      }
+      // 影響を受ける描画を更新
+      renderProposalsSection();
+      // 詳細パネルの次アクションも更新
+      if (state.selectedRequest) {
+        const area = document.getElementById('detailArea');
+        if (area) {
+          const naSection = area.querySelector('.next-action');
+          if (naSection) {
+            const wrap = naSection.parentElement;
+            if (wrap) wrap.outerHTML = renderNextActionPanel(state.selectedRequest);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('提案ステータス変更失敗:', e);
+      showToast('error', `提案ステータス変更に失敗しました：${e.message}`);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
   }
 
   // ─── マッチスコア計算（0〜100点） ───
@@ -2969,6 +3089,17 @@
     const proposals   = (state && state.selectedProposals)   || [];
     const assignments = (state && state.selectedAssignments) || [];
     const { overall } = buildRequirementChecklist(r);
+
+    // proposal_status を踏まえて、accepted / proposing 段階の次アクションを決める
+    const liveProposals = proposals.filter(p => !['withdrawn','expired','facility_declined'].includes(p.status));
+    const hasFacilityAccepted = proposals.some(p => p.status === 'facility_accepted');
+    const hasProposedToFacility = proposals.some(p => p.status === 'proposed_to_facility');
+    const hasWorkerAccepted = proposals.some(p => p.status === 'worker_accepted');
+    const hasWorkerContacted = proposals.some(p => p.status === 'worker_contacted');
+    const hasCreatedOnly = proposals.some(p => p.status === 'created');
+    const onlyDeclined = proposals.length > 0
+      && proposals.every(p => ['worker_declined','facility_declined','withdrawn','expired'].includes(p.status));
+
     switch (r.status) {
       case 'submitted':
         return {
@@ -2983,32 +3114,64 @@
           subs: ['不足項目を施設に確認', '報酬・条件を整理', '受諾／差戻しを判断'],
         };
       case 'accepted':
-        return {
-          main: '候補者抽出',
-          reason: '勤務枠は受諾済みですが、まだ施設への提案がありません。',
-          subs: ['医療者候補ランキングを確認', '要件に合う医療者へ打診', '施設向け提案文を準備'],
-        };
-      case 'proposing': {
-        const hasProposals = proposals.length > 0;
-        if (!hasProposals) {
+      case 'proposing':
+      case 'partially_assigned': {
+        if (proposals.length === 0) {
           return {
-            main: '医療者へ打診',
-            reason: '提案中ステータスですが、まだ提案が登録されていません。',
-            subs: ['候補医療者を選定', '打診メッセージを準備', '提案を作成'],
+            main: '医療者候補を抽出',
+            reason: 'まだ提案が登録されていません。要件に合う医療者を医療者台帳から確認してください。',
+            subs: ['医療者候補ランキングを確認', '推薦理由・リスクを確認', '提案を作成して候補者選定済みにする'],
           };
         }
+        if (hasFacilityAccepted) {
+          return {
+            main: '勤務確定へ',
+            reason: '施設承認済みの提案があります。確定アサインの作成・確認に進めます。',
+            subs: ['アサインを作成／確認', '医療者へ確定連絡', '勤務開始日を最終確認'],
+          };
+        }
+        if (hasProposedToFacility) {
+          return {
+            main: '施設承認待ち',
+            reason: '医療者承諾済みの候補を施設へ提案済みです。施設からの承認・見送り判断を待っています。',
+            subs: ['施設へ承認をリマインド', '条件確認の質問があれば対応', '別候補も並行で確保'],
+          };
+        }
+        if (hasWorkerAccepted) {
+          return {
+            main: '施設へ提案する',
+            reason: '医療者から承諾を得ました。施設管理者に正式提案してください。',
+            subs: ['提案カードから「施設へ提案する」を実行', '施設向け提案文を準備', '条件・期限を最終確認'],
+          };
+        }
+        if (hasWorkerContacted) {
+          return {
+            main: '医療者の返答待ち',
+            reason: '医療者へ打診済みです。返答が遅い場合はリマインドしてください。',
+            subs: ['返答状況を確認', '必要に応じて追加打診', '辞退時は別候補へ切替'],
+          };
+        }
+        if (hasCreatedOnly) {
+          return {
+            main: '医療者へ打診',
+            reason: '候補者は選定済みですが、まだ医療者へ打診できていません。',
+            subs: ['提案カードから「打診済みにする」を実行', '医療者向け打診文を準備', '期限を意識して打診'],
+          };
+        }
+        if (onlyDeclined) {
+          return {
+            main: '追加候補者を選定',
+            reason: '既存の候補は辞退・見送り・取下げ・期限切れになっています。新しい候補を選定してください。',
+            subs: ['医療者候補ランキングを再確認', '条件を見直す', '追加候補に打診'],
+          };
+        }
+        // フォールバック（liveProposals が混在している場合）
         return {
-          main: '施設提案状況を確認',
-          reason: '医療者への打診・施設への提案が進行中です。',
-          subs: ['医療者承諾／辞退を確認', '施設承認の進捗を確認', '残り枠の候補を継続確保'],
+          main: '配置調整中の状況確認',
+          reason: '医療者打診・施設提案が混在しています。各提案のステータスを確認してください。',
+          subs: ['提案ごとのアクションを確認', '残り未充足分の候補確保', '進捗を施設へ共有'],
         };
       }
-      case 'partially_assigned':
-        return {
-          main: '残り枠の候補者選定',
-          reason: '一部の枠は充足しましたが、まだ未充足の枠があります。',
-          subs: ['残り枠の候補者を確認', '追加打診を実施', '進捗を施設に共有'],
-        };
       case 'fully_assigned':
         return {
           main: '勤務開始待ち',

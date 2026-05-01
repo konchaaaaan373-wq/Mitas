@@ -226,6 +226,75 @@
       font-weight: 600;
       margin-top: 6px;
     }
+    /* ─── 勤務機会のご相談（将来実装予定）─── */
+    .opportunity-section {
+      margin-top: 24px;
+      padding: 16px 16px 18px;
+      background: var(--white, #fff);
+      border: 1px dashed var(--gray-300, #cbd5e1);
+      border-radius: 14px;
+    }
+    .opportunity-section__head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+    }
+    .opportunity-section__title {
+      font-size: 14px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .opportunity-section__pill {
+      display: inline-block; padding: 2px 8px; border-radius: 100px;
+      background: rgba(100,116,139,0.12); color: #64748b;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    }
+    .opportunity-section__desc {
+      font-size: 12px; color: var(--gray-700, #334155); line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .opportunity-section__note {
+      margin-top: 10px; font-size: 11px; color: var(--gray-500, #64748b);
+      line-height: 1.7;
+    }
+    .opportunity-card {
+      padding: 12px 14px;
+      background: var(--gray-50, #f8fafc);
+      border: 1px solid var(--gray-200, #e2e8f0);
+      border-radius: 10px;
+    }
+    .opportunity-card__head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 4px;
+    }
+    .opportunity-card__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .opportunity-card__badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 100px;
+      background: rgba(245,158,11,0.12); color: #b45309;
+    }
+    .opportunity-card__meta {
+      display: flex; flex-wrap: wrap; gap: 4px 10px;
+      font-size: 11px; color: var(--gray-500, #64748b); margin-bottom: 6px;
+    }
+    .opportunity-card__hint {
+      font-size: 11px; color: var(--gray-500, #64748b); line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .opportunity-card__actions {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .opportunity-btn {
+      flex: 1; min-width: 100px;
+      padding: 8px 10px; font-size: 12px; font-weight: 600;
+      border-radius: 6px; cursor: pointer;
+      background: var(--white, #fff); color: var(--navy-deep, #0d2340);
+      border: 1px solid var(--gray-300, #cbd5e1);
+    }
+    .opportunity-btn--primary {
+      background: rgba(14,165,233,0.10); color: #0369a1;
+      border-color: rgba(14,165,233,0.25);
+    }
+    .opportunity-btn--ghost { color: #64748b; }
+    .opportunity-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
     .card__meta {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1019,6 +1088,40 @@
     <div id="scheduleEmpty" class="empty" hidden>
       <div class="empty__title">表示できる勤務予定がありません</div>
       <div class="empty__sub">確定した勤務や過去の稼働実績がここに一覧表示されます。</div>
+    </div>
+
+    <!-- ─── 勤務機会のご相談（将来実装予定） ─── -->
+    <div class="opportunity-section" aria-labelledby="opportunityHead">
+      <div class="opportunity-section__head">
+        <span class="opportunity-section__title" id="opportunityHead">勤務機会のご相談</span>
+        <span class="opportunity-section__pill">将来実装予定</span>
+      </div>
+      <p class="opportunity-section__desc">
+        登録された資格・経験・希望条件に基づき、信頼できる医療機関からの勤務機会をNeco担当者からご相談する場合があります。<br>
+        将来的には、提案内容の詳細をこの画面で確認し、関心の有無をお知らせいただけるようになる予定です。
+      </p>
+      <div class="opportunity-card opportunity-card--placeholder" aria-disabled="true">
+        <div class="opportunity-card__head">
+          <span class="opportunity-card__title">サンプル勤務機会</span>
+          <span class="opportunity-card__badge">サンプル</span>
+        </div>
+        <div class="opportunity-card__meta">
+          <span>応援勤務</span>
+          <span>日勤</span>
+          <span>関東圏</span>
+        </div>
+        <div class="opportunity-card__hint">
+          実際の勤務機会は、現時点ではNeco担当者から直接ご連絡しております。
+        </div>
+        <div class="opportunity-card__actions">
+          <button class="opportunity-btn opportunity-btn--primary" type="button" disabled>関心あり</button>
+          <button class="opportunity-btn" type="button" disabled>詳細を確認</button>
+          <button class="opportunity-btn opportunity-btn--ghost" type="button" disabled>今回は見送る</button>
+        </div>
+      </div>
+      <p class="opportunity-section__note">
+        現時点では、Neco担当者がメール・お電話・メッセージで勤務機会のご相談を行います。応募という形ではなく、まずは「関心あり／見送り」をお伝えいただければ調整いたします。
+      </p>
     </div>
   </section>
 
