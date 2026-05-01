@@ -26,7 +26,9 @@
 --   - すべてのレコードに 'DEMO' プレフィックスまたは（DEMO）表記を付与
 --   - request/proposal/assignment/invoice の番号は 'XX-DEMO-NNNN' 形式
 --   - auth.users にメールが見つからない場合は EXCEPTION で全行ロールバック
---   - unique_violation 発生時は再投入として NOTICE のみで終了
+--   - 再実行を安全にするため、冒頭で既存 DEMO 行を DELETE してから INSERT
+--   - ユニーク制約違反などのエラーは捕捉せず、Supabase の result 画面に
+--     そのまま表示する（無音の rollback を避ける）
 -- ================================================================
 
 DO $$
@@ -88,6 +90,39 @@ BEGIN
 
   RAISE NOTICE '[Mitas LIVE seed] auth.users 解決完了: neco=%, alliance=%, facility1=%, facility2=%, worker1=%, worker2=%',
     v_neco_user, v_alliance_user, v_fa1_user, v_fa2_user, v_w1_user, v_w2_user;
+
+  -- ----------------------------------------------------------
+  -- 0b. 既存 DEMO 行を一旦削除（再実行を確実に成功させるため）
+  --     auth.users / user_roles は残し、role と display_name は上書き UPDATE する
+  -- ----------------------------------------------------------
+  DELETE FROM activity_log
+    WHERE entity_id IN (
+      SELECT id FROM staffing_requests WHERE request_number LIKE 'SR-DEMO-%'
+      UNION SELECT id FROM proposals          WHERE proposal_number LIKE 'PR-DEMO-%'
+      UNION SELECT id FROM assignments        WHERE assignment_number LIKE 'AS-DEMO-%'
+    );
+  DELETE FROM work_logs
+    WHERE assignment_id IN (
+      SELECT id FROM assignments WHERE assignment_number LIKE 'AS-DEMO-%'
+    );
+  DELETE FROM assignments        WHERE assignment_number LIKE 'AS-DEMO-%';
+  DELETE FROM proposals          WHERE proposal_number  LIKE 'PR-DEMO-%';
+  DELETE FROM staffing_requests  WHERE request_number   LIKE 'SR-DEMO-%';
+
+  DELETE FROM worker_credentials
+    WHERE worker_id IN (
+      SELECT id FROM worker_profiles WHERE full_name LIKE '%（DEMO）'
+    );
+  DELETE FROM worker_availability
+    WHERE worker_id IN (
+      SELECT id FROM worker_profiles WHERE full_name LIKE '%（DEMO）'
+    );
+  DELETE FROM worker_profiles    WHERE full_name LIKE '%（DEMO）';
+
+  DELETE FROM organization_members
+    WHERE organization_id IN (v_org_demo_hosp, v_org_demo_vns);
+  DELETE FROM organizations
+    WHERE id IN (v_org_demo_hosp, v_org_demo_vns);
 
   -- ----------------------------------------------------------
   -- 1. 組織（DEMO）
@@ -324,7 +359,4 @@ BEGIN
   RAISE NOTICE 'デモ終了後は docs/LIVE_DEMO_SEED_PLAN.md の';
   RAISE NOTICE '「削除（ロールバック）手順」を参照して削除してください。';
   RAISE NOTICE '----------------------------------------------------------';
-
-EXCEPTION WHEN unique_violation THEN
-  RAISE NOTICE 'デモシードは既に投入済みのためスキップしました（unique_violation）';
 END $$;
