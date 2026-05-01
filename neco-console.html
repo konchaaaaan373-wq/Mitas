@@ -611,6 +611,24 @@
       font-size: 11px; color: var(--gray-500); line-height: 1.7;
     }
 
+    /* ─── アサイン作成モーダル：警告・エラー ─── */
+    .asgn-alert {
+      padding: 10px 12px; border-radius: 6px; margin-bottom: 8px;
+      font-size: 12px; line-height: 1.7;
+    }
+    .asgn-alert--error {
+      background: rgba(220,38,38,0.06);
+      border-left: 3px solid var(--red);
+      color: #991B1B;
+    }
+    .asgn-alert--warn {
+      background: rgba(245,158,11,0.08);
+      border-left: 3px solid var(--amber);
+      color: #92400E;
+    }
+    .asgn-alert ul { margin: 6px 0 0 18px; padding: 0; }
+    .asgn-alert strong { display: block; margin-bottom: 4px; }
+
     /* ─── 候補者推薦理由・リスク ─── */
     .candidate-reasons {
       margin-top: 6px;
@@ -778,6 +796,23 @@
     .proposal-card__actions .action-btn {
       padding: 4px 10px;
       font-size: 11px;
+    }
+    .proposal-card__hint {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .proposal-card__hint--ok   {
+      background: rgba(16,185,129,0.08);
+      color: #065F46;
+      border-left: 3px solid var(--green);
+    }
+    .proposal-card__hint--info {
+      background: rgba(14,165,233,0.08);
+      color: #075985;
+      border-left: 3px solid var(--teal);
     }
 
     /* ── 提案ステータスバッジ ── */
@@ -1145,6 +1180,65 @@
   </div>
 </div>
 
+<!-- 勤務確定（アサイン）作成モーダル -->
+<div class="modal-backdrop" id="assignmentModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="assignmentModalTitle"
+       style="max-width: 640px;">
+    <div class="modal__head">
+      <div class="modal__title" id="assignmentModalTitle">勤務確定を作成</div>
+      <div class="modal__subtitle" id="assignmentModalSubtitle">—</div>
+    </div>
+    <form id="assignmentForm" novalidate>
+      <div class="modal__body">
+        <p style="font-size: 12px; color: var(--gray-700); line-height: 1.8; margin: 0 0 12px;">
+          施設承認済みの提案から勤務確定（アサイン）を作成します。勤務日時・報酬・契約条件を確認してください。
+        </p>
+
+        <div class="field-grid" style="background: var(--gray-50); padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--gray-200);">
+          <div>
+            <div style="font-size: 10px; color: var(--gray-500); margin-bottom: 2px;">医療者</div>
+            <div id="asgnSummaryWorker" style="font-size: 13px; font-weight: 600; color: var(--navy-deep);">—</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--gray-500); margin-bottom: 2px;">施設・勤務枠</div>
+            <div id="asgnSummaryRequest" style="font-size: 13px; font-weight: 600; color: var(--navy-deep);">—</div>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <div style="font-size: 10px; color: var(--gray-500); margin-bottom: 2px;">勤務種別</div>
+            <div id="asgnSummaryShift" style="font-size: 12px; color: var(--gray-700);">—</div>
+          </div>
+        </div>
+
+        <div id="asgnWarnings" style="margin-top: 12px;"></div>
+
+        <div class="field-grid" style="margin-top: 12px;">
+          <div class="field">
+            <label class="field__label" for="asgnStart">勤務開始予定</label>
+            <input class="field__input" type="datetime-local" id="asgnStart" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="asgnEnd">勤務終了予定</label>
+            <input class="field__input" type="datetime-local" id="asgnEnd" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="asgnRate">時給（円）</label>
+            <input class="field__input" type="number" id="asgnRate" min="0" step="100" inputmode="numeric" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="asgnTotal">総報酬（円）</label>
+            <input class="field__input" type="number" id="asgnTotal" min="0" step="100" inputmode="numeric"
+                   placeholder="未入力なら時給×時間で自動計算">
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="action-btn action-btn--ghost" id="assignmentCancelBtn">キャンセル</button>
+        <button type="submit" class="action-btn action-btn--primary" id="assignmentSubmitBtn">勤務確定を作成</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- キーボードショートカットヘルプ -->
 <div class="kb-help-overlay" id="kbHelpOverlay" hidden>
   <div class="kb-help" role="dialog" aria-labelledby="kbHelpTitle">
@@ -1241,7 +1335,11 @@
     proposed_to_facility: [
       { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
     ],
-    facility_accepted:  [],
+    facility_accepted: [
+      // 「勤務確定を作成」は通常のステータス遷移ではなく、別途モーダルで確認する
+      { custom: 'createAssignment',     label: '勤務確定を作成',     kind: 'success' },
+      { target: 'withdrawn',            label: '取下げる',           kind: 'ghost'   },
+    ],
     facility_declined:  [],
     withdrawn:          [],
     expired:            [],
@@ -1363,8 +1461,10 @@
       if (e.key === 'Escape') {
         const propModal = document.getElementById('proposalModal');
         const invModal  = document.getElementById('invoiceModal');
-        if (propModal.classList.contains('is-open')) closeProposalModal();
-        if (invModal.classList.contains('is-open'))  closeInvoiceModal();
+        const asgnModal = document.getElementById('assignmentModal');
+        if (propModal && propModal.classList.contains('is-open')) closeProposalModal();
+        if (invModal  && invModal.classList.contains('is-open'))  closeInvoiceModal();
+        if (asgnModal && asgnModal.classList.contains('is-open')) closeAssignmentCreateModal();
       }
     });
 
@@ -1931,13 +2031,23 @@
               <div style="font-size: 11px; color: var(--gray-700); margin-top: 6px; line-height: 1.6;">
                 ${escapeHtml(p.match_reason)}
               </div>` : ''}
+            ${p.status === 'facility_accepted' && !proposalHasAssignment(p) ? `
+              <div class="proposal-card__hint proposal-card__hint--ok">
+                施設承認済み：勤務確定手続きが必要です。<br>
+                この候補者は施設側で承認されています。勤務日時・報酬・契約条件を確認し、確定アサインを作成してください。
+              </div>` : ''}
+            ${p.status === 'facility_accepted' && proposalHasAssignment(p) ? `
+              <div class="proposal-card__hint proposal-card__hint--info">
+                勤務確定済みです。確定勤務・稼働状況セクションをご確認ください。
+              </div>` : ''}
             ${transitions.length ? `
               <div class="proposal-card__actions">
                 ${transitions.map(t => `
                   <button class="action-btn action-btn--${t.kind} proposal-action"
                           data-proposal-id="${escapeHtml(p.id)}"
-                          data-target="${escapeHtml(t.target)}"
-                          data-label="${escapeHtml(t.label)}">
+                          ${t.custom ? `data-custom="${escapeHtml(t.custom)}"` : `data-target="${escapeHtml(t.target)}"`}
+                          data-label="${escapeHtml(t.label)}"
+                          ${t.custom === 'createAssignment' && proposalHasAssignment(p) ? 'disabled' : ''}>
                     ${escapeHtml(t.label)}
                   </button>`).join('')}
               </div>` : ''}
@@ -1951,11 +2061,233 @@
       btn.addEventListener('click', () => {
         if (btn.disabled) return;
         const id = btn.dataset.proposalId;
+        const custom = btn.dataset.custom;
+        if (custom === 'createAssignment') {
+          openAssignmentCreateModal(id);
+          return;
+        }
         const target = btn.dataset.target;
         const label = btn.dataset.label || '';
         transitionProposal(id, target, label, btn);
       });
     });
+  }
+
+  // proposal に紐づく確定アサインが既にあるか
+  function proposalHasAssignment(p) {
+    const assignments = (state && state.selectedAssignments) || [];
+    return assignments.some(a => a.proposal_id === p.id && a.status !== 'cancelled');
+  }
+
+  // ─── 勤務確定（アサイン）作成モーダル ───────────────────────
+  // facility_accepted の proposal を選択すると、確認項目を表示して
+  // POST /api/v2/assignments で確定アサインを作成する。
+  const ASGN_MODAL_STATE = { proposalId: null };
+  function openAssignmentCreateModal(proposalId) {
+    const p = (state.selectedProposals || []).find(x => x.id === proposalId);
+    const r = state.selectedRequest;
+    if (!p || !r) {
+      showToast('error', '提案または勤務枠の情報が見つかりません');
+      return;
+    }
+    ASGN_MODAL_STATE.proposalId = proposalId;
+
+    const $ = (id) => document.getElementById(id);
+    $('asgnSummaryWorker').textContent = p.worker_name || '—';
+    const requestSummary = `${r.title || '(タイトルなし)'}（${r.request_number || ''}）`;
+    $('asgnSummaryRequest').textContent = requestSummary;
+    $('asgnSummaryShift').textContent = SHIFT_LABEL[r.shift_type] || r.shift_type || '—';
+    $('assignmentModalSubtitle').textContent = `${p.proposal_number || ''} / ${p.worker_name || ''}`;
+
+    // 既定値：proposal の値 → request の値の順で補完
+    const toLocal = (iso) => {
+      if (!iso) return '';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return '';
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    };
+    $('asgnStart').value = toLocal(p.proposed_start_at || r.start_at);
+    $('asgnEnd').value   = toLocal(p.proposed_end_at   || r.end_at);
+    const rate = p.proposed_hourly_rate || r.hourly_rate_min || r.hourly_rate_max || '';
+    $('asgnRate').value  = rate || '';
+    $('asgnTotal').value = p.proposed_total_compensation || '';
+
+    renderAssignmentWarnings();
+
+    // 入力変更時に警告を再評価＋総報酬の自動計算
+    ['asgnStart','asgnEnd','asgnRate'].forEach(id => {
+      const el = $(id);
+      el.oninput = () => {
+        renderAssignmentWarnings();
+        // 総報酬未入力なら時給×時間で自動補完
+        const totalEl = $('asgnTotal');
+        if (totalEl && !totalEl.value) {
+          const auto = calcAutoTotal();
+          if (auto != null) totalEl.placeholder = `自動計算：¥${auto.toLocaleString()}`;
+        }
+      };
+    });
+
+    document.getElementById('assignmentModal').setAttribute('aria-hidden', 'false');
+    document.getElementById('assignmentModal').classList.add('is-open');
+  }
+  function closeAssignmentCreateModal() {
+    const m = document.getElementById('assignmentModal');
+    m.setAttribute('aria-hidden', 'true');
+    m.classList.remove('is-open');
+    ASGN_MODAL_STATE.proposalId = null;
+  }
+  function calcAutoTotal() {
+    const $ = (id) => document.getElementById(id);
+    const start = $('asgnStart').value;
+    const end   = $('asgnEnd').value;
+    const rate  = parseFloat($('asgnRate').value);
+    if (!start || !end || !rate) return null;
+    const hours = (new Date(end).getTime() - new Date(start).getTime()) / 3600000;
+    if (!isFinite(hours) || hours <= 0) return null;
+    return Math.round(rate * hours);
+  }
+  function renderAssignmentWarnings() {
+    const $ = (id) => document.getElementById(id);
+    const warnings = [];
+    const blockers = [];
+    const start = $('asgnStart').value;
+    const end   = $('asgnEnd').value;
+    const rate  = parseFloat($('asgnRate').value);
+
+    if (!start) blockers.push('勤務開始予定が未設定です。アサイン作成前に確認してください。');
+    if (!end)   blockers.push('勤務終了時刻が未設定です。アサイン作成前に確認してください。');
+    if (!isFinite(rate) || rate <= 0) blockers.push('時給が未設定です。報酬条件を確認してください。');
+    if (start && end && new Date(end).getTime() <= new Date(start).getTime()) {
+      blockers.push('勤務終了予定は開始予定より後である必要があります。');
+    }
+
+    const r = state.selectedRequest || {};
+    const min = Number(r.hourly_rate_min);
+    const max = Number(r.hourly_rate_max);
+    if (isFinite(rate) && isFinite(min) && rate < min) {
+      warnings.push(`時給が依頼レンジの下限（¥${min.toLocaleString()}）を下回っています。`);
+    }
+    if (isFinite(rate) && isFinite(max) && rate > max) {
+      warnings.push(`時給が依頼レンジの上限（¥${max.toLocaleString()}）を上回っています。`);
+    }
+
+    const wrap = $('asgnWarnings');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    if (blockers.length) {
+      wrap.innerHTML += `<div class="asgn-alert asgn-alert--error">
+        <strong>作成前に確認が必要です</strong>
+        <ul>${blockers.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
+      </div>`;
+    }
+    if (warnings.length) {
+      wrap.innerHTML += `<div class="asgn-alert asgn-alert--warn">
+        <strong>確認をおすすめします</strong>
+        <ul>${warnings.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
+      </div>`;
+    }
+    // 送信ボタンは blockers があれば disable
+    const submit = document.getElementById('assignmentSubmitBtn');
+    if (submit) submit.disabled = blockers.length > 0;
+  }
+
+  // モーダルのキャンセル・送信を一度だけバインド
+  (function bindAssignmentModalOnce() {
+    const cancel = document.getElementById('assignmentCancelBtn');
+    if (cancel) cancel.addEventListener('click', closeAssignmentCreateModal);
+    const form = document.getElementById('assignmentForm');
+    if (form) form.addEventListener('submit', submitAssignmentCreate);
+    const back = document.getElementById('assignmentModal');
+    if (back) back.addEventListener('click', (e) => {
+      if (e.target === back) closeAssignmentCreateModal();
+    });
+  })();
+
+  async function submitAssignmentCreate(ev) {
+    ev.preventDefault();
+    const $ = (id) => document.getElementById(id);
+    const proposalId = ASGN_MODAL_STATE.proposalId;
+    if (!proposalId) return;
+
+    const start = $('asgnStart').value;
+    const end   = $('asgnEnd').value;
+    const rate  = parseFloat($('asgnRate').value);
+    let total   = parseFloat($('asgnTotal').value);
+    if (!isFinite(total)) total = calcAutoTotal();
+
+    if (!start || !end || !isFinite(rate) || rate <= 0) {
+      showToast('error', '必要項目が不足しています。確認のうえ再度お試しください。');
+      return;
+    }
+
+    const submit = $('assignmentSubmitBtn');
+    if (submit) submit.disabled = true;
+    try {
+      const payload = {
+        proposal_id: proposalId,
+        scheduled_start_at: new Date(start).toISOString(),
+        scheduled_end_at: new Date(end).toISOString(),
+        hourly_rate: Math.round(rate),
+        total_compensation: isFinite(total) ? Math.round(total) : null,
+      };
+
+      let assignment = null;
+      if (isMockMode || !state.token) {
+        // モック：選択中のアサインリストにダミーを追加
+        assignment = {
+          id: 'mock-' + Date.now(),
+          assignment_number: `AS-${new Date().getFullYear()}-MOCK`,
+          proposal_id: proposalId,
+          status: 'confirmed',
+          ...payload,
+        };
+        state.selectedAssignments = [assignment, ...(state.selectedAssignments || [])];
+        await new Promise(r => setTimeout(r, 200));
+        showToast('success', '勤務確定を作成しました（モック）');
+      } else {
+        const res = await fetch('/api/v2/assignments', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || data.detail || `API ${res.status}`);
+        }
+        const data = await res.json();
+        assignment = data.assignment || null;
+        if (assignment) {
+          state.selectedAssignments = [assignment, ...(state.selectedAssignments || [])];
+        }
+        showToast('success', '勤務確定を作成しました');
+      }
+
+      closeAssignmentCreateModal();
+      // 関連セクションを再描画
+      renderProposalsSection();
+      renderAssignmentsSection();
+      // 詳細パネルの次アクションも更新
+      if (state.selectedRequest) {
+        const area = document.getElementById('detailArea');
+        if (area) {
+          const naSection = area.querySelector('.next-action');
+          if (naSection) {
+            const wrap = naSection.parentElement;
+            if (wrap) wrap.outerHTML = renderNextActionPanel(state.selectedRequest);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('勤務確定の作成に失敗:', e);
+      showToast('error', '勤務確定の作成に失敗しました：' + e.message);
+    } finally {
+      if (submit) submit.disabled = false;
+    }
   }
 
   // 提案ステータスの遷移（PATCH /api/v2/proposals/:id）
@@ -3123,11 +3455,16 @@
             subs: ['医療者候補ランキングを確認', '推薦理由・リスクを確認', '提案を作成して候補者選定済みにする'],
           };
         }
+        // 確定アサインがある場合は assignment_status を踏まえた表示に切り替え
+        const liveAssignments = assignments.filter(a => a.status !== 'cancelled');
+        if (liveAssignments.length) {
+          return computeAssignmentNextAction(liveAssignments);
+        }
         if (hasFacilityAccepted) {
           return {
-            main: '勤務確定へ',
-            reason: '施設承認済みの提案があります。確定アサインの作成・確認に進めます。',
-            subs: ['アサインを作成／確認', '医療者へ確定連絡', '勤務開始日を最終確認'],
+            main: '勤務確定を作成',
+            reason: '施設承認済みの提案があります。勤務日時・報酬・契約条件を確認し、確定アサインを作成してください。',
+            subs: ['提案カードの「勤務確定を作成」を実行', '勤務開始／終了予定を確認', '時給・総報酬を最終確認'],
           };
         }
         if (hasProposedToFacility) {
@@ -3173,23 +3510,16 @@
         };
       }
       case 'fully_assigned':
+      case 'in_progress':
+      case 'completion_pending': {
+        const liveAssignments = assignments.filter(a => a.status !== 'cancelled');
+        if (liveAssignments.length) return computeAssignmentNextAction(liveAssignments);
         return {
           main: '勤務開始待ち',
           reason: '充足完了です。勤務開始日までの最終確認を行ってください。',
           subs: ['医療者へリマインド', '施設・医療者の連絡先確認', '勤務当日の体制確認'],
         };
-      case 'in_progress':
-        return {
-          main: '稼働状況確認',
-          reason: '稼働中です。チェックイン状況・現場の状況を確認してください。',
-          subs: ['チェックイン状況を確認', 'work_logsを確認', '異常時は施設へ連絡'],
-        };
-      case 'completion_pending':
-        return {
-          main: '完了確認',
-          reason: '医療者から完了報告が届いています。施設側の完了確認を促進してください。',
-          subs: ['施設に完了確認を依頼', '医療者の勤務メモを確認', '完了確定後に請求作成'],
-        };
+      }
       case 'confirmed':
         return {
           main: '請求作成',
@@ -3217,14 +3547,83 @@
     }
   }
 
+  // assignment_status を踏まえて次アクションを決定。
+  // 一つの request に複数 assignment が紐づく場合は「対応が必要なもの」を優先表示。
+  function computeAssignmentNextAction(assignments) {
+    const priority = [
+      'disputed',
+      'completion_reported',
+      'checked_out',
+      'checked_in',
+      'confirmed',
+      'completion_confirmed',
+      'no_show',
+      'cancelled',
+    ];
+    let target = null;
+    for (const s of priority) {
+      target = assignments.find(a => a.status === s);
+      if (target) break;
+    }
+    if (!target) target = assignments[0];
+    switch (target.status) {
+      case 'confirmed':
+        return {
+          main: '勤務開始待ち',
+          reason: '勤務確定済みです。医療者の勤務開始（チェックイン）をお待ちください。',
+          subs: ['医療者へ勤務日リマインド', '集合場所・持ち物の最終確認', '当日のバックアップ体制確認'],
+        };
+      case 'checked_in':
+        return {
+          main: '稼働中（勤務終了待ち）',
+          reason: '医療者がチェックイン済みです。勤務終了（チェックアウト）をお待ちください。',
+          subs: ['チェックイン時刻を確認', '現場の状況を確認', '異常時は施設・医療者へ連絡'],
+        };
+      case 'checked_out':
+        return {
+          main: '完了報告待ち',
+          reason: '医療者がチェックアウト済みです。完了報告の登録をお待ちください。',
+          subs: ['医療者に完了報告を依頼', '勤務時間を確認', '報告後に施設の完了確認へ'],
+        };
+      case 'completion_reported':
+        return {
+          main: '施設完了確認待ち',
+          reason: '医療者から完了報告が届いています。施設側の完了確認をお願いしてください。',
+          subs: ['施設に完了確認を依頼', '勤務メモを確認', '完了確定後に請求作成へ進む'],
+        };
+      case 'completion_confirmed':
+        return {
+          main: '請求作成',
+          reason: '完了確定済みです。請求書を作成してください。',
+          subs: ['請求モーダルから明細を確認', '消費税・支払期日を設定', '請求書を発行'],
+        };
+      case 'disputed':
+        return {
+          main: '確認事項対応',
+          reason: '確認事項（紛争）が発生しています。施設・医療者と内容を確認してください。',
+          subs: ['紛争理由を確認', '関係者にヒアリング', '解決後に状態を更新'],
+        };
+      case 'no_show':
+        return {
+          main: '未勤務対応',
+          reason: '医療者が未勤務として記録されています。施設・医療者と原因を確認してください。',
+          subs: ['未勤務理由を確認', '代替候補者を検討', '請求条件を再確認'],
+        };
+      case 'cancelled':
+        return { main: '終了', reason: 'このアサインはキャンセルされています。', subs: [] };
+      default:
+        return { main: '—', reason: '', subs: [] };
+    }
+  }
+
   // 勤務枠の次アクションをルールベースで導出（一覧用：requestのみ参照）
   function getRequestNextAction(r) {
     switch (r.status) {
       case 'submitted':           return '要件確認';
       case 'under_review':        return '受諾または差戻し';
       case 'accepted':            return '候補者抽出';
-      case 'proposing':           return '医療者へ打診／施設提案状況確認';
-      case 'partially_assigned':  return '残り枠の候補者選定';
+      case 'proposing':           return '医療者打診／施設提案／勤務確定';
+      case 'partially_assigned':  return '残り枠の候補者選定／勤務確定';
       case 'fully_assigned':      return '勤務開始待ち';
       case 'in_progress':         return '稼働状況確認';
       case 'completion_pending':  return '完了確認';

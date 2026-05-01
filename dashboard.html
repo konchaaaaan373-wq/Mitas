@@ -2933,17 +2933,31 @@
       expired:              '期限切れ',
     };
     // 施設管理者向けの状態の補足説明（カラム下に出す小さな注記）
-    const V2_PROPOSAL_STATUS_HINT = {
-      created:              'Necoが候補者を選定中です',
-      worker_contacted:     'Necoが医療者本人に打診中です',
-      worker_accepted:      '医療者から内諾を得ています',
-      worker_declined:      '医療者が辞退しました。別候補をNecoが調整中です',
-      proposed_to_facility: '貴施設での承認をお願いします。承認後に勤務確定へ進みます',
-      facility_accepted:    '貴施設が承認済みです。勤務確定に進んでいます',
-      facility_declined:    '貴施設が見送りとした提案です',
-      withdrawn:            '取下げられた提案です',
-      expired:              '対応期限を過ぎました',
-    };
+    // facility_accepted は assignment の有無で表示を切り替えるため、関数で生成する。
+    function v2ProposalStatusHint(p, hasAssignment) {
+      const map = {
+        created:              'Necoが候補者を選定中です',
+        worker_contacted:     'Necoが医療者本人に打診中です',
+        worker_accepted:      '医療者から内諾を得ています',
+        worker_declined:      '医療者が辞退しました。別候補をNecoが調整中です',
+        proposed_to_facility: '貴施設での承認をお願いします。承認後に勤務確定へ進みます',
+        facility_declined:    '貴施設が見送りとした提案です',
+        withdrawn:            '取下げられた提案です',
+        expired:              '対応期限を過ぎました',
+      };
+      if (p.status === 'facility_accepted') {
+        return hasAssignment
+          ? '勤務確定済みです。勤務日時・医療者・報酬条件をご確認ください。勤務完了後は、完了確認をお願いいたします。'
+          : 'Necoが勤務確定手続きを進めています。勤務確定後、勤務確定・稼働画面に反映されます。';
+      }
+      return map[p.status] || '';
+    }
+    function v2ProposalStatusLabel(p, hasAssignment) {
+      if (p.status === 'facility_accepted') {
+        return hasAssignment ? '勤務確定済み' : '施設承認済み';
+      }
+      return V2_PROPOSAL_STATUS_LABEL[p.status] || p.status;
+    }
     const V2_PROP_ACTION_REQUIRED = ['proposed_to_facility'];
     const V2_PROP_DONE = ['facility_accepted','facility_declined','withdrawn','expired'];
 
@@ -2963,6 +2977,16 @@
       body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
       setMsg('読み込み中…');
       if (btn) btn.disabled = true;
+
+      // facility_accepted の提案について「勤務確定済み」を表示するため、
+      // アサイン一覧を未読込なら先行で読み込んでおく（バックグラウンド）。
+      if (typeof v2AsgnState !== 'undefined' && !v2AsgnState.loaded
+          && typeof loadV2Assignments === 'function') {
+        loadV2Assignments().then(() => {
+          // 読み込み完了後に再描画して「勤務確定済み」表示を反映
+          if (typeof renderV2ProposalsTable === 'function') renderV2ProposalsTable();
+        }).catch(() => {});
+      }
 
       let token = null;
       try {
@@ -3045,11 +3069,21 @@
       };
       const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
 
-      const facilityActionLabel = (s) => {
-        if (s === 'proposed_to_facility') return '<span class="v2-prop-action v2-prop-action--need">承認をお願いします</span>';
-        if (s === 'worker_accepted')      return '<span class="v2-prop-action v2-prop-action--info">まもなく施設承認待ちになります</span>';
-        if (s === 'created' || s === 'worker_contacted') return '<span class="v2-prop-action v2-prop-action--info">Necoが調整中です</span>';
-        if (s === 'facility_accepted')    return '<span class="v2-prop-action v2-prop-action--ok">承認済み・勤務確定へ</span>';
+      // facility_accepted の提案について、assignment が既に作成済みかを判定
+      const assignedProposalIds = new Set(
+        ((v2AsgnState && v2AsgnState.rows) || [])
+          .filter(a => a.status !== 'cancelled' && a.proposal_id)
+          .map(a => a.proposal_id)
+      );
+      const facilityActionLabel = (p, hasAssignment) => {
+        if (p.status === 'proposed_to_facility') return '<span class="v2-prop-action v2-prop-action--need">承認をお願いします</span>';
+        if (p.status === 'worker_accepted')      return '<span class="v2-prop-action v2-prop-action--info">まもなく施設承認待ちになります</span>';
+        if (p.status === 'created' || p.status === 'worker_contacted') return '<span class="v2-prop-action v2-prop-action--info">Necoが調整中です</span>';
+        if (p.status === 'facility_accepted') {
+          return hasAssignment
+            ? '<span class="v2-prop-action v2-prop-action--ok">勤務確定済み</span>'
+            : '<span class="v2-prop-action v2-prop-action--info">Necoが勤務確定手続き中</span>';
+        }
         return '';
       };
 
@@ -3072,7 +3106,9 @@
               const wp = p.worker_profiles || {};
               const sr = p.staffing_requests || {};
               const isAction = V2_PROP_ACTION_REQUIRED.includes(p.status);
-              const hint = V2_PROPOSAL_STATUS_HINT[p.status] || '';
+              const hasAssignment = assignedProposalIds.has(p.id);
+              const hint = v2ProposalStatusHint(p, hasAssignment);
+              const label = v2ProposalStatusLabel(p, hasAssignment);
               return `
                 <tr class="${isAction ? 'v2-row-action' : ''}" data-proposal-id="${esc(p.id)}">
                   <td><span class="v2-cases-table__num">${esc(p.proposal_number || '')}</span></td>
@@ -3090,11 +3126,11 @@
                   <td class="num">${esc(yen(p.proposed_hourly_rate))}</td>
                   <td class="num">${p.match_score == null ? '—' : esc(String(p.match_score))}</td>
                   <td>
-                    <span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(V2_PROPOSAL_STATUS_LABEL[p.status] || p.status)}</span>
+                    <span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(label)}</span>
                     ${hint ? `<div style="font-size:11px;color:var(--gray-500,#64748B);margin-top:4px;line-height:1.6;">${esc(hint)}</div>` : ''}
                   </td>
                   <td>
-                    ${facilityActionLabel(p.status)}
+                    ${facilityActionLabel(p, hasAssignment)}
                     ${isAction ? `
                       <div class="v2-prop-actions">
                         <button class="v2-prop-btn v2-prop-btn--primary" data-action="approve" data-id="${esc(p.id)}">承認する</button>
