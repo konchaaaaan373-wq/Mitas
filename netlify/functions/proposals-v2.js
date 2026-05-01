@@ -160,16 +160,50 @@ function isUuid(s) {
 }
 
 function getMockProposals() {
+  // デモで主要ステータスを一通り見られるように9件
+  const iso = (offsetMs) => new Date(Date.now() + offsetMs).toISOString();
+  const wp = (n, name, prof) => ({ id: 'wp-' + n, full_name: name, profession_type: prof, primary_specialty: '' });
+  const sr = (n, t) => ({ id: 'sr-' + n, request_number: 'SR-2026-' + n, title: t, organization_id: 'aaaaaaaa-0000-0000-0000-000000000001' });
   return [
-    {
-      id: '00000000-0000-0000-0000-000000000101',
-      proposal_number: 'PR-2026-0001',
-      request_id: '00000000-0000-0000-0000-000000000002',
-      worker_id: '00000000-0000-0000-0000-000000000022',
-      proposed_hourly_rate: 3800,
-      status: 'proposed_to_facility',
-      match_score: 92.5,
-      match_reason: '訪問看護経験8年・希望エリア一致',
-    },
+    { id: '00000000-0000-0000-0000-000000000101', proposal_number: 'PR-2026-0001', status: 'created',
+      created_at: iso(-30*3600000), updated_at: iso(-30*3600000),
+      proposed_hourly_rate: 9000, match_score: 80, match_reason: '専門領域一致',
+      worker_profiles: wp('w001','山田 健司','physician'), staffing_requests: sr('001','内科外来 当直医（応援勤務）') },
+    { id: '00000000-0000-0000-0000-000000000102', proposal_number: 'PR-2026-0002', status: 'worker_contacted',
+      created_at: iso(-72*3600000), updated_at: iso(-50*3600000),
+      proposed_hourly_rate: 8500, match_score: 78,
+      worker_profiles: wp('w002','加藤 大輔','physician'), staffing_requests: sr('002','透析クリニック 常勤医') },
+    { id: '00000000-0000-0000-0000-000000000103', proposal_number: 'PR-2026-0003', status: 'worker_accepted',
+      created_at: iso(-96*3600000), updated_at: iso(-26*3600000),
+      worker_responded_at: iso(-26*3600000),
+      proposed_hourly_rate: 12000, match_score: 88,
+      worker_profiles: wp('w003','大塚 健司','physician'), staffing_requests: sr('004','リハビリ専門 PT/OT') },
+    { id: '00000000-0000-0000-0000-000000000104', proposal_number: 'PR-2026-0004', status: 'worker_declined',
+      created_at: iso(-100*3600000), updated_at: iso(-50*3600000),
+      worker_responded_at: iso(-50*3600000), worker_response_note: '希望勤務地と異なるため辞退',
+      proposed_hourly_rate: 7500, match_score: 60,
+      worker_profiles: wp('w004','木村 さくら','nurse'), staffing_requests: sr('003','訪問看護 週末スポット') },
+    { id: '00000000-0000-0000-0000-000000000105', proposal_number: 'PR-2026-0005', status: 'proposed_to_facility',
+      created_at: iso(-72*3600000), updated_at: iso(-50*3600000),
+      proposed_hourly_rate: 3800, match_score: 92.5, match_reason: '訪問看護経験8年・希望エリア一致',
+      worker_profiles: wp('w005','鈴木 美咲','nurse'), staffing_requests: sr('003','訪問看護 週末スポット') },
+    { id: '00000000-0000-0000-0000-000000000106', proposal_number: 'PR-2026-0006', status: 'facility_accepted',
+      created_at: iso(-96*3600000), updated_at: iso(-12*3600000),
+      worker_responded_at: iso(-50*3600000), facility_responded_at: iso(-12*3600000),
+      proposed_hourly_rate: 4200, match_score: 95,
+      worker_profiles: wp('w006','吉田 典子','nurse'), staffing_requests: sr('005','健診センター GW') },
+    { id: '00000000-0000-0000-0000-000000000107', proposal_number: 'PR-2026-0007', status: 'facility_declined',
+      created_at: iso(-120*3600000), updated_at: iso(-24*3600000),
+      facility_responded_at: iso(-24*3600000), facility_response_note: '今回は別候補で進めます',
+      proposed_hourly_rate: 6500, match_score: 70,
+      worker_profiles: wp('w007','森 紗奈','nurse'), staffing_requests: sr('006','夜勤専従ナース') },
+    { id: '00000000-0000-0000-0000-000000000108', proposal_number: 'PR-2026-0008', status: 'withdrawn',
+      created_at: iso(-150*3600000), updated_at: iso(-72*3600000),
+      proposed_hourly_rate: 8000, match_score: 65,
+      worker_profiles: wp('w008','長谷川 茂','physician'), staffing_requests: sr('001','内科外来 当直医（応援勤務）') },
+    { id: '00000000-0000-0000-0000-000000000109', proposal_number: 'PR-2026-0009', status: 'expired',
+      created_at: iso(-200*3600000), updated_at: iso(-100*3600000), expires_at: iso(-50*3600000),
+      proposed_hourly_rate: 7800, match_score: 72,
+      worker_profiles: wp('w009','小池 拓郎','physician'), staffing_requests: sr('002','透析クリニック 常勤医') },
   ];
 }
