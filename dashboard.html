@@ -1776,25 +1776,35 @@
 
       <!-- KPIカード（v2 リアルデータから動的算出） -->
       <div class="kpi-grid">
-        <div class="kpi-card">
-          <p class="kpi-card__label">進行中の勤務枠</p>
+        <div class="kpi-card kpi-card--red">
+          <p class="kpi-card__label">未充足勤務枠</p>
           <p class="kpi-card__value" id="kpiActive">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiActiveSub"></p>
         </div>
         <div class="kpi-card kpi-card--teal">
-          <p class="kpi-card__label">承認待ち配置候補</p>
+          <p class="kpi-card__label">候補者提案中</p>
           <p class="kpi-card__value" id="kpiPending">-<em>名</em></p>
           <p class="kpi-card__sub" id="kpiPendingSub"></p>
         </div>
         <div class="kpi-card kpi-card--amber">
-          <p class="kpi-card__label">充足希望日まで14日以内</p>
+          <p class="kpi-card__label">承認待ち</p>
           <p class="kpi-card__value" id="kpiSoon">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiSoonSub"></p>
         </div>
-        <div class="kpi-card kpi-card--red">
-          <p class="kpi-card__label">優先度・高〜緊急</p>
+        <div class="kpi-card">
+          <p class="kpi-card__label">今週の確定勤務</p>
           <p class="kpi-card__value" id="kpiUrgent">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiUrgentSub"></p>
+        </div>
+        <div class="kpi-card kpi-card--amber">
+          <p class="kpi-card__label">完了確認待ち</p>
+          <p class="kpi-card__value" id="kpiCompletion">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiCompletionSub"></p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-card__label">請求確認</p>
+          <p class="kpi-card__value" id="kpiInvoices">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiInvoicesSub"></p>
         </div>
       </div>
 
@@ -1852,6 +1862,9 @@
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
 
+      <p style="margin: 0 0 14px; font-size: 12px; color: #64748B; line-height: 1.8;">
+        Necoが勤務枠の要件を確認し、資格・経験・勤務可能性を踏まえて医療者候補をご提案します。施設側で承認後、勤務確定に進みます。
+      </p>
       <!-- ═════ 配置候補・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
       <div class="v2-cases-card" id="v2ProposalsCard" aria-label="配置候補一覧">
         <div class="v2-cases-card__head">
@@ -1877,6 +1890,9 @@
     <!-- ─── アサイン管理（v2 リアルデータ） ────────────────── -->
     <section class="page-section" id="s-assignments">
 
+      <p style="margin: 0 0 14px; font-size: 12px; color: #64748B; line-height: 1.8;">
+        勤務完了後は、施設側で完了確認を行うことで稼働実績・請求に反映されます。
+      </p>
       <div class="v2-cases-card" id="v2AssignmentsCard" aria-label="勤務確定・稼働管理">
         <div class="v2-cases-card__head">
           <span class="v2-cases-card__title">勤務確定・稼働管理</span>
@@ -2164,7 +2180,10 @@
           </div>
           <div class="modal-form-row">
             <label>勤務内容・注意事項</label>
-            <textarea id="reqNote" rows="3" placeholder="経験年数・専門領域・夜勤可否など、勤務枠の要件・注意事項をご記入ください"></textarea>
+            <textarea id="reqNote" rows="4" placeholder="経験年数・専門領域・夜勤可否などの要件、勤務内容、想定患者数、バックアップ体制、電子カルテ、集合場所などをご記入ください"></textarea>
+            <p style="font-size: 11px; color: #64748B; margin-top: 6px; line-height: 1.7;">
+              医療者に打診しやすくするため、勤務内容・想定患者数・バックアップ体制・電子カルテ・集合場所なども可能な範囲でご記載ください。
+            </p>
           </div>
         </div>
         <div class="modal-footer">
@@ -2264,19 +2283,31 @@
 
       const { requests = [], proposals = [], assignments = [], invoices = [] } = data;
 
-      // 集計
+      // ステータス・優先度から「対応が必要な事項」を集計
+      const openStatuses = ['submitted','under_review','accepted','proposing','partially_assigned'];
+      const urgentUnfilled = requests.filter(r =>
+        openStatuses.includes(r.status) && (r.priority === 'urgent' || r.priority === 'high')
+      ).length;
       const items = [
         {
-          key: 'inquiries',
-          label: '受付中の勤務枠依頼',
-          sub: '登録された勤務枠依頼を確認してください',
-          count: requests.filter(r => r.status === 'submitted').length,
+          key: 'cases',
+          label: '緊急度の高い未充足勤務枠',
+          sub: '優先度が「緊急」「高」の未充足勤務枠があります',
+          count: urgentUnfilled,
           icon: '!',
+          tone: 'urgent',
+        },
+        {
+          key: 'inquiries',
+          label: '新規依頼が受付中です',
+          sub: 'Necoが内容を確認しています',
+          count: requests.filter(r => r.status === 'submitted').length,
+          icon: 'i',
           tone: 'info',
         },
         {
           key: 'candidates',
-          label: '配置候補の承認待ち',
+          label: '提案候補の承認が必要です',
           sub: 'Necoから医療者候補が提案されています',
           count: proposals.filter(p => p.status === 'proposed_to_facility').length,
           icon: '?',
@@ -2284,7 +2315,7 @@
         },
         {
           key: 'assignments',
-          label: '完了確定待ち',
+          label: '勤務完了確認が必要です',
           sub: '医療者から稼働完了報告が届いています',
           count: assignments.filter(a => a.status === 'completion_reported').length,
           icon: '+',
@@ -2292,11 +2323,11 @@
         },
         {
           key: 'invoices',
-          label: '支払期日超過',
-          sub: '請求書の支払いが遅延しています',
-          count: invoices.filter(i => i.status === 'overdue').length,
+          label: '請求確認が必要です',
+          sub: '請求書の支払いが遅延または未確認です',
+          count: invoices.filter(i => i.status === 'overdue' || i.status === 'sent').length,
           icon: '$',
-          tone: 'urgent',
+          tone: 'warn',
         },
       ];
 
@@ -2442,14 +2473,33 @@
           if (el) el.textContent = txt;
         };
 
-        setKpiValue('kpiActive',  totalActive,        '件');
-        setKpiSub  ('kpiActiveSub',  `受付${v2pending}・提案${v2proposing}・進行${v2active}`);
-        setKpiValue('kpiPending', proposedToFacility, '名');
-        setKpiSub  ('kpiPendingSub', proposals.length ? `要対応の提案` : `提案データを取得中`);
-        setKpiValue('kpiSoon',    inFourteenDays,     '件');
-        setKpiSub  ('kpiSoonSub',    `14日以内に開始予定`);
-        setKpiValue('kpiUrgent',  v2urgent,           '件');
-        setKpiSub  ('kpiUrgentSub',  `priority=urgent`);
+        // 6つのKPIカードを施設管理者が「次に何をすべきか」分かるように再計算
+        const unfilledOpen = requests.filter(r => ['submitted','under_review','accepted','proposing','partially_assigned'].includes(r.status)).length;
+        const proposingCount = requests.filter(r => r.status === 'proposing' || r.status === 'partially_assigned').length;
+        const facilityApprovalNeeded = proposedToFacility;
+        const now = Date.now();
+        const oneWeek = 7 * 86400000;
+        const thisWeekConfirmed = assignments.filter(a => {
+          if (!['confirmed','checked_in','checked_out'].includes(a.status)) return false;
+          if (!a.scheduled_start_at) return false;
+          const t = new Date(a.scheduled_start_at).getTime();
+          return t >= now - oneWeek && t <= now + oneWeek;
+        }).length;
+        const completionPending = assignments.filter(a => a.status === 'completion_reported').length;
+        const invoiceAttention = invoices.filter(i => i.status === 'overdue' || i.status === 'sent').length;
+
+        setKpiValue('kpiActive',     unfilledOpen,           '件');
+        setKpiSub  ('kpiActiveSub',  v2urgent ? `うち緊急 ${v2urgent}件` : '充足調整中の勤務枠');
+        setKpiValue('kpiPending',    proposingCount,         '件');
+        setKpiSub  ('kpiPendingSub', proposingCount ? 'Necoが医療者を打診中' : '現在打診中の勤務枠はありません');
+        setKpiValue('kpiSoon',       facilityApprovalNeeded, '件');
+        setKpiSub  ('kpiSoonSub',    facilityApprovalNeeded ? '配置候補の承認をお願いします' : '承認待ちはありません');
+        setKpiValue('kpiUrgent',     thisWeekConfirmed,      '件');
+        setKpiSub  ('kpiUrgentSub',  thisWeekConfirmed ? '今週開始予定の確定勤務' : '今週の確定勤務はありません');
+        setKpiValue('kpiCompletion', completionPending,      '件');
+        setKpiSub  ('kpiCompletionSub', completionPending ? '稼働完了の確認をお願いします' : '完了確認待ちはありません');
+        setKpiValue('kpiInvoices',   invoiceAttention,       '件');
+        setKpiSub  ('kpiInvoicesSub', invoiceAttention ? '未確認・期日超過の請求があります' : '請求は最新状態です');
 
         // 通知センター（対応が必要な事項）
         renderV2Notices({ requests, proposals, assignments, invoices });
@@ -2470,11 +2520,22 @@
     /* ─── v2 リアル案件テーブル（Phase B） ─────────
        /api/v2/requests から自組織の依頼を取得し、v2スキーマで表示。
        既存の CASES（モック）テーブルとは別領域に並行表示する。 */
+    // 施設管理者向けの「次に何が起きているか」が伝わるラベル
     const V2_STATUS_LABEL = {
-      draft:'下書き', submitted:'受付', under_review:'確認中', accepted:'受諾',
-      rejected:'差戻し', proposing:'提案中', partially_assigned:'一部充足',
-      fully_assigned:'充足完了', in_progress:'進行中', completion_pending:'完了申請',
-      confirmed:'完了確定', invoiced:'請求済', paid:'入金済', cancelled:'キャンセル',
+      draft:               '下書き',
+      submitted:           'Neco確認待ち',
+      under_review:        '要件確認中',
+      accepted:            '候補者選定前',
+      rejected:            '差戻し',
+      proposing:           '候補者提案中',
+      partially_assigned:  '一部充足',
+      fully_assigned:      '充足完了',
+      in_progress:         '稼働中',
+      completion_pending:  '完了確認待ち',
+      confirmed:           '完了確定',
+      invoiced:            '請求済み',
+      paid:                '支払済み',
+      cancelled:           'キャンセル',
     };
     const V2_PRIORITY_LABEL = { urgent:'緊急', high:'高', medium:'中', low:'低' };
     const V2_PROFESSION_LABEL = {
@@ -3868,10 +3929,12 @@
         const subEl = document.getElementById(id + 'Sub');
         if (subEl) subEl.textContent = sub || '';
       };
-      setKpi('kpiActive',  '—<em>件</em>', '読み込み中…');
-      setKpi('kpiPending', '—<em>名</em>', '読み込み中…');
-      setKpi('kpiSoon',    '—<em>件</em>', '読み込み中…');
-      setKpi('kpiUrgent',  '—<em>件</em>', '読み込み中…');
+      setKpi('kpiActive',     '—<em>件</em>', '読み込み中…');
+      setKpi('kpiPending',    '—<em>件</em>', '読み込み中…');
+      setKpi('kpiSoon',       '—<em>件</em>', '読み込み中…');
+      setKpi('kpiUrgent',     '—<em>件</em>', '読み込み中…');
+      setKpi('kpiCompletion', '—<em>件</em>', '読み込み中…');
+      setKpi('kpiInvoices',   '—<em>件</em>', '読み込み中…');
     }
 
     /* ─── タスク ────────────────────────────────── */

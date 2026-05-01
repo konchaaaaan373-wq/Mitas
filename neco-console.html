@@ -256,6 +256,28 @@
       color: var(--gray-700);
       font-weight: 600;
     }
+    .request-card__facility {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+    .request-card__footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--gray-200);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .request-card__elapsed {
+      color: var(--gray-500);
+    }
+    .request-card__next {
+      color: var(--teal);
+      font-weight: 600;
+    }
 
     /* ─── バッジ ─── */
     .badge {
@@ -471,6 +493,139 @@
     }
     .timeline__label { color: var(--gray-500); }
     .timeline__value { color: var(--gray-700); font-variant-numeric: tabular-nums; }
+
+    /* ─── 要件確認チェックリスト ─── */
+    .checklist {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: var(--gray-50);
+      padding: 14px 16px;
+    }
+    .checklist__head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .checklist__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep);
+    }
+    .checklist__overall {
+      display: inline-block; padding: 2px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 700;
+    }
+    .checklist__overall--ok    { background: rgba(16,185,129,0.12); color: var(--green); }
+    .checklist__overall--warn  { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .checklist__overall--alert { background: rgba(220,38,38,0.10); color: var(--red); }
+    .checklist__grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 6px 12px;
+    }
+    .checklist__row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 10px; background: var(--white);
+      border: 1px solid var(--gray-200); border-radius: 6px;
+      font-size: 12px;
+    }
+    .checklist__row--ok    { border-left: 3px solid var(--green); }
+    .checklist__row--warn  { border-left: 3px solid var(--amber); }
+    .checklist__row--alert { border-left: 3px solid var(--red); }
+    .checklist__key { color: var(--gray-700); }
+    .checklist__status {
+      font-size: 11px; font-weight: 700; color: var(--gray-500);
+    }
+    .checklist__row--ok    .checklist__status { color: var(--green); }
+    .checklist__row--warn  .checklist__status { color: var(--amber); }
+    .checklist__row--alert .checklist__status { color: var(--red); }
+
+    /* ─── 次アクションパネル ─── */
+    .next-action {
+      border: 1px solid rgba(14,165,233,0.20);
+      background: rgba(14,165,233,0.05);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+    .next-action__head {
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .next-action__label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--teal); text-transform: uppercase;
+    }
+    .next-action__main {
+      font-size: 16px; font-weight: 700; color: var(--navy-deep);
+    }
+    .next-action__reason {
+      font-size: 12px; color: var(--gray-700); line-height: 1.7;
+    }
+    .next-action__subs {
+      margin: 8px 0 0; padding-left: 20px;
+      font-size: 12px; color: var(--gray-700); line-height: 1.9;
+    }
+
+    /* ─── AI配置支援パネル ─── */
+    .ai-support {
+      border: 1px dashed var(--gray-300);
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .ai-support__head { margin-bottom: 6px; }
+    .ai-support__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep);
+    }
+    .ai-support__pill {
+      display: inline-block; margin-left: 8px;
+      padding: 2px 8px; border-radius: 100px;
+      background: rgba(100,116,139,0.12); color: var(--gray-500);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    }
+    .ai-support__intro {
+      font-size: 12px; color: var(--gray-700); line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .ai-support__block {
+      margin-top: 10px; padding: 10px 12px;
+      background: var(--white); border: 1px solid var(--gray-200); border-radius: 6px;
+    }
+    .ai-support__block-label {
+      font-size: 11px; font-weight: 700; color: var(--gray-500);
+      letter-spacing: 0.04em; margin-bottom: 4px; text-transform: uppercase;
+    }
+    .ai-support__block-body {
+      font-size: 12px; color: var(--gray-900); line-height: 1.8;
+      white-space: pre-wrap;
+    }
+    .ai-support__draft-actions {
+      margin-top: 6px; display: flex; gap: 8px;
+    }
+    .ai-support__draft-copy {
+      padding: 4px 10px; font-size: 11px; cursor: pointer;
+      background: var(--white); color: var(--teal);
+      border: 1px solid rgba(14,165,233,0.25); border-radius: 4px;
+    }
+    .ai-support__draft-copy:hover {
+      background: rgba(14,165,233,0.06);
+    }
+    .ai-support__note {
+      margin-top: 12px;
+      font-size: 11px; color: var(--gray-500); line-height: 1.7;
+    }
+
+    /* ─── 候補者推薦理由・リスク ─── */
+    .candidate-reasons {
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .candidate-reasons__row {
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .candidate-reasons__icon {
+      width: 14px; flex-shrink: 0;
+      font-weight: 700;
+    }
+    .candidate-reasons__icon--reason { color: var(--green); }
+    .candidate-reasons__icon--risk   { color: var(--amber); }
 
     /* ─── 候補者抽出・既存提案セクション ─── */
     .sub-panel__head {
@@ -832,19 +987,19 @@
 
     <div class="tabs" role="tablist">
       <button class="tab is-active" role="tab" data-tab="new">
-        <span>新規</span>
+        <span>新規依頼</span>
         <span class="tab__count" id="count-new">0</span>
       </button>
       <button class="tab" role="tab" data-tab="in_review">
-        <span>要件確認中</span>
+        <span>要件確認</span>
         <span class="tab__count" id="count-in_review">0</span>
       </button>
       <button class="tab" role="tab" data-tab="proposing">
-        <span>提案中</span>
+        <span>配置調整中</span>
         <span class="tab__count" id="count-proposing">0</span>
       </button>
       <button class="tab" role="tab" data-tab="done">
-        <span>完了</span>
+        <span>稼働・完了</span>
         <span class="tab__count" id="count-done">0</span>
       </button>
     </div>
@@ -1432,6 +1587,9 @@
       </div>
 
       <div class="detail__body">
+        ${renderRequirementChecklist(r)}
+        ${renderNextActionPanel(r)}
+
         ${r.description ? `
           <div class="detail-section">
             <div class="detail-section__title">概要</div>
@@ -1541,21 +1699,18 @@
           </div>
         </div>
 
-        <!-- ─── AI配置支援（将来実装予定） ─── -->
-        <div class="detail-section" style="border: 1px dashed var(--gray-300); border-radius: var(--radius); padding: 14px 16px; background: var(--gray-50);">
-          <div class="detail-section__title" style="margin-top: 0;">AI配置支援（将来実装予定）</div>
-          <ul style="margin: 0; padding-left: 18px; color: var(--gray-700); font-size: 13px; line-height: 1.9;">
-            <li>勤務枠の要件整理</li>
-            <li>候補者推薦理由の生成</li>
-            <li>リスクフラグ表示</li>
-            <li>施設向け提案文の作成</li>
-            <li>医療者向け打診文の作成</li>
-            <li>月次需給レポートの作成</li>
-          </ul>
-          <div style="margin-top: 8px; font-size: 11px; color: var(--gray-500);">
-            AI配置支援は、Neco担当者と施設管理者の意思決定を補助する機能です。最終判断は人間が行います。
+        <!-- ─── 内部メモ・対応履歴（プレースホルダ） ─── -->
+        <div class="detail-section">
+          <div class="sub-panel__head">
+            <div class="detail-section__title" style="margin: 0;">内部メモ・対応履歴</div>
+          </div>
+          <div style="padding: 10px 12px; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius); color: var(--gray-700); font-size: 12px; line-height: 1.8;">
+            内部メモ機能は今後のアップデートで追加予定です。現時点ではタイムライン・監査ログ（activity_log）に記録された操作履歴を上記でご確認ください。
           </div>
         </div>
+
+        <!-- ─── AI配置支援（将来実装予定） ─── -->
+        ${renderAiSupportPanel(r)}
       </div>
     `;
 
@@ -1936,6 +2091,9 @@
     const region = [c.current_prefecture, c.current_city].filter(Boolean).join(' ') || '—';
     const specialty = c.primary_specialty || '—';
     const score = c._score;
+    const reasons = buildCandidateRecommendationReason(c, state.selectedRequest, score);
+    const risks   = buildCandidateRiskNotes(c, state.selectedRequest);
+    const offerOk = c.is_available_for_offers !== false;
     return `
       <div class="candidate-card">
         <div class="candidate-card__main">
@@ -1943,22 +2101,90 @@
             <span class="candidate-card__score badge ${scoreClass(score)}">${score}</span>
             ${escapeHtml(c.full_name || '(無名)')}
             ${proposed ? '<span class="badge badge--low">提案済み</span>' : ''}
+            ${!offerOk ? '<span class="badge badge--low">案内停止中</span>' : ''}
           </div>
           <div class="candidate-card__meta">
-            <span><strong>${escapeHtml(specialty)}</strong></span>
+            <span><strong>${escapeHtml(professionLabel(c.profession_type))}</strong></span>
+            <span>${escapeHtml(specialty)}</span>
             <span>${escapeHtml(exp)}</span>
             <span>${escapeHtml(region)}</span>
+          </div>
+          <div class="candidate-reasons">
+            ${reasons.map(r => `
+              <div class="candidate-reasons__row">
+                <span class="candidate-reasons__icon candidate-reasons__icon--reason">＋</span>
+                <span>${escapeHtml(r)}</span>
+              </div>`).join('')}
+            ${risks.map(r => `
+              <div class="candidate-reasons__row">
+                <span class="candidate-reasons__icon candidate-reasons__icon--risk">!</span>
+                <span>${escapeHtml(r)}</span>
+              </div>`).join('')}
           </div>
         </div>
         <div class="candidate-card__action">
           <button class="action-btn ${proposed ? 'action-btn--ghost' : 'action-btn--primary'}"
                   data-worker-id="${escapeHtml(c.id)}"
                   ${proposed ? 'disabled' : ''}>
-            ${proposed ? '提案済み' : '提案する'}
+            ${proposed ? '提案済み' : '施設へ提案'}
           </button>
         </div>
       </div>
     `;
+  }
+
+  // 推薦理由をルールベースで生成
+  function buildCandidateRecommendationReason(worker, request, score) {
+    const reasons = [];
+    if (request && worker.profession_type === request.profession_type) {
+      reasons.push('必要職種と一致しています');
+    }
+    if (request && worker.primary_specialty && request.specialty
+        && (worker.primary_specialty === request.specialty
+            || (request.specialty || '').includes(worker.primary_specialty))) {
+      reasons.push('専門領域が勤務枠に近い可能性があります');
+    } else if (worker.primary_specialty) {
+      reasons.push(`専門領域：${worker.primary_specialty}`);
+    }
+    if (worker.years_experience != null && worker.years_experience >= 5) {
+      reasons.push(`経験年数が十分です（${worker.years_experience}年）`);
+    }
+    if (worker.is_available_for_offers !== false) {
+      reasons.push('勤務機会の案内を受け付けています');
+    }
+    if (Array.isArray(worker.desired_prefectures) && worker.desired_prefectures.length) {
+      reasons.push(`希望地域：${worker.desired_prefectures.join('、')}`);
+    }
+    if (typeof score === 'number' && score >= 80) {
+      reasons.push('総合マッチスコアが高いです');
+    }
+    return reasons;
+  }
+  // 注意点（リスクフラグ）を生成
+  function buildCandidateRiskNotes(worker, request) {
+    const risks = [];
+    if (worker.is_available_for_offers === false) {
+      risks.push('現在「勤務機会の案内を受け取る」設定がオフです');
+    }
+    if (worker.years_experience != null && worker.years_experience < 3) {
+      risks.push(`経験年数が少なめです（${worker.years_experience}年）`);
+    }
+    if (worker.years_experience == null) {
+      risks.push('経験年数が未登録です');
+    }
+    if (request && Array.isArray(request.required_licenses) && request.required_licenses.length) {
+      risks.push('必要資格との一致確認が必要です');
+    }
+    if (!worker.primary_specialty) {
+      risks.push('専門領域が未登録です');
+    }
+    if (request && request.shift_type === 'night_duty' && worker.can_work_night === false) {
+      risks.push('夜勤対応が「不可」と登録されています');
+    }
+    if (!worker._credentialsVerified && worker._credentialsVerified !== undefined) {
+      risks.push('資格確認が未完了の可能性があります');
+    }
+    return risks;
   }
 
   // ─── 確定アサインの取得・描画（v0.2） ───
@@ -2580,6 +2806,12 @@
     const profession = professionLabel(r.profession_type);
     const headcount = r.headcount || 1;
     const startAt = r.start_at ? formatDate(r.start_at) : '—';
+    const shift = r.shift_type ? (SHIFT_LABEL[r.shift_type] || r.shift_type) : '';
+    const facility = r.organization_name || '';
+    const elapsedDays = r.created_at
+      ? Math.max(0, Math.floor((Date.now() - new Date(r.created_at).getTime()) / 86400000))
+      : null;
+    const nextAction = getRequestNextAction(r);
 
     return `
       <article class="request-card" data-id="${escapeHtml(r.id)}" role="listitem">
@@ -2588,14 +2820,258 @@
           <span class="badge ${priorityClass}">${PRIORITY_LABEL[priority] || priority}</span>
         </div>
         <div class="request-card__title">${escapeHtml(r.title || '(タイトルなし)')}</div>
+        ${facility ? `<div class="request-card__facility">${escapeHtml(facility)}</div>` : ''}
         <div class="request-card__meta">
           <span class="request-card__meta-item"><strong>${escapeHtml(profession)}</strong></span>
           <span class="request-card__meta-item">${headcount}名</span>
+          ${shift ? `<span class="request-card__meta-item">${escapeHtml(shift)}</span>` : ''}
           <span class="request-card__meta-item">${escapeHtml(startAt)}</span>
           <span class="badge ${statusClass}">${STATUS_LABEL[r.status] || r.status}</span>
         </div>
+        <div class="request-card__footer">
+          ${elapsedDays != null ? `<span class="request-card__elapsed">受付から ${elapsedDays} 日</span>` : ''}
+          <span class="request-card__next">次アクション：${escapeHtml(nextAction)}</span>
+        </div>
       </article>
     `;
+  }
+
+  // ─── AI配置支援パネル（将来実装予定／ルールベースのドラフト表示）───
+  function renderAiSupportPanel(r) {
+    const { items } = buildRequirementChecklist(r);
+    const missing = items.filter(i => i.status !== '十分').map(i => i.key);
+    const profession = professionLabel(r.profession_type);
+    const facility = r.organization_name || '貴院';
+    const shift = r.shift_type ? (SHIFT_LABEL[r.shift_type] || r.shift_type) : '勤務';
+    const facilityDraft = `${facility} ${profession} ${shift}枠について、条件に合致する医療者候補を確認しています。資格・経験・勤務可能性を踏まえ、候補者を順次ご提案いたします。`;
+    const workerDraft = `先生のご経験・ご希望条件に近い勤務枠についてご相談です。勤務内容、日時、報酬、バックアップ体制をご確認のうえ、ご関心があればお知らせください。`;
+    const policy = `この勤務枠では、必要職種、専門領域、勤務可能性、経験年数、資格確認状況、報酬条件を重視して候補者を確認します。`;
+    const riskLines = [];
+    if (r.priority === 'urgent' || r.priority === 'high') riskLines.push('優先度が高いため、候補者の確保を急ぐ必要があります。');
+    if (missing.length) riskLines.push(`チェックリストで確認が必要な項目があります（${missing.join('、')}）。`);
+    if (r.shift_type === 'night_duty' || r.shift_type === 'on_call') riskLines.push('夜勤・オンコール枠のため、対応可否の確認が必須です。');
+    if (!Array.isArray(r.required_licenses) || r.required_licenses.length === 0) riskLines.push('必要資格が未指定です。施設に確認することを推奨します。');
+    const subActions = computeNextAction(r).subs;
+
+    const block = (label, body, copyId) => `
+      <div class="ai-support__block">
+        <div class="ai-support__block-label">${escapeHtml(label)}</div>
+        <div class="ai-support__block-body" id="${copyId || ''}">${escapeHtml(body)}</div>
+        ${copyId ? `
+          <div class="ai-support__draft-actions">
+            <button class="ai-support__draft-copy" type="button" data-copy="${copyId}">本文をコピー</button>
+          </div>` : ''}
+      </div>`;
+
+    return `
+      <div class="detail-section">
+        <div class="ai-support">
+          <div class="ai-support__head">
+            <span class="ai-support__title">AI配置支援</span>
+            <span class="ai-support__pill">将来実装予定</span>
+          </div>
+          <p class="ai-support__intro">
+            将来的には、AIが勤務枠の要件整理、候補者推薦補助、リスク検知、提案文作成、需給レポート作成を支援します。最終判断はNeco担当者と施設管理者が行います。
+          </p>
+
+          ${block('推薦方針', policy)}
+          ${block('不足している確認項目', missing.length ? missing.join('、') : '主要な確認項目はそろっています。')}
+          ${block('リスクフラグ', riskLines.length ? riskLines.join('\n') : '現時点で目立ったリスクはありません。')}
+          ${block('施設向け提案文ドラフト', facilityDraft, 'aiDraftFacility')}
+          ${block('医療者向け打診文ドラフト', workerDraft, 'aiDraftWorker')}
+          ${block('次アクション候補', subActions.length ? subActions.map((s, i) => `${i + 1}. ${s}`).join('\n') : '—')}
+
+          <div class="ai-support__note">
+            ここに表示される内容は現時点ではルールベースのプレビューです。AI配置支援機能は、要件整理・候補者推薦補助・リスク検知・提案文作成・需給レポート作成を補助する目的で今後実装されます。最終判断はNeco担当者および施設管理者が行います。
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // AI支援パネルの「本文をコピー」ボタンを document レベルで一度だけバインド
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.ai-support__draft-copy');
+    if (!btn) return;
+    const id = btn.dataset.copy;
+    const el = id && document.getElementById(id);
+    if (!el || !navigator.clipboard) return;
+    navigator.clipboard.writeText(el.textContent || '').then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'コピーしました';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    }).catch(() => {});
+  });
+
+  // ─── 要件確認チェックリスト ───
+  function buildRequirementChecklist(r) {
+    const isFilled = (v) => v != null && v !== '' && !(Array.isArray(v) && v.length === 0);
+    const items = [
+      { key: '必要職種',         status: isFilled(r.profession_type) ? '十分' : '不足' },
+      { key: '勤務日時',         status: isFilled(r.start_at) ? '十分' : '不足' },
+      { key: '必要人数',         status: (r.headcount && r.headcount >= 1) ? '十分' : '不足' },
+      { key: '勤務種別',         status: isFilled(r.shift_type) ? '十分' : '要確認' },
+      { key: '報酬条件',         status: (isFilled(r.hourly_rate_min) || isFilled(r.hourly_rate_max)) ? '十分' : '要確認' },
+      { key: '必要資格',         status: (Array.isArray(r.required_licenses) && r.required_licenses.length) ? '十分' : '要確認' },
+      { key: '必要スキル',       status: (Array.isArray(r.required_skills) && r.required_skills.length) ? '十分' : '要確認' },
+      { key: '勤務内容・注意事項', status: (typeof r.notes === 'string' && r.notes.trim().length > 20) ? '十分' : '要確認' },
+      { key: '施設情報',         status: isFilled(r.organization_id) ? '十分' : '要確認' },
+      { key: '優先度',           status: isFilled(r.priority) ? '十分' : '要確認' },
+    ];
+    const insufficient = items.filter(i => i.status === '不足').length;
+    const needsReview  = items.filter(i => i.status === '要確認').length;
+    let overall;
+    if (insufficient > 0)      overall = '情報不足';
+    else if (needsReview > 0)  overall = '一部確認が必要';
+    else                       overall = '要件十分';
+    return { items, overall };
+  }
+  function renderRequirementChecklist(r) {
+    const { items, overall } = buildRequirementChecklist(r);
+    const tone = overall === '要件十分' ? 'ok' : (overall === '情報不足' ? 'alert' : 'warn');
+    return `
+      <div class="detail-section">
+        <div class="checklist">
+          <div class="checklist__head">
+            <div class="checklist__title">要件確認チェックリスト</div>
+            <span class="checklist__overall checklist__overall--${tone}">${overall}</span>
+          </div>
+          <div class="checklist__grid">
+            ${items.map(i => `
+              <div class="checklist__row checklist__row--${i.status === '十分' ? 'ok' : (i.status === '不足' ? 'alert' : 'warn')}">
+                <span class="checklist__key">${escapeHtml(i.key)}</span>
+                <span class="checklist__status">${escapeHtml(i.status)}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ─── 次アクションパネル ───
+  function renderNextActionPanel(r) {
+    const { main, reason, subs } = computeNextAction(r);
+    return `
+      <div class="detail-section">
+        <div class="next-action">
+          <div class="next-action__head">
+            <div class="next-action__label">次アクション</div>
+            <div class="next-action__main">${escapeHtml(main)}</div>
+          </div>
+          <div class="next-action__reason">${escapeHtml(reason)}</div>
+          ${subs.length ? `
+            <ul class="next-action__subs">
+              ${subs.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+            </ul>` : ''}
+        </div>
+      </div>`;
+  }
+  function computeNextAction(r) {
+    // 詳細パネルに紐づく現状の prop / assignment は state.selected* に格納されている
+    const proposals   = (state && state.selectedProposals)   || [];
+    const assignments = (state && state.selectedAssignments) || [];
+    const { overall } = buildRequirementChecklist(r);
+    switch (r.status) {
+      case 'submitted':
+        return {
+          main: '要件確認',
+          reason: '施設から登録された勤務枠依頼を確認し、Necoとして受諾するか差戻すか判断します。',
+          subs: ['チェックリストで不足項目を確認', '不足があれば施設へ連絡', '受諾後に候補者抽出へ進める'],
+        };
+      case 'under_review':
+        return {
+          main: '受諾または差戻し',
+          reason: '要件確認を進めています。' + (overall === '情報不足' ? '情報不足のため施設へ確認が必要です。' : '内容を最終確認してください。'),
+          subs: ['不足項目を施設に確認', '報酬・条件を整理', '受諾／差戻しを判断'],
+        };
+      case 'accepted':
+        return {
+          main: '候補者抽出',
+          reason: '勤務枠は受諾済みですが、まだ施設への提案がありません。',
+          subs: ['医療者候補ランキングを確認', '要件に合う医療者へ打診', '施設向け提案文を準備'],
+        };
+      case 'proposing': {
+        const hasProposals = proposals.length > 0;
+        if (!hasProposals) {
+          return {
+            main: '医療者へ打診',
+            reason: '提案中ステータスですが、まだ提案が登録されていません。',
+            subs: ['候補医療者を選定', '打診メッセージを準備', '提案を作成'],
+          };
+        }
+        return {
+          main: '施設提案状況を確認',
+          reason: '医療者への打診・施設への提案が進行中です。',
+          subs: ['医療者承諾／辞退を確認', '施設承認の進捗を確認', '残り枠の候補を継続確保'],
+        };
+      }
+      case 'partially_assigned':
+        return {
+          main: '残り枠の候補者選定',
+          reason: '一部の枠は充足しましたが、まだ未充足の枠があります。',
+          subs: ['残り枠の候補者を確認', '追加打診を実施', '進捗を施設に共有'],
+        };
+      case 'fully_assigned':
+        return {
+          main: '勤務開始待ち',
+          reason: '充足完了です。勤務開始日までの最終確認を行ってください。',
+          subs: ['医療者へリマインド', '施設・医療者の連絡先確認', '勤務当日の体制確認'],
+        };
+      case 'in_progress':
+        return {
+          main: '稼働状況確認',
+          reason: '稼働中です。チェックイン状況・現場の状況を確認してください。',
+          subs: ['チェックイン状況を確認', 'work_logsを確認', '異常時は施設へ連絡'],
+        };
+      case 'completion_pending':
+        return {
+          main: '完了確認',
+          reason: '医療者から完了報告が届いています。施設側の完了確認を促進してください。',
+          subs: ['施設に完了確認を依頼', '医療者の勤務メモを確認', '完了確定後に請求作成'],
+        };
+      case 'confirmed':
+        return {
+          main: '請求作成',
+          reason: '勤務完了が確定しました。請求書を作成してください。',
+          subs: ['請求モーダルから明細を確認', '消費税・支払期日を設定', '請求書を発行'],
+        };
+      case 'invoiced':
+        return {
+          main: '入金確認',
+          reason: '請求書発行済みです。施設からの入金を確認してください。',
+          subs: ['支払期日を確認', '入金状況を確認', '入金確認後に支払済みへ'],
+        };
+      case 'paid':
+        return {
+          main: '完了',
+          reason: 'すべての処理が完了しています。',
+          subs: ['実績データに反映済み'],
+        };
+      case 'cancelled':
+        return { main: '終了', reason: 'この勤務枠はキャンセルされています。', subs: [] };
+      case 'rejected':
+        return { main: '終了（差戻し）', reason: 'この勤務枠は差戻しになりました。', subs: [] };
+      default:
+        return { main: '—', reason: '', subs: [] };
+    }
+  }
+
+  // 勤務枠の次アクションをルールベースで導出（一覧用：requestのみ参照）
+  function getRequestNextAction(r) {
+    switch (r.status) {
+      case 'submitted':           return '要件確認';
+      case 'under_review':        return '受諾または差戻し';
+      case 'accepted':            return '候補者抽出';
+      case 'proposing':           return '医療者へ打診／施設提案状況確認';
+      case 'partially_assigned':  return '残り枠の候補者選定';
+      case 'fully_assigned':      return '勤務開始待ち';
+      case 'in_progress':         return '稼働状況確認';
+      case 'completion_pending':  return '完了確認';
+      case 'confirmed':           return '請求作成';
+      case 'invoiced':            return '入金確認';
+      case 'paid':                return '完了';
+      case 'cancelled':           return '終了';
+      case 'rejected':            return '終了（差戻し）';
+      default:                    return '—';
+    }
   }
 
   // ─── ヘルパー ───
