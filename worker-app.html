@@ -1353,6 +1353,26 @@
       currentToken = data.session.access_token;
       currentUser = data.session.user;
       document.getElementById('userEmail').textContent = currentUser.email || '';
+
+      // ロールガード：worker 以外は本来の画面へ自動遷移
+      try {
+        const { data: roleRow } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+        const role = roleRow && roleRow.role;
+        const ROLE_HOME = {
+          worker: '/worker-app.html',
+          facility_admin: '/dashboard.html',
+          neco_admin: '/neco-console.html',
+          alliance_admin: '/alliance-dashboard.html',
+        };
+        if (role && role !== 'worker') {
+          location.replace(ROLE_HOME[role] || '/dashboard.html');
+          return;
+        }
+      } catch (_) { /* ロール取得失敗時は何もしない（API側でRLS拒否されるだけ） */ }
     } else {
       // モック表示
       document.getElementById('userEmail').textContent = 'mock@example.com';

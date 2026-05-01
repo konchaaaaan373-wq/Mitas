@@ -33,11 +33,43 @@ function safeRedirectPath(path, fallback = '/dashboard.html') {
   return path
 }
 
-/** ログイン：成功時は redirectTo（または /dashboard.html）へ遷移 */
+/**
+ * user_roles.role からデフォルト遷移先を返す
+ * 未知のロール／取得失敗時は /dashboard.html にフォールバック
+ */
+const ROLE_HOME = {
+  worker:         '/worker-app.html',
+  facility_admin: '/dashboard.html',
+  neco_admin:     '/neco-console.html',
+  alliance_admin: '/alliance-dashboard.html',
+}
+async function fetchUserRole() {
+  try {
+    const { data: sess } = await db.auth.getSession()
+    const userId = sess?.session?.user?.id
+    if (!userId) return null
+    const { data, error } = await db
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .maybeSingle()
+    if (error || !data) return null
+    return data.role || null
+  } catch (_) { return null }
+}
+async function defaultPathForRole() {
+  const role = await fetchUserRole()
+  return ROLE_HOME[role] || '/dashboard.html'
+}
+
+/** ログイン：成功時は redirectTo（または role に応じた既定画面）へ遷移 */
 async function hospitalLogin(email, password, redirectTo) {
   const { error } = await db.auth.signInWithPassword({ email, password })
   if (error) throw new Error(toJa(error.message))
-  location.href = safeRedirectPath(redirectTo)
+  // redirectTo が明示されていればそれを優先（next= パラメータ等）
+  // 未指定／無効な場合は user_roles.role から既定画面を選ぶ
+  const roleHome = await defaultPathForRole()
+  location.href = safeRedirectPath(redirectTo, roleHome)
 }
 
 /** セッション取得（dashboard.html の認証確認に使用） */
