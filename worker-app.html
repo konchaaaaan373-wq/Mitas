@@ -200,6 +200,33 @@
       font-size: 13px; color: var(--gray-900, #0f172a); line-height: 1.7;
       white-space: pre-wrap;
     }
+    .pre-shift {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: rgba(56,189,248,0.05);
+      border: 1px solid rgba(56,189,248,0.20);
+      border-radius: 10px;
+    }
+    .pre-shift__head {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      color: #0369a1; margin-bottom: 8px; text-transform: uppercase;
+    }
+    .pre-shift__list { display: grid; gap: 8px; }
+    .pre-shift__item {
+      display: grid; grid-template-columns: 110px 1fr;
+      gap: 8px; font-size: 12px;
+    }
+    .pre-shift__key {
+      color: #475569; font-weight: 600;
+    }
+    .pre-shift__val {
+      color: #0f172a; line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 480px) {
+      .pre-shift__item { grid-template-columns: 1fr; gap: 2px; }
+      .pre-shift__key { font-size: 11px; }
+    }
     .neco-support {
       margin-top: 12px;
       padding: 8px 12px;
@@ -1454,6 +1481,9 @@
     const facilityName = a.staffing_requests?.organization_name || a.organization_name || '施設情報はNeco担当者にご確認ください';
     const shiftType = a.staffing_requests?.shift_type ? shiftTypeLabel(a.staffing_requests.shift_type) : '';
     const workNote = a.staffing_requests?.notes || '';
+    // 構造化された notes から、勤務前確認用にセクションを抽出
+    const sections = parseStructuredNotes(workNote);
+    const preShift = renderPreShiftBlock(sections);
 
     root.innerHTML = `
       <article class="card" aria-label="次の勤務">
@@ -1493,15 +1523,11 @@
               <div class="card__meta-value">${escapeHtml(a.assignment_number || '-')}</div>
             </div>
           </div>
-          ${workNote ? `
-            <div class="work-note">
-              <div class="work-note__label">業務内容・注意事項</div>
-              <div class="work-note__body">${escapeHtml(workNote)}</div>
-            </div>` : ''}
+          ${preShift}
           ${renderActionButton(a)}
           <div class="neco-support">
             <span class="neco-support__dot"></span>
-            ご不明な点はNeco担当者がサポートします
+            ご不明な点はNeco担当者がサポートします（連絡先：Neco担当者よりご案内）
           </div>
           <div id="gpsInfo" class="gps-info"><span class="gps-info__dot"></span>位置情報を取得中…</div>
         </div>
@@ -2429,6 +2455,48 @@
   function formatTime(d) {
     return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
+  // 構造化された notes（【見出し】本文）を section オブジェクトに分解する。
+  // 構造化されていない場合は { '勤務内容・注意事項': notes全文 } を返す。
+  function parseStructuredNotes(notes) {
+    if (!notes || typeof notes !== 'string') return null;
+    const re = /【([^】]+)】[\r\n]*/g;
+    const matches = [...notes.matchAll(re)];
+    if (matches.length === 0) {
+      return { '勤務内容・注意事項': notes.trim() };
+    }
+    const sections = {};
+    for (let i = 0; i < matches.length; i++) {
+      const key = matches[i][1].trim();
+      const start = matches[i].index + matches[i][0].length;
+      const end = i + 1 < matches.length ? matches[i + 1].index : notes.length;
+      const body = notes.slice(start, end).trim();
+      if (key && body) sections[key] = body;
+    }
+    return sections;
+  }
+
+  // 勤務前確認ブロックの描画。優先表示順を整え、未掲載項目はそのまま並べる。
+  function renderPreShiftBlock(sections) {
+    if (!sections) return '';
+    const preferred = ['想定患者数','業務範囲','バックアップ体制','電子カルテ','集合場所・持ち物','注意事項','勤務内容・注意事項'];
+    const keys = [
+      ...preferred.filter(k => sections[k]),
+      ...Object.keys(sections).filter(k => !preferred.includes(k)),
+    ];
+    if (!keys.length) return '';
+    return `
+      <div class="pre-shift">
+        <div class="pre-shift__head">勤務前確認</div>
+        <div class="pre-shift__list">
+          ${keys.map(k => `
+            <div class="pre-shift__item">
+              <div class="pre-shift__key">${escapeHtml(k)}</div>
+              <div class="pre-shift__val">${escapeHtml(sections[k])}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
   function statusLabel(s) {
     return ({
       confirmed: '勤務確定',

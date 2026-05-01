@@ -1567,6 +1567,11 @@
     .v2-cases-table tr.v2-row-action:hover td {
       background: rgba(91,33,182,0.08);
     }
+    .v2-asgn-actions {
+      margin-top: 6px;
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+
     /* 施設管理者向け：提案進捗のヒント・必要な対応バッジ */
     .v2-prop-action {
       display: inline-block; padding: 2px 8px;
@@ -3613,15 +3618,35 @@
        /api/v2/assignments から自組織のアサインを取得し、状態別に表示。
        facility_admin は completion_reported → completion_confirmed の
        状態遷移（PATCH）が可能。 */
+    const V2_SHIFT_LABEL = {
+      regular_shift: '通常勤務',
+      day_duty: '日勤',
+      night_duty: '夜勤・当直',
+      on_call: 'オンコール',
+      spot: '応援勤務',
+      long_term: '非常勤・継続勤務',
+    };
+    // 施設管理者向けの分かりやすいラベル
     const V2_ASGN_STATUS_LABEL = {
-      confirmed:            '確定',
+      confirmed:            '勤務確定',
       checked_in:           '勤務中',
       checked_out:          '勤務終了',
-      completion_reported:  '完了報告',
-      completion_confirmed: '完了確定',
-      disputed:             '紛争中',
+      completion_reported:  '完了報告済み',
+      completion_confirmed: '完了確定済み',
+      disputed:             '確認事項あり',
       cancelled:            'キャンセル',
-      no_show:              '無断欠勤',
+      no_show:              '未勤務',
+    };
+    // 施設側で必要な対応の文言
+    const V2_ASGN_FACILITY_HINT = {
+      confirmed:            '勤務開始待ち',
+      checked_in:           '勤務中',
+      checked_out:          '医療者の完了報告待ち',
+      completion_reported:  '完了確認が必要です',
+      completion_confirmed: '完了確定済み',
+      disputed:             '確認事項あり（Necoが調整中）',
+      cancelled:            'キャンセル済み',
+      no_show:              '未勤務として記録',
     };
     const V2_ASGN_ACTION_REQUIRED = ['completion_reported'];     // facility_admin の対応待ち
     const V2_ASGN_ACTIVE = ['confirmed','checked_in','checked_out','completion_reported','disputed'];
@@ -3733,19 +3758,26 @@
       };
       const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
 
+      const fmtTime = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)} ${('0'+d.getHours()).slice(-2)}:${('0'+d.getMinutes()).slice(-2)}`;
+      };
+
       body.innerHTML = `
         <table class="v2-cases-table">
           <thead>
             <tr>
               <th>アサイン番号</th>
               <th>医療者</th>
-              <th>依頼</th>
-              <th>予定開始</th>
-              <th>予定終了</th>
+              <th>勤務枠</th>
+              <th>勤務日時</th>
+              <th>勤務種別</th>
+              <th>稼働状況</th>
+              <th>進捗</th>
+              <th>必要な対応</th>
               <th class="num">時給</th>
-              <th class="num">総報酬</th>
-              <th>ステータス</th>
-              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -3755,6 +3787,8 @@
               const isAction = V2_ASGN_ACTION_REQUIRED.includes(a.status);
               const canConfirm = a.status === 'completion_reported';
               const canDispute = a.status === 'completion_reported' || a.status === 'checked_out';
+              const shift = sr.shift_type ? V2_SHIFT_LABEL[sr.shift_type] || sr.shift_type : '—';
+              const facilityHint = V2_ASGN_FACILITY_HINT[a.status] || '';
               return `
                 <tr class="${isAction ? 'v2-row-action' : ''}">
                   <td><span class="v2-cases-table__num">${esc(a.assignment_number || '')}</span></td>
@@ -3766,20 +3800,42 @@
                     <div>${esc(sr.title || '—')}</div>
                     <div style="font-size:11px;color:var(--gray-400,#94A3B8);">${esc(sr.request_number || '')}</div>
                   </td>
-                  <td>${esc(fmt(a.scheduled_start_at))}</td>
-                  <td>${esc(fmt(a.scheduled_end_at))}</td>
-                  <td class="num">${esc(yen(a.hourly_rate))}</td>
-                  <td class="num">${esc(yen(a.total_compensation))}</td>
-                  <td><span class="v2-asgn-st v2-asgn-st--${esc(a.status)}">${esc(V2_ASGN_STATUS_LABEL[a.status] || a.status)}</span></td>
                   <td>
-                    ${canConfirm
-                      ? `<button class="v2-banner__refresh v2-asgn-confirm" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;background:#10B981;color:#FFFFFF;border-color:#10B981;">完了確定</button>`
-                      : ''}
-                    ${canDispute
-                      ? `<button class="v2-banner__refresh v2-asgn-dispute" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;margin-left:4px;color:#DC2626;border-color:#DC2626;">紛争申告</button>`
-                      : ''}
-                    ${(!canConfirm && !canDispute) ? '<span class="v2-act-meta">—</span>' : ''}
+                    <div>${esc(fmtTime(a.scheduled_start_at))}</div>
+                    <div style="font-size:11px;color:var(--gray-500,#64748B);">〜 ${esc(fmtTime(a.scheduled_end_at))}</div>
                   </td>
+                  <td>${esc(shift)}</td>
+                  <td>
+                    <div style="font-size:11px;color:var(--gray-700,#334155);">
+                      ${a.checked_in_at  ? 'IN：'  + esc(fmtTime(a.checked_in_at))  : '<span style="color:var(--gray-400,#94A3B8);">IN 未実施</span>'}
+                    </div>
+                    <div style="font-size:11px;color:var(--gray-700,#334155);">
+                      ${a.checked_out_at ? 'OUT：' + esc(fmtTime(a.checked_out_at)) : '<span style="color:var(--gray-400,#94A3B8);">OUT 未実施</span>'}
+                    </div>
+                    ${a.worker_completion_note ? `
+                      <div style="margin-top:4px;padding:4px 6px;background:var(--gray-50,#f8fafc);border-radius:4px;font-size:11px;color:var(--gray-700,#334155);max-height:38px;overflow:hidden;">
+                        完了報告：${esc(a.worker_completion_note)}
+                      </div>` : ''}
+                    ${a.dispute_reason ? `
+                      <div style="margin-top:4px;padding:4px 6px;background:rgba(220,38,38,0.06);border-radius:4px;font-size:11px;color:#991B1B;max-height:38px;overflow:hidden;">
+                        確認事項：${esc(a.dispute_reason)}
+                      </div>` : ''}
+                  </td>
+                  <td>
+                    <span class="v2-asgn-st v2-asgn-st--${esc(a.status)}">${esc(V2_ASGN_STATUS_LABEL[a.status] || a.status)}</span>
+                  </td>
+                  <td>
+                    <div style="font-size:12px;font-weight:600;color:${isAction ? '#B91C1C' : 'var(--gray-700,#334155)'};">${esc(facilityHint)}</div>
+                    <div class="v2-asgn-actions">
+                      ${canConfirm
+                        ? `<button class="v2-banner__refresh v2-asgn-confirm" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;background:#10B981;color:#FFFFFF;border-color:#10B981;">完了確定</button>`
+                        : ''}
+                      ${canDispute
+                        ? `<button class="v2-banner__refresh v2-asgn-dispute" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;color:#DC2626;border-color:#DC2626;">確認事項を申告</button>`
+                        : ''}
+                    </div>
+                  </td>
+                  <td class="num">${esc(yen(a.hourly_rate))}</td>
                 </tr>
               `;
             }).join('')}

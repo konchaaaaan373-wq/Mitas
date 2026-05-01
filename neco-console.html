@@ -103,6 +103,186 @@
     }
     .topbar__btn:hover { background: rgba(255,255,255,0.16); }
 
+    /* ─── 稼働監視（横断ビュー） ─── */
+    .ops-section {
+      padding: 12px 16px 0;
+    }
+    .ops-section details > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .ops-section details[open] > summary {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .ops-section details > summary::-webkit-details-marker { display: none; }
+    .ops-section details > summary::before {
+      content: '▶';
+      font-size: 10px;
+      color: var(--gray-500);
+      transition: transform 0.15s;
+    }
+    .ops-section details[open] > summary::before { transform: rotate(90deg); }
+    .ops-section__head-main { flex: 1; min-width: 0; }
+    .ops-section__title {
+      font-size: 14px; font-weight: 700; color: var(--navy-deep);
+    }
+    .ops-section__sub {
+      display: block; font-size: 11px; color: var(--gray-500); margin-top: 2px;
+    }
+    .ops-section__refresh {
+      background: var(--gray-50); color: var(--gray-700);
+      border: 1px solid var(--gray-200);
+    }
+    .ops-section__refresh:hover { background: var(--gray-100); }
+    .ops-section__body {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-top: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 16px 18px;
+    }
+
+    .ops-todo {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      background: rgba(14,165,233,0.04);
+      border: 1px solid rgba(14,165,233,0.18);
+      border-radius: var(--radius);
+    }
+    .ops-todo__head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .ops-todo__title {
+      font-size: 12px; font-weight: 700;
+      color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ops-todo__msg { font-size: 11px; color: var(--gray-500); }
+    .ops-todo__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .ops-todo__placeholder, .ops-cats__placeholder {
+      grid-column: 1 / -1;
+      padding: 16px; text-align: center;
+      font-size: 12px; color: var(--gray-500);
+    }
+    .ops-todo__item {
+      padding: 10px 12px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.05s;
+    }
+    .ops-todo__item:hover {
+      border-color: var(--teal);
+    }
+    .ops-todo__item--zero { opacity: 0.55; cursor: default; }
+    .ops-todo__count {
+      font-size: 22px; font-weight: 700;
+      color: var(--navy-deep);
+      font-variant-numeric: tabular-nums;
+    }
+    .ops-todo__item--alert .ops-todo__count { color: var(--red); }
+    .ops-todo__item--warn  .ops-todo__count { color: var(--amber); }
+    .ops-todo__item--ok    .ops-todo__count { color: var(--green); }
+    .ops-todo__label {
+      font-size: 11px; color: var(--gray-700); margin-top: 2px; line-height: 1.5;
+    }
+
+    .ops-cats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .ops-cat {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: var(--white);
+      overflow: hidden;
+    }
+    .ops-cat__head {
+      padding: 10px 12px;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .ops-cat__title {
+      font-size: 12px; font-weight: 700; color: var(--navy-deep);
+    }
+    .ops-cat__count {
+      font-size: 11px; color: var(--gray-500);
+      font-variant-numeric: tabular-nums;
+    }
+    .ops-cat__body {
+      padding: 8px 10px; display: grid; gap: 6px;
+      max-height: 260px; overflow-y: auto;
+    }
+    .ops-cat__empty {
+      padding: 14px 8px; text-align: center;
+      font-size: 11px; color: var(--gray-400);
+    }
+    .ops-cat__item {
+      padding: 8px 10px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .ops-cat__item:hover { border-color: var(--teal); background: rgba(14,165,233,0.04); }
+    .ops-cat__row1 {
+      display: flex; justify-content: space-between; gap: 6px;
+      font-size: 11px; color: var(--gray-500);
+      font-variant-numeric: tabular-nums;
+    }
+    .ops-cat__num { font-weight: 700; color: var(--gray-700); }
+    .ops-cat__row2 {
+      font-size: 13px; font-weight: 600;
+      color: var(--navy-deep);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ops-cat__row3 {
+      margin-top: 2px;
+      font-size: 11px; color: var(--gray-500);
+    }
+    .ops-cat__next {
+      margin-top: 4px;
+      font-size: 11px; color: var(--teal); font-weight: 600;
+    }
+    .ops-cat__time {
+      margin-top: 4px;
+      font-size: 11px; color: var(--gray-700);
+    }
+    .ops-cat__note {
+      margin-top: 4px;
+      font-size: 11px; color: var(--gray-700);
+      background: var(--gray-50);
+      padding: 4px 6px; border-radius: 4px;
+      max-height: 40px; overflow: hidden;
+    }
+    .ops-cat--disputed { border-color: rgba(220,38,38,0.30); }
+    .ops-cat--disputed .ops-cat__head { background: rgba(220,38,38,0.06); }
+    .ops-cat--billing  { border-color: rgba(245,158,11,0.30); }
+    .ops-cat--billing  .ops-cat__head { background: rgba(245,158,11,0.08); }
+    @media (max-width: 640px) {
+      .ops-section { padding: 10px; }
+      .ops-todo__grid { grid-template-columns: repeat(2, 1fr); }
+      .ops-cats { grid-template-columns: 1fr; }
+    }
+
     /* ─── 全体レイアウト：左カラム35% / 右カラム65% ─── */
     .console {
       display: grid;
@@ -1024,6 +1204,36 @@
   </div>
 </div>
 
+<!-- ═════ 稼働監視（横断ビュー） ═════ -->
+<section class="ops-section" id="opsSection" aria-label="稼働監視">
+  <details id="opsDetails" open>
+    <summary class="ops-section__head">
+      <div class="ops-section__head-main">
+        <span class="ops-section__title">稼働監視</span>
+        <span class="ops-section__sub">確定アサインを横断的に監視。本日対応すべき事項と各勤務の状態をまとめて表示します。</span>
+      </div>
+      <button class="topbar__btn ops-section__refresh" id="opsRefreshBtn" type="button">更新</button>
+    </summary>
+    <div class="ops-section__body">
+      <!-- 本日対応ToDo -->
+      <div class="ops-todo" id="opsTodo">
+        <div class="ops-todo__head">
+          <span class="ops-todo__title">本日対応ToDo</span>
+          <span class="ops-todo__msg" id="opsTodoMsg">読み込み中…</span>
+        </div>
+        <div class="ops-todo__grid" id="opsTodoGrid">
+          <div class="ops-todo__placeholder">読み込み中…</div>
+        </div>
+      </div>
+
+      <!-- 状態別カテゴリ -->
+      <div class="ops-cats" id="opsCats">
+        <div class="ops-cats__placeholder">読み込み中…</div>
+      </div>
+    </div>
+  </details>
+</section>
+
 <div class="console">
   <!-- ═════ 左カラム：勤務枠依頼一覧 ═════ -->
   <section class="panel" aria-label="勤務枠依頼一覧">
@@ -1427,10 +1637,273 @@
 
     bindEvents();
     await loadRequests();
+    // 稼働監視（横断ビュー）を初期ロード（失敗しても他機能は動く）
+    loadOpsMonitor().catch(err => console.error('稼働監視ロード失敗:', err));
   }
+
+  // ─── 稼働監視（横断ビュー）─────────────────────────
+  // /api/v2/assignments と /api/v2/invoices をまとめて取得し、
+  // 状態別に表示・本日対応ToDoを集計する。
+  state.opsAssignments = [];
+  state.opsInvoices = [];
+  state.opsRequests  = [];
+  async function loadOpsMonitor() {
+    const grid = document.getElementById('opsTodoGrid');
+    const cats = document.getElementById('opsCats');
+    const msg  = document.getElementById('opsTodoMsg');
+    const btn  = document.getElementById('opsRefreshBtn');
+    if (!grid || !cats) return;
+    if (btn) btn.disabled = true;
+    if (msg) msg.textContent = '読み込み中…';
+    try {
+      const headers = state.token && !isMockMode
+        ? { Authorization: `Bearer ${state.token}`, 'Content-Type': 'application/json' }
+        : null;
+
+      let assignments = [], invoices = [];
+      if (headers) {
+        const [aRes, iRes] = await Promise.all([
+          fetch('/api/v2/assignments?limit=200', { headers }).catch(() => null),
+          fetch('/api/v2/invoices?limit=200',     { headers }).catch(() => null),
+        ]);
+        if (aRes && aRes.ok) {
+          const d = await aRes.json();
+          assignments = Array.isArray(d.assignments) ? d.assignments : [];
+        }
+        if (iRes && iRes.ok) {
+          const d = await iRes.json();
+          invoices = Array.isArray(d.invoices) ? d.invoices : [];
+        }
+      } else {
+        assignments = getOpsMockAssignments();
+        invoices = getOpsMockInvoices();
+      }
+      state.opsAssignments = assignments;
+      state.opsInvoices    = invoices;
+      // 既存 state.requests を ops 用にも参照（施設承認済み未確定のカウントに利用）
+      state.opsRequests = state.requests || [];
+
+      renderOpsTodo();
+      renderOpsCategories();
+      const nowStr = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+      if (msg) msg.textContent = `更新：${nowStr} 時点 / 確定アサイン ${assignments.length}件 / 請求 ${invoices.length}件${headers ? '' : '（モック）'}`;
+    } catch (e) {
+      console.error('稼働監視取得失敗:', e);
+      if (msg) msg.textContent = `読み込みに失敗しました：${e.message}`;
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  function renderOpsTodo() {
+    const grid = document.getElementById('opsTodoGrid');
+    if (!grid) return;
+    const assignments = state.opsAssignments || [];
+    const proposals = collectAllProposals();
+    const invoices  = state.opsInvoices || [];
+
+    // 今日の範囲
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const todayEnd   = todayStart + 86400000;
+    const isToday = (iso) => {
+      if (!iso) return false;
+      const t = new Date(iso).getTime();
+      return t >= todayStart && t < todayEnd;
+    };
+
+    // 施設承認済み・勤務確定未作成（提案 facility_accepted で対応 assignment が無い）
+    const assignedProposalIds = new Set(assignments.filter(a => a.status !== 'cancelled').map(a => a.proposal_id));
+    const facilityAcceptedNoAsgn = proposals
+      .filter(p => p.status === 'facility_accepted' && !assignedProposalIds.has(p.id))
+      .length;
+
+    const todayConfirmed     = assignments.filter(a => a.status === 'confirmed' && isToday(a.scheduled_start_at)).length;
+    const checkInPending     = assignments.filter(a => a.status === 'confirmed' && a.scheduled_start_at && new Date(a.scheduled_start_at).getTime() < now.getTime()).length;
+    const completionWaiting  = assignments.filter(a => a.status === 'checked_out').length;
+    const facilityConfirmWait= assignments.filter(a => a.status === 'completion_reported').length;
+    const invoiceWaiting     = countInvoicePending(assignments, invoices);
+    const disputed           = assignments.filter(a => a.status === 'disputed').length;
+
+    const items = [
+      { key: 'facility-accepted-no-asgn', label: '施設承認済み・勤務確定未作成', count: facilityAcceptedNoAsgn, tone: facilityAcceptedNoAsgn ? 'alert' : 'ok', cat: 'pre-confirm' },
+      { key: 'today-confirmed',           label: '本日勤務予定',                  count: todayConfirmed,        tone: todayConfirmed ? 'warn' : 'ok',        cat: 'today' },
+      { key: 'check-in-pending',          label: 'チェックイン未実施',            count: checkInPending,        tone: checkInPending ? 'alert' : 'ok',       cat: 'pre-check-in' },
+      { key: 'completion-waiting',        label: '完了報告待ち',                  count: completionWaiting,     tone: completionWaiting ? 'warn' : 'ok',     cat: 'checked_out' },
+      { key: 'facility-confirm-wait',     label: '施設完了確認待ち',              count: facilityConfirmWait,   tone: facilityConfirmWait ? 'warn' : 'ok',   cat: 'completion_reported' },
+      { key: 'invoice-waiting',           label: '請求作成待ち',                  count: invoiceWaiting,        tone: invoiceWaiting ? 'warn' : 'ok',        cat: 'billing' },
+      { key: 'disputed',                  label: '確認事項あり',                  count: disputed,              tone: disputed ? 'alert' : 'ok',             cat: 'disputed' },
+    ];
+
+    grid.innerHTML = items.map(i => `
+      <div class="ops-todo__item ops-todo__item--${i.tone} ${i.count === 0 ? 'ops-todo__item--zero' : ''}"
+           data-cat="${escapeHtml(i.cat)}">
+        <div class="ops-todo__count">${i.count}</div>
+        <div class="ops-todo__label">${escapeHtml(i.label)}</div>
+      </div>`).join('');
+
+    // クリックで対応カテゴリへスクロール
+    grid.querySelectorAll('.ops-todo__item').forEach(el => {
+      el.addEventListener('click', () => {
+        const cat = el.dataset.cat;
+        const target = document.querySelector(`.ops-cat[data-cat="${cat}"]`);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  // 既存の state.selectedProposals は単一request用なので、
+  // ToDo計算用に概算で全提案を集める：state.opsAssignments には proposal_id が付くが
+  // status は assignments 側のもの。確認待ち件数は state.requests の status から推定する。
+  // ※ 将来 /api/v2/proposals 一覧APIを追加すれば置き換え可能。
+  function collectAllProposals() {
+    // 暫定：state.requests + 選択中の proposals
+    const proposals = [];
+    const selected = state.selectedProposals || [];
+    proposals.push(...selected);
+    return proposals;
+  }
+
+  function countInvoicePending(assignments, invoices) {
+    // assignment.completion_confirmed のうち、対応する invoice_line_items が無いもの
+    // invoice 取得時に lines を含めない（軽量化）ため、ここでは
+    // 「completion_confirmed assignment 数 - 既存invoiceが扱っている件数」で概算。
+    const completed = assignments.filter(a => a.status === 'completion_confirmed').length;
+    const billed = (invoices || []).reduce((s, inv) => s + (inv.line_count || 0), 0);
+    // line_count が無い場合は概算で「invoiced/paid 状態のinvoice数」を引く
+    const fallback = (invoices || []).filter(i => ['issued','paid'].includes(i.status)).length;
+    const used = billed > 0 ? billed : fallback;
+    return Math.max(0, completed - used);
+  }
+
+  // 状態別カテゴリの表示
+  const OPS_CATS = [
+    { key: 'pre-confirm',         title: '勤務開始前',         filter: a => a.status === 'confirmed' && (!a.scheduled_start_at || new Date(a.scheduled_start_at).getTime() >= Date.now()), nextLabel: '勤務開始待ち' },
+    { key: 'today',               title: '本日勤務',           filter: (a, ctx) => a.status === 'confirmed' && ctx.isToday(a.scheduled_start_at), nextLabel: '勤務開始待ち' },
+    { key: 'pre-check-in',        title: 'チェックイン未実施', filter: a => a.status === 'confirmed' && a.scheduled_start_at && new Date(a.scheduled_start_at).getTime() < Date.now(), nextLabel: '医療者へリマインド' },
+    { key: 'checked_in',          title: 'チェックイン済み',   filter: a => a.status === 'checked_in', nextLabel: '勤務終了待ち' },
+    { key: 'checked_out',         title: 'チェックアウト済み', filter: a => a.status === 'checked_out', nextLabel: '医療者の完了報告待ち' },
+    { key: 'completion_reported', title: '施設完了確認待ち',   filter: a => a.status === 'completion_reported', nextLabel: '施設の完了確認待ち' },
+    { key: 'billing',             title: '請求作成待ち',       filter: a => a.status === 'completion_confirmed', nextLabel: '請求作成', cls: 'ops-cat--billing' },
+    { key: 'disputed',            title: '確認事項あり',       filter: a => a.status === 'disputed' || a.status === 'no_show', nextLabel: '確認事項対応', cls: 'ops-cat--disputed' },
+  ];
+
+  function renderOpsCategories() {
+    const root = document.getElementById('opsCats');
+    if (!root) return;
+    const assignments = state.opsAssignments || [];
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const todayEnd   = todayStart + 86400000;
+    const ctx = { isToday: (iso) => {
+      if (!iso) return false;
+      const t = new Date(iso).getTime();
+      return t >= todayStart && t < todayEnd;
+    } };
+
+    if (!assignments.length) {
+      root.innerHTML = '<div class="ops-cats__placeholder">確定アサインがありません。提案カードから「勤務確定を作成」を実行してください。</div>';
+      return;
+    }
+
+    root.innerHTML = OPS_CATS.map(cat => {
+      const items = assignments.filter(a => cat.filter(a, ctx));
+      return `
+        <div class="ops-cat ${cat.cls || ''}" data-cat="${cat.key}">
+          <div class="ops-cat__head">
+            <span class="ops-cat__title">${escapeHtml(cat.title)}</span>
+            <span class="ops-cat__count">${items.length}件</span>
+          </div>
+          <div class="ops-cat__body">
+            ${items.length === 0
+              ? `<div class="ops-cat__empty">該当なし</div>`
+              : items.map(a => renderOpsAssignmentItem(a, cat.nextLabel)).join('')}
+          </div>
+        </div>`;
+    }).join('');
+
+    // クリックで対応 request を選択して詳細を開く
+    root.querySelectorAll('.ops-cat__item').forEach(el => {
+      el.addEventListener('click', () => {
+        const reqId = el.dataset.requestId;
+        if (!reqId) return;
+        const req = (state.requests || []).find(r => r.id === reqId);
+        if (req) selectRequest(req.id);
+      });
+    });
+  }
+
+  function renderOpsAssignmentItem(a, nextLabel) {
+    const wp = a.worker_profiles || {};
+    const sr = a.staffing_requests || {};
+    const time = a.scheduled_start_at
+      ? `${formatDateTime(a.scheduled_start_at)}${a.scheduled_end_at ? ' 〜 ' + formatDateTime(a.scheduled_end_at).split(' ').slice(-1)[0] : ''}`
+      : '日時未設定';
+    return `
+      <div class="ops-cat__item" data-request-id="${escapeHtml(a.request_id || '')}">
+        <div class="ops-cat__row1">
+          <span class="ops-cat__num">${escapeHtml(a.assignment_number || '')}</span>
+          <span>${escapeHtml(ASSIGNMENT_STATUS_LABEL[a.status] || a.status || '')}</span>
+        </div>
+        <div class="ops-cat__row2">${escapeHtml(wp.full_name || '—')}</div>
+        <div class="ops-cat__row3">${escapeHtml(sr.title || '')}${sr.request_number ? ' ・ ' + escapeHtml(sr.request_number) : ''}</div>
+        <div class="ops-cat__time">${escapeHtml(time)}</div>
+        ${a.checked_in_at  ? `<div class="ops-cat__row3">チェックイン：${escapeHtml(formatDateTime(a.checked_in_at))}</div>` : ''}
+        ${a.checked_out_at ? `<div class="ops-cat__row3">チェックアウト：${escapeHtml(formatDateTime(a.checked_out_at))}</div>` : ''}
+        ${a.worker_completion_note ? `<div class="ops-cat__note">完了報告：${escapeHtml(a.worker_completion_note)}</div>` : ''}
+        ${a.dispute_reason ? `<div class="ops-cat__note">確認事項：${escapeHtml(a.dispute_reason)}</div>` : ''}
+        <div class="ops-cat__next">次：${escapeHtml(nextLabel)}</div>
+      </div>`;
+  }
+
+  // 稼働監視のモック
+  function getOpsMockAssignments() {
+    const iso = (offsetMs) => new Date(Date.now() + offsetMs).toISOString();
+    const sr = (n, t) => ({ id: 'req-' + n, request_number: 'SR-2026-' + n, title: t });
+    const wp = (n, name, prof) => ({ id: 'wp-' + n, full_name: name, profession_type: prof });
+    return [
+      { id: 'asgn-001', assignment_number: 'AS-2026-0011', status: 'confirmed',
+        scheduled_start_at: iso(3 * 86400000), scheduled_end_at: iso(3 * 86400000 + 8 * 3600000),
+        request_id: 'req-001', worker_profiles: wp('001','加藤 大輔','physician'), staffing_requests: sr('001','内科外来 当直医 5月応援') },
+      { id: 'asgn-002', assignment_number: 'AS-2026-0012', status: 'confirmed',
+        scheduled_start_at: iso(2 * 3600000), scheduled_end_at: iso(2 * 3600000 + 7 * 3600000),
+        request_id: 'req-002', worker_profiles: wp('002','西田 美咲','nurse'), staffing_requests: sr('002','病棟 夜勤看護師') },
+      { id: 'asgn-003', assignment_number: 'AS-2026-0013', status: 'checked_in',
+        scheduled_start_at: iso(-1 * 3600000), scheduled_end_at: iso(7 * 3600000),
+        checked_in_at: iso(-30 * 60000),
+        request_id: 'req-003', worker_profiles: wp('003','大塚 健司','physician'), staffing_requests: sr('003','透析クリニック 常勤医') },
+      { id: 'asgn-004', assignment_number: 'AS-2026-0014', status: 'checked_out',
+        scheduled_start_at: iso(-9 * 3600000), scheduled_end_at: iso(-1 * 3600000),
+        checked_in_at: iso(-9 * 3600000), checked_out_at: iso(-1 * 3600000),
+        request_id: 'req-004', worker_profiles: wp('004','森 紗奈','nurse'), staffing_requests: sr('004','外来 看護師') },
+      { id: 'asgn-005', assignment_number: 'AS-2026-0015', status: 'completion_reported',
+        scheduled_start_at: iso(-30 * 3600000), scheduled_end_at: iso(-22 * 3600000),
+        checked_in_at: iso(-30 * 3600000), checked_out_at: iso(-22 * 3600000),
+        worker_reported_at: iso(-21 * 3600000),
+        worker_completion_note: '勤務完了。患者対応に問題はありませんでした。',
+        request_id: 'req-005', worker_profiles: wp('005','小池 拓郎','physician'), staffing_requests: sr('005','健診センター GW') },
+      { id: 'asgn-006', assignment_number: 'AS-2026-0016', status: 'completion_confirmed',
+        scheduled_start_at: iso(-5 * 86400000), scheduled_end_at: iso(-5 * 86400000 + 8 * 3600000),
+        checked_in_at: iso(-5 * 86400000), checked_out_at: iso(-5 * 86400000 + 8 * 3600000),
+        worker_reported_at: iso(-4 * 86400000), facility_confirmed_at: iso(-3 * 86400000),
+        request_id: 'req-006', worker_profiles: wp('006','吉田 典子','nurse'), staffing_requests: sr('006','在宅医療 訪問同行') },
+      { id: 'asgn-007', assignment_number: 'AS-2026-0017', status: 'disputed',
+        scheduled_start_at: iso(-2 * 86400000), scheduled_end_at: iso(-2 * 86400000 + 8 * 3600000),
+        checked_in_at: iso(-2 * 86400000), checked_out_at: iso(-2 * 86400000 + 8 * 3600000),
+        dispute_reason: '勤務終了時刻に認識の差があります。施設・医療者と調整中です。',
+        request_id: 'req-007', worker_profiles: wp('007','長谷川 茂','physician'), staffing_requests: sr('007','救急対応 夜勤') },
+    ];
+  }
+  function getOpsMockInvoices() {
+    return [];
+  }
+
 
   // ─── イベントバインド ───
   function bindEvents() {
+    const opsRefresh = document.getElementById('opsRefreshBtn');
+    if (opsRefresh) opsRefresh.addEventListener('click', () => loadOpsMonitor());
+
     document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
