@@ -35,21 +35,24 @@
 
 Supabase Auth では **パスワード作成にダッシュボード操作が必要** なため、
 以下のユーザーは Supabase ダッシュボードで手動作成してください。
+**UUID は自動生成のままで構いません。** seed 実行時にメールアドレスから
+`auth.users.id` を自動取得します。
 
-| 想定 UUID | メール | パスワード方針 | 役割 |
-|---|---|---|---|
-| `11111111-1111-1111-1111-1111111111d1` | `demo-neco@mitas-demo.example` | 強力（外部公開不可） | neco_admin |
-| `22222222-2222-2222-2222-2222222222d1` | `demo-alliance@mitas-demo.example` | 強力 | alliance_admin |
-| `33333333-3333-3333-3333-3333333333d1` | `demo-facility-1@mitas-demo.example` | 強力 | facility_admin（デモ中央病院） |
-| `33333333-3333-3333-3333-3333333333d2` | `demo-facility-2@mitas-demo.example` | 強力 | facility_admin（デモ訪問看護） |
-| `55555555-5555-5555-5555-5555555555d1` | `demo-doctor@mitas-demo.example` | 強力 | worker（医師） |
-| `55555555-5555-5555-5555-5555555555d2` | `demo-nurse@mitas-demo.example` | 強力 | worker（看護師） |
+| メール | パスワード方針 | 役割 |
+|---|---|---|
+| `konchaaaaan373+mitas-admin@gmail.com` | 強力（外部公開不可） | neco_admin |
+| `konchaaaaan373+mitas-alliance@gmail.com` | 強力 | alliance_admin |
+| `konchaaaaan373+mitas-facility1@gmail.com` | 強力 | facility_admin（デモ中央病院） |
+| `konchaaaaan373+mitas-facility2@gmail.com` | 強力 | facility_admin（デモ訪問看護） |
+| `konchaaaaan373+mitas-worker1@gmail.com` | 強力 | worker（医師） |
+| `konchaaaaan373+mitas-worker2@gmail.com` | 強力 | worker（看護師） |
 
 **手順**：
 1. Supabase ダッシュボード → Authentication → Add user
-2. 上記メールで作成、UUID は自動生成された値で構わない
-3. 自動生成された UUID を `db/seeds/0003_live_demo_seed.sql` の冒頭 `DECLARE` ブロックに **置き換える**
-4. SQL Editor で seed を実行
+2. 上記メールで作成（UUID は自動生成のまま、置き換え不要）
+3. SQL Editor で `db/seeds/0003_live_demo_seed.sql` を実行
+   - 1人でも未作成の場合は、不足メール一覧つきの `EXCEPTION` で安全に
+     ロールバックされます
 
 ### 2.3 デモ医療者プロフィール
 
@@ -104,8 +107,7 @@ Supabase Auth では **パスワード作成にダッシュボード操作が必
 
 ```
 1. Auth ユーザー作成（Supabase ダッシュボード）
-2. UUID 置き換え（0003_live_demo_seed.sql）
-3. SQL 実行
+2. SQL 実行（UUID 置き換え不要：seed がメールから自動取得）
    - organizations / facilities
    - user_roles / organization_members
    - worker_profiles / worker_credentials / worker_availability

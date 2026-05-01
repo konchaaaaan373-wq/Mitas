@@ -34,12 +34,12 @@
 
 | ロール | メール | UUID | display_name |
 |---|---|---|---|
-| neco_admin | demo-neco@mitas-demo.example | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` | 【DEMO】Neco運用 担当 |
-| alliance_admin | demo-alliance@mitas-demo.example | | 【DEMO】医療連携 担当 |
-| facility_admin（デモ中央病院） | demo-facility-1@mitas-demo.example | | 【DEMO】デモ中央病院 採用担当 |
-| facility_admin（デモ訪問看護） | demo-facility-2@mitas-demo.example | | 【DEMO】デモ訪問看護 管理者 |
-| worker（医師） | demo-doctor@mitas-demo.example | | 【DEMO】田中 健太郎 |
-| worker（看護師） | demo-nurse@mitas-demo.example | | 【DEMO】佐藤 美咲 |
+| neco_admin | konchaaaaan373+mitas-admin@gmail.com | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` | 【DEMO】Neco運用 担当 |
+| alliance_admin | konchaaaaan373+mitas-alliance@gmail.com | | 【DEMO】医療連携 担当 |
+| facility_admin（デモ中央病院） | konchaaaaan373+mitas-facility1@gmail.com | | 【DEMO】デモ中央病院 採用担当 |
+| facility_admin（デモ訪問看護） | konchaaaaan373+mitas-facility2@gmail.com | | 【DEMO】デモ訪問看護 管理者 |
+| worker（医師） | konchaaaaan373+mitas-worker1@gmail.com | | 【DEMO】田中 健太郎 |
+| worker（看護師） | konchaaaaan373+mitas-worker2@gmail.com | | 【DEMO】佐藤 美咲 |
 
 ---
 

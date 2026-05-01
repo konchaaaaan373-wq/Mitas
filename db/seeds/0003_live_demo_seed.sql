@@ -11,34 +11,41 @@
 --
 -- 前提:
 --   1. Supabase ダッシュボードで以下の Auth ユーザーを **手動作成** 済み
---      - demo-neco@mitas-demo.example      （neco_admin）
---      - demo-alliance@mitas-demo.example  （alliance_admin）
---      - demo-facility-1@mitas-demo.example（facility_admin / デモ中央病院）
---      - demo-facility-2@mitas-demo.example（facility_admin / デモ訪問看護）
---      - demo-doctor@mitas-demo.example    （worker / 医師）
---      - demo-nurse@mitas-demo.example     （worker / 看護師）
---   2. 上記ユーザーの auth.users.id を、下の DECLARE ブロックの
---      v_neco_user / v_alliance_user / v_fa1_user / v_fa2_user /
---      v_w1_user / v_w2_user に **置き換えて** 実行してください。
+--      - konchaaaaan373+mitas-admin@gmail.com     （neco_admin）
+--      - konchaaaaan373+mitas-alliance@gmail.com  （alliance_admin）
+--      - konchaaaaan373+mitas-facility1@gmail.com （facility_admin / デモ中央病院）
+--      - konchaaaaan373+mitas-facility2@gmail.com （facility_admin / デモ訪問看護）
+--      - konchaaaaan373+mitas-worker1@gmail.com   （worker / 医師）
+--      - konchaaaaan373+mitas-worker2@gmail.com   （worker / 看護師）
+--   2. UUID の手動指定は不要。本シードはメールアドレスから auth.users.id を
+--      自動取得します。1人でも未作成の場合は EXCEPTION でロールバックします。
 --   3. db/migrations/9999_all_in_one_setup.sql （または 0001〜0006 の
 --      個別マイグレーション）が適用済みであること。
 --
 -- 安全策:
 --   - すべてのレコードに 'DEMO' プレフィックスまたは（DEMO）表記を付与
 --   - request/proposal/assignment/invoice の番号は 'XX-DEMO-NNNN' 形式
---   - auth.users が見つからない場合は NOTICE を出して安全に終了
+--   - auth.users にメールが見つからない場合は EXCEPTION で全行ロールバック
 --   - unique_violation 発生時は再投入として NOTICE のみで終了
 -- ================================================================
 
 DO $$
 DECLARE
-  -- ========== Auth ユーザー UUID（実値に置き換える） ==========
-  v_neco_user      uuid := '11111111-1111-1111-1111-1111111111d1';  -- ← 実 UUID に置き換え
-  v_alliance_user  uuid := '22222222-2222-2222-2222-2222222222d1';  -- ← 実 UUID に置き換え
-  v_fa1_user       uuid := '33333333-3333-3333-3333-3333333333d1';  -- ← 実 UUID に置き換え
-  v_fa2_user       uuid := '33333333-3333-3333-3333-3333333333d2';  -- ← 実 UUID に置き換え
-  v_w1_user        uuid := '55555555-5555-5555-5555-5555555555d1';  -- ← 実 UUID に置き換え
-  v_w2_user        uuid := '55555555-5555-5555-5555-5555555555d2';  -- ← 実 UUID に置き換え
+  -- ========== Auth ユーザーのメール（固定） ==========
+  c_email_neco     constant text := 'konchaaaaan373+mitas-admin@gmail.com';
+  c_email_alliance constant text := 'konchaaaaan373+mitas-alliance@gmail.com';
+  c_email_fa1      constant text := 'konchaaaaan373+mitas-facility1@gmail.com';
+  c_email_fa2      constant text := 'konchaaaaan373+mitas-facility2@gmail.com';
+  c_email_w1       constant text := 'konchaaaaan373+mitas-worker1@gmail.com';
+  c_email_w2       constant text := 'konchaaaaan373+mitas-worker2@gmail.com';
+
+  -- ========== auth.users.id（メールから取得） ==========
+  v_neco_user      uuid;
+  v_alliance_user  uuid;
+  v_fa1_user       uuid;
+  v_fa2_user       uuid;
+  v_w1_user        uuid;
+  v_w2_user        uuid;
 
   -- ========== 組織 UUID（DEMO 固定） ==========
   v_org_demo_hosp  uuid := 'aaaaaaaa-0000-0000-0000-0000000000d1';
@@ -54,30 +61,33 @@ DECLARE
   v_proposal_2_id  uuid;
   v_assignment_1_id uuid;
 
-  v_users_exist    boolean;
+  v_missing        text[] := ARRAY[]::text[];
 BEGIN
   -- ----------------------------------------------------------
-  -- 0. 前提チェック：auth.users が存在するか
+  -- 0. メールから auth.users.id を解決（不足分があれば EXCEPTION）
   -- ----------------------------------------------------------
-  SELECT EXISTS (
-    SELECT 1 FROM auth.users WHERE id = v_neco_user
-  ) INTO v_users_exist;
+  SELECT id INTO v_neco_user     FROM auth.users WHERE email = c_email_neco;
+  SELECT id INTO v_alliance_user FROM auth.users WHERE email = c_email_alliance;
+  SELECT id INTO v_fa1_user      FROM auth.users WHERE email = c_email_fa1;
+  SELECT id INTO v_fa2_user      FROM auth.users WHERE email = c_email_fa2;
+  SELECT id INTO v_w1_user       FROM auth.users WHERE email = c_email_w1;
+  SELECT id INTO v_w2_user       FROM auth.users WHERE email = c_email_w2;
 
-  IF NOT v_users_exist THEN
-    RAISE NOTICE '----------------------------------------------------------';
-    RAISE NOTICE 'Auth ユーザーが見つかりません。';
-    RAISE NOTICE 'Supabase ダッシュボードで以下のユーザーを手動作成し、';
-    RAISE NOTICE 'auth.users.id を本ファイル冒頭の DECLARE ブロックに';
-    RAISE NOTICE '置き換えてから再度実行してください。';
-    RAISE NOTICE '  - demo-neco@mitas-demo.example';
-    RAISE NOTICE '  - demo-alliance@mitas-demo.example';
-    RAISE NOTICE '  - demo-facility-1@mitas-demo.example';
-    RAISE NOTICE '  - demo-facility-2@mitas-demo.example';
-    RAISE NOTICE '  - demo-doctor@mitas-demo.example';
-    RAISE NOTICE '  - demo-nurse@mitas-demo.example';
-    RAISE NOTICE '----------------------------------------------------------';
-    RETURN;
+  IF v_neco_user     IS NULL THEN v_missing := array_append(v_missing, c_email_neco);     END IF;
+  IF v_alliance_user IS NULL THEN v_missing := array_append(v_missing, c_email_alliance); END IF;
+  IF v_fa1_user      IS NULL THEN v_missing := array_append(v_missing, c_email_fa1);      END IF;
+  IF v_fa2_user      IS NULL THEN v_missing := array_append(v_missing, c_email_fa2);      END IF;
+  IF v_w1_user       IS NULL THEN v_missing := array_append(v_missing, c_email_w1);       END IF;
+  IF v_w2_user       IS NULL THEN v_missing := array_append(v_missing, c_email_w2);       END IF;
+
+  IF array_length(v_missing, 1) IS NOT NULL THEN
+    RAISE EXCEPTION
+      '[Mitas LIVE seed] 以下の Auth ユーザーが auth.users に見つかりません。Supabase ダッシュボードで作成してから再実行してください: %',
+      array_to_string(v_missing, ', ');
   END IF;
+
+  RAISE NOTICE '[Mitas LIVE seed] auth.users 解決完了: neco=%, alliance=%, facility1=%, facility2=%, worker1=%, worker2=%',
+    v_neco_user, v_alliance_user, v_fa1_user, v_fa2_user, v_w1_user, v_w2_user;
 
   -- ----------------------------------------------------------
   -- 1. 組織（DEMO）

@@ -63,16 +63,19 @@ window.__SUPABASE_ANON_KEY__ = '<anon-key>';
 - [ ] 状態遷移トリガー（`validate_request_transition` など）が登録されている
 
 ### D.2 Auth ユーザー（手動作成）
-- [ ] `demo-neco@mitas-demo.example`（neco_admin 用）
-- [ ] `demo-alliance@mitas-demo.example`（alliance_admin 用）
-- [ ] `demo-facility-1@mitas-demo.example`（facility_admin / デモ中央病院）
-- [ ] `demo-facility-2@mitas-demo.example`（facility_admin / デモ訪問看護）
-- [ ] `demo-doctor@mitas-demo.example`（worker / 医師）
-- [ ] `demo-nurse@mitas-demo.example`（worker / 看護師）
-- [ ] 各ユーザーの **生成された UUID をメモした**
+seed はメールから `auth.users.id` を自動取得するため、UUID の控えは不要。
+6人すべてが Authentication → Users に **同じメール** で作成済みであることを確認：
+
+- [ ] `konchaaaaan373+mitas-admin@gmail.com`（neco_admin 用）
+- [ ] `konchaaaaan373+mitas-alliance@gmail.com`（alliance_admin 用）
+- [ ] `konchaaaaan373+mitas-facility1@gmail.com`（facility_admin / デモ中央病院）
+- [ ] `konchaaaaan373+mitas-facility2@gmail.com`（facility_admin / デモ訪問看護）
+- [ ] `konchaaaaan373+mitas-worker1@gmail.com`（worker / 医師）
+- [ ] `konchaaaaan373+mitas-worker2@gmail.com`（worker / 看護師）
 
 ### D.3 ロール付与（user_roles）
-- [ ] `db/seeds/0003_live_demo_seed.sql` の `DECLARE` ブロックに **D.2 の UUID を反映**
+- [ ] `db/seeds/0003_live_demo_seed.sql` をそのまま SQL Editor で実行
+      （UUID 置換は不要。1人でも未作成なら `EXCEPTION` で安全にロールバック）
 - [ ] SQL 実行後、`SELECT user_id, role, display_name FROM user_roles WHERE display_name LIKE '【DEMO】%';` で 6 行返る
 - [ ] `display_name` の先頭が `【DEMO】` で始まっている
 
