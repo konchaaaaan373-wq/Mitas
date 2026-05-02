@@ -2582,11 +2582,11 @@
     const r = state.selectedRequest;
     if (!r) return;
 
-    const [proposalsResult, candidatesResult, assignmentsResult, activitiesResult] = await Promise.allSettled([
+    // Step 1: proposals / candidates / assignments を並行取得
+    const [proposalsResult, candidatesResult, assignmentsResult] = await Promise.allSettled([
       fetchExistingProposals(requestId),
       fetchCandidates(r.profession_type),
       fetchAssignmentsForRequest(requestId),
-      fetchActivityForRequest(requestId),
     ]);
 
     // 切替が起きていたら描画をスキップ
@@ -2612,15 +2612,19 @@
       console.error('アサインの取得に失敗:', assignmentsResult.reason);
     }
 
-    if (activitiesResult.status === 'fulfilled') {
-      state.selectedActivities = activitiesResult.value;
-    } else {
-      console.error('履歴の取得に失敗:', activitiesResult.reason);
-    }
-
     renderProposalsSection();
     renderCandidatesSection();
     renderAssignmentsSection();
+
+    // Step 2: 関連 entity_id（request + proposals + assignments）を集めて
+    //         activity_log を横断取得。proposals/assignments の取得後に
+    //         実行する必要があるため、Step 1 の Promise.allSettled の後で行う。
+    try {
+      state.selectedActivities = await fetchActivityForRequest(requestId);
+    } catch (e) {
+      console.error('履歴の取得に失敗:', e);
+    }
+    if (state.selectedId !== requestId) return;
     renderActivitySection();
   }
 
@@ -3840,12 +3844,21 @@
   }
 
   // ─── 履歴の取得・描画（v0.2） ───
-  // 依頼に紐づく activity_log を取得（entity_type='staffing_request'）
+  // 依頼・提案・アサインに紐づく activity_log を横断取得。
+  // entity_type は staffing_request / proposal / assignment / invoice を含むため、
+  // entity_id が UUID で衝突しないことを利用して entity_id IN(...) で一括取得する。
+  // 呼び出し時点で state.selectedProposals / state.selectedAssignments が
+  // ロード済みである必要がある。
   async function fetchActivityForRequest(requestId) {
-    const path = `/activity_log?entity_type=eq.staffing_request`
-      + `&entity_id=eq.${encodeURIComponent(requestId)}`
-      + `&select=id,actor_user_id,actor_role,action,occurred_at`
-      + `&order=occurred_at.desc&limit=20`;
+    const ids = [];
+    if (requestId) ids.push(requestId);
+    (state.selectedProposals  || []).forEach(p => { if (p && p.id) ids.push(p.id); });
+    (state.selectedAssignments || []).forEach(a => { if (a && a.id) ids.push(a.id); });
+    const unique = [...new Set(ids.filter(Boolean))];
+    if (!unique.length) return [];
+    const path = `/activity_log?entity_id=in.(${unique.join(',')})`
+      + `&select=id,actor_user_id,actor_role,action,entity_type,entity_id,occurred_at`
+      + `&order=occurred_at.desc&limit=50`;
     const rows = await pgFetch(path);
     return Array.isArray(rows) ? rows : [];
   }
