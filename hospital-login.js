@@ -62,10 +62,47 @@ async function defaultPathForRole() {
   return ROLE_HOME[role] || '/dashboard.html'
 }
 
+/**
+ * 現在のユーザーが所属する組織を取得し、sessionStorage に
+ * `mitas_org`（{ id, name } の JSON）として保存する。
+ *
+ * dashboard.html 等が `sessionStorage.getItem('mitas_org')` から
+ * organization_id を読むため、ログイン直後／checkAuth で必ず一度
+ * 呼んで保存しておく必要がある。複数組織所属の場合は最初の 1 件
+ * を採用する（現状 facility_admin は単組織を想定）。
+ *
+ * 取得失敗・対応行なし（worker / neco_admin / alliance_admin など、
+ * 組織に紐付かないロール）の場合は何もしない（null を返す）。
+ */
+async function fetchAndStoreUserOrg() {
+  try {
+    const { data: sess } = await db.auth.getSession()
+    const userId = sess?.session?.user?.id
+    if (!userId) return null
+    const { data, error } = await db
+      .from('organization_members')
+      .select('organization_id, organizations(id, name)')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .limit(1)
+      .maybeSingle()
+    if (error || !data) return null
+    const org = (data.organizations && data.organizations.id)
+      ? { id: data.organizations.id, name: data.organizations.name }
+      : (data.organization_id ? { id: data.organization_id, name: '' } : null)
+    if (!org) return null
+    try { sessionStorage.setItem('mitas_org', JSON.stringify(org)) } catch (_) { /* sessionStorage 不可は無視 */ }
+    return org
+  } catch (_) { return null }
+}
+
 /** ログイン：成功時は redirectTo（または role に応じた既定画面）へ遷移 */
 async function hospitalLogin(email, password, redirectTo) {
   const { error } = await db.auth.signInWithPassword({ email, password })
   if (error) throw new Error(toJa(error.message))
+  // 組織情報を sessionStorage に保存（facility_admin の勤務枠登録等で使用）
+  // 失敗しても遷移自体は続行（dashboard 側でフォールバック取得する）
+  await fetchAndStoreUserOrg()
   // redirectTo が明示されていればそれを優先（next= パラメータ等）
   // 未指定／無効な場合は user_roles.role から既定画面を選ぶ
   const roleHome = await defaultPathForRole()
