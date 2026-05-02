@@ -2215,7 +2215,7 @@
           </div>
           <div class="modal-form-2col">
             <div class="modal-form-row">
-              <label>勤務開始予定</label>
+              <label>勤務開始予定<span class="req">*</span></label>
               <input type="date" id="reqStartDate">
             </div>
             <div class="modal-form-row">
@@ -4457,9 +4457,18 @@
         .join('\n\n');
 
       // バリデーション
+      // 勤務開始予定 (start_at) は候補者抽出・スコアリングの基準になるため必須。
+      // これが NULL のまま保存されると、neco_admin 側の要件確認で常に「不足」となり、
+      // 案件が前に進まないため、ここでブロックする。
       if (!title)    { toast('勤務枠名を入力してください。', 'error'); return; }
       if (!prof)     { toast('必要職種を選択してください。', 'error'); return; }
+      if (!start)    { toast('勤務開始予定日を入力してください。', 'error'); return; }
       if (!deadline) { toast('充足希望日を入力してください。', 'error'); return; }
+      // 充足希望日は勤務開始予定日と同日以降である必要がある
+      // （DB 側 CHECK: end_at > start_at で同一秒は弾かれるため、09:00 < 23:59 で OK）
+      if (new Date(`${deadline}T23:59:00`) <= new Date(`${start}T09:00:00`)) {
+        toast('充足希望日は勤務開始予定日と同日以降にしてください。', 'error'); return;
+      }
 
       // 組織IDを sessionStorage から取得
       let organization_id = '';

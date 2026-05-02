@@ -2615,6 +2615,11 @@
     renderProposalsSection();
     renderCandidatesSection();
     renderAssignmentsSection();
+    // 次アクション（要件確認チェックリスト依存）を proposals/assignments
+    // の取得結果で再評価して描画し直す。renderDetail 直後に呼ばれた
+    // 時点では state.selectedProposals が空のままだったため、フェッチ
+    // 完了後に再描画しないと古い結果が残る。
+    refreshNextActionPanel();
 
     // Step 2: 関連 entity_id（request + proposals + assignments）を集めて
     //         activity_log を横断取得。proposals/assignments の取得後に
@@ -3407,6 +3412,30 @@
     return 'badge--score-none';
   }
 
+  // 候補者ランキングが空のときに、原因を切り分けた上で表示する文言を返す。
+  // - 必要職種が未設定: 抽出条件が無いので何も出ない
+  // - 候補者総数 0: profession_type に該当する有効な医療者が居ない（DB / 公開設定 / 承認状態）
+  // - 候補者総数 > 0 だがフィルター後 0: フィルター条件を緩めるよう促す
+  function buildCandidatesEmptyMessage(totalCount, request, filter) {
+    const prof = request && request.profession_type;
+    if (!prof) {
+      return '勤務枠の必要職種が未設定のため候補者を抽出できません。要件確認チェックリストで職種を確定してください。';
+    }
+    const profLabel = (typeof professionLabel === 'function') ? professionLabel(prof) : prof;
+    if (totalCount === 0) {
+      return `該当する医療者がまだ登録されていません（職種: ${profLabel} / 募集中=true / 承認済=approved）。医療者台帳の公開設定・オンボーディング承認状況を確認してください。`;
+    }
+    const f = filter || {};
+    const active = [];
+    if (f.keyword)        active.push(`キーワード「${f.keyword}」`);
+    if (f.minYears > 0)   active.push(`経験 ${f.minYears} 年以上`);
+    if (f.minScore > 0)   active.push(`スコア ${f.minScore}+`);
+    if (f.hideProposed)   active.push('提案済みを隠す');
+    return active.length
+      ? `条件に一致する候補者はいません（適用中のフィルター: ${active.join(' / ')}）。フィルターを緩めて再確認してください。`
+      : '条件に一致する候補者はいません。';
+  }
+
   // ─── 候補者セクションの描画 ───
   function renderCandidatesSection() {
     const container = document.getElementById('candidatesContainer');
@@ -3475,7 +3504,7 @@
       </div>
 
       ${filtered.length === 0 ? `
-        <div class="placeholder" style="padding: 16px;">条件に一致する候補者はいません</div>
+        <div class="placeholder" style="padding: 16px;">${escapeHtml(buildCandidatesEmptyMessage(candidates.length, request, f))}</div>
       ` : `
         <div class="candidate-list">
           ${filtered.map(c => renderCandidateCard(c)).join('')}
@@ -4441,7 +4470,9 @@
       { key: '報酬条件',         status: (isFilled(r.hourly_rate_min) || isFilled(r.hourly_rate_max)) ? '十分' : '要確認' },
       { key: '必要資格',         status: (Array.isArray(r.required_licenses) && r.required_licenses.length) ? '十分' : '要確認' },
       { key: '必要スキル',       status: (Array.isArray(r.required_skills) && r.required_skills.length) ? '十分' : '要確認' },
-      { key: '勤務内容・注意事項', status: (typeof r.notes === 'string' && r.notes.trim().length > 20) ? '十分' : '要確認' },
+      // 勤務内容・注意事項: requests-v2 / DB スキーマ上のフィールド名は description。
+      // 旧名 r.notes が誤って参照されており常に「要確認」になっていたため修正。
+      { key: '勤務内容・注意事項', status: (typeof r.description === 'string' && r.description.trim().length > 20) ? '十分' : '要確認' },
       { key: '施設情報',         status: isFilled(r.organization_id) ? '十分' : '要確認' },
       { key: '優先度',           status: isFilled(r.priority) ? '十分' : '要確認' },
     ];
@@ -4492,19 +4523,33 @@
         </div>
       </div>`;
   }
+  // 詳細パネル内の「次アクション」だけを再評価して差し替える。
+  // proposals/assignments を非同期取得した後など、state は更新済みだが
+  // renderDetail 全体を再実行したくない場合に使う。
+  function refreshNextActionPanel() {
+    if (!state.selectedRequest) return;
+    const area = document.getElementById('detailArea');
+    if (!area) return;
+    const naSection = area.querySelector('.next-action');
+    if (!naSection) return;
+    const wrap = naSection.parentElement;
+    if (wrap) wrap.outerHTML = renderNextActionPanel(state.selectedRequest);
+  }
   function computeNextAction(r) {
     // 詳細パネルに紐づく現状の prop / assignment は state.selected* に格納されている
     const proposals   = (state && state.selectedProposals)   || [];
     const assignments = (state && state.selectedAssignments) || [];
     const { overall } = buildRequirementChecklist(r);
 
-    // proposal_status を踏まえて、accepted / proposing 段階の次アクションを決める
+    // proposal_status を踏まえて、accepted / proposing 段階の次アクションを決める。
+    // 「施設承認待ち／医療者打診済み」等は live な提案に対してのみ判定する
+    // （withdrawn/expired/facility_declined のものを根拠に表示しない）。
     const liveProposals = proposals.filter(p => !['withdrawn','expired','facility_declined'].includes(p.status));
-    const hasFacilityAccepted = proposals.some(p => p.status === 'facility_accepted');
-    const hasProposedToFacility = proposals.some(p => p.status === 'proposed_to_facility');
-    const hasWorkerAccepted = proposals.some(p => p.status === 'worker_accepted');
-    const hasWorkerContacted = proposals.some(p => p.status === 'worker_contacted');
-    const hasCreatedOnly = proposals.some(p => p.status === 'created');
+    const hasFacilityAccepted   = liveProposals.some(p => p.status === 'facility_accepted');
+    const hasProposedToFacility = liveProposals.some(p => p.status === 'proposed_to_facility');
+    const hasWorkerAccepted     = liveProposals.some(p => p.status === 'worker_accepted');
+    const hasWorkerContacted    = liveProposals.some(p => p.status === 'worker_contacted');
+    const hasCreatedOnly        = liveProposals.some(p => p.status === 'created');
     const onlyDeclined = proposals.length > 0
       && proposals.every(p => ['worker_declined','facility_declined','withdrawn','expired'].includes(p.status));
 
@@ -4524,10 +4569,24 @@
       case 'accepted':
       case 'proposing':
       case 'partially_assigned': {
-        if (proposals.length === 0) {
+        // live な提案が無い場合は、ステータスが proposing でも
+        // 「施設承認待ち」「医療者の返答待ち」等を表示しない
+        // （提案が全て withdrawn / expired / facility_declined の場合も含む）。
+        if (liveProposals.length === 0) {
+          // 必須の要件（勤務日時・職種・人数）が不足しているなら、候補者抽出より前に
+          // 「勤務日時等の確認が必要」であることを明示する。
+          if (overall === '情報不足') {
+            return {
+              main: '勤務日時・要件の確認',
+              reason: '必須項目（勤務日時・職種・必要人数）に不足があります。候補者抽出の前に施設へ確認してください。',
+              subs: ['チェックリストの「不足」項目を確認', '施設へ追記を依頼', '要件が揃ってから候補者抽出へ'],
+            };
+          }
           return {
-            main: '医療者候補を抽出',
-            reason: 'まだ提案が登録されていません。要件に合う医療者を医療者台帳から確認してください。',
+            main: proposals.length === 0 ? '医療者候補を抽出' : '追加候補者を選定',
+            reason: proposals.length === 0
+              ? 'まだ提案が登録されていません。要件に合う医療者を医療者台帳から確認してください。'
+              : '既存の提案は取下げ・期限切れ・見送りになっています。新しい候補を選定してください。',
             subs: ['医療者候補ランキングを確認', '推薦理由・リスクを確認', '提案を作成して候補者選定済みにする'],
           };
         }
