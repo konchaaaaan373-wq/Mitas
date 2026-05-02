@@ -500,6 +500,26 @@
       }
       token = data.session.access_token;
       user = data.session.user;
+
+      // ロールガード：alliance_admin 以外は本来の画面へ自動遷移
+      try {
+        const { data: roleRow } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        const role = roleRow && roleRow.role;
+        const ROLE_HOME = {
+          worker: '/worker-app.html',
+          facility_admin: '/dashboard.html',
+          neco_admin: '/neco-console.html',
+          alliance_admin: '/alliance-dashboard.html',
+        };
+        if (role && role !== 'alliance_admin') {
+          location.replace(ROLE_HOME[role] || '/dashboard.html');
+          return;
+        }
+      } catch (_) { /* ロール取得失敗時は RLS に委ねる */ }
     }
 
     document.getElementById('userName').textContent = user?.email || 'モックユーザー';

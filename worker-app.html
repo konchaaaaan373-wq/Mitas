@@ -175,6 +175,187 @@
     .card__body {
       padding: 16px 18px;
     }
+    .status-guidance {
+      margin: 0 18px;
+      padding: 10px 14px;
+      background: rgba(56,189,248,0.08);
+      border-left: 3px solid #38bdf8;
+      border-radius: 6px;
+      color: #1e3a5f;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .work-note {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: var(--gray-50, #f8fafc);
+      border: 1px solid var(--gray-200, #e2e8f0);
+      border-radius: 8px;
+    }
+    .work-note__label {
+      font-size: 10px; font-weight: 700; color: var(--gray-500, #64748b);
+      letter-spacing: 0.06em; margin-bottom: 4px;
+    }
+    .work-note__body {
+      font-size: 13px; color: var(--gray-900, #0f172a); line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .reminder-list {
+      display: grid; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .reminder {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-200, #e2e8f0);
+      background: var(--white, #fff);
+    }
+    .reminder--info  { background: rgba(56,189,248,0.05); border-color: rgba(56,189,248,0.20); }
+    .reminder--warn  { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.25); }
+    .reminder--alert { background: rgba(220,38,38,0.05); border-color: rgba(220,38,38,0.22); }
+    .reminder--ok    { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.22); }
+    .reminder__icon {
+      width: 22px; height: 22px; flex-shrink: 0;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      background: rgba(0,0,0,0.04); color: var(--gray-700, #334155);
+    }
+    .reminder--info  .reminder__icon { background: rgba(56,189,248,0.12); color: #0369a1; }
+    .reminder--warn  .reminder__icon { background: rgba(245,158,11,0.15); color: #b45309; }
+    .reminder--alert .reminder__icon { background: rgba(220,38,38,0.12); color: #b91c1c; }
+    .reminder--ok    .reminder__icon { background: rgba(16,185,129,0.15); color: #047857; }
+    .reminder__main { flex: 1; min-width: 0; }
+    .reminder__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .reminder__body {
+      margin-top: 2px;
+      font-size: 12px; color: var(--gray-700, #334155); line-height: 1.7;
+    }
+    .pre-shift {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: rgba(56,189,248,0.05);
+      border: 1px solid rgba(56,189,248,0.20);
+      border-radius: 10px;
+    }
+    .pre-shift__head {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      color: #0369a1; margin-bottom: 8px; text-transform: uppercase;
+    }
+    .pre-shift__list { display: grid; gap: 8px; }
+    .pre-shift__item {
+      display: grid; grid-template-columns: 110px 1fr;
+      gap: 8px; font-size: 12px;
+    }
+    .pre-shift__key {
+      color: #475569; font-weight: 600;
+    }
+    .pre-shift__val {
+      color: #0f172a; line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 480px) {
+      .pre-shift__item { grid-template-columns: 1fr; gap: 2px; }
+      .pre-shift__key { font-size: 11px; }
+    }
+    .neco-support {
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: rgba(16,185,129,0.06);
+      border: 1px solid rgba(16,185,129,0.18);
+      border-radius: 6px;
+      color: #065f46;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .neco-support__dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #10b981;
+    }
+    .next-action-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(56,189,248,0.10);
+      color: #0369a1;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    /* ─── 勤務機会のご相談（将来実装予定）─── */
+    .opportunity-section {
+      margin-top: 24px;
+      padding: 16px 16px 18px;
+      background: var(--white, #fff);
+      border: 1px dashed var(--gray-300, #cbd5e1);
+      border-radius: 14px;
+    }
+    .opportunity-section__head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+    }
+    .opportunity-section__title {
+      font-size: 14px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .opportunity-section__pill {
+      display: inline-block; padding: 2px 8px; border-radius: 100px;
+      background: rgba(100,116,139,0.12); color: #64748b;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    }
+    .opportunity-section__desc {
+      font-size: 12px; color: var(--gray-700, #334155); line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .opportunity-section__note {
+      margin-top: 10px; font-size: 11px; color: var(--gray-500, #64748b);
+      line-height: 1.7;
+    }
+    .opportunity-card {
+      padding: 12px 14px;
+      background: var(--gray-50, #f8fafc);
+      border: 1px solid var(--gray-200, #e2e8f0);
+      border-radius: 10px;
+    }
+    .opportunity-card__head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 4px;
+    }
+    .opportunity-card__title {
+      font-size: 13px; font-weight: 700; color: var(--navy-deep, #0d2340);
+    }
+    .opportunity-card__badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 8px; border-radius: 100px;
+      background: rgba(245,158,11,0.12); color: #b45309;
+    }
+    .opportunity-card__meta {
+      display: flex; flex-wrap: wrap; gap: 4px 10px;
+      font-size: 11px; color: var(--gray-500, #64748b); margin-bottom: 6px;
+    }
+    .opportunity-card__hint {
+      font-size: 11px; color: var(--gray-500, #64748b); line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .opportunity-card__actions {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .opportunity-btn {
+      flex: 1; min-width: 100px;
+      padding: 8px 10px; font-size: 12px; font-weight: 600;
+      border-radius: 6px; cursor: pointer;
+      background: var(--white, #fff); color: var(--navy-deep, #0d2340);
+      border: 1px solid var(--gray-300, #cbd5e1);
+    }
+    .opportunity-btn--primary {
+      background: rgba(14,165,233,0.10); color: #0369a1;
+      border-color: rgba(14,165,233,0.25);
+    }
+    .opportunity-btn--ghost { color: #64748b; }
+    .opportunity-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
     .card__meta {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -929,6 +1110,9 @@
       <p class="page-head__sub" id="todayDate"></p>
     </div>
 
+    <!-- アプリ内リマインド（勤務予定に応じて表示） -->
+    <div id="reminderRoot" class="reminder-list" hidden></div>
+
     <!-- スケルトン -->
     <div id="skeleton" class="card skeleton-card">
       <div class="skeleton skeleton-line skeleton-line--lg"></div>
@@ -968,6 +1152,40 @@
     <div id="scheduleEmpty" class="empty" hidden>
       <div class="empty__title">表示できる勤務予定がありません</div>
       <div class="empty__sub">確定した勤務や過去の稼働実績がここに一覧表示されます。</div>
+    </div>
+
+    <!-- ─── 勤務機会のご相談（将来実装予定） ─── -->
+    <div class="opportunity-section" aria-labelledby="opportunityHead">
+      <div class="opportunity-section__head">
+        <span class="opportunity-section__title" id="opportunityHead">勤務機会のご相談</span>
+        <span class="opportunity-section__pill">将来実装予定</span>
+      </div>
+      <p class="opportunity-section__desc">
+        登録された資格・経験・希望条件に基づき、信頼できる医療機関からの勤務機会をNeco担当者からご相談する場合があります。<br>
+        将来的には、提案内容の詳細をこの画面で確認し、関心の有無をお知らせいただけるようになる予定です。
+      </p>
+      <div class="opportunity-card opportunity-card--placeholder" aria-disabled="true">
+        <div class="opportunity-card__head">
+          <span class="opportunity-card__title">サンプル勤務機会</span>
+          <span class="opportunity-card__badge">サンプル</span>
+        </div>
+        <div class="opportunity-card__meta">
+          <span>応援勤務</span>
+          <span>日勤</span>
+          <span>関東圏</span>
+        </div>
+        <div class="opportunity-card__hint">
+          実際の勤務機会は、現時点ではNeco担当者から直接ご連絡しております。
+        </div>
+        <div class="opportunity-card__actions">
+          <button class="opportunity-btn opportunity-btn--primary" type="button" disabled>関心あり</button>
+          <button class="opportunity-btn" type="button" disabled>詳細を確認</button>
+          <button class="opportunity-btn opportunity-btn--ghost" type="button" disabled>今回は見送る</button>
+        </div>
+      </div>
+      <p class="opportunity-section__note">
+        現時点では、Neco担当者がメール・お電話・メッセージで勤務機会のご相談を行います。応募という形ではなく、まずは「関心あり／見送り」をお伝えいただければ調整いたします。
+      </p>
     </div>
   </section>
 
@@ -1135,6 +1353,26 @@
       currentToken = data.session.access_token;
       currentUser = data.session.user;
       document.getElementById('userEmail').textContent = currentUser.email || '';
+
+      // ロールガード：worker 以外は本来の画面へ自動遷移
+      try {
+        const { data: roleRow } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', currentUser.id)
+          .maybeSingle();
+        const role = roleRow && roleRow.role;
+        const ROLE_HOME = {
+          worker: '/worker-app.html',
+          facility_admin: '/dashboard.html',
+          neco_admin: '/neco-console.html',
+          alliance_admin: '/alliance-dashboard.html',
+        };
+        if (role && role !== 'worker') {
+          location.replace(ROLE_HOME[role] || '/dashboard.html');
+          return;
+        }
+      } catch (_) { /* ロール取得失敗時は何もしない（API側でRLS拒否されるだけ） */ }
     } else {
       // モック表示
       document.getElementById('userEmail').textContent = 'mock@example.com';
@@ -1251,6 +1489,9 @@
       currentAssignment = active[0] || null;
       renderAssignment(currentAssignment);
 
+      // アプリ内リマインドを描画
+      renderReminders(allAssignments, currentAssignment);
+
       // Schedule: 全件をセクション分け
       renderSchedule(allAssignments);
     } catch (e) {
@@ -1273,6 +1514,140 @@
   }
 
   // ─── 描画 ───
+  // 勤務予定に応じて、アプリ内リマインドを描画する。
+  // confirmed → 開始までの残時間 / 本日 / 明日 / 過ぎている
+  // checked_in → 終了時刻が近づいている / 終了時刻を過ぎている
+  // checked_out → 完了報告のお願い
+  // completion_reported → 施設確認待ち
+  // completion_confirmed → 完了済みのお知らせ
+  // disputed → 確認事項のお知らせ
+  function renderReminders(all, current) {
+    const root = document.getElementById('reminderRoot');
+    if (!root) return;
+    const reminders = [];
+    const now = Date.now();
+
+    // 1) 直近の confirmed を探す
+    const upcomingConfirmed = (all || [])
+      .filter(a => a.status === 'confirmed' && a.scheduled_start_at)
+      .sort((a, b) => new Date(a.scheduled_start_at) - new Date(b.scheduled_start_at));
+
+    if (upcomingConfirmed.length) {
+      const next = upcomingConfirmed[0];
+      const startMs = new Date(next.scheduled_start_at).getTime();
+      const diff = startMs - now;
+      const oneHour = 3600000;
+      const today = new Date();
+      const startDate = new Date(startMs);
+      const isSameDay =
+        startDate.getFullYear() === today.getFullYear() &&
+        startDate.getMonth() === today.getMonth() &&
+        startDate.getDate() === today.getDate();
+      const isTomorrow = (() => {
+        const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        return startDate.getFullYear() === tomorrow.getFullYear() &&
+               startDate.getMonth() === tomorrow.getMonth() &&
+               startDate.getDate() === tomorrow.getDate();
+      })();
+
+      const facility = next.staffing_requests?.organization_name || next.staffing_requests?.title || '勤務先';
+      const time = `${formatDateShort(startDate)} ${formatTime(startDate)}`;
+
+      if (diff < 0 && next.status === 'confirmed') {
+        reminders.push({
+          tone: 'alert', icon: '!',
+          title: '勤務開始時刻を過ぎています',
+          body: `${escapeHtml(time)}〜の勤務が確定済みです。チェックインがまだの場合はお早めにお願いします。`,
+        });
+      } else if (diff <= oneHour) {
+        reminders.push({
+          tone: 'warn', icon: '!',
+          title: '本日の勤務開始時刻が近づいています',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。勤務内容・場所をご確認のうえ、勤務開始時にチェックインしてください。`,
+        });
+      } else if (isSameDay) {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '本日の勤務があります',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。勤務開始時にチェックインしてください。`,
+        });
+      } else if (isTomorrow) {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '明日の勤務があります',
+          body: `${escapeHtml(facility)} / ${escapeHtml(time)} 開始予定です。事前に勤務内容・場所・持ち物をご確認ください。`,
+        });
+      }
+    }
+
+    // 2) 現在の状態に応じたリマインド
+    if (current) {
+      if (current.status === 'checked_in') {
+        const endMs = current.scheduled_end_at ? new Date(current.scheduled_end_at).getTime() : null;
+        const diff = endMs ? endMs - now : null;
+        if (diff != null && diff < 0) {
+          reminders.push({
+            tone: 'warn', icon: '!',
+            title: '勤務終了時刻を過ぎています',
+            body: '勤務終了時にチェックアウトをお願いします。',
+          });
+        } else if (diff != null && diff <= 60 * 60000) {
+          reminders.push({
+            tone: 'warn', icon: '!',
+            title: '勤務終了時刻が近づいています',
+            body: '勤務終了時にチェックアウトをお願いします。',
+          });
+        } else {
+          reminders.push({
+            tone: 'info', icon: 'i',
+            title: '勤務中です',
+            body: '勤務終了時にチェックアウトしてください。',
+          });
+        }
+      } else if (current.status === 'checked_out') {
+        reminders.push({
+          tone: 'warn', icon: '!',
+          title: '完了報告のお願い',
+          body: '勤務終了後は完了報告をお願いします。',
+        });
+      } else if (current.status === 'completion_reported') {
+        reminders.push({
+          tone: 'info', icon: 'i',
+          title: '施設の完了確認待ちです',
+          body: '完了報告済みです。施設側の確認後、稼働実績に反映されます。',
+        });
+      } else if (current.status === 'completion_confirmed') {
+        reminders.push({
+          tone: 'ok', icon: '✓',
+          title: '施設確認が完了しました',
+          body: '勤務完了が確定しました。お疲れさまでした。',
+        });
+      } else if (current.status === 'disputed') {
+        reminders.push({
+          tone: 'alert', icon: '!',
+          title: '確認事項があります',
+          body: 'Neco担当者からの連絡をお待ちください。',
+        });
+      }
+    }
+
+    // 表示
+    if (!reminders.length) {
+      root.hidden = true;
+      root.innerHTML = '';
+      return;
+    }
+    root.hidden = false;
+    root.innerHTML = reminders.map(r => `
+      <div class="reminder reminder--${r.tone}">
+        <div class="reminder__icon">${escapeHtml(r.icon)}</div>
+        <div class="reminder__main">
+          <div class="reminder__title">${escapeHtml(r.title)}</div>
+          <div class="reminder__body">${r.body}</div>
+        </div>
+      </div>`).join('');
+  }
+
   function renderAssignment(a) {
     const root = document.getElementById('assignmentRoot');
     const empty = document.getElementById('emptyState');
@@ -1296,6 +1671,15 @@
     const hourly = a.hourly_rate != null ? `¥${fmt(a.hourly_rate)}` : '-';
     const total = a.total_compensation != null ? `¥${fmt(a.total_compensation)}` : '-';
 
+    const guidance = statusGuidance(a.status);
+    const facilityName = a.staffing_requests?.organization_name || a.organization_name || '施設情報はNeco担当者にご確認ください';
+    const shiftType = a.staffing_requests?.shift_type ? shiftTypeLabel(a.staffing_requests.shift_type) : '';
+    // staffing_requests の自由記述は description 列（旧 notes はスキーマに無い）
+    const workNote = a.staffing_requests?.description || '';
+    // 構造化された notes から、勤務前確認用にセクションを抽出
+    const sections = parseStructuredNotes(workNote);
+    const preShift = renderPreShiftBlock(sections);
+
     root.innerHTML = `
       <article class="card" aria-label="次の勤務">
         <header class="card__head">
@@ -1305,12 +1689,22 @@
           </div>
           <span class="badge badge--${a.status}">${statusLabel(a.status)}</span>
         </header>
+        ${guidance ? `<div class="status-guidance">${escapeHtml(guidance)}</div>` : ''}
         <div class="card__body">
           <div class="card__meta">
+            <div class="card__meta-item">
+              <div class="card__meta-label">勤務先</div>
+              <div class="card__meta-value">${escapeHtml(facilityName)}</div>
+            </div>
             <div class="card__meta-item">
               <div class="card__meta-label">勤務日時</div>
               <div class="card__meta-value">${escapeHtml(dateLabel)}</div>
             </div>
+            ${shiftType ? `
+            <div class="card__meta-item">
+              <div class="card__meta-label">勤務種別</div>
+              <div class="card__meta-value">${escapeHtml(shiftType)}</div>
+            </div>` : ''}
             <div class="card__meta-item">
               <div class="card__meta-label">時給</div>
               <div class="card__meta-value card__meta-value--num">${hourly}<span class="unit">/時</span></div>
@@ -1324,7 +1718,12 @@
               <div class="card__meta-value">${escapeHtml(a.assignment_number || '-')}</div>
             </div>
           </div>
+          ${preShift}
           ${renderActionButton(a)}
+          <div class="neco-support">
+            <span class="neco-support__dot"></span>
+            ご不明な点はNeco担当者がサポートします（連絡先：Neco担当者よりご案内）
+          </div>
           <div id="gpsInfo" class="gps-info"><span class="gps-info__dot"></span>位置情報を取得中…</div>
         </div>
       </article>
@@ -1382,7 +1781,7 @@
       return `<div class="action-pending"
               style="padding:14px 16px;background:var(--red-pale);border:1px solid rgba(220,38,38,0.20);border-radius:var(--radius);text-align:center;">
         <div style="font-size:13px;font-weight:600;color:var(--red);">紛争申告中</div>
-        <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">MITAS担当者が確認します</div>
+        <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">Neco担当者が確認します</div>
       </div>`;
     }
     return `<button class="action" type="button" disabled>この勤務は操作できません</button>`;
@@ -1519,8 +1918,12 @@
     root.innerHTML = `
       ${renderProfileCard(p, initials)}
       ${renderOfferToggle(p)}
-      ${renderCredentialsCard(workerCredentials)}
-      ${renderAvailabilityCard(workerAvailability)}
+      ${renderProfileSection('専門領域', renderSpecialtyBlock(p))}
+      ${renderProfileSection('対応可能業務', renderCapabilitiesBlock(p))}
+      ${renderProfileSection('希望勤務条件', renderPreferencesBlock(p))}
+      ${renderProfileSection('勤務可能時間', null, renderAvailabilityCard(workerAvailability))}
+      ${renderProfileSection('資格書類', null, renderCredentialsCard(workerCredentials))}
+      ${renderProfileSection('Neco確認状況', renderNecoVerificationBlock(p, workerCredentials))}
     `;
     root.hidden = false;
 
@@ -1534,14 +1937,101 @@
     });
   }
 
+  // プロフィール内のグループセクション枠（タイトル＋本文）
+  function renderProfileSection(title, htmlBody, prebuiltCard) {
+    if (prebuiltCard) {
+      // 既存のsection-cardをそのまま使うが、タイトルだけ差し替える
+      return prebuiltCard.replace(/<div class="section-card__title">[^<]*<\/div>/, `<div class="section-card__title">${escapeHtml(title)}</div>`);
+    }
+    return `
+      <div class="section-card">
+        <div class="section-card__head">
+          <div class="section-card__title">${escapeHtml(title)}</div>
+        </div>
+        <div class="section-card__list">${htmlBody || profilePlaceholder()}</div>
+      </div>`;
+  }
+  function profilePlaceholder() {
+    return `<div class="section-card__empty">今後のアップデートで登録可能になります</div>`;
+  }
+  function renderInfoGrid(items) {
+    const visible = items.filter(([, v]) => v != null && v !== '');
+    if (!visible.length) return profilePlaceholder();
+    return `<div class="info-grid" style="padding: 4px 0;">${visible.map(([label, val]) => `
+      <div class="info-grid__item">
+        <div class="info-grid__label">${escapeHtml(label)}</div>
+        <div class="info-grid__value">${escapeHtml(String(val))}</div>
+      </div>`).join('')}</div>`;
+  }
+  function renderSpecialtyBlock(p) {
+    return renderInfoGrid([
+      ['主な専門', p.primary_specialty],
+      ['副専門', Array.isArray(p.sub_specialties) ? p.sub_specialties.join('、') : p.sub_specialties],
+      ['経験年数', p.years_experience != null ? `${p.years_experience} 年` : null],
+    ]);
+  }
+  function renderCapabilitiesBlock(p) {
+    const skills = Array.isArray(p.skills) ? p.skills : null;
+    const certs = Array.isArray(p.certifications) ? p.certifications : null;
+    return renderInfoGrid([
+      ['対応可能業務', skills && skills.length ? skills.join('、') : null],
+      ['認定資格', certs && certs.length ? certs.join('、') : null],
+      ['当直対応', p.can_work_night === true ? '可' : (p.can_work_night === false ? '不可' : null)],
+      ['オンコール対応', p.can_work_oncall === true ? '可' : (p.can_work_oncall === false ? '不可' : null)],
+    ]);
+  }
+  function renderPreferencesBlock(p) {
+    return renderInfoGrid([
+      ['居住地', [p.current_prefecture, p.current_city].filter(Boolean).join(' ') || null],
+      ['希望勤務地', (p.desired_prefectures || []).join('、') || null],
+      ['通勤可能距離', p.work_radius_km != null ? `${p.work_radius_km} km` : null],
+      ['希望時給（下限）', p.min_hourly_rate != null ? `¥${fmt(p.min_hourly_rate)}` : null],
+      ['希望時給（上限）', p.max_hourly_rate != null ? `¥${fmt(p.max_hourly_rate)}` : null],
+    ]);
+  }
+  function renderNecoVerificationBlock(p, credentials) {
+    const verified = (credentials || []).filter(c => c.verification_status === 'verified').length;
+    const pending = (credentials || []).filter(c => c.verification_status === 'pending').length;
+    const rejected = (credentials || []).filter(c => c.verification_status === 'rejected').length;
+    const total = (credentials || []).length;
+    let overall = '未確認';
+    if (total === 0) overall = '資格情報未登録';
+    else if (rejected > 0) overall = '一部書類が却下されています';
+    else if (pending > 0) overall = '審査中の書類があります';
+    else if (verified === total) overall = '資格確認完了';
+    return `
+      <div style="padding: 8px 0;">
+        <div class="info-grid">
+          <div class="info-grid__item">
+            <div class="info-grid__label">確認総合</div>
+            <div class="info-grid__value">${escapeHtml(overall)}</div>
+          </div>
+          <div class="info-grid__item">
+            <div class="info-grid__label">資格確認済み</div>
+            <div class="info-grid__value">${verified} / ${total} 件</div>
+          </div>
+          <div class="info-grid__item">
+            <div class="info-grid__label">審査中</div>
+            <div class="info-grid__value">${pending} 件</div>
+          </div>
+          <div class="info-grid__item">
+            <div class="info-grid__label">却下</div>
+            <div class="info-grid__value">${rejected} 件</div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 11px; color: var(--gray-500); line-height: 1.7;">
+          資格書類の追加・更新が必要な場合はNeco担当者にご連絡ください。
+        </div>
+      </div>`;
+  }
+
   function renderProfileCard(p, initials) {
+    // 基本情報
     const items = [
       ['職種', professionLabel(p.profession_type)],
-      ['専門', p.primary_specialty || '-'],
-      ['経験年数', p.years_experience != null ? `${p.years_experience} 年` : '-'],
-      ['居住地', [p.current_prefecture, p.current_city].filter(Boolean).join(' ') || '-'],
-      ['希望勤務地', (p.desired_prefectures || []).join('、') || '-'],
-      ['通勤可能距離', p.work_radius_km != null ? `${p.work_radius_km} km` : '-'],
+      ['氏名', p.full_name || '-'],
+      ['登録メール', p.email || '-'],
+      ['電話番号', p.phone || '-'],
     ];
     return `
       <div class="profile-card">
@@ -1831,6 +2321,10 @@
     const title = a.staffing_requests?.title || a.assignment_number || 'アサイン';
     const profession = a.worker_profiles?.profession_type ? professionLabel(a.worker_profiles.profession_type) : '';
 
+    const shiftType = a.staffing_requests?.shift_type ? shiftTypeLabel(a.staffing_requests.shift_type) : '';
+    const nextAction = isPast ? '' : nextActionForWorker(a.status);
+    const hourly = a.hourly_rate != null ? `¥${fmt(a.hourly_rate)}/時` : '';
+
     return `
       <button class="list-card${isPast ? ' list-card--past' : ''}" type="button" data-id="${escapeHtml(a.id)}" aria-label="${escapeHtml(title)}">
         <div class="list-card__date">
@@ -1843,8 +2337,11 @@
           <div class="list-card__meta">
             <span class="badge badge--${a.status}">${statusLabel(a.status)}</span>
             ${time ? `<span class="list-card__meta-sep"></span><span>${escapeHtml(time)}</span>` : ''}
+            ${shiftType ? `<span class="list-card__meta-sep"></span><span>${escapeHtml(shiftType)}</span>` : ''}
             ${profession ? `<span class="list-card__meta-sep"></span><span>${escapeHtml(profession)}</span>` : ''}
+            ${hourly ? `<span class="list-card__meta-sep"></span><span>${escapeHtml(hourly)}</span>` : ''}
           </div>
+          ${nextAction && nextAction !== '-' ? `<div class="next-action-pill">次の対応：${escapeHtml(nextAction)}</div>` : ''}
         </div>
         <div class="list-card__chevron">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -2153,16 +2650,85 @@
   function formatTime(d) {
     return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
+  // 構造化された notes（【見出し】本文）を section オブジェクトに分解する。
+  // 構造化されていない場合は { '勤務内容・注意事項': notes全文 } を返す。
+  function parseStructuredNotes(notes) {
+    if (!notes || typeof notes !== 'string') return null;
+    const re = /【([^】]+)】[\r\n]*/g;
+    const matches = [...notes.matchAll(re)];
+    if (matches.length === 0) {
+      return { '勤務内容・注意事項': notes.trim() };
+    }
+    const sections = {};
+    for (let i = 0; i < matches.length; i++) {
+      const key = matches[i][1].trim();
+      const start = matches[i].index + matches[i][0].length;
+      const end = i + 1 < matches.length ? matches[i + 1].index : notes.length;
+      const body = notes.slice(start, end).trim();
+      if (key && body) sections[key] = body;
+    }
+    return sections;
+  }
+
+  // 勤務前確認ブロックの描画。優先表示順を整え、未掲載項目はそのまま並べる。
+  function renderPreShiftBlock(sections) {
+    if (!sections) return '';
+    const preferred = ['想定患者数','業務範囲','バックアップ体制','電子カルテ','集合場所・持ち物','注意事項','勤務内容・注意事項'];
+    const keys = [
+      ...preferred.filter(k => sections[k]),
+      ...Object.keys(sections).filter(k => !preferred.includes(k)),
+    ];
+    if (!keys.length) return '';
+    return `
+      <div class="pre-shift">
+        <div class="pre-shift__head">勤務前確認</div>
+        <div class="pre-shift__list">
+          ${keys.map(k => `
+            <div class="pre-shift__item">
+              <div class="pre-shift__key">${escapeHtml(k)}</div>
+              <div class="pre-shift__val">${escapeHtml(sections[k])}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
   function statusLabel(s) {
     return ({
-      confirmed: '確定',
+      confirmed: '勤務確定',
       checked_in: '勤務中',
       checked_out: '勤務終了',
-      completion_reported: '完了報告済',
-      completion_confirmed: '確認済',
+      completion_reported: '完了報告済み',
+      completion_confirmed: '完了確定',
       cancelled: 'キャンセル',
-      disputed: '係争中',
+      disputed: '確認事項あり',
+      no_show: '未勤務',
     })[s] || s;
+  }
+  // ステータスごとの状況説明文（医療者向けの安心感のあるトーン）
+  function statusGuidance(s) {
+    return ({
+      confirmed: 'この勤務は確定しています。勤務内容・場所・時間をご確認のうえ、当日は勤務開始時にチェックインしてください。',
+      checked_in: '勤務中です。勤務終了時にチェックアウトしてください。',
+      checked_out: '勤務終了後、勤務内容に問題がなければ完了報告を行ってください。',
+      completion_reported: '完了報告済みです。施設側の完了確認をお待ちください。',
+      completion_confirmed: '勤務完了が確定しました。稼働実績に反映されています。',
+      disputed: '確認事項があります。Neco担当者からの連絡をお待ちください。',
+      cancelled: 'この勤務はキャンセルされています。',
+      no_show: 'この勤務は未勤務として記録されています。',
+    })[s] || '';
+  }
+  // 勤務予定リストでの「次に必要な対応」短文
+  function nextActionForWorker(s) {
+    return ({
+      confirmed: '勤務開始時にチェックイン',
+      checked_in: '勤務終了時にチェックアウト',
+      checked_out: '完了報告が必要',
+      completion_reported: '施設確認待ち',
+      completion_confirmed: '完了済み',
+      disputed: 'Neco確認中',
+      cancelled: 'キャンセル済み',
+      no_show: '未勤務',
+    })[s] || '-';
   }
   function professionLabel(p) {
     return ({

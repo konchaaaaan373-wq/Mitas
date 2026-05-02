@@ -400,15 +400,16 @@
     const errorBanner = document.getElementById('errorBanner');
 
     // ?next=/path で指定されたリダイレクト先を取得（Open Redirect 防止のため相対パスに限定）
+    // 未指定時は null を返し、ログイン後に user_roles.role から既定画面を決定する
     function getNextPath() {
       try {
         const next = new URLSearchParams(location.search).get('next');
-        if (typeof next !== 'string' || !next) return '/dashboard.html';
-        if (/^https?:\/\//i.test(next)) return '/dashboard.html';
-        if (next.startsWith('//'))      return '/dashboard.html';
-        if (!next.startsWith('/'))      return '/dashboard.html';
+        if (typeof next !== 'string' || !next) return null;
+        if (/^https?:\/\//i.test(next)) return null;
+        if (next.startsWith('//'))      return null;
+        if (!next.startsWith('/'))      return null;
         return next;
-      } catch (_) { return '/dashboard.html'; }
+      } catch (_) { return null; }
     }
 
     form.addEventListener('submit', async (e) => {
@@ -427,7 +428,7 @@
       loginBtn.classList.add('loading');
 
       try {
-        // 成功時は hospital-login.js が next（または /dashboard.html）へリダイレクト
+        // 成功時は hospital-login.js が next（指定時）または role 既定画面へ遷移
         await hospitalLogin(email, password, getNextPath());
       } catch (err) {
         showError(err.message);
@@ -442,12 +443,22 @@
       errorBanner.classList.add('show');
     }
 
-    // 既にセッションがあれば next（または /dashboard.html）へ
+    // 既にセッションがあれば next（指定時）または role 既定画面へ
     (async function checkSession() {
       // hospital-login.js のロードを待つ
       await new Promise(r => script.addEventListener('load', r));
       const session = await getSession();
-      if (session) location.href = getNextPath();
+      if (!session) return;
+      const next = getNextPath();
+      if (next) {
+        location.href = next;
+      } else {
+        // hospital-login.js の defaultPathForRole を利用
+        const home = (typeof defaultPathForRole === 'function')
+          ? await defaultPathForRole()
+          : '/dashboard.html';
+        location.href = home;
+      }
     })();
   </script>
 </body>

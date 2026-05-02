@@ -926,6 +926,41 @@
     .modal-sent__title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
     .modal-sent__sub { font-size: 13px; color: var(--gray-500); }
 
+    /* ─── 構造化された勤務内容の入力補助 ─── */
+    .structured-notes {
+      margin-bottom: 16px;
+      border: 1px dashed var(--gray-300, #cbd5e1);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: var(--gray-50, #f8fafc);
+    }
+    .structured-notes summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy, #1B3A6B);
+      list-style: none;
+      padding: 2px 0;
+    }
+    .structured-notes summary::-webkit-details-marker { display: none; }
+    .structured-notes summary::before {
+      content: '▶';
+      display: inline-block;
+      margin-right: 6px;
+      font-size: 10px;
+      color: var(--gray-500, #64748B);
+      transition: transform 0.15s;
+    }
+    .structured-notes[open] summary::before { transform: rotate(90deg); }
+    .structured-notes__hint {
+      font-size: 11px;
+      color: var(--gray-500, #64748B);
+      line-height: 1.7;
+      margin: 8px 0 12px;
+    }
+    .structured-notes .modal-form-row { margin-bottom: 10px; }
+    .structured-notes .modal-form-row:last-child { margin-bottom: 0; }
+
     /* ─── 優先度・ステータスバッジ拡張 ─────────────── */
     .priority-dot {
       display: inline-flex;
@@ -1532,6 +1567,35 @@
     .v2-cases-table tr.v2-row-action:hover td {
       background: rgba(91,33,182,0.08);
     }
+    .v2-asgn-actions {
+      margin-top: 6px;
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+
+    /* 施設管理者向け：提案進捗のヒント・必要な対応バッジ */
+    .v2-prop-action {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 100px; font-size: 11px; font-weight: 600;
+    }
+    .v2-prop-action--need { background: rgba(220,38,38,0.10); color: #B91C1C; }
+    .v2-prop-action--info { background: rgba(14,165,233,0.10); color: #0369A1; }
+    .v2-prop-action--ok   { background: rgba(16,185,129,0.10); color: #047857; }
+    .v2-prop-actions {
+      margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .v2-prop-btn {
+      padding: 4px 10px; font-size: 11px; cursor: pointer;
+      background: var(--white, #fff); color: #1B3A6B;
+      border: 1px solid var(--gray-300, #cbd5e1); border-radius: 4px;
+    }
+    .v2-prop-btn:hover { background: rgba(14,165,233,0.06); }
+    .v2-prop-btn--primary {
+      background: #0EA5E9; color: #fff; border-color: #0EA5E9;
+    }
+    .v2-prop-btn--primary:hover { background: #0284C7; border-color: #0284C7; }
+    .v2-prop-btn--ghost { color: #64748B; }
+    .v2-prop-btn[disabled] { opacity: 0.6; cursor: default; }
+
     /* クリック可能な行（依頼詳細を開く） */
     .v2-cases-table tr.v2-row-clickable { cursor: pointer; }
     .v2-cases-table tr.v2-row-clickable:hover td {
@@ -1776,25 +1840,35 @@
 
       <!-- KPIカード（v2 リアルデータから動的算出） -->
       <div class="kpi-grid">
-        <div class="kpi-card">
-          <p class="kpi-card__label">進行中の勤務枠</p>
+        <div class="kpi-card kpi-card--red">
+          <p class="kpi-card__label">未充足勤務枠</p>
           <p class="kpi-card__value" id="kpiActive">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiActiveSub"></p>
         </div>
         <div class="kpi-card kpi-card--teal">
-          <p class="kpi-card__label">承認待ち配置候補</p>
+          <p class="kpi-card__label">候補者提案中</p>
           <p class="kpi-card__value" id="kpiPending">-<em>名</em></p>
           <p class="kpi-card__sub" id="kpiPendingSub"></p>
         </div>
         <div class="kpi-card kpi-card--amber">
-          <p class="kpi-card__label">充足希望日まで14日以内</p>
+          <p class="kpi-card__label">承認待ち</p>
           <p class="kpi-card__value" id="kpiSoon">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiSoonSub"></p>
         </div>
-        <div class="kpi-card kpi-card--red">
-          <p class="kpi-card__label">優先度・高〜緊急</p>
+        <div class="kpi-card">
+          <p class="kpi-card__label">今週の確定勤務</p>
           <p class="kpi-card__value" id="kpiUrgent">-<em>件</em></p>
           <p class="kpi-card__sub" id="kpiUrgentSub"></p>
+        </div>
+        <div class="kpi-card kpi-card--amber">
+          <p class="kpi-card__label">完了確認待ち</p>
+          <p class="kpi-card__value" id="kpiCompletion">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiCompletionSub"></p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-card__label">請求確認</p>
+          <p class="kpi-card__value" id="kpiInvoices">-<em>件</em></p>
+          <p class="kpi-card__sub" id="kpiInvoicesSub"></p>
         </div>
       </div>
 
@@ -1852,6 +1926,9 @@
     <!-- ─── 候補者確認 ─────────────────────────────── -->
     <section class="page-section" id="s-candidates">
 
+      <p style="margin: 0 0 14px; font-size: 12px; color: #64748B; line-height: 1.8;">
+        Necoが勤務枠の要件を確認し、資格・経験・勤務可能性を踏まえて医療者候補をご提案します。施設側で承認後、勤務確定に進みます。
+      </p>
       <!-- ═════ 配置候補・提案一覧（v2 リアルデータ・Phase E-3 でメイン化） ═════ -->
       <div class="v2-cases-card" id="v2ProposalsCard" aria-label="配置候補一覧">
         <div class="v2-cases-card__head">
@@ -1877,6 +1954,9 @@
     <!-- ─── アサイン管理（v2 リアルデータ） ────────────────── -->
     <section class="page-section" id="s-assignments">
 
+      <p style="margin: 0 0 14px; font-size: 12px; color: #64748B; line-height: 1.8;">
+        勤務完了後は、施設側で完了確認を行うことで稼働実績・請求に反映されます。
+      </p>
       <div class="v2-cases-card" id="v2AssignmentsCard" aria-label="勤務確定・稼働管理">
         <div class="v2-cases-card__head">
           <span class="v2-cases-card__title">勤務確定・稼働管理</span>
@@ -2162,9 +2242,43 @@
               <input type="number" id="reqRateMax" min="0" step="100" placeholder="例：12000">
             </div>
           </div>
+          <details class="structured-notes" id="reqStructuredNotes" open>
+            <summary>勤務内容の入力補助（医療者に打診しやすくなります）</summary>
+            <p class="structured-notes__hint">
+              以下の項目に記入すると、送信時に「勤務内容・注意事項」へ整形してまとめます。<br>
+              個別に「勤務内容・注意事項」だけ記入することもできます。
+            </p>
+            <div class="modal-form-row">
+              <label>想定患者数</label>
+              <input type="text" id="reqNotePatients" placeholder="例：30名程度（午前外来）">
+            </div>
+            <div class="modal-form-row">
+              <label>業務範囲</label>
+              <input type="text" id="reqNoteScope" placeholder="例：一般内科外来、発熱対応なし">
+            </div>
+            <div class="modal-form-row">
+              <label>バックアップ体制</label>
+              <input type="text" id="reqNoteBackup" placeholder="例：院長へ相談可、専門医オンコール体制あり">
+            </div>
+            <div class="modal-form-row">
+              <label>電子カルテ</label>
+              <input type="text" id="reqNoteEmr" placeholder="例：CLIUS / 紙カルテ など">
+            </div>
+            <div class="modal-form-row">
+              <label>集合場所・持ち物</label>
+              <input type="text" id="reqNoteMeeting" placeholder="例：受付に集合、白衣持参">
+            </div>
+            <div class="modal-form-row">
+              <label>注意事項</label>
+              <input type="text" id="reqNoteCaution" placeholder="例：初回勤務のためオリエンテーションあり">
+            </div>
+          </details>
           <div class="modal-form-row">
-            <label>勤務内容・注意事項</label>
-            <textarea id="reqNote" rows="3" placeholder="経験年数・専門領域・夜勤可否など、勤務枠の要件・注意事項をご記入ください"></textarea>
+            <label>勤務内容・注意事項（自由記載）</label>
+            <textarea id="reqNote" rows="3" placeholder="上記の入力補助に追加で記入したい内容があればご記入ください"></textarea>
+            <p style="font-size: 11px; color: #64748B; margin-top: 6px; line-height: 1.7;">
+              ここに記入した内容と入力補助で記入した内容は、送信時にまとめて「勤務内容・注意事項」として登録されます。
+            </p>
           </div>
         </div>
         <div class="modal-footer">
@@ -2210,6 +2324,26 @@
         } catch { sessionStorage.clear(); location.href = '/login.html' + next; }
         return;
       }
+
+      // ロールガード：facility_admin 以外は本来の画面へ自動遷移
+      try {
+        const { data: roleRow } = await db
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+        const role = roleRow && roleRow.role;
+        const ROLE_HOME = {
+          worker: '/worker-app.html',
+          facility_admin: '/dashboard.html',
+          neco_admin: '/neco-console.html',
+          alliance_admin: '/alliance-dashboard.html',
+        };
+        if (role && role !== 'facility_admin') {
+          location.replace(ROLE_HOME[role] || '/dashboard.html');
+          return;
+        }
+      } catch (_) { /* ロール取得失敗時は RLS に委ねる */ }
 
       initApp({ email: session.user.email, sub: session.user.id });
     })();
@@ -2264,39 +2398,93 @@
 
       const { requests = [], proposals = [], assignments = [], invoices = [] } = data;
 
-      // 集計
+      // 経過時間ヘルパー
+      const hoursSinceISO = (iso) => {
+        if (!iso) return null;
+        const t = new Date(iso).getTime();
+        if (Number.isNaN(t)) return null;
+        return (Date.now() - t) / 3600000;
+      };
+      const formatElapsed = (h) => {
+        if (h == null) return '';
+        if (h < 24)  return `${Math.max(0, Math.round(h))}時間経過`;
+        return `${Math.round(h / 24)}日経過`;
+      };
+      const maxElapsedH = (list, accessor) => {
+        let max = null;
+        list.forEach(x => {
+          const h = hoursSinceISO(accessor(x));
+          if (h != null && (max == null || h > max)) max = h;
+        });
+        return max;
+      };
+
+      // ステータス・優先度から「対応が必要な事項」を集計
+      const openStatuses = ['submitted','under_review','accepted','proposing','partially_assigned'];
+      const urgentUnfilledList = requests.filter(r =>
+        openStatuses.includes(r.status) && (r.priority === 'urgent' || r.priority === 'high')
+      );
+      const submittedList    = requests.filter(r => r.status === 'submitted');
+      const approvalList     = proposals.filter(p => p.status === 'proposed_to_facility');
+      const completionList   = assignments.filter(a => a.status === 'completion_reported');
+      const disputedList     = assignments.filter(a => a.status === 'disputed');
+      const invoiceAttention = invoices.filter(i => i.status === 'overdue' || i.status === 'sent' || i.status === 'issued');
+
+      const approvalMaxH = maxElapsedH(approvalList,   p => p.updated_at || p.created_at);
+      const completionMaxH = maxElapsedH(completionList, a => a.worker_reported_at || a.checked_out_at);
+
       const items = [
         {
-          key: 'inquiries',
-          label: '受付中の勤務枠依頼',
-          sub: '登録された勤務枠依頼を確認してください',
-          count: requests.filter(r => r.status === 'submitted').length,
+          key: 'cases',
+          label: '緊急度の高い未充足勤務枠',
+          sub: '優先度が「緊急」「高」の未充足勤務枠があります',
+          count: urgentUnfilledList.length,
           icon: '!',
+          tone: 'urgent',
+        },
+        {
+          key: 'inquiries',
+          label: '新規依頼が受付中です',
+          sub: 'Necoが内容を確認しています',
+          count: submittedList.length,
+          icon: 'i',
           tone: 'info',
         },
         {
           key: 'candidates',
-          label: '配置候補の承認待ち',
-          sub: 'Necoから医療者候補が提案されています',
-          count: proposals.filter(p => p.status === 'proposed_to_facility').length,
+          label: '提案候補の承認が必要です',
+          sub: approvalMaxH != null && approvalMaxH >= 24
+            ? `候補者提案から${formatElapsed(approvalMaxH)}しています。承認または見送りをご判断ください。`
+            : 'Necoから医療者候補が提案されています。承認または見送りをご判断ください。',
+          count: approvalList.length,
           icon: '?',
-          tone: 'warn',
+          tone: approvalMaxH != null && approvalMaxH >= 48 ? 'urgent' : 'warn',
         },
         {
           key: 'assignments',
-          label: '完了確定待ち',
-          sub: '医療者から稼働完了報告が届いています',
-          count: assignments.filter(a => a.status === 'completion_reported').length,
+          label: '勤務完了確認が必要です',
+          sub: completionMaxH != null && completionMaxH >= 24
+            ? `完了報告から${formatElapsed(completionMaxH)}しています。完了確認をお願いします。`
+            : '完了報告済みの勤務があります。完了確認をお願いします。',
+          count: completionList.length,
           icon: '+',
+          tone: completionMaxH != null && completionMaxH >= 48 ? 'urgent' : 'warn',
+        },
+        {
+          key: 'assignments',
+          label: '確認事項ありの勤務があります',
+          sub: '紛争申告中の勤務があります。Neco担当者が調整中です。',
+          count: disputedList.length,
+          icon: '!',
           tone: 'urgent',
         },
         {
           key: 'invoices',
-          label: '支払期日超過',
-          sub: '請求書の支払いが遅延しています',
-          count: invoices.filter(i => i.status === 'overdue').length,
+          label: '請求確認が必要な項目があります',
+          sub: '請求書の支払いが遅延または未確認です。',
+          count: invoiceAttention.length,
           icon: '$',
-          tone: 'urgent',
+          tone: invoiceAttention.some(i => i.status === 'overdue') ? 'urgent' : 'warn',
         },
       ];
 
@@ -2442,14 +2630,33 @@
           if (el) el.textContent = txt;
         };
 
-        setKpiValue('kpiActive',  totalActive,        '件');
-        setKpiSub  ('kpiActiveSub',  `受付${v2pending}・提案${v2proposing}・進行${v2active}`);
-        setKpiValue('kpiPending', proposedToFacility, '名');
-        setKpiSub  ('kpiPendingSub', proposals.length ? `要対応の提案` : `提案データを取得中`);
-        setKpiValue('kpiSoon',    inFourteenDays,     '件');
-        setKpiSub  ('kpiSoonSub',    `14日以内に開始予定`);
-        setKpiValue('kpiUrgent',  v2urgent,           '件');
-        setKpiSub  ('kpiUrgentSub',  `priority=urgent`);
+        // 6つのKPIカードを施設管理者が「次に何をすべきか」分かるように再計算
+        const unfilledOpen = requests.filter(r => ['submitted','under_review','accepted','proposing','partially_assigned'].includes(r.status)).length;
+        const proposingCount = requests.filter(r => r.status === 'proposing' || r.status === 'partially_assigned').length;
+        const facilityApprovalNeeded = proposedToFacility;
+        const now = Date.now();
+        const oneWeek = 7 * 86400000;
+        const thisWeekConfirmed = assignments.filter(a => {
+          if (!['confirmed','checked_in','checked_out'].includes(a.status)) return false;
+          if (!a.scheduled_start_at) return false;
+          const t = new Date(a.scheduled_start_at).getTime();
+          return t >= now - oneWeek && t <= now + oneWeek;
+        }).length;
+        const completionPending = assignments.filter(a => a.status === 'completion_reported').length;
+        const invoiceAttention = invoices.filter(i => i.status === 'overdue' || i.status === 'sent').length;
+
+        setKpiValue('kpiActive',     unfilledOpen,           '件');
+        setKpiSub  ('kpiActiveSub',  v2urgent ? `うち緊急 ${v2urgent}件` : '充足調整中の勤務枠');
+        setKpiValue('kpiPending',    proposingCount,         '件');
+        setKpiSub  ('kpiPendingSub', proposingCount ? 'Necoが医療者を打診中' : '現在打診中の勤務枠はありません');
+        setKpiValue('kpiSoon',       facilityApprovalNeeded, '件');
+        setKpiSub  ('kpiSoonSub',    facilityApprovalNeeded ? '配置候補の承認をお願いします' : '承認待ちはありません');
+        setKpiValue('kpiUrgent',     thisWeekConfirmed,      '件');
+        setKpiSub  ('kpiUrgentSub',  thisWeekConfirmed ? '今週開始予定の確定勤務' : '今週の確定勤務はありません');
+        setKpiValue('kpiCompletion', completionPending,      '件');
+        setKpiSub  ('kpiCompletionSub', completionPending ? '稼働完了の確認をお願いします' : '完了確認待ちはありません');
+        setKpiValue('kpiInvoices',   invoiceAttention,       '件');
+        setKpiSub  ('kpiInvoicesSub', invoiceAttention ? '未確認・期日超過の請求があります' : '請求は最新状態です');
 
         // 通知センター（対応が必要な事項）
         renderV2Notices({ requests, proposals, assignments, invoices });
@@ -2470,11 +2677,22 @@
     /* ─── v2 リアル案件テーブル（Phase B） ─────────
        /api/v2/requests から自組織の依頼を取得し、v2スキーマで表示。
        既存の CASES（モック）テーブルとは別領域に並行表示する。 */
+    // 施設管理者向けの「次に何が起きているか」が伝わるラベル
     const V2_STATUS_LABEL = {
-      draft:'下書き', submitted:'受付', under_review:'確認中', accepted:'受諾',
-      rejected:'差戻し', proposing:'提案中', partially_assigned:'一部充足',
-      fully_assigned:'充足完了', in_progress:'進行中', completion_pending:'完了申請',
-      confirmed:'完了確定', invoiced:'請求済', paid:'入金済', cancelled:'キャンセル',
+      draft:               '下書き',
+      submitted:           'Neco確認待ち',
+      under_review:        '要件確認中',
+      accepted:            '候補者選定前',
+      rejected:            '差戻し',
+      proposing:           '候補者提案中',
+      partially_assigned:  '一部充足',
+      fully_assigned:      '充足完了',
+      in_progress:         '稼働中',
+      completion_pending:  '完了確認待ち',
+      confirmed:           '完了確定',
+      invoiced:            '請求済み',
+      paid:                '支払済み',
+      cancelled:           'キャンセル',
     };
     const V2_PRIORITY_LABEL = { urgent:'緊急', high:'高', medium:'中', low:'低' };
     const V2_PROFESSION_LABEL = {
@@ -2769,17 +2987,44 @@
        /api/v2/proposals から自組織宛の提案を取得し、状態別に表示。
        既存の CANDIDATES（モック）パネルとは別領域に並行表示する。
        proposals_select RLS により facility_admin は自組織宛の提案のみ閲覧可能。 */
+    // 施設管理者の視点から提案の進捗が分かるラベル
     const V2_PROPOSAL_STATUS_LABEL = {
-      created:              '作成',
-      worker_contacted:     '医療者へ連絡',
-      worker_accepted:      '医療者承諾',
+      created:              'Neco確認中',
+      worker_contacted:     '医療者打診中',
+      worker_accepted:      '医療者承諾済み',
       worker_declined:      '医療者辞退',
-      proposed_to_facility: '要対応',
-      facility_accepted:    '承諾済',
-      facility_declined:    '辞退済',
-      withdrawn:            '取り下げ',
+      proposed_to_facility: '施設承認待ち',
+      facility_accepted:    '施設承認済み',
+      facility_declined:    '見送り',
+      withdrawn:            '取下げ',
       expired:              '期限切れ',
     };
+    // 施設管理者向けの状態の補足説明（カラム下に出す小さな注記）
+    // facility_accepted は assignment の有無で表示を切り替えるため、関数で生成する。
+    function v2ProposalStatusHint(p, hasAssignment) {
+      const map = {
+        created:              'Necoが候補者を選定中です',
+        worker_contacted:     'Necoが医療者本人に打診中です',
+        worker_accepted:      '医療者から内諾を得ています',
+        worker_declined:      '医療者が辞退しました。別候補をNecoが調整中です',
+        proposed_to_facility: '貴施設での承認をお願いします。承認後に勤務確定へ進みます',
+        facility_declined:    '貴施設が見送りとした提案です',
+        withdrawn:            '取下げられた提案です',
+        expired:              '対応期限を過ぎました',
+      };
+      if (p.status === 'facility_accepted') {
+        return hasAssignment
+          ? '勤務確定済みです。勤務日時・医療者・報酬条件をご確認ください。勤務完了後は、完了確認をお願いいたします。'
+          : 'Necoが勤務確定手続きを進めています。勤務確定後、勤務確定・稼働画面に反映されます。';
+      }
+      return map[p.status] || '';
+    }
+    function v2ProposalStatusLabel(p, hasAssignment) {
+      if (p.status === 'facility_accepted') {
+        return hasAssignment ? '勤務確定済み' : '施設承認済み';
+      }
+      return V2_PROPOSAL_STATUS_LABEL[p.status] || p.status;
+    }
     const V2_PROP_ACTION_REQUIRED = ['proposed_to_facility'];
     const V2_PROP_DONE = ['facility_accepted','facility_declined','withdrawn','expired'];
 
@@ -2799,6 +3044,16 @@
       body.innerHTML = '<div class="v2-cases-table__placeholder">読み込み中…</div>';
       setMsg('読み込み中…');
       if (btn) btn.disabled = true;
+
+      // facility_accepted の提案について「勤務確定済み」を表示するため、
+      // アサイン一覧を未読込なら先行で読み込んでおく（バックグラウンド）。
+      if (typeof v2AsgnState !== 'undefined' && !v2AsgnState.loaded
+          && typeof loadV2Assignments === 'function') {
+        loadV2Assignments().then(() => {
+          // 読み込み完了後に再描画して「勤務確定済み」表示を反映
+          if (typeof renderV2ProposalsTable === 'function') renderV2ProposalsTable();
+        }).catch(() => {});
+      }
 
       let token = null;
       try {
@@ -2881,18 +3136,36 @@
       };
       const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
 
+      // facility_accepted の提案について、assignment が既に作成済みかを判定
+      const assignedProposalIds = new Set(
+        ((v2AsgnState && v2AsgnState.rows) || [])
+          .filter(a => a.status !== 'cancelled' && a.proposal_id)
+          .map(a => a.proposal_id)
+      );
+      const facilityActionLabel = (p, hasAssignment) => {
+        if (p.status === 'proposed_to_facility') return '<span class="v2-prop-action v2-prop-action--need">承認をお願いします</span>';
+        if (p.status === 'worker_accepted')      return '<span class="v2-prop-action v2-prop-action--info">まもなく施設承認待ちになります</span>';
+        if (p.status === 'created' || p.status === 'worker_contacted') return '<span class="v2-prop-action v2-prop-action--info">Necoが調整中です</span>';
+        if (p.status === 'facility_accepted') {
+          return hasAssignment
+            ? '<span class="v2-prop-action v2-prop-action--ok">勤務確定済み</span>'
+            : '<span class="v2-prop-action v2-prop-action--info">Necoが勤務確定手続き中</span>';
+        }
+        return '';
+      };
+
       body.innerHTML = `
         <table class="v2-cases-table">
           <thead>
             <tr>
               <th>提案番号</th>
               <th>医療者</th>
-              <th>依頼</th>
+              <th>勤務枠</th>
               <th class="num">提案時給</th>
               <th class="num">スコア</th>
-              <th>ステータス</th>
+              <th>進捗</th>
+              <th>必要な対応</th>
               <th>期限</th>
-              <th>作成日</th>
             </tr>
           </thead>
           <tbody>
@@ -2900,8 +3173,11 @@
               const wp = p.worker_profiles || {};
               const sr = p.staffing_requests || {};
               const isAction = V2_PROP_ACTION_REQUIRED.includes(p.status);
+              const hasAssignment = assignedProposalIds.has(p.id);
+              const hint = v2ProposalStatusHint(p, hasAssignment);
+              const label = v2ProposalStatusLabel(p, hasAssignment);
               return `
-                <tr class="${isAction ? 'v2-row-action' : ''}">
+                <tr class="${isAction ? 'v2-row-action' : ''}" data-proposal-id="${esc(p.id)}">
                   <td><span class="v2-cases-table__num">${esc(p.proposal_number || '')}</span></td>
                   <td>
                     <div class="v2-cases-table__title">${esc(wp.full_name || '—')}</div>
@@ -2916,15 +3192,91 @@
                   </td>
                   <td class="num">${esc(yen(p.proposed_hourly_rate))}</td>
                   <td class="num">${p.match_score == null ? '—' : esc(String(p.match_score))}</td>
-                  <td><span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(V2_PROPOSAL_STATUS_LABEL[p.status] || p.status)}</span></td>
+                  <td>
+                    <span class="v2-prop-st v2-prop-st--${esc(p.status)}">${esc(label)}</span>
+                    ${hint ? `<div style="font-size:11px;color:var(--gray-500,#64748B);margin-top:4px;line-height:1.6;">${esc(hint)}</div>` : ''}
+                  </td>
+                  <td>
+                    ${facilityActionLabel(p, hasAssignment)}
+                    ${isAction ? `
+                      <div class="v2-prop-actions">
+                        <button class="v2-prop-btn v2-prop-btn--primary" data-action="approve" data-id="${esc(p.id)}">承認する</button>
+                        <button class="v2-prop-btn"                     data-action="ask"     data-id="${esc(p.id)}">条件確認を依頼</button>
+                        <button class="v2-prop-btn v2-prop-btn--ghost"  data-action="decline" data-id="${esc(p.id)}">見送る</button>
+                      </div>` : ''}
+                  </td>
                   <td>${esc(fmt(p.expires_at))}</td>
-                  <td>${esc(fmt(p.created_at))}</td>
                 </tr>
               `;
             }).join('')}
           </tbody>
         </table>
       `;
+
+      // 施設管理者向けアクションをバインド
+      body.querySelectorAll('.v2-prop-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          const p = (v2PropState.rows || []).find(x => x.id === id);
+          if (!p) return;
+          handleFacilityProposalAction(p, action, btn);
+        });
+      });
+    }
+
+    // 施設側の提案アクション（承認 / 条件確認 / 見送り）
+    async function handleFacilityProposalAction(p, action, btn) {
+      const session = (typeof getSession === 'function') ? getSession() : null;
+      const token = session && session.access_token;
+      const apiBase = '/api/v2/proposals';
+      const url = `${apiBase}/${encodeURIComponent(p.id)}`;
+
+      if (action === 'approve') {
+        if (!window.confirm('この配置候補を承認します。よろしいですか？')) return;
+        await patchProposalAndReload(url, token, { status: 'facility_accepted' }, '承認しました', btn);
+        return;
+      }
+      if (action === 'decline') {
+        if (!window.confirm('この配置候補を見送ります。よろしいですか？')) return;
+        await patchProposalAndReload(url, token, { status: 'facility_declined' }, '見送りに変更しました', btn);
+        return;
+      }
+      if (action === 'ask') {
+        // DB変更なしで「条件確認を依頼」フィードバックを与える
+        if (typeof toast === 'function') {
+          toast('条件確認の依頼をNeco担当者にお伝えください。専用フォームは今後のアップデートで追加予定です。', 'info');
+        } else {
+          alert('条件確認の依頼をNeco担当者にお伝えください。専用フォームは今後のアップデートで追加予定です。');
+        }
+      }
+    }
+    async function patchProposalAndReload(url, token, body, successMsg, btn) {
+      try {
+        if (btn) btn.disabled = true;
+        if (!token) {
+          // モック相当：UIだけ更新
+          await new Promise(r => setTimeout(r, 200));
+          if (typeof toast === 'function') toast(successMsg + '（モック）', 'success');
+        } else {
+          const res = await fetch(url, {
+            method: 'PATCH',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || data.detail || `API ${res.status}`);
+          }
+          if (typeof toast === 'function') toast(successMsg, 'success');
+        }
+        if (typeof loadV2Proposals === 'function') loadV2Proposals();
+      } catch (e) {
+        console.error('提案更新失敗:', e);
+        if (typeof toast === 'function') toast('提案の更新に失敗しました：' + e.message, 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     function bindV2ProposalsControls() {
@@ -3328,15 +3680,35 @@
        /api/v2/assignments から自組織のアサインを取得し、状態別に表示。
        facility_admin は completion_reported → completion_confirmed の
        状態遷移（PATCH）が可能。 */
+    const V2_SHIFT_LABEL = {
+      regular_shift: '通常勤務',
+      day_duty: '日勤',
+      night_duty: '夜勤・当直',
+      on_call: 'オンコール',
+      spot: '応援勤務',
+      long_term: '非常勤・継続勤務',
+    };
+    // 施設管理者向けの分かりやすいラベル
     const V2_ASGN_STATUS_LABEL = {
-      confirmed:            '確定',
+      confirmed:            '勤務確定',
       checked_in:           '勤務中',
       checked_out:          '勤務終了',
-      completion_reported:  '完了報告',
-      completion_confirmed: '完了確定',
-      disputed:             '紛争中',
+      completion_reported:  '完了報告済み',
+      completion_confirmed: '完了確定済み',
+      disputed:             '確認事項あり',
       cancelled:            'キャンセル',
-      no_show:              '無断欠勤',
+      no_show:              '未勤務',
+    };
+    // 施設側で必要な対応の文言
+    const V2_ASGN_FACILITY_HINT = {
+      confirmed:            '勤務開始待ち',
+      checked_in:           '勤務中',
+      checked_out:          '医療者の完了報告待ち',
+      completion_reported:  '完了確認が必要です',
+      completion_confirmed: '完了確定済み',
+      disputed:             '確認事項あり（Necoが調整中）',
+      cancelled:            'キャンセル済み',
+      no_show:              '未勤務として記録',
     };
     const V2_ASGN_ACTION_REQUIRED = ['completion_reported'];     // facility_admin の対応待ち
     const V2_ASGN_ACTIVE = ['confirmed','checked_in','checked_out','completion_reported','disputed'];
@@ -3448,19 +3820,26 @@
       };
       const yen = (n) => (n == null) ? '—' : `¥${Number(n).toLocaleString()}`;
 
+      const fmtTime = (iso) => {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return `${('0'+(d.getMonth()+1)).slice(-2)}/${('0'+d.getDate()).slice(-2)} ${('0'+d.getHours()).slice(-2)}:${('0'+d.getMinutes()).slice(-2)}`;
+      };
+
       body.innerHTML = `
         <table class="v2-cases-table">
           <thead>
             <tr>
               <th>アサイン番号</th>
               <th>医療者</th>
-              <th>依頼</th>
-              <th>予定開始</th>
-              <th>予定終了</th>
+              <th>勤務枠</th>
+              <th>勤務日時</th>
+              <th>勤務種別</th>
+              <th>稼働状況</th>
+              <th>進捗</th>
+              <th>必要な対応</th>
               <th class="num">時給</th>
-              <th class="num">総報酬</th>
-              <th>ステータス</th>
-              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -3470,6 +3849,8 @@
               const isAction = V2_ASGN_ACTION_REQUIRED.includes(a.status);
               const canConfirm = a.status === 'completion_reported';
               const canDispute = a.status === 'completion_reported' || a.status === 'checked_out';
+              const shift = sr.shift_type ? V2_SHIFT_LABEL[sr.shift_type] || sr.shift_type : '—';
+              const facilityHint = V2_ASGN_FACILITY_HINT[a.status] || '';
               return `
                 <tr class="${isAction ? 'v2-row-action' : ''}">
                   <td><span class="v2-cases-table__num">${esc(a.assignment_number || '')}</span></td>
@@ -3481,20 +3862,42 @@
                     <div>${esc(sr.title || '—')}</div>
                     <div style="font-size:11px;color:var(--gray-400,#94A3B8);">${esc(sr.request_number || '')}</div>
                   </td>
-                  <td>${esc(fmt(a.scheduled_start_at))}</td>
-                  <td>${esc(fmt(a.scheduled_end_at))}</td>
-                  <td class="num">${esc(yen(a.hourly_rate))}</td>
-                  <td class="num">${esc(yen(a.total_compensation))}</td>
-                  <td><span class="v2-asgn-st v2-asgn-st--${esc(a.status)}">${esc(V2_ASGN_STATUS_LABEL[a.status] || a.status)}</span></td>
                   <td>
-                    ${canConfirm
-                      ? `<button class="v2-banner__refresh v2-asgn-confirm" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;background:#10B981;color:#FFFFFF;border-color:#10B981;">完了確定</button>`
-                      : ''}
-                    ${canDispute
-                      ? `<button class="v2-banner__refresh v2-asgn-dispute" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;margin-left:4px;color:#DC2626;border-color:#DC2626;">紛争申告</button>`
-                      : ''}
-                    ${(!canConfirm && !canDispute) ? '<span class="v2-act-meta">—</span>' : ''}
+                    <div>${esc(fmtTime(a.scheduled_start_at))}</div>
+                    <div style="font-size:11px;color:var(--gray-500,#64748B);">〜 ${esc(fmtTime(a.scheduled_end_at))}</div>
                   </td>
+                  <td>${esc(shift)}</td>
+                  <td>
+                    <div style="font-size:11px;color:var(--gray-700,#334155);">
+                      ${a.checked_in_at  ? 'IN：'  + esc(fmtTime(a.checked_in_at))  : '<span style="color:var(--gray-400,#94A3B8);">IN 未実施</span>'}
+                    </div>
+                    <div style="font-size:11px;color:var(--gray-700,#334155);">
+                      ${a.checked_out_at ? 'OUT：' + esc(fmtTime(a.checked_out_at)) : '<span style="color:var(--gray-400,#94A3B8);">OUT 未実施</span>'}
+                    </div>
+                    ${a.worker_completion_note ? `
+                      <div style="margin-top:4px;padding:4px 6px;background:var(--gray-50,#f8fafc);border-radius:4px;font-size:11px;color:var(--gray-700,#334155);max-height:38px;overflow:hidden;">
+                        完了報告：${esc(a.worker_completion_note)}
+                      </div>` : ''}
+                    ${a.dispute_reason ? `
+                      <div style="margin-top:4px;padding:4px 6px;background:rgba(220,38,38,0.06);border-radius:4px;font-size:11px;color:#991B1B;max-height:38px;overflow:hidden;">
+                        確認事項：${esc(a.dispute_reason)}
+                      </div>` : ''}
+                  </td>
+                  <td>
+                    <span class="v2-asgn-st v2-asgn-st--${esc(a.status)}">${esc(V2_ASGN_STATUS_LABEL[a.status] || a.status)}</span>
+                  </td>
+                  <td>
+                    <div style="font-size:12px;font-weight:600;color:${isAction ? '#B91C1C' : 'var(--gray-700,#334155)'};">${esc(facilityHint)}</div>
+                    <div class="v2-asgn-actions">
+                      ${canConfirm
+                        ? `<button class="v2-banner__refresh v2-asgn-confirm" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;background:#10B981;color:#FFFFFF;border-color:#10B981;">完了確定</button>`
+                        : ''}
+                      ${canDispute
+                        ? `<button class="v2-banner__refresh v2-asgn-dispute" data-id="${esc(a.id)}" type="button" style="font-size:11px;padding:4px 10px;color:#DC2626;border-color:#DC2626;">確認事項を申告</button>`
+                        : ''}
+                    </div>
+                  </td>
+                  <td class="num">${esc(yen(a.hourly_rate))}</td>
                 </tr>
               `;
             }).join('')}
@@ -3868,10 +4271,12 @@
         const subEl = document.getElementById(id + 'Sub');
         if (subEl) subEl.textContent = sub || '';
       };
-      setKpi('kpiActive',  '—<em>件</em>', '読み込み中…');
-      setKpi('kpiPending', '—<em>名</em>', '読み込み中…');
-      setKpi('kpiSoon',    '—<em>件</em>', '読み込み中…');
-      setKpi('kpiUrgent',  '—<em>件</em>', '読み込み中…');
+      setKpi('kpiActive',     '—<em>件</em>', '読み込み中…');
+      setKpi('kpiPending',    '—<em>件</em>', '読み込み中…');
+      setKpi('kpiSoon',       '—<em>件</em>', '読み込み中…');
+      setKpi('kpiUrgent',     '—<em>件</em>', '読み込み中…');
+      setKpi('kpiCompletion', '—<em>件</em>', '読み込み中…');
+      setKpi('kpiInvoices',   '—<em>件</em>', '読み込み中…');
     }
 
     /* ─── タスク ────────────────────────────────── */
@@ -3984,7 +4389,10 @@
       document.getElementById('requestFormWrap').style.display = 'block';
       document.getElementById('requestSent').classList.remove('show');
       // フォーム値を毎回クリア
-      ['reqTitle','reqHeadcount','reqStartDate','reqDeadline','reqRateMin','reqRateMax','reqNote'].forEach(id => {
+      [
+        'reqTitle','reqHeadcount','reqStartDate','reqDeadline','reqRateMin','reqRateMax','reqNote',
+        'reqNotePatients','reqNoteScope','reqNoteBackup','reqNoteEmr','reqNoteMeeting','reqNoteCaution'
+      ].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = (id === 'reqHeadcount') ? '1' : '';
       });
@@ -4007,7 +4415,23 @@
       const urgency  = $('reqUrgency')?.value || 'medium';
       const rateMin  = $('reqRateMin')?.value || '';
       const rateMax  = $('reqRateMax')?.value || '';
-      const note     = ($('reqNote')?.value || '').trim();
+      const noteFree = ($('reqNote')?.value || '').trim();
+
+      // 構造化された入力補助フィールドを「勤務内容・注意事項」へ整形
+      const structured = [
+        ['想定患者数',       ($('reqNotePatients')?.value || '').trim()],
+        ['業務範囲',         ($('reqNoteScope')?.value    || '').trim()],
+        ['バックアップ体制', ($('reqNoteBackup')?.value   || '').trim()],
+        ['電子カルテ',       ($('reqNoteEmr')?.value      || '').trim()],
+        ['集合場所・持ち物', ($('reqNoteMeeting')?.value  || '').trim()],
+        ['注意事項',         ($('reqNoteCaution')?.value  || '').trim()],
+      ].filter(([, v]) => v);
+      const structuredText = structured
+        .map(([k, v]) => `【${k}】\n${v}`)
+        .join('\n\n');
+      const note = [structuredText, noteFree]
+        .filter(Boolean)
+        .join('\n\n');
 
       // バリデーション
       if (!title)    { toast('勤務枠名を入力してください。', 'error'); return; }

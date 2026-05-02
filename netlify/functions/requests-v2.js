@@ -235,8 +235,19 @@ function isUuid(s) {
 }
 
 function getMockRequests() {
+  // デモで主要ステータスを一通り見られるように10件を用意
+  const iso = (offsetMs) => new Date(Date.now() + offsetMs).toISOString();
+  const day = 86400000;
   return [
-    { id: '00000000-0000-0000-0000-000000000001', request_number: 'SR-2026-0001', title: '内科外来 当直医（5月急募）', profession_type: 'physician', specialty: '内科', headcount: 1, shift_type: 'on_call', status: 'submitted', priority: 'urgent' },
-    { id: '00000000-0000-0000-0000-000000000002', request_number: 'SR-2026-0002', title: '訪問看護 週末スポット', profession_type: 'nurse', headcount: 1, shift_type: 'spot', status: 'accepted', priority: 'medium' },
+    { id: '00000000-0000-0000-0000-000000000001', request_number: 'SR-2026-0001', title: '内科外来 当直医（応援勤務）',         profession_type: 'physician', specialty: '内科',     headcount: 1, shift_type: 'on_call',       status: 'submitted',          priority: 'urgent', start_at: iso(5*day),  hourly_rate_min: 15000, hourly_rate_max: 18000, submitted_at: iso(-30*3600000), created_at: iso(-30*3600000) },
+    { id: '00000000-0000-0000-0000-000000000002', request_number: 'SR-2026-0002', title: '透析クリニック 常勤医',               profession_type: 'physician', specialty: '腎臓内科', headcount: 1, shift_type: 'regular_shift', status: 'under_review',       priority: 'medium', start_at: iso(30*day), hourly_rate_min: 12000, hourly_rate_max: 15000, reviewed_at: iso(-50*3600000) },
+    { id: '00000000-0000-0000-0000-000000000003', request_number: 'SR-2026-0003', title: '訪問看護 週末スポット',               profession_type: 'nurse',                            headcount: 1, shift_type: 'spot',          status: 'accepted',           priority: 'medium', start_at: iso(7*day),  hourly_rate_min: 3500,  hourly_rate_max: 4000,  accepted_at: iso(-2*day) },
+    { id: '00000000-0000-0000-0000-000000000004', request_number: 'SR-2026-0004', title: 'リハビリ専門 PT/OT 提案中',           profession_type: 'physical_therapist',               headcount: 2, shift_type: 'regular_shift', status: 'proposing',          priority: 'medium', start_at: iso(20*day), hourly_rate_min: 3200,  hourly_rate_max: 3800 },
+    { id: '00000000-0000-0000-0000-000000000005', request_number: 'SR-2026-0005', title: '健診センター GW 一部充足',           profession_type: 'physician', specialty: '健診',     headcount: 4, shift_type: 'spot',          status: 'partially_assigned', priority: 'high',   start_at: iso(10*day) },
+    { id: '00000000-0000-0000-0000-000000000006', request_number: 'SR-2026-0006', title: '夜勤専従ナース 充足完了',             profession_type: 'nurse',                            headcount: 3, shift_type: 'night_duty',    status: 'fully_assigned',     priority: 'high',   start_at: iso(35*day) },
+    { id: '00000000-0000-0000-0000-000000000007', request_number: 'SR-2026-0007', title: '在宅医療 訪問同行（稼働中）',         profession_type: 'physician',                        headcount: 1, shift_type: 'regular_shift', status: 'in_progress',        priority: 'medium', start_at: iso(-1*day) },
+    { id: '00000000-0000-0000-0000-000000000008', request_number: 'SR-2026-0008', title: '外来看護 完了申請中',                 profession_type: 'nurse',                            headcount: 1, shift_type: 'day_duty',      status: 'completion_pending', priority: 'low',    start_at: iso(-2*day) },
+    { id: '00000000-0000-0000-0000-000000000009', request_number: 'SR-2026-0009', title: '在宅医療 完了確定済',                 profession_type: 'physician',                        headcount: 1, shift_type: 'regular_shift', status: 'confirmed',          priority: 'medium', start_at: iso(-7*day) },
+    { id: '00000000-0000-0000-0000-000000000010', request_number: 'SR-2026-0010', title: '訪問看護 請求済',                     profession_type: 'nurse',                            headcount: 1, shift_type: 'spot',          status: 'invoiced',           priority: 'low',    start_at: iso(-30*day) },
   ];
 }
