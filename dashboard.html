@@ -2355,6 +2355,19 @@
         }
       } catch (_) { /* ロール取得失敗時は RLS に委ねる */ }
 
+      // 組織情報を sessionStorage に保存（旧セッションで mitas_org が空の場合のフォールバック）
+      // hospital-login.js 経由でログインしていれば既に入っているが、
+      // ログイン直後以外の経路で着地した場合に備えて常に確認する。
+      try {
+        const cached = sessionStorage.getItem('mitas_org');
+        const parsed = cached ? JSON.parse(cached) : null;
+        if (!parsed || !parsed.id) {
+          if (typeof fetchAndStoreUserOrg === 'function') {
+            await fetchAndStoreUserOrg();
+          }
+        }
+      } catch (_) { /* 失敗時は initApp が走り、勤務枠登録時に再度トーストでガイド */ }
+
       initApp({ email: session.user.email, sub: session.user.id });
     })();
 
