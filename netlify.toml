@@ -207,6 +207,12 @@
   to = "/.netlify/functions/dashboard-kpi-v2"
   status = 200
 
+# Me API – ログインユーザー本人の組織情報（RLS 連鎖回避のためサーバー経由）
+[[redirects]]
+  from = "/api/v2/me/org"
+  to = "/.netlify/functions/me-v2"
+  status = 200
+
 # Protected pages – redirect to login if accessed directly (handled client-side too)
 # These are informational; the actual auth check is done in JavaScript.
 [[redirects]]
