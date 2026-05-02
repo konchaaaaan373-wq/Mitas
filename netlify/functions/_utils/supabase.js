@@ -110,16 +110,29 @@ async function pgServiceFetch(path, init = {}) {
 
 /**
  * 監査ログを書き込む（service_role 使用）
+ *
+ * actor_role が未指定で actor_user_id が指定されている場合、
+ * user_roles から role を取得して記録する（呼び出し側の引数省略を許容）。
  */
 async function logActivity({ actor_user_id, actor_role, action, entity_type, entity_id, organization_id, before, after, headers = {} }) {
   if (isMockMode()) return;
   try {
+    let role = actor_role || null;
+    if (!role && actor_user_id) {
+      try {
+        const res = await pgServiceFetch(`/user_roles?user_id=eq.${encodeURIComponent(actor_user_id)}&select=role&limit=1`);
+        if (res.ok) {
+          const rows = await res.json();
+          if (Array.isArray(rows) && rows[0] && rows[0].role) role = rows[0].role;
+        }
+      } catch (_) { /* role 取得失敗は致命的ではないので無視 */ }
+    }
     await pgServiceFetch('/activity_log', {
       method: 'POST',
       headers: { Prefer: 'return=minimal' },
       body: JSON.stringify({
         actor_user_id,
-        actor_role,
+        actor_role: role,
         action,
         entity_type,
         entity_id,

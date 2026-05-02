@@ -3844,7 +3844,7 @@
   }
 
   // ─── 履歴の取得・描画（v0.2） ───
-  // 依頼・提案・アサインに紐づく activity_log を横断取得。
+  // 依頼・提案・アサイン・請求に紐づく activity_log を横断取得。
   // entity_type は staffing_request / proposal / assignment / invoice を含むため、
   // entity_id が UUID で衝突しないことを利用して entity_id IN(...) で一括取得する。
   // 呼び出し時点で state.selectedProposals / state.selectedAssignments が
@@ -3854,6 +3854,19 @@
     if (requestId) ids.push(requestId);
     (state.selectedProposals  || []).forEach(p => { if (p && p.id) ids.push(p.id); });
     (state.selectedAssignments || []).forEach(a => { if (a && a.id) ids.push(a.id); });
+
+    // invoice の id を assignment_id 経由で集める（invoice_line_items.assignment_id）
+    const asgIds = (state.selectedAssignments || []).map(a => a && a.id).filter(Boolean);
+    if (asgIds.length) {
+      try {
+        const liPath = `/invoice_line_items?assignment_id=in.(${asgIds.join(',')})&select=invoice_id`;
+        const liRows = await pgFetch(liPath);
+        if (Array.isArray(liRows)) {
+          liRows.forEach(li => { if (li && li.invoice_id) ids.push(li.invoice_id); });
+        }
+      } catch (_) { /* 失敗時は invoice 行を諦めて他を返す */ }
+    }
+
     const unique = [...new Set(ids.filter(Boolean))];
     if (!unique.length) return [];
     const path = `/activity_log?entity_id=in.(${unique.join(',')})`
