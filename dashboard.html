@@ -2296,8 +2296,18 @@
   </div>
 
   <script>
-    /* ─── 認証確認（Supabase セッション検証） ───────── */
+    /* ─── 認証確認（Supabase セッション検証） ─────────
+       mock mode（window.__SUPABASE_URL__ が 'YOUR_PROJECT' を含む or 未設定）の
+       場合は、auth を完全にスキップして mock ユーザーで initApp を直接呼ぶ。
+       他画面（worker-app / neco-console / alliance-dashboard）と挙動を揃え、
+       Live 環境を立てずに UI を確認できるようにするため。 */
     (async function checkAuth() {
+      const __MOCK = !window.__SUPABASE_URL__ || window.__SUPABASE_URL__.includes('YOUR_PROJECT');
+      if (__MOCK) {
+        initApp({ email: 'mock@example.com', sub: 'mock-user' });
+        return;
+      }
+
       // hospital-login.js のロードを待つ
       await new Promise(resolve => {
         if (typeof getSession === 'function') { resolve(); return; }
