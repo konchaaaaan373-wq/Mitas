@@ -483,7 +483,8 @@
   const SUPABASE_URL = window.__SUPABASE_URL__;
   const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__;
   const isMockMode = !SUPABASE_URL || SUPABASE_URL.includes('YOUR_PROJECT');
-  const supabase = !isMockMode && window.supabase
+  // Supabase CDN との lexical 衝突回避のためローカル別名 sbClient を使用
+  const sbClient = !isMockMode && window.supabase
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 
@@ -491,8 +492,8 @@
   async function init() {
     let token = null;
     let user = null;
-    if (supabase) {
-      const { data } = await supabase.auth.getSession();
+    if (sbClient) {
+      const { data } = await sbClient.auth.getSession();
       if (!data.session) {
         // 元の画面に戻れるよう next パラメータを付与
         location.href = '/login.html?next=' + encodeURIComponent(location.pathname);
@@ -503,7 +504,7 @@
 
       // ロールガード：alliance_admin 以外は本来の画面へ自動遷移
       try {
-        const { data: roleRow } = await supabase
+        const { data: roleRow } = await sbClient
           .from('user_roles')
           .select('role')
           .eq('user_id', user.id)
@@ -686,7 +687,7 @@
 
   // ─── ログアウト ───
   document.getElementById('logoutBtn').addEventListener('click', async () => {
-    if (supabase) await supabase.auth.signOut();
+    if (sbClient) await sbClient.auth.signOut();
     location.href = '/login.html';
   });
 
