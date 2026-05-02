@@ -68,49 +68,32 @@ async function defaultPathForRole() {
  *
  * dashboard.html 等が `sessionStorage.getItem('mitas_org')` から
  * organization_id を読むため、ログイン直後／checkAuth で必ず一度
- * 呼んで保存しておく必要がある。複数組織所属の場合は最初の 1 件
- * を採用する（現状 facility_admin は単組織を想定）。
+ * 呼んで保存しておく必要がある。
  *
  * 取得失敗・対応行なし（worker / neco_admin / alliance_admin など、
  * 組織に紐付かないロール）の場合は何もしない（null を返す）。
  *
- * 実装注意: PostgREST の embedded relation
- * （`select=organization_id,organizations(id,name)`）を使うと、
- * organization_members と organizations の RLS が連鎖評価されて
- * 500 を返すケースがあるため、**JOIN は使わず 2 つの単純クエリ**
- * （まず organization_id を取得 → 次に organizations.name を取得）
- * に分割する。組織名の取得が失敗しても id があれば保存して
- * フローは止めない。
+ * 実装注意: PostgREST から `organization_members` を直接 SELECT すると、
+ * 同テーブルの SELECT RLS が自己参照サブセレクト
+ * （organization_id IN (SELECT organization_id FROM organization_members ...)）
+ * を含むため、PostgREST 経由では Postgres が RLS を評価しきれず 500 を
+ * 返すことがある。そのためサーバー側 Function `/api/v2/me/org` を経由し、
+ * service_role で安全に取得した結果（本人の組織のみ）を受け取る。
  */
 async function fetchAndStoreUserOrg() {
   try {
     const { data: sess } = await db.auth.getSession()
-    const userId = sess?.session?.user?.id
-    if (!userId) return null
+    const token = sess?.session?.access_token
+    if (!token) return null
 
-    // Step 1: organization_members から自組織 id を取得（JOIN なし）
-    const { data: member, error: memberErr } = await db
-      .from('organization_members')
-      .select('organization_id')
-      .eq('user_id', userId)
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle()
-    if (memberErr || !member || !member.organization_id) return null
-    const orgId = member.organization_id
+    const res = await fetch('/api/v2/me/org', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    if (!data || !data.organization || !data.organization.id) return null
 
-    // Step 2: organizations から name を取得（補助情報。失敗しても保存は続行）
-    let orgName = ''
-    try {
-      const { data: orgRow } = await db
-        .from('organizations')
-        .select('name')
-        .eq('id', orgId)
-        .maybeSingle()
-      if (orgRow && orgRow.name) orgName = orgRow.name
-    } catch (_) { /* name 取得失敗は無視。id があれば下流の機能は動く */ }
-
-    const org = { id: orgId, name: orgName }
+    const org = { id: data.organization.id, name: data.organization.name || '' }
     try { sessionStorage.setItem('mitas_org', JSON.stringify(org)) } catch (_) { /* sessionStorage 不可は無視 */ }
     return org
   } catch (_) { return null }
