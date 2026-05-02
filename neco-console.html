@@ -4167,6 +4167,27 @@
         });
       }
 
+      // 3. activity_log に invoice.issued を記録
+      //    neco_admin は activity_log_insert RLS で直接 INSERT 可能
+      try {
+        await pgFetch('/activity_log', {
+          method: 'POST',
+          headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify({
+            actor_user_id: state.user && state.user.id,
+            actor_role: 'neco_admin',
+            action: 'invoice.issued',
+            entity_type: 'invoice',
+            entity_id: invoice.id,
+            organization_id: invoice.organization_id,
+            after_state: { status: invoice.status, total: invoice.total, invoice_number: invoice.invoice_number },
+          }),
+        });
+      } catch (logErr) {
+        // 監査ログ書き込み失敗は致命的ではない（請求書自体は作成済み）
+        console.warn('invoice.issued の activity_log 記録に失敗:', logErr.message);
+      }
+
       showToast('success', `請求書 ${invoice.invoice_number} を作成しました`);
       closeInvoiceModal();
     } catch (err) {
