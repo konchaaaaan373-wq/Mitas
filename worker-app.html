@@ -1307,7 +1307,11 @@
   const SUPABASE_URL = window.__SUPABASE_URL__;
   const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__;
   const isMockMode = !SUPABASE_URL || SUPABASE_URL.includes('YOUR_PROJECT');
-  const supabase = !isMockMode && window.supabase
+  // Supabase CDN は window.supabase を露出する。CDN バンドル形式によっては
+  // この inline script で `const supabase` を宣言すると lexical conflict
+  // （Identifier 'supabase' has already been declared）になるため、
+  // ここではローカル別名 sbClient を使用する。
+  const sbClient = !isMockMode && window.supabase
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 
@@ -1344,8 +1348,8 @@
     if (isMockMode) document.getElementById('devBanner').hidden = false;
 
     // セッション確認
-    if (supabase) {
-      const { data, error } = await supabase.auth.getSession();
+    if (sbClient) {
+      const { data, error } = await sbClient.auth.getSession();
       if (error || !data.session) {
         location.replace('/login.html');
         return;
@@ -1356,7 +1360,7 @@
 
       // ロールガード：worker 以外は本来の画面へ自動遷移
       try {
-        const { data: roleRow } = await supabase
+        const { data: roleRow } = await sbClient
           .from('user_roles')
           .select('role')
           .eq('user_id', currentUser.id)
@@ -1424,7 +1428,7 @@
 
   // ─── ログアウト ───
   async function handleLogout() {
-    if (supabase) await supabase.auth.signOut();
+    if (sbClient) await sbClient.auth.signOut();
     location.replace('/login.html');
   }
 
