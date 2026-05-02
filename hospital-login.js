@@ -73,24 +73,44 @@ async function defaultPathForRole() {
  *
  * 取得失敗・対応行なし（worker / neco_admin / alliance_admin など、
  * 組織に紐付かないロール）の場合は何もしない（null を返す）。
+ *
+ * 実装注意: PostgREST の embedded relation
+ * （`select=organization_id,organizations(id,name)`）を使うと、
+ * organization_members と organizations の RLS が連鎖評価されて
+ * 500 を返すケースがあるため、**JOIN は使わず 2 つの単純クエリ**
+ * （まず organization_id を取得 → 次に organizations.name を取得）
+ * に分割する。組織名の取得が失敗しても id があれば保存して
+ * フローは止めない。
  */
 async function fetchAndStoreUserOrg() {
   try {
     const { data: sess } = await db.auth.getSession()
     const userId = sess?.session?.user?.id
     if (!userId) return null
-    const { data, error } = await db
+
+    // Step 1: organization_members から自組織 id を取得（JOIN なし）
+    const { data: member, error: memberErr } = await db
       .from('organization_members')
-      .select('organization_id, organizations(id, name)')
+      .select('organization_id')
       .eq('user_id', userId)
       .eq('is_active', true)
       .limit(1)
       .maybeSingle()
-    if (error || !data) return null
-    const org = (data.organizations && data.organizations.id)
-      ? { id: data.organizations.id, name: data.organizations.name }
-      : (data.organization_id ? { id: data.organization_id, name: '' } : null)
-    if (!org) return null
+    if (memberErr || !member || !member.organization_id) return null
+    const orgId = member.organization_id
+
+    // Step 2: organizations から name を取得（補助情報。失敗しても保存は続行）
+    let orgName = ''
+    try {
+      const { data: orgRow } = await db
+        .from('organizations')
+        .select('name')
+        .eq('id', orgId)
+        .maybeSingle()
+      if (orgRow && orgRow.name) orgName = orgRow.name
+    } catch (_) { /* name 取得失敗は無視。id があれば下流の機能は動く */ }
+
+    const org = { id: orgId, name: orgName }
     try { sessionStorage.setItem('mitas_org', JSON.stringify(org)) } catch (_) { /* sessionStorage 不可は無視 */ }
     return org
   } catch (_) { return null }
