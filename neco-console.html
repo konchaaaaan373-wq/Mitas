@@ -361,14 +361,17 @@
       .ops-cats { grid-template-columns: 1fr; }
     }
 
-    /* ─── 全体レイアウト：左カラム35% / 右カラム65% ─── */
+    /* ─── 全体レイアウト：左カラム（依頼一覧）／右カラム（詳細） ─── */
+    /* 詳細パネルが右側で見づらいというフィードバックを受けて、左カラムを
+       スリム化し（min 320px / 28%）、最大幅を 1800px に拡張。詳細パネル
+       内部は section を縦スクロール可にしてコンテンツが切れないようにする。 */
     .console {
       display: grid;
-      grid-template-columns: minmax(360px, 35%) 1fr;
+      grid-template-columns: minmax(320px, 28%) 1fr;
       gap: 16px;
       padding: 16px;
       height: calc(100vh - var(--topbar-h));
-      max-width: 1600px;
+      max-width: 1800px;
       margin: 0 auto;
     }
 
