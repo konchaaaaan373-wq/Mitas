@@ -3250,8 +3250,16 @@
 
     // 施設側の提案アクション（承認 / 条件確認 / 見送り）
     async function handleFacilityProposalAction(p, action, btn) {
-      const session = (typeof getSession === 'function') ? getSession() : null;
-      const token = session && session.access_token;
+      // getSession() は async（hospital-login.js）。await を付け忘れると
+      // session が Promise になり session.access_token が undefined になって
+      // patchProposalAndReload の no-token 分岐に落ち、PATCH が送られない。
+      let token = null;
+      try {
+        if (typeof getSession === 'function') {
+          const session = await getSession();
+          token = (session && session.access_token) ? session.access_token : null;
+        }
+      } catch (_) { /* token 取得失敗は下流で扱う */ }
       const apiBase = '/api/v2/proposals';
       const url = `${apiBase}/${encodeURIComponent(p.id)}`;
 
@@ -3275,10 +3283,17 @@
       }
     }
     async function patchProposalAndReload(url, token, body, successMsg, btn) {
+      // mock mode 判定（checkAuth と同じ条件）。mock の場合のみトークン無しでも
+      // 「擬似的に成功」を許容する。Live 環境ではトークン無しは即エラーにする
+      // （以前は silent に mock 分岐に落ちて PATCH が送られないバグになっていた）。
+      const isMock = !window.__SUPABASE_URL__ || window.__SUPABASE_URL__.includes('YOUR_PROJECT');
       try {
         if (btn) btn.disabled = true;
         if (!token) {
-          // モック相当：UIだけ更新
+          if (!isMock) {
+            throw new Error('セッションが見つかりません。再ログインしてください。');
+          }
+          // mock 相当：UIだけ更新
           await new Promise(r => setTimeout(r, 200));
           if (typeof toast === 'function') toast(successMsg + '（モック）', 'success');
         } else {
@@ -3293,7 +3308,10 @@
           }
           if (typeof toast === 'function') toast(successMsg, 'success');
         }
-        if (typeof loadV2Proposals === 'function') loadV2Proposals();
+        // facility_accepted への遷移後は assignment の有無で表示が切り替わるため、
+        // proposals に加えて assignments も再読込する。
+        if (typeof loadV2Proposals  === 'function') loadV2Proposals();
+        if (typeof loadV2Assignments === 'function') loadV2Assignments();
       } catch (e) {
         console.error('提案更新失敗:', e);
         if (typeof toast === 'function') toast('提案の更新に失敗しました：' + e.message, 'error');
